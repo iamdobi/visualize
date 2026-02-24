@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<style>
+  :root {
+    --hue: 220;
+    --bg: hsl(var(--hue), 15%, 96%);
+    --surface: hsl(0, 0%, 100%);
+    --text: hsl(var(--hue), 20%, 15%);
+    --text-secondary: hsl(var(--hue), 10%, 50%);
+    --accent: hsl(var(--hue), 80%, 55%);
+    --green: hsl(145, 65%, 42%);
+    --red: hsl(0, 70%, 55%);
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2rem;
+  }
+
+  .header h1 { font-size: 1.75rem; font-weight: 700; }
+  .header .date { color: var(--text-secondary); font-size: 0.9rem; }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .kpi-label { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+  .kpi-value { font-size: 2rem; font-weight: 700; }
+  .kpi-change { font-size: 0.85rem; font-weight: 600; }
+  .kpi-change.positive { color: var(--green); }
+  .kpi-change.negative { color: var(--red); }
+
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+
+  .chart-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+  }
+
+  svg { width: 100%; height: auto; }
+  svg text { font-family: var(--font); }
+
+  @media (max-width: 768px) {
+    body { padding: 1rem; }
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <h1>Dashboard Title</h1>
+    <span class="date" id="date"></span>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <span class="kpi-label">Total Revenue</span>
+      <span class="kpi-value">$124.5K</span>
+      <span class="kpi-change positive">↑ 12.3% vs last month</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Active Users</span>
+      <span class="kpi-value">8,429</span>
+      <span class="kpi-change positive">↑ 5.7%</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Conversion</span>
+      <span class="kpi-value">3.2%</span>
+      <span class="kpi-change negative">↓ 0.4%</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Avg Order</span>
+      <span class="kpi-value">$47.80</span>
+      <span class="kpi-change positive">↑ 2.1%</span>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Revenue Over Time</h3>
+      <svg viewBox="0 0 600 300">
+        <!-- Grid lines -->
+        <g stroke="#f0f0f0" stroke-width="1">
+          <line x1="60" y1="30" x2="580" y2="30"/>
+          <line x1="60" y1="97" x2="580" y2="97"/>
+          <line x1="60" y1="164" x2="580" y2="164"/>
+          <line x1="60" y1="231" x2="580" y2="231"/>
+        </g>
+        <!-- Y-axis labels -->
+        <g fill="#999" font-size="11" text-anchor="end">
+          <text x="55" y="34">$150K</text>
+          <text x="55" y="101">$100K</text>
+          <text x="55" y="168">$50K</text>
+          <text x="55" y="235">$0</text>
+        </g>
+        <!-- Area fill -->
+        <path d="M60,200 L147,170 L234,185 L321,140 L408,120 L495,100 L580,80 L580,231 L60,231 Z"
+              fill="hsla(220,80%,55%,0.1)"/>
+        <!-- Line -->
+        <polyline points="60,200 147,170 234,185 321,140 408,120 495,100 580,80"
+                  fill="none" stroke="hsl(220,80%,55%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Dots -->
+        <g fill="hsl(220,80%,55%)">
+          <circle cx="60" cy="200" r="4"/>
+          <circle cx="147" cy="170" r="4"/>
+          <circle cx="234" cy="185" r="4"/>
+          <circle cx="321" cy="140" r="4"/>
+          <circle cx="408" cy="120" r="4"/>
+          <circle cx="495" cy="100" r="4"/>
+          <circle cx="580" cy="80" r="4"/>
+        </g>
+        <!-- X-axis labels -->
+        <g fill="#999" font-size="11" text-anchor="middle">
+          <text x="60" y="255">Jan</text>
+          <text x="147" y="255">Feb</text>
+          <text x="234" y="255">Mar</text>
+          <text x="321" y="255">Apr</text>
+          <text x="408" y="255">May</text>
+          <text x="495" y="255">Jun</text>
+          <text x="580" y="255">Jul</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="chart-card">
+      <h3>Traffic by Source</h3>
+      <svg viewBox="0 0 300 300">
+        <!-- Donut chart -->
+        <g transform="translate(150,140)">
+          <circle r="90" fill="none" stroke="hsl(220,80%,55%)" stroke-width="35"
+                  stroke-dasharray="226 339" stroke-dashoffset="0" transform="rotate(-90)"/>
+          <circle r="90" fill="none" stroke="hsl(160,65%,50%)" stroke-width="35"
+                  stroke-dasharray="141 424" stroke-dashoffset="-226" transform="rotate(-90)"/>
+          <circle r="90" fill="none" stroke="hsl(35,90%,55%)" stroke-width="35"
+                  stroke-dasharray="85 480" stroke-dashoffset="-367" transform="rotate(-90)"/>
+          <circle r="90" fill="none" stroke="hsl(0,0%,80%)" stroke-width="35"
+                  stroke-dasharray="113 452" stroke-dashoffset="-452" transform="rotate(-90)"/>
+          <text text-anchor="middle" dy="-0.2em" font-size="24" font-weight="700" fill="#333">8.4K</text>
+          <text text-anchor="middle" dy="1.2em" font-size="11" fill="#999">visitors</text>
+        </g>
+        <!-- Legend -->
+        <g transform="translate(40,270)" font-size="11">
+          <circle cx="0" cy="-4" r="5" fill="hsl(220,80%,55%)"/><text x="12" y="0" fill="#666">Direct (40%)</text>
+          <circle cx="120" cy="-4" r="5" fill="hsl(160,65%,50%)"/><text x="132" y="0" fill="#666">Organic (25%)</text>
+          <circle cx="0" cy="18" r="5" fill="hsl(35,90%,55%)"/><text x="12" y="22" fill="#666">Referral (15%)</text>
+          <circle cx="120" cy="18" r="5" fill="hsl(0,0%,80%)"/><text x="132" y="22" fill="#666">Other (20%)</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  </script>
+</body>
+</html>
