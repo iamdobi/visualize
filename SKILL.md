@@ -217,11 +217,296 @@ Use these when they add value. See [references/css-techniques.md](references/css
 - **View Transitions API** — smooth theme switching animations
 - **Inline SVG icons** — draw simple icons as `<svg>` paths, no icon library needed
 
+## Mandatory HTML Skeleton
+
+**EVERY visualization MUST start from this skeleton.** Do not write HTML from scratch. Copy this, then add content. This ensures light theme, print styles, Inter font, animations, reduced-motion, and menu are never missing.
+
+```html
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YOUR TITLE HERE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- ADD CDN LIBRARIES HERE (Chart.js, Mermaid, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* ===== THEME SYSTEM (REQUIRED — both themes must exist) ===== */
+    :root, .theme-dark {
+      --bg: #030712;
+      --surface: #111827;
+      --surface-hover: #1f2937;
+      --border: rgba(255,255,255,0.08);
+      --text: #f9fafb;
+      --text-secondary: #9ca3af;
+      --accent: #3b82f6;
+      --accent-secondary: #8b5cf6;
+      --positive: #10b981;
+      --negative: #f43f5e;
+      --warning: #f59e0b;
+    }
+    .theme-light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a;
+      --text-secondary: #64748b;
+      --accent: #2563eb;
+      --accent-secondary: #7c3aed;
+      --positive: #059669;
+      --negative: #e11d48;
+      --warning: #d97706;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);           /* CRITICAL: always use var(--text), never rely on defaults */
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
+    }
+    
+    /* ===== GLASS CARD (reuse everywhere) ===== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    
+    /* ===== TEXT COLORS (NEVER use raw white/black — always CSS vars) ===== */
+    h1, h2, h3, h4, h5, h6 { color: var(--text); }
+    p, li, td, th, span, label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
+    
+    /* ===== ENTRANCE ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    
+    /* ===== REDUCED MOTION (REQUIRED) ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* ===== PRINT STYLES (REQUIRED) ===== */
+    @media print {
+      body { background: white !important; color: black !important; }
+      .viz-menu { display: none !important; }
+      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+    
+    /* ===== HAMBURGER MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s;
+    }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown {
+      position: absolute; top: 52px; right: 0; min-width: 200px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
+      transform: translateY(-8px); transition: all 0.2s;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button {
+      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text); font-size: 14px;
+      font-family: inherit; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
+    }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    
+    /* ===== YOUR CUSTOM STYLES BELOW ===== */
+  </style>
+</head>
+<body>
+
+  <!-- MENU (REQUIRED — copy exactly) -->
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/>
+        <line x1="3" y1="10" x2="17" y2="10"/>
+        <line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()">
+        <span>📥</span>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()">
+        <span>🖨️</span>
+        <span>Print / PDF</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- YOUR CONTENT HERE -->
+
+  <script>
+    // Menu
+    function toggleMenu() {
+      document.getElementById('vizMenuDropdown').classList.toggle('open');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.viz-menu')) {
+        document.getElementById('vizMenuDropdown').classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
+    });
+
+    // Theme
+    const themes = ['dark', 'light'];
+    const themeIcons = { dark: '🌙', light: '☀️' };
+    let currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').textContent = themeIcons[t];
+      document.getElementById('themeLabel').textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+    }
+    function cycleTheme() {
+      const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+      applyTheme(next);
+    }
+    applyTheme(currentTheme);
+
+    // Download PNG
+    async function downloadImage() {
+      const menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        const dataUrl = await htmlToImage.toPng(document.body, {
+          quality: 1, pixelRatio: 2,
+          filter: n => !n.classList?.contains('viz-menu')
+        });
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png';
+        a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+  </script>
+</body>
+</html>
+```
+
+**Non-negotiable rules for the skeleton:**
+- NEVER omit `.theme-light` — both themes must exist
+- NEVER use raw colors like `white`, `#fff`, `black` — always `var(--text)`, `var(--bg)`, etc.
+- NEVER omit `@media print` or `@media (prefers-reduced-motion: reduce)`
+- NEVER use a menu class other than `.viz-menu`, `.viz-menu-toggle`, `.viz-menu-dropdown`
+- ALWAYS include `html-to-image` CDN and the download function
+- ALWAYS set `<html lang="en" class="theme-dark">`
+- ALWAYS use Inter font — it's loaded in the skeleton
+
+## Minimum Sizing Rules
+
+Elements must be large enough to read and feel substantial:
+
+- **Timeline cards:** minimum width 280px, minimum padding 20px
+- **Chart containers:** minimum 60% of parent width, minimum height 300px
+- **Stat numbers:** minimum font-size 2rem (32px), bold/extrabold weight
+- **Card content area:** minimum padding 24px
+- **Section spacing:** minimum 48px between major sections
+- **Slide headings:** minimum 2rem (32px), maximum 6 words
+- **Body text:** minimum 1rem (16px), never smaller
+
+**If content feels too small, it IS too small. Err on the side of larger.**
+
+## Text Visibility Rules
+
+**Text must ALWAYS be visible.** This is the #1 cause of broken outputs.
+
+- Dark theme: text MUST use `var(--text)` which resolves to `#f9fafb` (near-white)
+- Light theme: text MUST use `var(--text)` which resolves to `#0f172a` (near-black)
+- On gradient backgrounds: add `text-shadow: 0 1px 3px rgba(0,0,0,0.3)` for readability
+- On hero slides with gradient/image backgrounds: use a dark overlay (`rgba(0,0,0,0.5)`)
+- NEVER set text color to a value close to the background color
+- Test mentally: "would this text be visible on BOTH dark (#030712) and light (#f8fafc) backgrounds?"
+
+## Chart.js Integration Rules
+
+Charts are the second most common failure. Follow these rules:
+
+- **Always wrap in a container div** with explicit `width` and `height` or `aspect-ratio`
+- **Minimum chart height:** 300px on desktop, 250px on mobile
+- **Set `maintainAspectRatio: false`** and control size via CSS container
+- **Use theme-aware colors:** read CSS vars at render time, re-render on theme change
+- **Chart text colors:** set `Chart.defaults.color = getComputedStyle(root).getPropertyValue('--text-secondary').trim()`
+- **Grid line colors:** use `var(--border)` value
+- **Legend position:** 'top' for horizontal charts, 'right' for vertical with space
+- **Responsive:** `responsive: true` is default, but container must have explicit dimensions
+
+```javascript
+// Theme-aware Chart.js setup (include in every chart visualization)
+function getChartColors() {
+  const s = getComputedStyle(document.documentElement);
+  return {
+    text: s.getPropertyValue('--text').trim(),
+    textSecondary: s.getPropertyValue('--text-secondary').trim(),
+    border: s.getPropertyValue('--border').trim(),
+    surface: s.getPropertyValue('--surface').trim(),
+    accent: s.getPropertyValue('--accent').trim(),
+  };
+}
+// Call this and update charts whenever theme changes
+```
+
 ## Process
 
 1. **Understand** — what's the message? Who's the audience? What format fits?
-2. **Structure** — outline content/sections BEFORE writing code
-3. **Build** — write the complete HTML file with all features
-4. **Verify** — is it readable at a glance? Would you present this? Would someone screenshot and share it?
+2. **Start from skeleton** — copy the Mandatory HTML Skeleton above. NEVER start from a blank file.
+3. **Structure** — outline content/sections BEFORE filling in the skeleton
+4. **Build** — add content, charts, styles. Keep all colors as CSS vars.
+5. **Verify checklist:**
+   - [ ] Both `.theme-dark` and `.theme-light` defined?
+   - [ ] All text uses `var(--text)` or `var(--text-secondary)`?
+   - [ ] `@media print` hides menu, forces white bg?
+   - [ ] `@media (prefers-reduced-motion: reduce)` present?
+   - [ ] `.viz-menu` with toggle, theme, download, print?
+   - [ ] Inter font loaded and applied?
+   - [ ] Entrance animations with staggered delays?
+   - [ ] All charts have explicit container sizing (≥300px height)?
+   - [ ] Hero/title text visible on both themes?
 
 The quality bar: **"good, period"** — not "good for AI-generated."
