@@ -1,101 +1,529 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" class="theme-dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>History of AI – Timeline</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:hsl(240,20%,7%);--surface:hsl(240,18%,12%);--text:hsl(0,0%,95%);--muted:hsl(240,10%,55%);--accent:hsl(260,80%,65%);--accent2:hsl(200,90%,55%);--line:hsl(260,40%,30%);--radius:16px;--shadow:0 4px 32px hsla(260,50%,10%,.5);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-[data-theme="light"]{--bg:hsl(250,20%,97%);--surface:hsl(0,0%,100%);--text:hsl(240,25%,10%);--muted:hsl(240,10%,40%);--line:hsl(260,30%,80%);--shadow:0 4px 32px hsla(260,30%,20%,.08)}
-body{background:var(--bg);color:var(--text);overflow-x:hidden}
-.hero{text-align:center;padding:80px 24px 48px;position:relative}
-.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{color:var(--muted);margin-top:8px;font-size:1.1rem}
-.timeline{position:relative;max-width:900px;margin:0 auto;padding:40px 24px 80px}
-.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,transparent,var(--line) 10%,var(--line) 90%,transparent);transform:translateX(-50%)}
-.item{position:relative;width:50%;padding:0 40px 48px;opacity:0;transform:translateY(40px);transition:opacity .6s,transform .6s}
-.item.visible{opacity:1;transform:none}
-.item.left{left:0;text-align:right}
-.item.right{left:50%;text-align:left}
-.item::after{content:'';position:absolute;top:24px;width:16px;height:16px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);z-index:2}
-.item.left::after{right:-8px}
-.item.right::after{left:-8px}
-.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:relative}
-.card .year{font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}
-.card h3{font-size:1.15rem;font-weight:700;margin-bottom:8px}
-.card p{font-size:.9rem;color:var(--muted);line-height:1.5}
-.card .icon{width:48px;height:48px;margin-bottom:12px;display:inline-block}
-.item.right .card .icon,.item.left .card .icon{display:block}
-.item.left .card .icon{margin-left:auto}
-@media(max-width:700px){
-.timeline::before{left:20px}
-.item{width:100%;left:0!important;padding:0 0 32px 48px;text-align:left!important}
-.item::after{left:12px!important;right:auto!important}
-.item.left .card .icon{margin-left:0}
-}
-/* Hamburger */
-.hamburger{position:fixed;top:16px;right:16px;z-index:200;width:40px;height:40px;background:var(--surface);border:none;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow)}
-.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s}
-.menu-open .hamburger span:nth-child(1){transform:rotate(45deg) translate(2.5px,2.5px)}
-.menu-open .hamburger span:nth-child(2){opacity:0}
-.menu-open .hamburger span:nth-child(3){transform:rotate(-45deg) translate(2.5px,-2.5px)}
-.menu-panel{position:fixed;top:0;right:-260px;width:260px;height:100%;background:var(--surface);box-shadow:var(--shadow);z-index:190;transition:right .3s;padding:72px 24px 24px;display:flex;flex-direction:column;gap:12px}
-.menu-open .menu-panel{right:0}
-.menu-panel button{background:none;border:1px solid var(--muted);color:var(--text);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.9rem;text-align:left;transition:background .2s}
-.menu-panel button:hover{background:hsla(0,0%,50%,.15)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The History of AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ===== THEME SYSTEM ===== */
+    :root, .theme-dark {
+      --bg: #030712;
+      --surface: #111827;
+      --surface-hover: #1f2937;
+      --border: rgba(255,255,255,0.08);
+      --text: #f9fafb;
+      --text-secondary: #9ca3af;
+      --accent: #3b82f6;
+      --accent-secondary: #8b5cf6;
+      --positive: #10b981;
+      --negative: #f43f5e;
+      --warning: #f59e0b;
+    }
+    .theme-light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a;
+      --text-secondary: #64748b;
+      --accent: #2563eb;
+      --accent-secondary: #7c3aed;
+      --positive: #059669;
+      --negative: #e11d48;
+      --warning: #d97706;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* ===== TEXT COLORS ===== */
+    h1, h2, h3, h4, h5, h6 { color: var(--text); }
+    p, li, td, th, span, label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
+
+    /* ===== GLASS CARD ===== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* ===== ENTRANCE ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+
+    /* ===== REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      body { background: white !important; color: black !important; }
+      .viz-menu { display: none !important; }
+      .hero { background: #1e3a5f !important; }
+      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      .timeline-line { background: #ccc !important; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+
+    /* ===== HAMBURGER MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s;
+    }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown {
+      position: absolute; top: 52px; right: 0; min-width: 200px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
+      transform: translateY(-8px); transition: all 0.2s;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button {
+      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text); font-size: 14px;
+      font-family: inherit; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
+    }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 50vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 96px 24px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.15) 0%, transparent 70%),
+                  radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.1) 0%, transparent 50%);
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary), #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: var(--text-secondary);
+      max-width: 500px;
+      position: relative;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 64px 24px 96px;
+      position: relative;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent-secondary), var(--accent));
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 48px;
+      position: relative;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    /* Alternating layout */
+    .timeline-item.left .timeline-card { margin-right: auto; }
+    .timeline-item.right .timeline-card { margin-left: auto; }
+    .timeline-item.left { padding-right: calc(50% + 32px); }
+    .timeline-item.right { padding-left: calc(50% + 32px); }
+
+    /* Dot on the line */
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 28px;
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border: 3px solid var(--bg);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.25);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* Card */
+    .timeline-card {
+      width: 100%;
+      min-width: 320px;
+      padding: 28px 28px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+      transition: transform 0.25s, box-shadow 0.25s, background 0.3s, border-color 0.3s;
+      /* scroll animation initial state */
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .timeline-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s, background 0.3s;
+    }
+    .timeline-item.left .timeline-card.visible { animation: slideFromLeft 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .timeline-item.right .timeline-card.visible { animation: slideFromRight 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+    @keyframes slideFromLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideFromRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .timeline-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .card-emoji {
+      font-size: 2rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .card-year {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 700px) {
+      .timeline-line { left: 20px; }
+      .timeline-dot { left: 20px; top: 20px; }
+      .timeline-item.left,
+      .timeline-item.right {
+        padding-left: 52px;
+        padding-right: 0;
+      }
+      .timeline-item.left .timeline-card,
+      .timeline-item.right .timeline-card {
+        margin-left: 0;
+        margin-right: 0;
+        min-width: 0;
+      }
+      .timeline-item.left .timeline-card.visible { animation-name: slideFromRight; }
+    }
+  </style>
 </head>
 <body>
-<button class="hamburger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu">
-<span></span><span></span><span></span>
-</button>
-<div class="menu-panel">
-<button onclick="toggleTheme()">🌓 Toggle Theme</button>
-<button onclick="downloadPNG()">📸 Download PNG</button>
-<button onclick="window.print()">🖨️ Print / PDF</button>
-</div>
 
-<div id="page">
-<div class="hero">
-<h1>The History of Artificial Intelligence</h1>
-<p>Seven decades of breakthroughs — 1950 to 2025</p>
-</div>
+  <!-- MENU -->
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/>
+        <line x1="3" y1="10" x2="17" y2="10"/>
+        <line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()">
+        <span>📥</span>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()">
+        <span>🖨️</span>
+        <span>Print / PDF</span>
+      </button>
+    </div>
+  </div>
 
-<div class="timeline" id="timeline"></div>
-</div>
+  <!-- HERO -->
+  <section class="hero">
+    <h1 class="hero-title animate-in">The History of AI</h1>
+    <p class="hero-sub animate-in delay-2">Seven decades of breakthroughs — from a simple thought experiment to agents that think, code, and create.</p>
+  </section>
 
-<script>
-const events=[
-{year:'1950',title:'Turing Test Proposed',desc:'Alan Turing publishes "Computing Machinery and Intelligence," posing the question: Can machines think?',icon:'🧠',color:'hsl(260,80%,65%)'},
-{year:'1956',title:'Dartmouth Conference',desc:'The term "Artificial Intelligence" is coined at a summer workshop at Dartmouth College.',icon:'🎓',color:'hsl(200,90%,55%)'},
-{year:'1966',title:'ELIZA Chatbot',desc:'Joseph Weizenbaum creates ELIZA, one of the first programs to process natural language.',icon:'💬',color:'hsl(150,70%,50%)'},
-{year:'1974',title:'First AI Winter',desc:'Funding dries up as early AI fails to meet grand expectations. Research stalls.',icon:'❄️',color:'hsl(200,60%,70%)'},
-{year:'1980',title:'Expert Systems Boom',desc:'Rule-based expert systems become a billion-dollar industry, reviving AI commercial interest.',icon:'⚙️',color:'hsl(35,90%,55%)'},
-{year:'1997',title:'Deep Blue Beats Kasparov',desc:'IBM\'s Deep Blue defeats world chess champion Garry Kasparov in a historic match.',icon:'♟️',color:'hsl(0,70%,55%)'},
-{year:'2006',title:'Deep Learning Renaissance',desc:'Geoffrey Hinton publishes breakthrough work on deep belief networks, sparking the deep learning era.',icon:'🔬',color:'hsl(280,70%,60%)'},
-{year:'2011',title:'Watson Wins Jeopardy!',desc:'IBM\'s Watson defeats human champions on Jeopardy!, showcasing NLP and knowledge retrieval.',icon:'🏆',color:'hsl(45,90%,50%)'},
-{year:'2012',title:'AlexNet & ImageNet',desc:'AlexNet crushes the ImageNet competition, proving deep CNNs can dominate computer vision.',icon:'👁️',color:'hsl(180,70%,50%)'},
-{year:'2016',title:'AlphaGo Beats Lee Sedol',desc:'DeepMind\'s AlphaGo defeats Go world champion Lee Sedol 4-1, stunning the AI community.',icon:'⚫',color:'hsl(160,60%,45%)'},
-{year:'2017',title:'Transformers Architecture',desc:'Google publishes "Attention Is All You Need," introducing the transformer — the foundation of modern AI.',icon:'⚡',color:'hsl(50,95%,50%)'},
-{year:'2020',title:'GPT-3 Released',desc:'OpenAI\'s GPT-3 demonstrates remarkable language generation, igniting the generative AI wave.',icon:'🤖',color:'hsl(210,90%,55%)'},
-{year:'2022',title:'ChatGPT & Stable Diffusion',desc:'ChatGPT reaches 100M users in 2 months. AI image generation goes mainstream.',icon:'🚀',color:'hsl(330,80%,55%)'},
-{year:'2024',title:'Multimodal AI & Agents',desc:'GPT-4o, Claude 3, Gemini — AI sees, hears, reasons. Autonomous agents emerge.',icon:'🌐',color:'hsl(260,80%,65%)'},
-{year:'2025',title:'The Age of AI Agents',desc:'AI agents ship code, manage workflows, and collaborate autonomously. The intelligence era begins.',icon:'✨',color:'hsl(200,90%,55%)'}
-];
+  <!-- TIMELINE -->
+  <section class="timeline-container">
+    <div class="timeline-line"></div>
 
-const tl=document.getElementById('timeline');
-events.forEach((e,i)=>{
-const side=i%2===0?'left':'right';
-tl.innerHTML+=`<div class="item ${side}"><div class="card"><div class="icon" style="font-size:2rem">${e.icon}</div><div class="year">${e.year}</div><h3>${e.title}</h3><p>${e.desc}</p></div></div>`;
-});
+    <div class="timeline-item left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🧪</span>
+          <span class="card-year">1950</span>
+        </div>
+        <h3 class="card-title">The Turing Test</h3>
+        <p class="card-desc">Alan Turing publishes "Computing Machinery and Intelligence," proposing the imitation game — the first formal framework for evaluating machine intelligence.</p>
+      </div>
+    </div>
 
-const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
-document.querySelectorAll('.item').forEach(el=>obs.observe(el));
+    <div class="timeline-item right">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🎓</span>
+          <span class="card-year">1956</span>
+        </div>
+        <h3 class="card-title">Dartmouth Workshop</h3>
+        <p class="card-desc">John McCarthy coins "Artificial Intelligence" at a Dartmouth summer conference. The field is officially born, attracting early pioneers like Minsky and Simon.</p>
+      </div>
+    </div>
 
-function toggleTheme(){document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'}
-function downloadPNG(){htmlToImage.toPng(document.getElementById('page')).then(d=>{const a=document.createElement('a');a.href=d;a.download='ai-timeline.png';a.click()})}
-</script>
+    <div class="timeline-item left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🏥</span>
+          <span class="card-year">1970s</span>
+        </div>
+        <h3 class="card-title">Expert Systems</h3>
+        <p class="card-desc">Rule-based programs like MYCIN and DENDRAL bring AI into real-world domains — medical diagnosis, chemical analysis, and business decision-making.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">❄️</span>
+          <span class="card-year">1987</span>
+        </div>
+        <h3 class="card-title">The AI Winter</h3>
+        <p class="card-desc">Hype collapses as expert systems fail to scale. Funding dries up, DARPA pulls back, and the Lisp machine market crashes — AI enters its deepest winter.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">♟️</span>
+          <span class="card-year">1997</span>
+        </div>
+        <h3 class="card-title">Deep Blue Defeats Kasparov</h3>
+        <p class="card-desc">IBM's Deep Blue becomes the first computer to beat a reigning world chess champion in a full match, captivating the world and reigniting interest in AI.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🖼️</span>
+          <span class="card-year">2012</span>
+        </div>
+        <h3 class="card-title">ImageNet & Deep Learning</h3>
+        <p class="card-desc">AlexNet crushes the ImageNet competition, slashing error rates by 10+ points. Deep learning goes from niche to mainstream, launching the modern AI era.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🎮</span>
+          <span class="card-year">2016</span>
+        </div>
+        <h3 class="card-title">AlphaGo Defeats Lee Sedol</h3>
+        <p class="card-desc">DeepMind's AlphaGo beats the world Go champion 4-1, a feat thought decades away. Move 37 in Game 2 becomes one of the most famous moves in history.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">📝</span>
+          <span class="card-year">2020</span>
+        </div>
+        <h3 class="card-title">GPT-3 & Few-Shot Learning</h3>
+        <p class="card-desc">OpenAI's 175-billion-parameter model stuns researchers with emergent abilities — writing code, essays, and poetry from just a few examples.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">💬</span>
+          <span class="card-year">2022</span>
+        </div>
+        <h3 class="card-title">ChatGPT Goes Viral</h3>
+        <p class="card-desc">ChatGPT reaches 100 million users in two months — the fastest-growing consumer app ever. AI goes from research curiosity to dinner-table conversation.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item right">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🧠</span>
+          <span class="card-year">2023</span>
+        </div>
+        <h3 class="card-title">GPT-4 & Claude</h3>
+        <p class="card-desc">Multimodal models arrive — GPT-4 passes the bar exam, Claude pioneers constitutional AI. The race for safe, capable frontier models intensifies.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item left">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card">
+        <div class="card-header">
+          <span class="card-emoji">🤖</span>
+          <span class="card-year">2024–25</span>
+        </div>
+        <h3 class="card-title">The Age of Agents</h3>
+        <p class="card-desc">AI breaks out of the chat box. Autonomous agents write code, browse the web, manage workflows, and collaborate — ushering in a new era of AI-human partnership.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <script>
+    // Menu
+    function toggleMenu() {
+      document.getElementById('vizMenuDropdown').classList.toggle('open');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.viz-menu')) {
+        document.getElementById('vizMenuDropdown').classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
+    });
+
+    // Theme
+    const themes = ['dark', 'light'];
+    const themeIcons = { dark: '🌙', light: '☀️' };
+    let currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').textContent = themeIcons[t];
+      document.getElementById('themeLabel').textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+    }
+    function cycleTheme() {
+      const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+      applyTheme(next);
+    }
+    applyTheme(currentTheme);
+
+    // Download PNG
+    async function downloadImage() {
+      const menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        const dataUrl = await htmlToImage.toPng(document.body, {
+          quality: 1, pixelRatio: 2,
+          filter: n => !n.classList?.contains('viz-menu')
+        });
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png';
+        a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+
+    // Scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.timeline-card').forEach(card => observer.observe(card));
+  </script>
 </body>
 </html>

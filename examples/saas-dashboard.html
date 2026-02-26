@@ -1,93 +1,523 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" class="theme-dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SaaS Metrics Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:hsl(225,25%,8%);--surface:hsl(225,20%,13%);--surface2:hsl(225,18%,17%);--text:hsl(0,0%,95%);--muted:hsl(225,10%,55%);--accent:hsl(210,100%,60%);--green:hsl(150,70%,45%);--red:hsl(0,75%,55%);--orange:hsl(35,95%,55%);--purple:hsl(270,70%,60%);--radius:12px;--shadow:0 2px 16px hsla(0,0%,0%,.3);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-[data-theme="light"]{--bg:hsl(220,20%,96%);--surface:hsl(0,0%,100%);--surface2:hsl(220,15%,94%);--text:hsl(225,25%,12%);--muted:hsl(225,10%,40%);--shadow:0 2px 16px hsla(225,30%,20%,.08)}
-body{background:var(--bg);color:var(--text);min-height:100vh;padding:24px}
-.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
-.header h1{font-size:1.5rem;font-weight:800}.header h1 span{color:var(--accent)}
-.header .date{color:var(--muted);font-size:.9rem}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
-.kpi{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-.kpi::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
-.kpi:nth-child(1)::before{background:var(--accent)}.kpi:nth-child(2)::before{background:var(--green)}.kpi:nth-child(3)::before{background:var(--orange)}.kpi:nth-child(4)::before{background:var(--purple)}.kpi:nth-child(5)::before{background:var(--red)}.kpi:nth-child(6)::before{background:hsl(180,60%,50%)}
-.kpi-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
-.kpi-value{font-size:1.8rem;font-weight:800}
-.kpi-change{font-size:.8rem;margin-top:4px}.kpi-change.up{color:var(--green)}.kpi-change.down{color:var(--red)}
-.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
-.chart-card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
-.chart-card h3{font-size:1rem;font-weight:700;margin-bottom:16px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:768px){.charts-grid,.row2{grid-template-columns:1fr}}
-/* Hamburger */
-.hamburger{position:fixed;top:16px;right:16px;z-index:200;width:40px;height:40px;background:var(--surface);border:none;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow)}
-.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s}
-.menu-open .hamburger span:nth-child(1){transform:rotate(45deg) translate(2.5px,2.5px)}
-.menu-open .hamburger span:nth-child(2){opacity:0}
-.menu-open .hamburger span:nth-child(3){transform:rotate(-45deg) translate(2.5px,-2.5px)}
-.menu-panel{position:fixed;top:0;right:-260px;width:260px;height:100%;background:var(--surface);box-shadow:var(--shadow);z-index:190;transition:right .3s;padding:72px 24px 24px;display:flex;flex-direction:column;gap:12px}
-.menu-open .menu-panel{right:0}
-.menu-panel button{background:none;border:1px solid var(--muted);color:var(--text);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.9rem;text-align:left;transition:background .2s}
-.menu-panel button:hover{background:hsla(0,0%,50%,.15)}
-.animate{animation:fadeUp .6s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.kpi:nth-child(2){animation-delay:.05s}.kpi:nth-child(3){animation-delay:.1s}.kpi:nth-child(4){animation-delay:.15s}.kpi:nth-child(5){animation-delay:.2s}.kpi:nth-child(6){animation-delay:.25s}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SaaS Metrics Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* ===== THEME SYSTEM ===== */
+    :root, .theme-dark {
+      --bg: #030712;
+      --surface: #111827;
+      --surface-hover: #1f2937;
+      --border: rgba(255,255,255,0.08);
+      --text: #f9fafb;
+      --text-secondary: #9ca3af;
+      --accent: #3b82f6;
+      --accent-secondary: #8b5cf6;
+      --positive: #10b981;
+      --negative: #f43f5e;
+      --warning: #f59e0b;
+    }
+    .theme-light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a;
+      --text-secondary: #64748b;
+      --accent: #2563eb;
+      --accent-secondary: #7c3aed;
+      --positive: #059669;
+      --negative: #e11d48;
+      --warning: #d97706;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
+    }
+    
+    /* ===== GLASS CARD ===== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    
+    /* ===== TEXT COLORS ===== */
+    h1, h2, h3, h4, h5, h6 { color: var(--text); }
+    p, li, td, th, span, label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
+    
+    /* ===== ENTRANCE ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+    .delay-7 { animation-delay: 0.7s; }
+    .delay-8 { animation-delay: 0.8s; }
+    .delay-9 { animation-delay: 0.9s; }
+    .delay-10 { animation-delay: 1.0s; }
+    
+    /* ===== REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* ===== PRINT STYLES ===== */
+    @media print {
+      body { background: white !important; color: black !important; }
+      .viz-menu { display: none !important; }
+      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+    
+    /* ===== HAMBURGER MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s;
+    }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown {
+      position: absolute; top: 52px; right: 0; min-width: 200px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
+      transform: translateY(-8px); transition: all 0.2s;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button {
+      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text); font-size: 14px;
+      font-family: inherit; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
+    }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    
+    /* ===== DASHBOARD LAYOUT ===== */
+    .dashboard {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+    }
+    
+    .dashboard-header {
+      margin-bottom: 32px;
+      padding-right: 60px;
+    }
+    .dashboard-header h1 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .dashboard-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .header-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: var(--positive);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: var(--positive);
+      color: #fff;
+    }
+    
+    /* ===== KPI GRID ===== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      border-left: 4px solid var(--positive);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .kpi-card.negative { border-left-color: var(--negative); }
+    .kpi-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .kpi-change {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .kpi-change.up { color: var(--positive); }
+    .kpi-change.down { color: var(--negative); }
+    
+    /* ===== CHART GRID ===== */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .chart-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .chart-container {
+      position: relative;
+      min-height: 300px;
+      width: 100%;
+    }
+    .chart-container canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+    
+    @media (max-width: 768px) {
+      .chart-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .dashboard { padding: 16px 12px 48px; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-<button class="hamburger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu">
-<span></span><span></span><span></span>
-</button>
-<div class="menu-panel">
-<button onclick="toggleTheme()">🌓 Toggle Theme</button>
-<button onclick="downloadPNG()">📸 Download PNG</button>
-<button onclick="window.print()">🖨️ Print / PDF</button>
-</div>
 
-<div id="dashboard">
-<div class="header">
-<h1>📊 SaaS <span>Dashboard</span></h1>
-<div class="date" id="dateEl"></div>
-</div>
+  <!-- MENU -->
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/>
+        <line x1="3" y1="10" x2="17" y2="10"/>
+        <line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()">
+        <span>📥</span>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()">
+        <span>🖨️</span>
+        <span>Print / PDF</span>
+      </button>
+    </div>
+  </div>
 
-<div class="kpi-grid">
-<div class="kpi animate"><div class="kpi-label">MRR</div><div class="kpi-value">$128K</div><div class="kpi-change up">↑ 12.4% vs last month</div></div>
-<div class="kpi animate"><div class="kpi-label">ARR</div><div class="kpi-value">$1.54M</div><div class="kpi-change up">↑ 8.2% vs last quarter</div></div>
-<div class="kpi animate"><div class="kpi-label">Active Users</div><div class="kpi-value">14,280</div><div class="kpi-change up">↑ 18.7%</div></div>
-<div class="kpi animate"><div class="kpi-label">Churn Rate</div><div class="kpi-value">3.2%</div><div class="kpi-change down">↑ 0.4%</div></div>
-<div class="kpi animate"><div class="kpi-label">LTV</div><div class="kpi-value">$2,840</div><div class="kpi-change up">↑ 5.1%</div></div>
-<div class="kpi animate"><div class="kpi-label">CAC</div><div class="kpi-value">$186</div><div class="kpi-change up">↓ 11.3%</div></div>
-</div>
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+    <div class="dashboard-header animate-in">
+      <div class="header-bar">
+        <h1>SaaS Metrics Dashboard</h1>
+        <div class="live-dot"></div>
+        <span class="badge">Live</span>
+      </div>
+      <p class="text-secondary">February 2026 — All metrics updated in real-time</p>
+    </div>
 
-<div class="charts-grid">
-<div class="chart-card"><h3>Revenue Over Time</h3><canvas id="revenueChart"></canvas></div>
-<div class="chart-card"><h3>Churn Breakdown</h3><canvas id="churnChart"></canvas></div>
-</div>
+    <!-- KPI CARDS -->
+    <div class="kpi-grid">
+      <div class="kpi-card animate-in delay-1">
+        <div class="kpi-label">Monthly Recurring Revenue</div>
+        <div class="kpi-value">$128K</div>
+        <div class="kpi-change up">↑ 12.4% vs last month</div>
+      </div>
+      <div class="kpi-card animate-in delay-2">
+        <div class="kpi-label">Annual Recurring Revenue</div>
+        <div class="kpi-value">$1.54M</div>
+        <div class="kpi-change up">↑ 24.8% YoY</div>
+      </div>
+      <div class="kpi-card animate-in delay-3">
+        <div class="kpi-label">Active Users</div>
+        <div class="kpi-value">14,280</div>
+        <div class="kpi-change up">↑ 8.2% vs last month</div>
+      </div>
+      <div class="kpi-card negative animate-in delay-4">
+        <div class="kpi-label">Churn Rate</div>
+        <div class="kpi-value">3.2%</div>
+        <div class="kpi-change down">↑ 0.4% vs last month</div>
+      </div>
+      <div class="kpi-card animate-in delay-5">
+        <div class="kpi-label">Lifetime Value</div>
+        <div class="kpi-value">$2,840</div>
+        <div class="kpi-change up">↑ 6.1% vs last quarter</div>
+      </div>
+      <div class="kpi-card animate-in delay-6">
+        <div class="kpi-label">Customer Acq. Cost</div>
+        <div class="kpi-value">$186</div>
+        <div class="kpi-change up">↓ 11.0% vs last quarter</div>
+      </div>
+    </div>
 
-<div class="row2">
-<div class="chart-card"><h3>User Growth</h3><canvas id="userChart"></canvas></div>
-<div class="chart-card"><h3>Revenue by Plan</h3><canvas id="planChart"></canvas></div>
-</div>
-</div>
+    <!-- CHARTS -->
+    <div class="chart-grid">
+      <div class="chart-card animate-in delay-7">
+        <h3>Revenue Over Time</h3>
+        <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+      </div>
+      <div class="chart-card animate-in delay-8">
+        <h3>Churn Breakdown</h3>
+        <div class="chart-container"><canvas id="churnChart"></canvas></div>
+      </div>
+      <div class="chart-card animate-in delay-9">
+        <h3>User Growth</h3>
+        <div class="chart-container"><canvas id="userChart"></canvas></div>
+      </div>
+      <div class="chart-card animate-in delay-10">
+        <h3>Revenue by Plan</h3>
+        <div class="chart-container"><canvas id="planChart"></canvas></div>
+      </div>
+    </div>
+  </div>
 
-<script>
-document.getElementById('dateEl').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-const gc='hsla(0,0%,50%,.12)',tc='hsl(0,0%,55%)';
-const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-new Chart(document.getElementById('revenueChart'),{type:'line',data:{labels:months,datasets:[{label:'MRR ($K)',data:[42,48,53,61,68,74,82,89,97,108,118,128],borderColor:'hsl(210,100%,60%)',backgroundColor:'hsla(210,100%,60%,.08)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'hsl(210,100%,60%)'},{label:'Expenses ($K)',data:[38,40,42,44,46,48,50,52,54,56,58,60],borderColor:'hsl(0,75%,55%)',backgroundColor:'hsla(0,75%,55%,.05)',fill:true,tension:.4,pointRadius:3,borderDash:[5,5]}]},options:{responsive:true,plugins:{legend:{labels:{color:tc}}},scales:{y:{grid:{color:gc},ticks:{color:tc,callback:v=>'$'+v+'K'}},x:{grid:{display:false},ticks:{color:tc}}}}});
-new Chart(document.getElementById('churnChart'),{type:'doughnut',data:{labels:['Voluntary','Involuntary','Downgrade'],datasets:[{data:[45,30,25],backgroundColor:['hsl(0,75%,55%)','hsl(35,95%,55%)','hsl(270,70%,60%)'],borderWidth:0}]},options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:tc,padding:12}}}}});
-new Chart(document.getElementById('userChart'),{type:'bar',data:{labels:months,datasets:[{label:'New Users',data:[420,510,580,690,820,950,1100,1280,1450,1680,1900,2150],backgroundColor:'hsl(150,70%,45%)',borderRadius:6},{label:'Churned',data:[80,90,95,110,120,130,140,150,155,170,180,190],backgroundColor:'hsl(0,75%,55%)',borderRadius:6}]},options:{responsive:true,plugins:{legend:{labels:{color:tc}}},scales:{y:{grid:{color:gc},ticks:{color:tc}},x:{grid:{display:false},ticks:{color:tc}}}}});
-new Chart(document.getElementById('planChart'),{type:'doughnut',data:{labels:['Starter $29','Pro $99','Enterprise $299'],datasets:[{data:[35,45,20],backgroundColor:['hsl(210,100%,60%)','hsl(150,70%,45%)','hsl(270,70%,60%)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:tc,padding:12}}}}});
+  <script>
+    // Menu
+    function toggleMenu() {
+      document.getElementById('vizMenuDropdown').classList.toggle('open');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.viz-menu')) {
+        document.getElementById('vizMenuDropdown').classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
+    });
 
-function toggleTheme(){document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'}
-function downloadPNG(){htmlToImage.toPng(document.getElementById('dashboard')).then(d=>{const a=document.createElement('a');a.href=d;a.download='saas-dashboard.png';a.click()})}
-</script>
+    // Theme
+    const themes = ['dark', 'light'];
+    const themeIcons = { dark: '🌙', light: '☀️' };
+    let currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').textContent = themeIcons[t];
+      document.getElementById('themeLabel').textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+      renderAllCharts();
+    }
+    function cycleTheme() {
+      const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+      applyTheme(next);
+    }
+
+    // Download PNG
+    async function downloadImage() {
+      const menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        const dataUrl = await htmlToImage.toPng(document.body, {
+          quality: 1, pixelRatio: 2,
+          filter: n => !n.classList?.contains('viz-menu')
+        });
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'saas-metrics-dashboard.png';
+        a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+
+    // Chart.js theme-aware helpers
+    function getChartColors() {
+      const s = getComputedStyle(document.documentElement);
+      return {
+        text: s.getPropertyValue('--text').trim(),
+        textSecondary: s.getPropertyValue('--text-secondary').trim(),
+        border: s.getPropertyValue('--border').trim(),
+        surface: s.getPropertyValue('--surface').trim(),
+        accent: s.getPropertyValue('--accent').trim(),
+        positive: s.getPropertyValue('--positive').trim(),
+        negative: s.getPropertyValue('--negative').trim(),
+        warning: s.getPropertyValue('--warning').trim(),
+      };
+    }
+    const PALETTE = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#06b6d4','#f43f5e'];
+
+    let charts = {};
+    function renderAllCharts() {
+      Object.values(charts).forEach(c => c.destroy());
+      charts = {};
+      const c = getChartColors();
+      Chart.defaults.color = c.textSecondary;
+      Chart.defaults.borderColor = c.border;
+
+      const months = ['Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'];
+
+      // Revenue line
+      charts.revenue = new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'MRR ($K)',
+            data: [68,74,79,85,91,96,100,105,110,116,122,128],
+            borderColor: PALETTE[0],
+            backgroundColor: PALETTE[0] + '20',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 4,
+            pointBackgroundColor: PALETTE[0],
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid: { color: c.border }, ticks: { callback: v => '$' + v + 'K' } },
+            x: { grid: { color: c.border } }
+          }
+        }
+      });
+
+      // Churn doughnut
+      charts.churn = new Chart(document.getElementById('churnChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Voluntary','Involuntary','Downgrade','Delinquent'],
+          datasets: [{
+            data: [38,24,22,16],
+            backgroundColor: [PALETTE[6],PALETTE[3],PALETTE[1],PALETTE[5]],
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: { position: 'bottom', labels: { color: c.textSecondary, padding: 16, usePointStyle: true, pointStyle: 'circle' } }
+          }
+        }
+      });
+
+      // User growth bar
+      charts.users = new Chart(document.getElementById('userChart'), {
+        type: 'bar',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'New Users',
+            data: [820,910,975,1040,1120,1180,1260,1340,1390,1450,1520,1600],
+            backgroundColor: PALETTE[4] + 'cc',
+            borderRadius: 6,
+          },{
+            label: 'Churned',
+            data: [180,195,210,220,230,240,250,255,260,270,280,290],
+            backgroundColor: PALETTE[6] + 'cc',
+            borderRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: 'top', labels: { color: c.textSecondary, usePointStyle: true, pointStyle: 'circle' } } },
+          scales: {
+            y: { grid: { color: c.border } },
+            x: { grid: { color: c.border } }
+          }
+        }
+      });
+
+      // Revenue by plan doughnut
+      charts.plan = new Chart(document.getElementById('planChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Enterprise','Business','Pro','Starter'],
+          datasets: [{
+            data: [52,28,14,6],
+            backgroundColor: [PALETTE[0],PALETTE[1],PALETTE[2],PALETTE[3]],
+            borderWidth: 0,
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: { position: 'bottom', labels: { color: c.textSecondary, padding: 16, usePointStyle: true, pointStyle: 'circle' } }
+          }
+        }
+      });
+    }
+
+    applyTheme(currentTheme);
+  </script>
 </body>
 </html>
