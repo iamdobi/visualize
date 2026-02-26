@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CookAI – Pitch Deck</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:hsl(230,25%,9%);--surface:hsl(230,20%,13%);--text:hsl(0,0%,95%);--muted:hsl(230,10%,60%);--accent:hsl(25,95%,55%);--accent2:hsl(160,70%,45%);--radius:12px;--shadow:0 4px 24px hsla(0,0%,0%,.4);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+[data-theme="light"]{--bg:hsl(40,20%,96%);--surface:hsl(0,0%,100%);--text:hsl(230,25%,12%);--muted:hsl(230,10%,45%);--shadow:0 4px 24px hsla(230,30%,20%,.1)}
+html,body{height:100%;background:var(--bg);color:var(--text);overflow:hidden}
+.deck{position:relative;width:100%;height:100%}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 64px;opacity:0;transform:translateX(60px);transition:opacity .5s,transform .5s;pointer-events:none;text-align:center}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.prev{opacity:0;transform:translateX(-60px)}
+h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.1;margin-bottom:16px}
+h2{font-size:clamp(1.4rem,3vw,2.2rem);font-weight:700;margin-bottom:24px}
+h3{font-size:1.1rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px}
+p,.desc{font-size:clamp(1rem,1.8vw,1.25rem);color:var(--muted);max-width:700px;line-height:1.6}
+.accent{color:var(--accent)}
+.accent2{color:var(--accent2)}
+.big-number{font-size:clamp(3rem,8vw,6rem);font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:32px;width:100%;max-width:900px;text-align:left}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;width:100%;max-width:900px}
+.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.card h4{font-size:1rem;margin-bottom:8px}
+.card p{font-size:.9rem}
+.chart-wrap{width:100%;max-width:600px;margin:0 auto}
+.logo{font-size:2.5rem;margin-bottom:8px}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:800px}
+.team-card{text-align:center}.team-card .avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 8px;color:#fff}
+.team-card .name{font-weight:700;font-size:.95rem}.team-card .role{font-size:.8rem;color:var(--muted)}
+.pill{display:inline-block;background:var(--accent);color:#fff;padding:6px 16px;border-radius:999px;font-weight:600;font-size:.9rem;margin:4px}
+.nav-dots{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100}
+.nav-dots span{width:10px;height:10px;border-radius:50%;background:var(--muted);cursor:pointer;transition:background .3s,transform .3s}
+.nav-dots span.active{background:var(--accent);transform:scale(1.3)}
+.slide-num{position:fixed;bottom:28px;right:32px;font-size:.85rem;color:var(--muted);z-index:100}
+/* Hamburger */
+.hamburger{position:fixed;top:16px;right:16px;z-index:200;width:40px;height:40px;background:var(--surface);border:none;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow)}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s}
+.menu-open .hamburger span:nth-child(1){transform:rotate(45deg) translate(2.5px,2.5px)}
+.menu-open .hamburger span:nth-child(2){opacity:0}
+.menu-open .hamburger span:nth-child(3){transform:rotate(-45deg) translate(2.5px,-2.5px)}
+.menu-panel{position:fixed;top:0;right:-260px;width:260px;height:100%;background:var(--surface);box-shadow:var(--shadow);z-index:190;transition:right .3s;padding:72px 24px 24px;display:flex;flex-direction:column;gap:12px}
+.menu-open .menu-panel{right:0}
+.menu-panel button{background:none;border:1px solid var(--muted);color:var(--text);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.9rem;text-align:left;transition:background .2s}
+.menu-panel button:hover{background:hsla(0,0%,50%,.15)}
+@media(max-width:600px){.slide{padding:24px}.grid2,.grid3,.team-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
+<div class="menu-panel">
+<button onclick="toggleTheme()">🌓 Toggle Theme</button>
+<button onclick="downloadPNG()">📸 Download PNG</button>
+<button onclick="window.print()">🖨️ Print / PDF</button>
+</div>
+
+<div class="deck" id="deck">
+<!-- Slide 0: Title -->
+<div class="slide active">
+<div class="logo">🍳</div>
+<h1>Cook<span class="accent">AI</span></h1>
+<p>Your AI-powered personal chef. What's in your fridge becomes tonight's dinner.</p>
+<div style="margin-top:24px"><span class="pill">Seed Round – $2M</span></div>
+</div>
+<!-- Slide 1: Problem -->
+<div class="slide">
+<h3>The Problem</h3>
+<h2>40% of groceries go to waste</h2>
+<div class="grid2">
+<div class="card"><h4>🗑️ $1,600/year wasted</h4><p>The average US household throws away $1,600 in groceries annually.</p></div>
+<div class="card"><h4>😩 Decision Fatigue</h4><p>63% of people dread the daily question: "What should I cook tonight?"</p></div>
+</div>
+</div>
+<!-- Slide 2: Solution -->
+<div class="slide">
+<h3>The Solution</h3>
+<h2>Snap. Cook. <span class="accent">Enjoy.</span></h2>
+<div class="grid3">
+<div class="card"><h4>📸 Scan</h4><p>Take a photo of your fridge or pantry.</p></div>
+<div class="card"><h4>🤖 AI Chef</h4><p>Get personalized recipes matching your ingredients, diet & skill level.</p></div>
+<div class="card"><h4>🍽️ Cook</h4><p>Step-by-step guided cooking with voice & video.</p></div>
+</div>
+</div>
+<!-- Slide 3: Market -->
+<div class="slide">
+<h3>Market Opportunity</h3>
+<div class="big-number">$300B</div>
+<p>Global food-tech market by 2027</p>
+<div class="chart-wrap" style="margin-top:24px"><canvas id="marketChart"></canvas></div>
+</div>
+<!-- Slide 4: Business Model -->
+<div class="slide">
+<h3>Business Model</h3>
+<h2>Freemium + Marketplace</h2>
+<div class="grid2">
+<div class="card"><h4>🆓 Free Tier</h4><p>5 recipes/week. Ingredient recognition. Basic filters.</p></div>
+<div class="card"><h4>⭐ Pro – $9.99/mo</h4><p>Unlimited recipes. Meal planning. Nutrition tracking. Family sharing.</p></div>
+<div class="card"><h4>🛒 Grocery API</h4><p>One-tap ordering from partner grocers. 8% affiliate rev.</p></div>
+<div class="card"><h4>🏢 Enterprise</h4><p>White-label for meal-kit companies & grocery chains.</p></div>
+</div>
+</div>
+<!-- Slide 5: Traction -->
+<div class="slide">
+<h3>Traction</h3>
+<h2>Growing <span class="accent2">42% MoM</span></h2>
+<div class="chart-wrap"><canvas id="tractionChart"></canvas></div>
+</div>
+<!-- Slide 6: Product -->
+<div class="slide">
+<h3>Why Us</h3>
+<h2>Unfair Advantages</h2>
+<div class="grid3">
+<div class="card"><h4>🧠 Proprietary Vision Model</h4><p>98.5% ingredient recognition accuracy, trained on 2M+ food images.</p></div>
+<div class="card"><h4>📊 Taste Graph</h4><p>Personalization engine learns preferences with every interaction.</p></div>
+<div class="card"><h4>🌍 150+ Cuisines</h4><p>Largest curated recipe DB: 2M+ recipes across every global cuisine.</p></div>
+</div>
+</div>
+<!-- Slide 7: Team -->
+<div class="slide">
+<h3>The Team</h3>
+<h2>Built to win</h2>
+<div class="team-grid">
+<div class="team-card"><div class="avatar">👩‍💻</div><div class="name">Sarah Chen</div><div class="role">CEO — Ex-Google AI</div></div>
+<div class="team-card"><div class="avatar">👨‍🍳</div><div class="name">Marco Rivera</div><div class="role">CPO — Michelin Chef</div></div>
+<div class="team-card"><div class="avatar">👨‍💻</div><div class="name">James Park</div><div class="role">CTO — Ex-Meta ML</div></div>
+<div class="team-card"><div class="avatar">👩‍💼</div><div class="name">Aisha Patel</div><div class="role">COO — Ex-DoorDash</div></div>
+</div>
+</div>
+<!-- Slide 8: Roadmap -->
+<div class="slide">
+<h3>Roadmap</h3>
+<h2>What's Next</h2>
+<div class="grid2" style="max-width:700px">
+<div class="card"><h4>Q1 2026</h4><p>Launch Pro tier. Grocery partner integrations (Instacart, Kroger).</p></div>
+<div class="card"><h4>Q2 2026</h4><p>Voice-guided cooking. Smart kitchen device integrations.</p></div>
+<div class="card"><h4>Q3 2026</h4><p>Social features: share recipes, follow chefs, community challenges.</p></div>
+<div class="card"><h4>Q4 2026</h4><p>Enterprise API. International expansion (EU, APAC).</p></div>
+</div>
+</div>
+<!-- Slide 9: Ask -->
+<div class="slide">
+<h3>The Ask</h3>
+<div class="big-number">$2M</div>
+<h2 style="margin-top:16px">Seed Round</h2>
+<div class="grid3" style="margin-top:24px">
+<div class="card"><h4>40%</h4><p>Engineering & AI model training</p></div>
+<div class="card"><h4>35%</h4><p>Growth & user acquisition</p></div>
+<div class="card"><h4>25%</h4><p>Operations & partnerships</p></div>
+</div>
+<p style="margin-top:24px">📧 invest@cookai.app</p>
+</div>
+</div>
+
+<div class="nav-dots" id="dots"></div>
+<div class="slide-num" id="slideNum"></div>
+
+<script>
+let cur=0;const slides=document.querySelectorAll('.slide'),total=slides.length;
+const dots=document.getElementById('dots'),numEl=document.getElementById('slideNum');
+for(let i=0;i<total;i++){const d=document.createElement('span');d.onclick=()=>go(i);dots.appendChild(d)}
+function go(n){if(n<0||n>=total)return;slides[cur].classList.remove('active');slides[cur].classList.add('prev');cur=n;slides.forEach((s,i)=>{if(i!==cur)s.classList.remove('active','prev')});slides[cur].classList.add('active');document.querySelectorAll('.nav-dots span').forEach((d,i)=>d.classList.toggle('active',i===cur));numEl.textContent=`${cur+1} / ${total}`;initCharts()}
+go(0);
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+let tx=0;document.addEventListener('touchstart',e=>tx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(d<-50)go(cur+1);if(d>50)go(cur-1)});
+
+let chartsReady={market:false,traction:false};
+function initCharts(){
+if(cur===3&&!chartsReady.market){chartsReady.market=true;new Chart(document.getElementById('marketChart'),{type:'bar',data:{labels:['2023','2024','2025','2026','2027'],datasets:[{label:'Market Size ($B)',data:[180,210,245,275,300],backgroundColor:['hsl(25,95%,55%)','hsl(30,95%,55%)','hsl(35,95%,55%)','hsl(40,95%,55%)','hsl(160,70%,45%)'],borderRadius:8}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'hsla(0,0%,50%,.15)'},ticks:{color:'hsl(0,0%,60%)'}},x:{grid:{display:false},ticks:{color:'hsl(0,0%,60%)'}}}}})}
+if(cur===5&&!chartsReady.traction){chartsReady.traction=true;new Chart(document.getElementById('tractionChart'),{type:'line',data:{labels:['Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan'],datasets:[{label:'MAU (K)',data:[2,3.5,5,8,12,18,26,37],borderColor:'hsl(25,95%,55%)',backgroundColor:'hsla(25,95%,55%,.1)',fill:true,tension:.4,pointRadius:4,pointBackgroundColor:'hsl(25,95%,55%)'}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{grid:{color:'hsla(0,0%,50%,.15)'},ticks:{color:'hsl(0,0%,60%)'}},x:{grid:{display:false},ticks:{color:'hsl(0,0%,60%)'}}}}})}
+}
+function toggleTheme(){const t=document.documentElement.dataset.theme;document.documentElement.dataset.theme=t==='dark'?'light':'dark';chartsReady={market:false,traction:false};document.querySelectorAll('canvas').forEach(c=>{const ch=Chart.getChart(c);if(ch)ch.destroy()});initCharts()}
+function downloadPNG(){htmlToImage.toPng(document.querySelector('.slide.active')).then(d=>{const a=document.createElement('a');a.href=d;a.download='cookai-slide-'+(cur+1)+'.png';a.click()})}
+</script>
+</body>
+</html>

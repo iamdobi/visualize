@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>History of AI – Timeline</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:hsl(240,20%,7%);--surface:hsl(240,18%,12%);--text:hsl(0,0%,95%);--muted:hsl(240,10%,55%);--accent:hsl(260,80%,65%);--accent2:hsl(200,90%,55%);--line:hsl(260,40%,30%);--radius:16px;--shadow:0 4px 32px hsla(260,50%,10%,.5);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+[data-theme="light"]{--bg:hsl(250,20%,97%);--surface:hsl(0,0%,100%);--text:hsl(240,25%,10%);--muted:hsl(240,10%,40%);--line:hsl(260,30%,80%);--shadow:0 4px 32px hsla(260,30%,20%,.08)}
+body{background:var(--bg);color:var(--text);overflow-x:hidden}
+.hero{text-align:center;padding:80px 24px 48px;position:relative}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);margin-top:8px;font-size:1.1rem}
+.timeline{position:relative;max-width:900px;margin:0 auto;padding:40px 24px 80px}
+.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,transparent,var(--line) 10%,var(--line) 90%,transparent);transform:translateX(-50%)}
+.item{position:relative;width:50%;padding:0 40px 48px;opacity:0;transform:translateY(40px);transition:opacity .6s,transform .6s}
+.item.visible{opacity:1;transform:none}
+.item.left{left:0;text-align:right}
+.item.right{left:50%;text-align:left}
+.item::after{content:'';position:absolute;top:24px;width:16px;height:16px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);z-index:2}
+.item.left::after{right:-8px}
+.item.right::after{left:-8px}
+.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);position:relative}
+.card .year{font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:2px;margin-bottom:4px}
+.card h3{font-size:1.15rem;font-weight:700;margin-bottom:8px}
+.card p{font-size:.9rem;color:var(--muted);line-height:1.5}
+.card .icon{width:48px;height:48px;margin-bottom:12px;display:inline-block}
+.item.right .card .icon,.item.left .card .icon{display:block}
+.item.left .card .icon{margin-left:auto}
+@media(max-width:700px){
+.timeline::before{left:20px}
+.item{width:100%;left:0!important;padding:0 0 32px 48px;text-align:left!important}
+.item::after{left:12px!important;right:auto!important}
+.item.left .card .icon{margin-left:0}
+}
+/* Hamburger */
+.hamburger{position:fixed;top:16px;right:16px;z-index:200;width:40px;height:40px;background:var(--surface);border:none;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow)}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s}
+.menu-open .hamburger span:nth-child(1){transform:rotate(45deg) translate(2.5px,2.5px)}
+.menu-open .hamburger span:nth-child(2){opacity:0}
+.menu-open .hamburger span:nth-child(3){transform:rotate(-45deg) translate(2.5px,-2.5px)}
+.menu-panel{position:fixed;top:0;right:-260px;width:260px;height:100%;background:var(--surface);box-shadow:var(--shadow);z-index:190;transition:right .3s;padding:72px 24px 24px;display:flex;flex-direction:column;gap:12px}
+.menu-open .menu-panel{right:0}
+.menu-panel button{background:none;border:1px solid var(--muted);color:var(--text);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.9rem;text-align:left;transition:background .2s}
+.menu-panel button:hover{background:hsla(0,0%,50%,.15)}
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
+<div class="menu-panel">
+<button onclick="toggleTheme()">🌓 Toggle Theme</button>
+<button onclick="downloadPNG()">📸 Download PNG</button>
+<button onclick="window.print()">🖨️ Print / PDF</button>
+</div>
+
+<div id="page">
+<div class="hero">
+<h1>The History of Artificial Intelligence</h1>
+<p>Seven decades of breakthroughs — 1950 to 2025</p>
+</div>
+
+<div class="timeline" id="timeline"></div>
+</div>
+
+<script>
+const events=[
+{year:'1950',title:'Turing Test Proposed',desc:'Alan Turing publishes "Computing Machinery and Intelligence," posing the question: Can machines think?',icon:'🧠',color:'hsl(260,80%,65%)'},
+{year:'1956',title:'Dartmouth Conference',desc:'The term "Artificial Intelligence" is coined at a summer workshop at Dartmouth College.',icon:'🎓',color:'hsl(200,90%,55%)'},
+{year:'1966',title:'ELIZA Chatbot',desc:'Joseph Weizenbaum creates ELIZA, one of the first programs to process natural language.',icon:'💬',color:'hsl(150,70%,50%)'},
+{year:'1974',title:'First AI Winter',desc:'Funding dries up as early AI fails to meet grand expectations. Research stalls.',icon:'❄️',color:'hsl(200,60%,70%)'},
+{year:'1980',title:'Expert Systems Boom',desc:'Rule-based expert systems become a billion-dollar industry, reviving AI commercial interest.',icon:'⚙️',color:'hsl(35,90%,55%)'},
+{year:'1997',title:'Deep Blue Beats Kasparov',desc:'IBM\'s Deep Blue defeats world chess champion Garry Kasparov in a historic match.',icon:'♟️',color:'hsl(0,70%,55%)'},
+{year:'2006',title:'Deep Learning Renaissance',desc:'Geoffrey Hinton publishes breakthrough work on deep belief networks, sparking the deep learning era.',icon:'🔬',color:'hsl(280,70%,60%)'},
+{year:'2011',title:'Watson Wins Jeopardy!',desc:'IBM\'s Watson defeats human champions on Jeopardy!, showcasing NLP and knowledge retrieval.',icon:'🏆',color:'hsl(45,90%,50%)'},
+{year:'2012',title:'AlexNet & ImageNet',desc:'AlexNet crushes the ImageNet competition, proving deep CNNs can dominate computer vision.',icon:'👁️',color:'hsl(180,70%,50%)'},
+{year:'2016',title:'AlphaGo Beats Lee Sedol',desc:'DeepMind\'s AlphaGo defeats Go world champion Lee Sedol 4-1, stunning the AI community.',icon:'⚫',color:'hsl(160,60%,45%)'},
+{year:'2017',title:'Transformers Architecture',desc:'Google publishes "Attention Is All You Need," introducing the transformer — the foundation of modern AI.',icon:'⚡',color:'hsl(50,95%,50%)'},
+{year:'2020',title:'GPT-3 Released',desc:'OpenAI\'s GPT-3 demonstrates remarkable language generation, igniting the generative AI wave.',icon:'🤖',color:'hsl(210,90%,55%)'},
+{year:'2022',title:'ChatGPT & Stable Diffusion',desc:'ChatGPT reaches 100M users in 2 months. AI image generation goes mainstream.',icon:'🚀',color:'hsl(330,80%,55%)'},
+{year:'2024',title:'Multimodal AI & Agents',desc:'GPT-4o, Claude 3, Gemini — AI sees, hears, reasons. Autonomous agents emerge.',icon:'🌐',color:'hsl(260,80%,65%)'},
+{year:'2025',title:'The Age of AI Agents',desc:'AI agents ship code, manage workflows, and collaborate autonomously. The intelligence era begins.',icon:'✨',color:'hsl(200,90%,55%)'}
+];
+
+const tl=document.getElementById('timeline');
+events.forEach((e,i)=>{
+const side=i%2===0?'left':'right';
+tl.innerHTML+=`<div class="item ${side}"><div class="card"><div class="icon" style="font-size:2rem">${e.icon}</div><div class="year">${e.year}</div><h3>${e.title}</h3><p>${e.desc}</p></div></div>`;
+});
+
+const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.15});
+document.querySelectorAll('.item').forEach(el=>obs.observe(el));
+
+function toggleTheme(){document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'}
+function downloadPNG(){htmlToImage.toPng(document.getElementById('page')).then(d=>{const a=document.createElement('a');a.href=d;a.download='ai-timeline.png';a.click()})}
+</script>
+</body>
+</html>

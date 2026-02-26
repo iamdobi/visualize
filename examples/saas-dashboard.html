@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS Metrics Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:hsl(225,25%,8%);--surface:hsl(225,20%,13%);--surface2:hsl(225,18%,17%);--text:hsl(0,0%,95%);--muted:hsl(225,10%,55%);--accent:hsl(210,100%,60%);--green:hsl(150,70%,45%);--red:hsl(0,75%,55%);--orange:hsl(35,95%,55%);--purple:hsl(270,70%,60%);--radius:12px;--shadow:0 2px 16px hsla(0,0%,0%,.3);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+[data-theme="light"]{--bg:hsl(220,20%,96%);--surface:hsl(0,0%,100%);--surface2:hsl(220,15%,94%);--text:hsl(225,25%,12%);--muted:hsl(225,10%,40%);--shadow:0 2px 16px hsla(225,30%,20%,.08)}
+body{background:var(--bg);color:var(--text);min-height:100vh;padding:24px}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.header h1{font-size:1.5rem;font-weight:800}.header h1 span{color:var(--accent)}
+.header .date{color:var(--muted);font-size:.9rem}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.kpi{background:var(--surface);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.kpi:nth-child(1)::before{background:var(--accent)}.kpi:nth-child(2)::before{background:var(--green)}.kpi:nth-child(3)::before{background:var(--orange)}.kpi:nth-child(4)::before{background:var(--purple)}.kpi:nth-child(5)::before{background:var(--red)}.kpi:nth-child(6)::before{background:hsl(180,60%,50%)}
+.kpi-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.kpi-value{font-size:1.8rem;font-weight:800}
+.kpi-change{font-size:.8rem;margin-top:4px}.kpi-change.up{color:var(--green)}.kpi-change.down{color:var(--red)}
+.charts-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.chart-card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.chart-card h3{font-size:1rem;font-weight:700;margin-bottom:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:768px){.charts-grid,.row2{grid-template-columns:1fr}}
+/* Hamburger */
+.hamburger{position:fixed;top:16px;right:16px;z-index:200;width:40px;height:40px;background:var(--surface);border:none;border-radius:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;box-shadow:var(--shadow)}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:transform .3s}
+.menu-open .hamburger span:nth-child(1){transform:rotate(45deg) translate(2.5px,2.5px)}
+.menu-open .hamburger span:nth-child(2){opacity:0}
+.menu-open .hamburger span:nth-child(3){transform:rotate(-45deg) translate(2.5px,-2.5px)}
+.menu-panel{position:fixed;top:0;right:-260px;width:260px;height:100%;background:var(--surface);box-shadow:var(--shadow);z-index:190;transition:right .3s;padding:72px 24px 24px;display:flex;flex-direction:column;gap:12px}
+.menu-open .menu-panel{right:0}
+.menu-panel button{background:none;border:1px solid var(--muted);color:var(--text);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.9rem;text-align:left;transition:background .2s}
+.menu-panel button:hover{background:hsla(0,0%,50%,.15)}
+.animate{animation:fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.kpi:nth-child(2){animation-delay:.05s}.kpi:nth-child(3){animation-delay:.1s}.kpi:nth-child(4){animation-delay:.15s}.kpi:nth-child(5){animation-delay:.2s}.kpi:nth-child(6){animation-delay:.25s}
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="document.body.classList.toggle('menu-open')" aria-label="Menu">
+<span></span><span></span><span></span>
+</button>
+<div class="menu-panel">
+<button onclick="toggleTheme()">🌓 Toggle Theme</button>
+<button onclick="downloadPNG()">📸 Download PNG</button>
+<button onclick="window.print()">🖨️ Print / PDF</button>
+</div>
+
+<div id="dashboard">
+<div class="header">
+<h1>📊 SaaS <span>Dashboard</span></h1>
+<div class="date" id="dateEl"></div>
+</div>
+
+<div class="kpi-grid">
+<div class="kpi animate"><div class="kpi-label">MRR</div><div class="kpi-value">$128K</div><div class="kpi-change up">↑ 12.4% vs last month</div></div>
+<div class="kpi animate"><div class="kpi-label">ARR</div><div class="kpi-value">$1.54M</div><div class="kpi-change up">↑ 8.2% vs last quarter</div></div>
+<div class="kpi animate"><div class="kpi-label">Active Users</div><div class="kpi-value">14,280</div><div class="kpi-change up">↑ 18.7%</div></div>
+<div class="kpi animate"><div class="kpi-label">Churn Rate</div><div class="kpi-value">3.2%</div><div class="kpi-change down">↑ 0.4%</div></div>
+<div class="kpi animate"><div class="kpi-label">LTV</div><div class="kpi-value">$2,840</div><div class="kpi-change up">↑ 5.1%</div></div>
+<div class="kpi animate"><div class="kpi-label">CAC</div><div class="kpi-value">$186</div><div class="kpi-change up">↓ 11.3%</div></div>
+</div>
+
+<div class="charts-grid">
+<div class="chart-card"><h3>Revenue Over Time</h3><canvas id="revenueChart"></canvas></div>
+<div class="chart-card"><h3>Churn Breakdown</h3><canvas id="churnChart"></canvas></div>
+</div>
+
+<div class="row2">
+<div class="chart-card"><h3>User Growth</h3><canvas id="userChart"></canvas></div>
+<div class="chart-card"><h3>Revenue by Plan</h3><canvas id="planChart"></canvas></div>
+</div>
+</div>
+
+<script>
+document.getElementById('dateEl').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+const gc='hsla(0,0%,50%,.12)',tc='hsl(0,0%,55%)';
+const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+new Chart(document.getElementById('revenueChart'),{type:'line',data:{labels:months,datasets:[{label:'MRR ($K)',data:[42,48,53,61,68,74,82,89,97,108,118,128],borderColor:'hsl(210,100%,60%)',backgroundColor:'hsla(210,100%,60%,.08)',fill:true,tension:.4,pointRadius:3,pointBackgroundColor:'hsl(210,100%,60%)'},{label:'Expenses ($K)',data:[38,40,42,44,46,48,50,52,54,56,58,60],borderColor:'hsl(0,75%,55%)',backgroundColor:'hsla(0,75%,55%,.05)',fill:true,tension:.4,pointRadius:3,borderDash:[5,5]}]},options:{responsive:true,plugins:{legend:{labels:{color:tc}}},scales:{y:{grid:{color:gc},ticks:{color:tc,callback:v=>'$'+v+'K'}},x:{grid:{display:false},ticks:{color:tc}}}}});
+new Chart(document.getElementById('churnChart'),{type:'doughnut',data:{labels:['Voluntary','Involuntary','Downgrade'],datasets:[{data:[45,30,25],backgroundColor:['hsl(0,75%,55%)','hsl(35,95%,55%)','hsl(270,70%,60%)'],borderWidth:0}]},options:{responsive:true,cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:tc,padding:12}}}}});
+new Chart(document.getElementById('userChart'),{type:'bar',data:{labels:months,datasets:[{label:'New Users',data:[420,510,580,690,820,950,1100,1280,1450,1680,1900,2150],backgroundColor:'hsl(150,70%,45%)',borderRadius:6},{label:'Churned',data:[80,90,95,110,120,130,140,150,155,170,180,190],backgroundColor:'hsl(0,75%,55%)',borderRadius:6}]},options:{responsive:true,plugins:{legend:{labels:{color:tc}}},scales:{y:{grid:{color:gc},ticks:{color:tc}},x:{grid:{display:false},ticks:{color:tc}}}}});
+new Chart(document.getElementById('planChart'),{type:'doughnut',data:{labels:['Starter $29','Pro $99','Enterprise $299'],datasets:[{data:[35,45,20],backgroundColor:['hsl(210,100%,60%)','hsl(150,70%,45%)','hsl(270,70%,60%)'],borderWidth:0}]},options:{responsive:true,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:tc,padding:12}}}}});
+
+function toggleTheme(){document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'}
+function downloadPNG(){htmlToImage.toPng(document.getElementById('dashboard')).then(d=>{const a=document.createElement('a');a.href=d;a.download='saas-dashboard.png';a.click()})}
+</script>
+</body>
+</html>
