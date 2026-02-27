@@ -6,7 +6,7 @@
   <title>Remote Work vs Office Work</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -127,9 +127,11 @@
     .pros-cons li { padding: 8px 0; padding-left: 24px; position: relative; font-size: 0.95rem; }
     .pros-cons .remote-list li::before { content: '✓'; position: absolute; left: 0; color: var(--remote); font-weight: 700; }
     .pros-cons .office-list li::before { content: '✓'; position: absolute; left: 0; color: var(--office); font-weight: 700; }
+    .pros-cons .cons-list li::before { content: '✗' !important; color: var(--negative) !important; }
 
     .chart-section h2 { text-align: center; font-size: 1.75rem; margin-bottom: 24px; }
-    .chart-container { height: 400px; max-width: 700px; margin: 0 auto; }
+    .chart-container { height: 400px; max-width: 700px; margin: 0 auto; position: relative; }
+    .chart-container canvas { display: block; }
 
     .insights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .insight-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
@@ -171,7 +173,7 @@
       </div>
     </header>
 
-    <section data-reveal>
+    <section>
       <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;" class="animate">By the Numbers</h2>
       <div class="stats-grid">
         <article class="card stat-card">
@@ -193,11 +195,12 @@
       </div>
     </section>
 
-    <section data-reveal>
+    <section>
       <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Pros &amp; Cons</h2>
       <div class="pros-cons">
         <div class="card">
           <h3 style="color:var(--remote);">🏠 Remote Work</h3>
+          <h4 style="font-size:0.85rem; color:var(--positive); margin-bottom:8px;">✓ Pros</h4>
           <ul class="remote-list">
             <li>Flexible schedule and location</li>
             <li>No commute saves 40+ min/day</li>
@@ -205,9 +208,17 @@
             <li>Lower overhead costs for companies</li>
             <li>Access to global talent pool</li>
           </ul>
+          <h4 style="font-size:0.85rem; color:var(--negative); margin:16px 0 8px;">✗ Cons</h4>
+          <ul class="remote-list cons-list" style="opacity:0.85;">
+            <li style="color:var(--text-secondary);">Social isolation and loneliness (33% report)</li>
+            <li style="color:var(--text-secondary);">Blurred work-life boundaries</li>
+            <li style="color:var(--text-secondary);">Harder to build team culture</li>
+            <li style="color:var(--text-secondary);">Distractions at home</li>
+          </ul>
         </div>
         <div class="card">
           <h3 style="color:var(--office);">🏢 Office Work</h3>
+          <h4 style="font-size:0.85rem; color:var(--positive); margin-bottom:8px;">✓ Pros</h4>
           <ul class="office-list">
             <li>Spontaneous collaboration & brainstorming</li>
             <li>Stronger team bonding & culture</li>
@@ -215,11 +226,18 @@
             <li>Easier mentorship for juniors</li>
             <li>Better access to equipment & resources</li>
           </ul>
+          <h4 style="font-size:0.85rem; color:var(--negative); margin:16px 0 8px;">✗ Cons</h4>
+          <ul class="office-list cons-list" style="opacity:0.85;">
+            <li style="color:var(--text-secondary);">Long commutes (avg 27 min each way)</li>
+            <li style="color:var(--text-secondary);">Higher overhead costs for companies</li>
+            <li style="color:var(--text-secondary);">More frequent interruptions</li>
+            <li style="color:var(--text-secondary);">Limited flexibility and autonomy</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <section class="chart-section" data-reveal>
+    <section class="chart-section">
       <h2>Employee Satisfaction</h2>
       <div class="card" style="padding:32px;">
         <div class="chart-container">
@@ -228,7 +246,7 @@
       </div>
     </section>
 
-    <section data-reveal>
+    <section>
       <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Key Insights</h2>
       <div class="insights-grid">
         <article class="card insight-card">
@@ -250,7 +268,7 @@
       </div>
     </section>
 
-    <section class="sources" data-reveal>
+    <section class="sources">
       <h3>Sources</h3>
       <p>Buffer State of Remote Work 2024 · Owl Labs Hybrid Work Report · McKinsey Future of Work Survey · Stanford WFH Research</p>
     </section>
@@ -358,10 +376,11 @@
         },
         options: {
           responsive: true, maintainAspectRatio: false,
+          animation: false,
           plugins: { legend: { position: 'top' } },
           scales: {
             x: { grid: { display: false } },
-            y: { grid: { color: c.border }, max: 100, ticks: { callback: function(v) { return v + '%'; } } }
+            y: { beginAtZero: true, grid: { color: c.border }, max: 100, ticks: { callback: function(v) { return v + '%'; } } }
           }
         }
       });

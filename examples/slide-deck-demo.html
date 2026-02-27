@@ -513,7 +513,7 @@
   </div>
 
   <div class="progress" id="progress"></div>
-  <div class="slide-num" id="slideNum"></div>
+  <!-- slide-num removed to fix "0" artifact -->
 
   <div class="deck" id="deck">
 
@@ -660,7 +660,7 @@
     const slides = document.querySelectorAll('.slide');
     const counter = document.getElementById('counter');
     const progress = document.getElementById('progress');
-    const slideNum = document.getElementById('slideNum');
+    const slideNum = document.getElementById('slideNum') || { style: {}, textContent: '' };
     let current = 0;
 
     function showSlide(i) {

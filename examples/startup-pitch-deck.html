@@ -211,10 +211,11 @@
   <div class="slides-container">
 
     <!-- Slide 1: Title -->
-    <section class="slide active" data-slide="0">
-      <h1 class="animate"><span class="gradient-text">CookAI</span></h1>
-      <p class="animate delay-1" style="font-size:1.5rem; margin-bottom:8px;">Your AI-Powered Kitchen Companion</p>
-      <p class="animate delay-2">Personalized recipes from what's in your fridge</p>
+    <section class="slide active" data-slide="0" style="background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.15), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(139,92,246,0.12), transparent 50%), var(--bg);">
+      <div style="font-size:5rem; margin-bottom:16px; filter:drop-shadow(0 0 24px rgba(59,130,246,0.3));" class="animate">🍳</div>
+      <h1 class="animate delay-1" style="font-size:4.5rem;"><span class="gradient-text">CookAI</span></h1>
+      <p class="animate delay-2" style="font-size:1.75rem; margin-bottom:8px; color:var(--text);">Your AI-Powered Kitchen Companion</p>
+      <p class="animate delay-3" style="font-size:1.15rem;">Snap your fridge. Get personalized recipes. Waste nothing.</p>
     </section>
 
     <!-- Slide 2: Problem -->
@@ -499,7 +500,7 @@
           }]
         },
         options: {
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+          indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
           plugins: { legend: { display: false } },
           scales: {
             x: { grid: { color: c.border }, ticks: { callback: function(v) { return '$' + v + 'B'; } } },
@@ -521,7 +522,7 @@
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
+          responsive: true, maintainAspectRatio: false, animation: false,
           plugins: { legend: { display: false } },
           scales: {
             x: { grid: { color: c.border } },

@@ -315,8 +315,15 @@
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: c.accent + 'ee', titleColor: '#fff', bodyColor: '#fff',
+              cornerRadius: 8, padding: 10,
+              callbacks: { label: function(ctx) { return '$' + ctx.parsed.y + 'K revenue'; } }
+            }
+          },
           scales: {
             x: { grid: { color: c.border } },
             y: { grid: { color: c.border }, ticks: { callback: function(v) { return '$' + v + 'K'; } } }
@@ -336,8 +343,15 @@
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } },
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              backgroundColor: c.accent + 'ee', titleColor: '#fff', bodyColor: '#fff',
+              cornerRadius: 8, padding: 10,
+              callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.parsed + '%'; } }
+            }
+          },
           cutout: '65%'
         }
       });
@@ -354,8 +368,15 @@
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: c.positive + 'ee', titleColor: '#fff', bodyColor: '#fff',
+              cornerRadius: 8, padding: 10,
+              callbacks: { label: function(ctx) { return ctx.parsed.y.toLocaleString() + ' new users'; } }
+            }
+          },
           scales: {
             x: { grid: { display: false } },
             y: { grid: { color: c.border } }
@@ -375,8 +396,15 @@
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } },
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              backgroundColor: c.accent + 'ee', titleColor: '#fff', bodyColor: '#fff',
+              cornerRadius: 8, padding: 10,
+              callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.parsed + '% of revenue'; } }
+            }
+          },
           cutout: '65%'
         }
       });

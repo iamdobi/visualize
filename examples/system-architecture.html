@@ -145,7 +145,19 @@
       display: flex; justify-content: center; padding: 8px 0;
     }
     .arrow-row svg { width: 24px; height: 24px; }
-    .arrow-row svg path { fill: var(--text-secondary); }
+    .arrow-row svg { stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .node { position: relative; }
+    .node .tooltip {
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 12px; font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .node:hover .tooltip { opacity: 1; }
+    .legend { display: flex; gap: 20px; justify-content: center; margin: 24px 0; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
 
     .annotations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .annotations h2 { grid-column: 1 / -1; text-align: center; font-size: 1.5rem; margin-bottom: 8px; }
@@ -181,15 +193,21 @@
       <p class="animate delay-1">E-Commerce Platform — System Overview</p>
     </header>
 
-    <section class="diagram animate delay-2">
+    <div class="legend animate delay-2">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--positive);"></div> Healthy</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--warning);"></div> Degraded</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--negative);"></div> Down</div>
+    </div>
+
+    <section class="diagram animate delay-3">
 
       <!-- Layer 1: Clients -->
       <div class="layer">
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-clients)"></div> Clients</div>
         <div class="nodes">
-          <div class="node node-clients">🌐 Web App</div>
-          <div class="node node-clients">📱 Mobile App</div>
-          <div class="node node-clients">🖥️ Admin Panel</div>
+          <div class="node node-clients">🌐 Web App<span class="tooltip">React SPA · CDN-hosted</span></div>
+          <div class="node node-clients">📱 Mobile App<span class="tooltip">React Native · iOS & Android</span></div>
+          <div class="node node-clients">🖥️ Admin Panel<span class="tooltip">Internal dashboard · RBAC</span></div>
         </div>
       </div>
 
@@ -199,9 +217,9 @@
       <div class="layer">
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-gateway)"></div> API Gateway</div>
         <div class="nodes">
-          <div class="node node-gateway">🔐 Auth & Rate Limiting</div>
-          <div class="node node-gateway">🔀 Load Balancer</div>
-          <div class="node node-gateway">📊 Request Router</div>
+          <div class="node node-gateway">🔐 Auth & Rate Limiting<span class="tooltip">JWT validation · 1K req/min limit</span></div>
+          <div class="node node-gateway">🔀 Load Balancer<span class="tooltip">NGINX · Round-robin</span></div>
+          <div class="node node-gateway">📊 Request Router<span class="tooltip">Path-based routing to services</span></div>
         </div>
       </div>
 
@@ -211,12 +229,12 @@
       <div class="layer">
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-services)"></div> Microservices</div>
         <div class="nodes">
-          <div class="node node-services">👤 User Service</div>
-          <div class="node node-services">📦 Product Service</div>
-          <div class="node node-services">🛒 Order Service</div>
-          <div class="node node-services">💳 Payment Service</div>
-          <div class="node node-services">📬 Notification Service</div>
-          <div class="node node-services">🔍 Search Service</div>
+          <div class="node node-services">👤 User Service<span class="tooltip">Auth, profiles, preferences · Healthy</span></div>
+          <div class="node node-services">📦 Product Service<span class="tooltip">Catalog, inventory, pricing · Healthy</span></div>
+          <div class="node node-services">🛒 Order Service<span class="tooltip">Cart, checkout, order tracking · Healthy</span></div>
+          <div class="node node-services">💳 Payment Service<span class="tooltip">Stripe integration · Degraded (latency)</span></div>
+          <div class="node node-services">📬 Notification Service<span class="tooltip">Email, push, SMS · Healthy</span></div>
+          <div class="node node-services">🔍 Search Service<span class="tooltip">Elasticsearch-powered · Healthy</span></div>
         </div>
       </div>
 

@@ -62,6 +62,7 @@
     .reveal.visible { opacity: 1; transform: translateX(0) !important; }
     .reveal.from-left { transform: translateX(-40px); }
     .reveal.from-right { transform: translateX(40px); }
+    /* Timeline items visible by default, JS animates entrance */
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -170,7 +171,7 @@
           <div class="label">Years of Progress</div>
         </div>
         <div class="hero-stat">
-          <div class="num" data-count="11">11</div>
+          <div class="num" data-count="12">12</div>
           <div class="label">Key Milestones</div>
         </div>
         <div class="hero-stat">
@@ -182,7 +183,7 @@
 
     <section class="timeline">
 
-      <article class="tl-item left" data-reveal data-dir="left">
+      <article class="tl-item left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1950</div>
@@ -191,25 +192,34 @@
         </div>
       </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
+      <article class="tl-item right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
-          <div class="year">1956</div>
-          <h3>Dartmouth Conference</h3>
-          <p>The term "Artificial Intelligence" is coined at a summer workshop, marking the birth of AI as a field.</p>
+          <div class="year">1958</div>
+          <h3>The Perceptron</h3>
+          <p>Frank Rosenblatt builds the Mark I Perceptron — the first neural network hardware, sparking hopes for machine learning.</p>
         </div>
       </article>
 
-      <article class="tl-item left" data-reveal data-dir="left">
+      <article class="tl-item left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
-          <div class="year">1966</div>
-          <h3>ELIZA Chatbot</h3>
-          <p>MIT's Joseph Weizenbaum creates ELIZA, the first chatbot that simulates conversation with pattern matching.</p>
+          <div class="year">1970s</div>
+          <h3>Expert Systems Era</h3>
+          <p>Rule-based expert systems like MYCIN and DENDRAL bring AI to medicine and chemistry — the first commercial AI boom.</p>
         </div>
       </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
+      <article class="tl-item right">
+        <div class="tl-dot"></div>
+        <div class="card tl-card">
+          <div class="year">1987</div>
+          <h3>AI Winter</h3>
+          <p>Overpromise meets underdelivery. Funding collapses, the expert systems market crashes, and AI enters its cold decade.</p>
+        </div>
+      </article>
+
+      <article class="tl-item left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1997</div>
@@ -218,25 +228,7 @@
         </div>
       </article>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2006</div>
-          <h3>Deep Learning Renaissance</h3>
-          <p>Geoffrey Hinton introduces deep belief networks, reigniting interest in neural networks after the AI winter.</p>
-        </div>
-      </article>
-
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2011</div>
-          <h3>Watson Wins Jeopardy!</h3>
-          <p>IBM Watson defeats two greatest Jeopardy! champions, showcasing natural language understanding at scale.</p>
-        </div>
-      </article>
-
-      <article class="tl-item left" data-reveal data-dir="left">
+      <article class="tl-item right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2012</div>
@@ -245,7 +237,7 @@
         </div>
       </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
+      <article class="tl-item left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2016</div>
@@ -254,7 +246,7 @@
         </div>
       </article>
 
-      <article class="tl-item left" data-reveal data-dir="left">
+      <article class="tl-item right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2017</div>
@@ -263,7 +255,16 @@
         </div>
       </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
+      <article class="tl-item left">
+        <div class="tl-dot"></div>
+        <div class="card tl-card">
+          <div class="year">2020</div>
+          <h3>GPT-3 Arrives</h3>
+          <p>OpenAI's 175-billion-parameter model demonstrates remarkable language abilities, making "prompt engineering" a thing.</p>
+        </div>
+      </article>
+
+      <article class="tl-item right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2022</div>
@@ -272,7 +273,16 @@
         </div>
       </article>
 
-      <article class="tl-item left" data-reveal data-dir="left">
+      <article class="tl-item left">
+        <div class="tl-dot"></div>
+        <div class="card tl-card">
+          <div class="year">2023</div>
+          <h3>GPT-4 & Multimodal AI</h3>
+          <p>GPT-4 brings vision, reasoning leaps, and near-human performance on professional exams. The multimodal era begins.</p>
+        </div>
+      </article>
+
+      <article class="tl-item right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2025</div>
@@ -313,7 +323,7 @@
     });
     var revealObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
 
     // === Number Counter ===
