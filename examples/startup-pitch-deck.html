@@ -1000,26 +1000,34 @@
         return;
       }
 
-      inSlide.classList.add('active');
-      inSlide.style.opacity = '0';
-
-      Motion.animate(outSlide,
-        { opacity: [1, 0], x: [0, -80 * dir] },
-        { duration: 0.35, ease: 'ease-in' }
-      ).finished.then(() => {
+      // Swap slides with CSS transition fallback (Motion.js .finished can be unreliable)
+      outSlide.style.transition = 'opacity 0.3s, transform 0.3s';
+      outSlide.style.opacity = '0';
+      outSlide.style.transform = `translateX(${-80 * dir}px)`;
+      
+      setTimeout(() => {
         outSlide.classList.remove('active');
         outSlide.style.opacity = '';
         outSlide.style.transform = '';
-        Motion.animate(inSlide,
-          { opacity: [0, 1], x: [80 * dir, 0] },
-          { duration: 0.45, ease: Motion.spring({ stiffness: 200, damping: 25 }) }
-        ).finished.then(() => {
-          transitioning = false;
-          inSlide.style.opacity = '';
-          inSlide.style.transform = '';
+        outSlide.style.transition = '';
+        
+        inSlide.classList.add('active');
+        inSlide.style.opacity = '0';
+        inSlide.style.transform = `translateX(${80 * dir}px)`;
+        
+        requestAnimationFrame(() => {
+          inSlide.style.transition = 'opacity 0.4s, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+          inSlide.style.opacity = '1';
+          inSlide.style.transform = 'translateX(0)';
+          setTimeout(() => {
+            inSlide.style.transition = '';
+            inSlide.style.opacity = '';
+            inSlide.style.transform = '';
+            transitioning = false;
+          }, 450);
         });
         animateSlideContent(inSlide);
-      });
+      }, 300);
     }
 
     function animateSlideContent(slide) {
