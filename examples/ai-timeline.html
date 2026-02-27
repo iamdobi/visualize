@@ -32,13 +32,22 @@
       transition: background 0.3s, color 0.3s;
     }
     h1,h2,h3,h4,h5,h6 { color: var(--text); }
-    p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -100px; left: 16px; padding: 8px 16px;
+      background: var(--accent); color: #fff; border-radius: 8px; z-index: 99999;
+      text-decoration: none; font-weight: 600; font-size: 0.875rem;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* Focus indicators */
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 28px;
-      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
@@ -55,6 +64,7 @@
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
 
+    /* Scroll reveal — visible by default, JS adds .reveal then .visible */
     .reveal { opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.from-left { transform: translateX(-40px); }
     .reveal.from-right { transform: translateX(40px); }
@@ -63,7 +73,7 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
 
     @media print {
@@ -74,6 +84,7 @@
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
+    /* Menu */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
       width: 44px; height: 44px; border-radius: 12px;
@@ -98,19 +109,19 @@
       display: flex; align-items: center; gap: 10px; transition: background 0.15s;
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* ===== TIMELINE ===== */
+    /* Timeline */
     .container { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
 
     .hero { text-align: center; margin-bottom: 64px; }
-    .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 12px; }
     .hero p { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 32px; }
-    .hero-stats { display: flex; justify-content: center; gap: 48px; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
     .hero-stat { text-align: center; }
     .hero-stat .num { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .hero-stat .label { font-size: 0.875rem; color: var(--text-secondary); }
 
-    /* Era mini-nav */
     .era-nav {
       position: fixed; left: 16px; top: 50%; transform: translateY(-50%);
       z-index: 999; display: flex; flex-direction: column; gap: 4px;
@@ -147,7 +158,7 @@
       animation: dot-pulse 3s ease-in-out infinite;
     }
 
-    .tl-card { min-width: 320px; }
+    .tl-card { min-width: 280px; }
     .tl-card .year {
       font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.05em; color: var(--accent); margin-bottom: 8px;
@@ -155,44 +166,51 @@
     .tl-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
     .tl-card p { font-size: 0.95rem; color: var(--text-secondary); }
 
-    /* Decade markers */
-    .decade-marker {
-      text-align: center; margin: 48px 0 32px; position: relative;
-    }
+    .decade-marker { text-align: center; margin: 48px 0 32px; position: relative; }
     .decade-marker span {
-      display: inline-block; padding: 6px 20px; border-radius: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 20px; border-radius: 20px;
       background: var(--surface); border: 1px solid var(--border);
       font-size: 0.85rem; font-weight: 700; color: var(--accent);
       position: relative; z-index: 3;
     }
+    .decade-marker svg { width: 16px; height: 16px; }
 
-    @media (max-width: 700px) {
+    @media (max-width: 768px) {
       .timeline::before { left: 20px; }
       .tl-item.left, .tl-item.right { padding-left: 52px; padding-right: 0; justify-content: flex-start; }
       .tl-dot { left: 20px; }
       .tl-card { min-width: 0; }
       .era-nav { display: none; }
+      .hero-stats { gap: 24px; }
+      .hero-stat .num { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
-  <main>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
   <div class="viz-menu">
-    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-      </svg>
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Open menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+      <button onclick="cycleTheme()" role="menuitem">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print / PDF</span>
+      </button>
     </div>
   </div>
 
-  <!-- Era mini-nav -->
-  <nav class="era-nav" id="eraNav">
+  <nav class="era-nav" id="eraNav" aria-label="Timeline eras">
     <a href="#era-foundations">1950s</a>
     <a href="#era-expert">1970s</a>
     <a href="#era-winter">1980s</a>
@@ -201,152 +219,171 @@
     <a href="#era-llm">2020s</a>
   </nav>
 
-  <div class="container">
-    <header class="hero">
-      <h1 class="animate">The Evolution of <span style="background:linear-gradient(135deg,var(--accent),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">AI</span></h1>
-      <p class="animate delay-1">75 years of breakthroughs that shaped the future</p>
-      <div class="hero-stats animate delay-2">
-        <div class="hero-stat">
-          <div class="num" data-count="75" data-suffix="+">75+</div>
-          <div class="label">Years of Progress</div>
+  <main id="main-content">
+    <div class="container">
+      <header class="hero">
+        <h1 class="animate">The Evolution of <span style="background:linear-gradient(135deg,var(--accent),var(--accent-secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">AI</span></h1>
+        <p class="animate delay-1">75 years of breakthroughs that shaped the future</p>
+        <div class="hero-stats animate delay-2" role="img" aria-label="Key statistics: 75+ years of progress, 12 key milestones, $184B AI market in 2025">
+          <div class="hero-stat">
+            <div class="num" data-count="75" data-suffix="+">75+</div>
+            <div class="label">Years of Progress</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" data-count="12">12</div>
+            <div class="label">Key Milestones</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" data-count="184" data-prefix="$" data-suffix="B">$184B</div>
+            <div class="label">AI Market (2025)</div>
+          </div>
         </div>
-        <div class="hero-stat">
-          <div class="num" data-count="12">12</div>
-          <div class="label">Key Milestones</div>
-        </div>
-        <div class="hero-stat">
-          <div class="num" data-count="184" data-prefix="$" data-suffix="B">$184B</div>
-          <div class="label">AI Market (2025)</div>
-        </div>
-      </div>
-    </header>
+      </header>
 
-    <section class="timeline">
+      <section class="timeline" aria-label="AI Timeline from 1950 to 2025">
 
-      <div class="decade-marker" id="era-foundations"><span>🏛️ Foundations</span></div>
+        <div class="decade-marker" id="era-foundations"><span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+          Foundations
+        </span></div>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">1950</div>
-          <h3>Turing Test Proposed</h3>
-          <p>Alan Turing publishes "Computing Machinery and Intelligence," posing the question: can machines think?</p>
-        </div>
-      </article>
+        <article class="tl-item left" data-reveal data-dir="left">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">1950</div>
+            <h3>Turing Test Proposed</h3>
+            <p>Alan Turing publishes "Computing Machinery and Intelligence," posing the question: can machines think?</p>
+          </div>
+        </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">1958</div>
-          <h3>The Perceptron</h3>
-          <p>Frank Rosenblatt builds the Mark I Perceptron — the first neural network hardware, sparking hopes for machine learning.</p>
-        </div>
-      </article>
+        <article class="tl-item right" data-reveal data-dir="right">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">1958</div>
+            <h3>The Perceptron</h3>
+            <p>Frank Rosenblatt builds the Mark I Perceptron — the first neural network hardware, sparking hopes for machine learning.</p>
+          </div>
+        </article>
 
-      <div class="decade-marker" id="era-expert"><span>🧠 Expert Systems</span></div>
+        <div class="decade-marker" id="era-expert"><span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 00-4 14.93V20h8v-3.07A8 8 0 0012 2z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+          Expert Systems
+        </span></div>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">1970s</div>
-          <h3>Expert Systems Era</h3>
-          <p>Rule-based expert systems like MYCIN and DENDRAL bring AI to medicine and chemistry — the first commercial AI boom.</p>
-        </div>
-      </article>
+        <article class="tl-item left" data-reveal data-dir="left">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">1970s</div>
+            <h3>Expert Systems Era</h3>
+            <p>Rule-based expert systems like MYCIN and DENDRAL bring AI to medicine and chemistry — the first commercial AI boom.</p>
+          </div>
+        </article>
 
-      <div class="decade-marker" id="era-winter"><span>❄️ AI Winter</span></div>
+        <div class="decade-marker" id="era-winter"><span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 7l-5 5-5-5M2 12h20M7 17l5-5 5 5"/></svg>
+          AI Winter
+        </span></div>
 
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">1987</div>
-          <h3>AI Winter</h3>
-          <p>Overpromise meets underdelivery. Funding collapses, the expert systems market crashes, and AI enters its cold decade.</p>
-        </div>
-      </article>
+        <article class="tl-item right" data-reveal data-dir="right">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">1987</div>
+            <h3>AI Winter</h3>
+            <p>Overpromise meets underdelivery. Funding collapses, the expert systems market crashes, and AI enters its cold decade.</p>
+          </div>
+        </article>
 
-      <div class="decade-marker" id="era-revival"><span>♟️ Revival</span></div>
+        <div class="decade-marker" id="era-revival"><span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M8 6h2l4 6-4 6H8l4-6z"/></svg>
+          Revival
+        </span></div>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">1997</div>
-          <h3>Deep Blue Beats Kasparov</h3>
-          <p>IBM's Deep Blue defeats world chess champion Garry Kasparov, proving machines can master strategic games.</p>
-        </div>
-      </article>
+        <article class="tl-item left" data-reveal data-dir="left">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">1997</div>
+            <h3>Deep Blue Beats Kasparov</h3>
+            <p>IBM's Deep Blue defeats world chess champion Garry Kasparov, proving machines can master strategic games.</p>
+          </div>
+        </article>
 
-      <div class="decade-marker" id="era-deep"><span>🔥 Deep Learning</span></div>
+        <div class="decade-marker" id="era-deep"><span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Deep Learning
+        </span></div>
 
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2012</div>
-          <h3>AlexNet & ImageNet</h3>
-          <p>Deep convolutional neural network crushes the ImageNet competition, triggering the deep learning revolution.</p>
-        </div>
-      </article>
+        <article class="tl-item right" data-reveal data-dir="right">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2012</div>
+            <h3>AlexNet &amp; ImageNet</h3>
+            <p>Deep convolutional neural network crushes the ImageNet competition, triggering the deep learning revolution.</p>
+          </div>
+        </article>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2016</div>
-          <h3>AlphaGo Beats Lee Sedol</h3>
-          <p>DeepMind's AlphaGo defeats world Go champion, solving a game once thought decades away for AI.</p>
-        </div>
-      </article>
+        <article class="tl-item left" data-reveal data-dir="left">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2016</div>
+            <h3>AlphaGo Beats Lee Sedol</h3>
+            <p>DeepMind's AlphaGo defeats world Go champion, solving a game once thought decades away for AI.</p>
+          </div>
+        </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2017</div>
-          <h3>Transformer Architecture</h3>
-          <p>Google publishes "Attention Is All You Need," introducing the architecture behind every modern LLM.</p>
-        </div>
-      </article>
+        <article class="tl-item right" data-reveal data-dir="right">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2017</div>
+            <h3>Transformer Architecture</h3>
+            <p>Google publishes "Attention Is All You Need," introducing the architecture behind every modern LLM.</p>
+          </div>
+        </article>
 
-      <div class="decade-marker" id="era-llm"><span>🚀 LLM Era</span></div>
+        <div class="decade-marker" id="era-llm"><span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/></svg>
+          LLM Era
+        </span></div>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2020</div>
-          <h3>GPT-3 Arrives</h3>
-          <p>OpenAI's 175-billion-parameter model demonstrates remarkable language abilities, making "prompt engineering" a thing.</p>
-        </div>
-      </article>
+        <article class="tl-item left" data-reveal data-dir="left">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2020</div>
+            <h3>GPT-3 Arrives</h3>
+            <p>OpenAI's 175-billion-parameter model demonstrates remarkable language abilities, making "prompt engineering" a thing.</p>
+          </div>
+        </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2022</div>
-          <h3>ChatGPT Launches</h3>
-          <p>OpenAI releases ChatGPT, reaching 100M users in 2 months — the fastest-growing consumer app in history.</p>
-        </div>
-      </article>
+        <article class="tl-item right" data-reveal data-dir="right">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2022</div>
+            <h3>ChatGPT Launches</h3>
+            <p>OpenAI releases ChatGPT, reaching 100M users in 2 months — the fastest-growing consumer app in history.</p>
+          </div>
+        </article>
 
-      <article class="tl-item left" data-reveal data-dir="left">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2023</div>
-          <h3>GPT-4 & Multimodal AI</h3>
-          <p>GPT-4 brings vision, reasoning leaps, and near-human performance on professional exams. The multimodal era begins.</p>
-        </div>
-      </article>
+        <article class="tl-item left" data-reveal data-dir="left">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2023</div>
+            <h3>GPT-4 &amp; Multimodal AI</h3>
+            <p>GPT-4 brings vision, reasoning leaps, and near-human performance on professional exams. The multimodal era begins.</p>
+          </div>
+        </article>
 
-      <article class="tl-item right" data-reveal data-dir="right">
-        <div class="tl-dot"></div>
-        <div class="card tl-card">
-          <div class="year">2025</div>
-          <h3>AI Agents & Autonomy</h3>
-          <p>Autonomous AI agents perform complex multi-step tasks, write code, and manage workflows independently.</p>
-        </div>
-      </article>
+        <article class="tl-item right" data-reveal data-dir="right">
+          <div class="tl-dot" aria-hidden="true"></div>
+          <div class="card tl-card">
+            <div class="year">2025</div>
+            <h3>AI Agents &amp; Autonomy</h3>
+            <p>Autonomous AI agents perform complex multi-step tasks, write code, and manage workflows independently.</p>
+          </div>
+        </article>
 
-    </section>
-  </div>
-
+      </section>
+    </div>
   </main>
+
   <script>
     // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
@@ -355,20 +392,18 @@
 
     // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    var moonPath = '<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
+    var sunPath = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeIcon').innerHTML = t === 'dark' ? moonPath : sunPath;
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
-      // Update dot border color for theme
-      document.querySelectorAll('.tl-dot').forEach(function(d) { d.style.borderColor = t === 'dark' ? '#030712' : '#f8fafc'; });
-      if (typeof onThemeChange === 'function') onThemeChange();
+      localStorage.setItem('viz-theme', t); currentTheme = t;
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // === Scroll Reveal (direction-aware) ===
+    // === Scroll Reveal ===
     document.querySelectorAll('[data-reveal]').forEach(function(el) {
       var dir = el.dataset.dir;
       el.classList.add('reveal');
@@ -381,7 +416,10 @@
     }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
 
-    // === Era nav highlight on scroll ===
+    // Ensure all reveals trigger for screenshots/PNG export
+    setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
+
+    // === Era nav highlight ===
     var eraLinks = document.querySelectorAll('.era-nav a');
     var eraTargets = [];
     eraLinks.forEach(function(a) {
@@ -392,8 +430,8 @@
       entries.forEach(function(e) {
         eraTargets.forEach(function(t) {
           if (t.el === e.target) {
-            if (e.isIntersecting) t.link.classList.add('active');
-            else t.link.classList.remove('active');
+            if (e.isIntersecting) { t.link.classList.add('active'); t.link.setAttribute('aria-current', 'true'); }
+            else { t.link.classList.remove('active'); t.link.removeAttribute('aria-current'); }
           }
         });
       });
@@ -433,8 +471,6 @@
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
-
-    function onThemeChange() {}
   </script>
 </body>
 </html>

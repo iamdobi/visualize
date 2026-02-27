@@ -1,441 +1,125 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="theme-dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>커리어해커 알렉스 — The Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root, .theme-dark {
     --hue: 250;
-    --bg: hsl(var(--hue), 20%, 8%);
-    --surface: hsl(var(--hue), 15%, 14%);
-    --text: hsl(var(--hue), 10%, 92%);
-    --text-secondary: hsl(var(--hue), 10%, 60%);
-    --accent: hsl(var(--hue), 85%, 68%);
-    --accent2: hsl(170, 70%, 55%);
-    --accent3: hsl(35, 90%, 60%);
+    --bg: hsl(var(--hue), 20%, 8%); --surface: hsl(var(--hue), 15%, 14%);
+    --text: hsl(var(--hue), 10%, 92%); --text-secondary: hsl(var(--hue), 10%, 60%);
+    --accent: hsl(var(--hue), 85%, 68%); --accent2: hsl(170, 70%, 55%); --accent3: hsl(35, 90%, 60%);
     --glow: hsla(var(--hue), 85%, 68%, 0.15);
-    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --menu-bg: rgba(0,0,0,0.7);
-    --menu-border: rgba(255,255,255,0.1);
-    --menu-text: #fff;
-    --menu-item-hover: rgba(255,255,255,0.1);
+    --border: hsla(var(--hue), 20%, 30%, 0.5);
   }
-
   .theme-light {
-    --bg: hsl(var(--hue), 15%, 97%);
-    --surface: hsl(0, 0%, 100%);
-    --text: hsl(var(--hue), 20%, 15%);
-    --text-secondary: hsl(var(--hue), 10%, 45%);
-    --accent: hsl(var(--hue), 80%, 50%);
-    --accent2: hsl(170, 65%, 38%);
-    --accent3: hsl(35, 85%, 45%);
+    --bg: hsl(var(--hue), 15%, 97%); --surface: hsl(0, 0%, 100%);
+    --text: hsl(var(--hue), 20%, 15%); --text-secondary: hsl(var(--hue), 10%, 45%);
+    --accent: hsl(var(--hue), 80%, 50%); --accent2: hsl(170, 65%, 38%); --accent3: hsl(35, 85%, 45%);
     --glow: hsla(var(--hue), 80%, 50%, 0.1);
-    --menu-bg: rgba(255,255,255,0.85);
-    --menu-border: rgba(0,0,0,0.1);
-    --menu-text: #333;
-    --menu-item-hover: rgba(0,0,0,0.06);
+    --border: hsla(var(--hue), 10%, 80%, 0.5);
   }
 
-  @media (prefers-color-scheme: light) {
-    .theme-auto {
-      --bg: hsl(var(--hue), 15%, 97%);
-      --surface: hsl(0, 0%, 100%);
-      --text: hsl(var(--hue), 20%, 15%);
-      --text-secondary: hsl(var(--hue), 10%, 45%);
-      --accent: hsl(var(--hue), 80%, 50%);
-      --accent2: hsl(170, 65%, 38%);
-      --accent3: hsl(35, 85%, 45%);
-      --glow: hsla(var(--hue), 80%, 50%, 0.1);
-      --menu-bg: rgba(255,255,255,0.85);
-      --menu-border: rgba(0,0,0,0.1);
-      --menu-text: #333;
-      --menu-item-hover: rgba(0,0,0,0.06);
-    }
+  .skip-link {
+    position: absolute; top: -100px; left: 16px; padding: 8px 16px;
+    background: var(--accent); color: #fff; border-radius: 8px; z-index: 99999;
+    text-decoration: none; font-weight: 600;
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .skip-link:focus { top: 16px; }
+  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text);
-    overflow: hidden;
-    height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    overflow: hidden; height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
   }
 
   .deck { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
-
   .slide {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: center;
     padding: 5rem 8rem;
-    opacity: 0;
-    transform: translateX(80px);
+    opacity: 0; transform: translateX(80px);
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
   }
-
   .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
   .slide.prev { opacity: 0; transform: translateX(-80px); }
 
-  /* === SLIDE TYPES === */
+  /* Slide types */
+  .slide--hero { justify-content: center; align-items: center; text-align: center;
+    background: radial-gradient(ellipse at 30% 50%, var(--glow), transparent 70%), radial-gradient(ellipse at 70% 80%, hsla(170,70%,55%,0.08), transparent 60%), var(--bg); }
+  .slide--hero .eyebrow { font-size: 0.9rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; font-weight: 600; }
+  .slide--hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .slide--hero .subtitle { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--text-secondary); max-width: 600px; }
 
-  /* Title slide */
-  .slide--hero {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: radial-gradient(ellipse at 30% 50%, var(--glow) 0%, transparent 70%),
-                radial-gradient(ellipse at 70% 80%, hsla(170, 70%, 55%, 0.08) 0%, transparent 60%),
-                var(--bg);
-  }
+  .slide--content { background: var(--bg); }
+  .slide--content h2 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 2.5rem; line-height: 1.2; }
+  .highlight { color: var(--accent); }
 
-  .slide--hero .eyebrow {
-    font-size: 0.9rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-  }
-
-  .slide--hero h1 {
-    font-size: 4.5rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .slide--hero .subtitle {
-    font-size: 1.4rem;
-    color: var(--text-secondary);
-    max-width: 600px;
-  }
-
-  /* Content slide */
-  .slide--content {
-    background: var(--bg);
-  }
-
-  .slide--content h2 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-bottom: 2.5rem;
-    line-height: 1.2;
-  }
-
-  .slide--content h2 .highlight {
-    color: var(--accent);
-  }
-
-  /* Stat cards */
-  .stat-row {
-    display: flex;
-    gap: 2rem;
-    margin-top: 1rem;
-  }
-
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid hsla(var(--hue), 20%, 30%, 0.5);
-    border-radius: 16px;
-    padding: 2rem;
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--accent);
-    border-radius: 3px 3px 0 0;
-  }
-
+  .stat-row { display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; flex: 1; min-width: 180px; position: relative; overflow: hidden; }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); border-radius: 3px 3px 0 0; }
   .stat-card.green::before { background: var(--accent2); }
   .stat-card.orange::before { background: var(--accent3); }
-
-  .stat-value {
-    font-size: 3rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
+  .stat-value { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1; margin-bottom: 0.5rem; }
   .stat-card:nth-child(1) .stat-value { color: var(--accent); }
   .stat-card.green .stat-value { color: var(--accent2); }
   .stat-card.orange .stat-value { color: var(--accent3); }
+  .stat-label { font-size: 0.95rem; color: var(--text-secondary); }
 
-  .stat-label {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-  }
-
-  /* Timeline */
-  .timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1rem;
-  }
-
-  .timeline-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
-  }
-
-  .timeline-dot {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin-top: 6px;
-    box-shadow: 0 0 12px var(--glow);
-    position: relative;
-  }
-
-  .timeline-item:not(:last-child) .timeline-dot::after {
-    content: '';
-    position: absolute;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 32px;
-    background: hsla(var(--hue), 20%, 30%, 0.5);
-  }
-
-  .timeline-year {
-    font-size: 0.8rem;
-    color: var(--accent);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    min-width: 50px;
-  }
-
-  .timeline-text {
-    font-size: 1.15rem;
-    line-height: 1.5;
-  }
-
+  .timeline { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+  .timeline-item { display: flex; align-items: flex-start; gap: 1.5rem; }
+  .timeline-dot { flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); margin-top: 6px; box-shadow: 0 0 12px var(--glow); position: relative; }
+  .timeline-item:not(:last-child) .timeline-dot::after { content: ''; position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 2px; height: 32px; background: var(--border); }
+  .timeline-year { font-size: 0.8rem; color: var(--accent); font-weight: 700; letter-spacing: 0.05em; min-width: 50px; }
+  .timeline-text { font-size: 1.15rem; line-height: 1.5; color: var(--text-secondary); }
   .timeline-text strong { color: var(--text); }
-  .timeline-text { color: var(--text-secondary); }
 
-  /* Quote slide */
-  .slide--quote {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: radial-gradient(ellipse at center, var(--glow) 0%, transparent 70%), var(--bg);
-  }
+  .slide--quote { justify-content: center; align-items: center; text-align: center; background: radial-gradient(ellipse at center, var(--glow), transparent 70%), var(--bg); }
+  .slide--quote blockquote { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.3; max-width: 800px; color: var(--text); }
+  .slide--quote blockquote .ko { display: block; font-size: 1.4rem; color: var(--accent); margin-top: 1.5rem; font-weight: 500; }
 
-  .slide--quote blockquote {
-    font-size: 2.8rem;
-    font-weight: 700;
-    line-height: 1.3;
-    max-width: 800px;
-    color: var(--text);
-  }
+  .chart-container { background: var(--surface); border-radius: 16px; padding: 2rem; margin-top: 1.5rem; border: 1px solid var(--border); width: 100%; max-width: 900px; height: 350px; position: relative; }
 
-  .slide--quote blockquote .ko {
-    display: block;
-    font-size: 1.4rem;
-    color: var(--accent);
-    margin-top: 1.5rem;
-    font-weight: 500;
-  }
-
-  /* Chart slide */
-  .chart-container {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 2rem;
-    margin-top: 1.5rem;
-    border: 1px solid hsla(var(--hue), 20%, 30%, 0.5);
-    width: 100%;
-    max-width: 900px;
-    height: 350px;
-    position: relative;
-  }
-
-  /* Bullet list */
-  .points {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    margin-top: 0.5rem;
-  }
-
-  .points li {
-    font-size: 1.3rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-  }
-
-  .points li::before {
-    content: '→';
-    color: var(--accent);
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
+  .points { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; margin-top: 0.5rem; }
+  .points li { font-size: clamp(1rem, 2vw, 1.3rem); line-height: 1.5; color: var(--text-secondary); display: flex; align-items: baseline; gap: 1rem; }
+  .points li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
   .points li strong { color: var(--text); }
 
-  /* Two column */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-top: 1.5rem;
-  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 1.5rem; }
+  .col-card { background: var(--surface); border-radius: 16px; padding: 2rem; border: 1px solid var(--border); }
+  .col-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+  .col-card h3 svg { width: 20px; height: 20px; }
+  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .col-card ul li { font-size: 1rem; color: var(--text-secondary); line-height: 1.5; }
+  .col-card ul li::before { content: '•'; color: var(--accent); margin-right: 0.75rem; font-weight: 700; }
 
-  .col-card {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 2rem;
-    border: 1px solid hsla(var(--hue), 20%, 30%, 0.5);
-  }
-
-  .col-card h3 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: var(--accent);
-  }
-
-  .col-card ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .col-card ul li {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-
-  .col-card ul li::before {
-    content: '•';
-    color: var(--accent);
-    margin-right: 0.75rem;
-    font-weight: 700;
-  }
-
-  /* Closing slide */
-  .slide--closing {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: radial-gradient(ellipse at 50% 50%, var(--glow) 0%, transparent 60%), var(--bg);
-  }
-
-  .slide--closing h2 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .slide--closing .links {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-
-  .slide--closing .link-pill {
-    background: var(--surface);
-    border: 1px solid hsla(var(--hue), 20%, 30%, 0.5);
-    border-radius: 2rem;
-    padding: 0.6rem 1.5rem;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-  }
-
+  .slide--closing { justify-content: center; align-items: center; text-align: center; background: radial-gradient(ellipse at 50% 50%, var(--glow), transparent 60%), var(--bg); }
+  .slide--closing h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .slide--closing .links { display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
+  .slide--closing .link-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.6rem 1.5rem; font-size: 0.9rem; color: var(--text-secondary); }
   .slide--closing .link-pill strong { color: var(--accent); }
 
-  /* Navigation */
-  .nav {
-    position: fixed;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    background: hsla(var(--hue), 15%, 10%, 0.85);
-    backdrop-filter: blur(16px);
-    border: 1px solid hsla(var(--hue), 20%, 25%, 0.5);
-    color: var(--text);
-    padding: 0.5rem 1.5rem;
-    border-radius: 2rem;
-    font-size: 0.85rem;
-    z-index: 100;
-  }
+  /* Nav */
+  .nav { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 1.5rem; background: hsla(var(--hue),15%,10%,0.85); backdrop-filter: blur(16px); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem; z-index: 100; }
+  .nav button { background: none; border: none; color: var(--text-secondary); font-size: 1.1rem; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 6px; transition: all 0.2s; display: flex; align-items: center; }
+  .nav button:hover { color: var(--text); background: hsla(var(--hue),20%,25%,0.5); }
+  .nav button svg { width: 18px; height: 18px; }
 
-  .nav button {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 6px;
-    transition: all 0.2s;
-  }
-
-  .nav button:hover { color: var(--text); background: hsla(var(--hue), 20%, 25%, 0.5); }
-
-  .progress {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    transition: width 0.6s ease;
-    z-index: 100;
-  }
-
-  .slide-num {
-    position: fixed;
-    top: 2rem;
-    right: 3rem;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    z-index: 100;
-    font-variant-numeric: tabular-nums;
-  }
+  .progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.6s ease; z-index: 100; }
 
   /* Element animations */
-  .slide.active .stat-card,
-  .slide.active .timeline-item,
-  .slide.active .points li,
-  .slide.active .col-card {
-    animation: fadeUp 0.5s ease both;
-  }
-
+  .slide.active .stat-card, .slide.active .timeline-item, .slide.active .points li, .slide.active .col-card { animation: fadeUp 0.5s ease both; }
   .slide.active .stat-card:nth-child(1) { animation-delay: 0.1s; }
   .slide.active .stat-card:nth-child(2) { animation-delay: 0.2s; }
   .slide.active .stat-card:nth-child(3) { animation-delay: 0.3s; }
@@ -452,156 +136,104 @@
   .slide.active .points li:nth-child(4) { animation-delay: 0.4s; }
   .slide.active .col-card:nth-child(1) { animation-delay: 0.1s; }
   .slide.active .col-card:nth-child(2) { animation-delay: 0.25s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 
-  /* === Hamburger Menu === */
+  /* Menu */
   .viz-menu { position: fixed; top: 1rem; right: 1rem; z-index: 9999; }
-  .viz-menu-toggle {
-    width: 40px; height: 40px; border-radius: 10px;
-    border: 1px solid var(--menu-border);
-    background: var(--menu-bg); color: var(--menu-text);
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    transition: all 0.2s ease;
-  }
+  .viz-menu-toggle { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: hsla(var(--hue),15%,10%,0.7); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.2s; }
   .viz-menu-toggle:hover { transform: scale(1.05); }
-  .viz-menu-dropdown {
-    position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px;
-    background: var(--menu-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--menu-border); border-radius: 12px; padding: 6px;
-    opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.96);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  }
-  .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-  .viz-menu-dropdown button {
-    width: 100%; display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px; border: none; background: transparent;
-    color: var(--menu-text); font-size: 0.875rem; cursor: pointer;
-    border-radius: 8px; transition: background 0.15s; text-align: left; white-space: nowrap;
-    font-family: var(--font);
-  }
-  .viz-menu-dropdown button:hover { background: var(--menu-item-hover); }
-  .viz-menu-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+  .viz-menu-dropdown { position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px; background: hsla(var(--hue),15%,10%,0.85); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 12px; padding: 6px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+  .viz-menu-dropdown button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: none; background: transparent; color: var(--text); font-size: 0.875rem; cursor: pointer; border-radius: 8px; transition: background 0.15s; text-align: left; font-family: inherit; }
+  .viz-menu-dropdown button:hover { background: rgba(255,255,255,0.1); }
+  .viz-menu-dropdown svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-  /* Print styles */
   @media print {
-    .viz-menu, .nav, .progress, .slide-num { display: none !important; }
-    body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .viz-menu, .nav, .progress { display: none !important; }
+    body { background: white !important; overflow: visible; height: auto; }
     .slide { position: relative !important; opacity: 1 !important; transform: none !important; page-break-after: always; height: 100vh; display: flex !important; pointer-events: auto !important; }
     .slide.prev { display: flex !important; opacity: 1 !important; transform: none !important; }
+    * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+
+  @media (max-width: 768px) {
+    .slide { padding: 3rem 2rem; }
+    .stat-row { flex-direction: column; }
+    .two-col { grid-template-columns: 1fr; gap: 1.5rem; }
+    .nav { bottom: 1rem; padding: 0.4rem 1rem; }
   }
 </style>
 </head>
 <body>
-  <!-- Hamburger Menu -->
+  <a href="#deck" class="skip-link">Skip to slides</a>
+
   <div class="viz-menu">
-    <button class="viz-menu-toggle" onclick="document.getElementById('vizMenuDropdown').classList.toggle('open')" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-      </svg>
+    <button class="viz-menu-toggle" onclick="document.getElementById('vizMenuDropdown').classList.toggle('open')" aria-label="Open menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()"><span class="viz-menu-icon">◐</span><span>Theme: <span id="themeLabel">Dark</span></span></button>
-      <button onclick="downloadImage()"><span class="viz-menu-icon">⤓</span><span>Download as PNG</span></button>
-      <button onclick="window.print()"><span class="viz-menu-icon">⎙</span><span>Print / Save PDF</span></button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+      <button onclick="cycleTheme()" role="menuitem">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print / PDF</span>
+      </button>
     </div>
   </div>
 
   <div class="progress" id="progress"></div>
-  <!-- slide-num removed to fix "0" artifact -->
 
-  <div class="deck" id="deck">
+  <main>
+  <div class="deck" id="deck" role="region" aria-label="Slide deck" aria-roledescription="carousel">
 
-    <!-- 1: TITLE -->
-    <section class="slide slide--hero active">
+    <section class="slide slide--hero active" aria-label="Slide 1: Title">
       <div class="eyebrow">커리어해커 알렉스</div>
       <h1>From 180+ Rejections<br>to Staff Engineer at Meta</h1>
       <div class="subtitle">한국에서 혼자 미국으로, 게임중독 소년에서 실리콘밸리 8년차 엔지니어까지</div>
     </section>
 
-    <!-- 2: THE NUMBERS -->
-    <section class="slide slide--content">
+    <section class="slide slide--content" aria-label="Slide 2: By the Numbers">
       <h2>By the <span class="highlight">Numbers</span></h2>
       <div class="stat-row">
-        <div class="stat-card">
-          <div class="stat-value">186K</div>
-          <div class="stat-label">YouTube Subscribers</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-value">8 yrs</div>
-          <div class="stat-label">Silicon Valley Experience</div>
-        </div>
-        <div class="stat-card orange">
-          <div class="stat-value">180+</div>
-          <div class="stat-label">Job Rejections Before Meta</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">3.93</div>
-          <div class="stat-label">GPA at Johns Hopkins</div>
-        </div>
+        <div class="stat-card"><div class="stat-value">186K</div><div class="stat-label">YouTube Subscribers</div></div>
+        <div class="stat-card green"><div class="stat-value">8 yrs</div><div class="stat-label">Silicon Valley Experience</div></div>
+        <div class="stat-card orange"><div class="stat-value">180+</div><div class="stat-label">Job Rejections Before Meta</div></div>
+        <div class="stat-card"><div class="stat-value">3.93</div><div class="stat-label">GPA at Johns Hopkins</div></div>
       </div>
     </section>
 
-    <!-- 3: TIMELINE -->
-    <section class="slide slide--content">
+    <section class="slide slide--content" aria-label="Slide 3: The Journey">
       <h2>The <span class="highlight">Journey</span></h2>
       <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">15세</div>
-          <div class="timeline-text"><strong>혼자 미국으로</strong> — 게임중독이었던 소년이 한국을 떠나 미국에 홀로 도착</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">JHU</div>
-          <div class="timeline-text"><strong>Johns Hopkins University</strong> — CS 전공, GPA 3.93으로 졸업</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">180+</div>
-          <div class="timeline-text"><strong>끝없는 거절</strong> — 180번 넘게 떨어지고도 포기하지 않음</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">Meta</div>
-          <div class="timeline-text"><strong>Instagram Ads 합류</strong> — 팀이 10명이었을 때부터 300명+까지 성장을 함께함</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">2023</div>
-          <div class="timeline-text"><strong>Advantage+ Creative 런칭</strong> — Meta Q3 실적 발표에서 언급된 GenAI 제품의 Tech Lead</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-year">Now</div>
-          <div class="timeline-text"><strong>Staff SWE + Creator</strong> — 186K 유튜브 구독자, AI 네이티브 워크플로우 구축</div>
-        </div>
+        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">15세</div><div class="timeline-text"><strong>혼자 미국으로</strong> — 게임중독이었던 소년이 한국을 떠나 미국에 홀로 도착</div></div>
+        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">JHU</div><div class="timeline-text"><strong>Johns Hopkins University</strong> — CS 전공, GPA 3.93으로 졸업</div></div>
+        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">180+</div><div class="timeline-text"><strong>끝없는 거절</strong> — 180번 넘게 떨어지고도 포기하지 않음</div></div>
+        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">Meta</div><div class="timeline-text"><strong>Instagram Ads 합류</strong> — 팀이 10명이었을 때부터 300명+까지 성장을 함께함</div></div>
+        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">2023</div><div class="timeline-text"><strong>Advantage+ Creative 런칭</strong> — Meta Q3 실적 발표에서 언급된 GenAI 제품의 Tech Lead</div></div>
+        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">Now</div><div class="timeline-text"><strong>Staff SWE + Creator</strong> — 186K 유튜브 구독자, AI 네이티브 워크플로우 구축</div></div>
       </div>
     </section>
 
-    <!-- 4: QUOTE -->
-    <section class="slide slide--quote">
-      <blockquote>
-        "사람이 전부."
-        <span class="ko">Trust, resilience, execution — not permission.</span>
-      </blockquote>
+    <section class="slide slide--quote" aria-label="Slide 4: Quote">
+      <blockquote>"사람이 전부."<span class="ko">Trust, resilience, execution — not permission.</span></blockquote>
     </section>
 
-    <!-- 5: YOUTUBE GROWTH -->
-    <section class="slide slide--content">
+    <section class="slide slide--content" aria-label="Slide 5: YouTube Growth">
       <h2>YouTube <span class="highlight">Growth</span></h2>
-      <div class="chart-container">
+      <div class="chart-container" role="img" aria-label="Line chart showing YouTube subscriber growth from 2K to 186K between 2022 and 2025">
         <canvas id="growthChart"></canvas>
       </div>
     </section>
 
-    <!-- 6: CONTENT EVOLUTION -->
-    <section class="slide slide--content">
+    <section class="slide slide--content" aria-label="Slide 6: Content Evolution">
       <h2>Content <span class="highlight">Evolution</span></h2>
       <ul class="points">
         <li><strong>Phase 1: Career Advice</strong> — 실리콘밸리 취업, 이직, 면접 팁</li>
@@ -611,12 +243,14 @@
       </ul>
     </section>
 
-    <!-- 7: PHILOSOPHY -->
-    <section class="slide slide--content">
+    <section class="slide slide--content" aria-label="Slide 7: Core Philosophy">
       <h2>Core <span class="highlight">Philosophy</span></h2>
       <div class="two-col">
         <div class="col-card">
-          <h3>🧠 Mindset</h3>
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 00-4 14.93V20h8v-3.07A8 8 0 0012 2z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+            Mindset
+          </h3>
           <ul>
             <li>Drop ego → embrace AI native</li>
             <li>1-person teams > big teams</li>
@@ -625,7 +259,10 @@
           </ul>
         </div>
         <div class="col-card">
-          <h3>🎯 Mission</h3>
+          <h3>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+            Mission
+          </h3>
           <ul>
             <li>기술로 선한영향력을 만들고 싶습니다</li>
             <li>Build, ship, teach, repeat</li>
@@ -636,8 +273,7 @@
       </div>
     </section>
 
-    <!-- 8: CLOSING -->
-    <section class="slide slide--closing">
+    <section class="slide slide--closing" aria-label="Slide 8: Closing">
       <h2>기술로 선한영향력을</h2>
       <p style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 0.5rem;">Create positive impact through technology.</p>
       <div class="links">
@@ -648,33 +284,34 @@
     </section>
 
   </div>
+  </main>
 
-  <div class="nav">
-    <button onclick="navigate(-1)">◀</button>
-    <span id="counter"></span>
-    <button onclick="navigate(1)">▶</button>
-  </div>
+  <nav class="nav" aria-label="Slide navigation">
+    <button onclick="navigate(-1)" aria-label="Previous slide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span id="counter" aria-live="polite">1 / 8</span>
+    <button onclick="navigate(1)" aria-label="Next slide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </nav>
 
   <script>
-    // Slide navigation
-    const slides = document.querySelectorAll('.slide');
-    const counter = document.getElementById('counter');
-    const progress = document.getElementById('progress');
-    const slideNum = document.getElementById('slideNum') || { style: {}, textContent: '' };
-    let current = 0;
+    var slides = document.querySelectorAll('.slide');
+    var counter = document.getElementById('counter');
+    var progress = document.getElementById('progress');
+    var current = 0;
+    var chartInstance = null;
 
     function showSlide(i) {
-      slides.forEach((s, idx) => {
+      slides.forEach(function(s, idx) {
         s.classList.remove('active', 'prev');
         if (idx === i) s.classList.add('active');
         else if (idx < i) s.classList.add('prev');
       });
-      counter.textContent = `${i + 1} / ${slides.length}`;
-      slideNum.textContent = `${String(i + 1).padStart(2, '0')}`;
-      progress.style.width = `${((i + 1) / slides.length) * 100}%`;
-
-      // Init chart when we hit the chart slide
-      if (i === 4 && !window.chartInit) initChart();
+      counter.textContent = (i + 1) + ' / ' + slides.length;
+      progress.style.width = ((i + 1) / slides.length * 100) + '%';
+      if (i === 4 && !chartInstance) initChart();
     }
 
     function navigate(dir) {
@@ -682,143 +319,75 @@
       showSlide(current);
     }
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
     });
 
-    document.getElementById('deck').addEventListener('click', (e) => {
-      if (e.target.closest('.nav')) return;
+    document.getElementById('deck').addEventListener('click', function(e) {
+      if (e.target.closest('.nav') || e.target.closest('.viz-menu')) return;
       navigate(e.clientX / window.innerWidth < 0.33 ? -1 : 1);
     });
 
-    // Touch support
-    let touchStartX = 0;
-    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-    document.addEventListener('touchend', e => {
-      const diff = touchStartX - e.changedTouches[0].clientX;
+    var touchStartX = 0;
+    document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', function(e) {
+      var diff = touchStartX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
     });
 
     showSlide(0);
 
-    // === Menu: close on outside click / Escape ===
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
+    // Menu
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme cycling ===
-    const themes = [
-      { name: 'Dark', class: 'theme-dark' },
-      { name: 'Light', class: 'theme-light' },
-      { name: 'Auto', class: 'theme-auto' },
-    ];
-    let currentThemeIdx = 0;
-
-    function cycleTheme() {
-      themes.forEach(t => document.documentElement.classList.remove(t.class));
-      currentThemeIdx = (currentThemeIdx + 1) % themes.length;
-      document.documentElement.classList.add(themes[currentThemeIdx].class);
-      document.getElementById('themeLabel').textContent = themes[currentThemeIdx].name;
-      localStorage.setItem('viz-theme', currentThemeIdx);
+    // Theme
+    var currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    var moonPath = '<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
+    var sunPath = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').innerHTML = t === 'dark' ? moonPath : sunPath;
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', t); currentTheme = t;
+      if (chartInstance) { chartInstance.destroy(); chartInstance = null; initChart(); }
     }
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    applyTheme(currentTheme);
 
-    // Restore saved theme
-    (function() {
-      const saved = localStorage.getItem('viz-theme');
-      if (saved !== null) {
-        currentThemeIdx = parseInt(saved);
-        document.documentElement.classList.add(themes[currentThemeIdx].class);
-        document.getElementById('themeLabel').textContent = themes[currentThemeIdx].name;
-      }
-    })();
-
-    // === Download as PNG ===
+    // Download
     async function downloadImage() {
-      const target = document.querySelector('.slide.active') || document.body;
-      const menu = document.querySelector('.viz-menu');
-      const nav = document.querySelector('.nav');
-      const prog = document.querySelector('.progress');
-      const sNum = document.querySelector('.slide-num');
-
-      [menu, nav, prog, sNum].forEach(el => { if (el) el.style.display = 'none'; });
-
+      var target = document.querySelector('.slide.active') || document.body;
+      var menu = document.querySelector('.viz-menu');
+      var nav = document.querySelector('.nav');
+      var prog = document.querySelector('.progress');
+      [menu,nav,prog].forEach(function(el) { if (el) el.style.display = 'none'; });
       try {
-        const dataUrl = await htmlToImage.toPng(target, {
-          quality: 1,
-          pixelRatio: 2,
-          cacheBust: true,
-          width: target.scrollWidth,
-          height: target.scrollHeight,
-        });
-        const link = document.createElement('a');
-        link.download = `${document.title || 'visualization'}-slide-${current + 1}.png`;
-        link.href = dataUrl;
-        link.click();
-      } catch (err) {
-        console.error('Export failed:', err);
-        alert('Image export failed. Try Print → Save as PDF instead.');
-      }
-
-      [menu, nav, prog, sNum].forEach(el => { if (el) el.style.display = ''; });
+        var url = await htmlToImage.toPng(target, { quality: 1, pixelRatio: 2, width: target.scrollWidth, height: target.scrollHeight });
+        var a = document.createElement('a'); a.download = document.title + '-slide-' + (current+1) + '.png'; a.href = url; a.click();
+      } catch(e) { console.error('Export failed:', e); }
+      [menu,nav,prog].forEach(function(el) { if (el) el.style.display = ''; });
     }
 
-    // Chart.js — YouTube growth
+    // Chart
     function initChart() {
-      window.chartInit = true;
-      const ctx = document.getElementById('growthChart');
-      new Chart(ctx, {
+      var s = getComputedStyle(document.documentElement);
+      var accentColor = s.getPropertyValue('--accent').trim();
+      var textSecondary = s.getPropertyValue('--text-secondary').trim();
+      var borderColor = s.getPropertyValue('--border').trim();
+      chartInstance = new Chart(document.getElementById('growthChart'), {
         type: 'line',
         data: {
-          labels: ['2022 Q1', 'Q2', 'Q3', 'Q4', '2023 Q1', 'Q2', 'Q3', 'Q4', '2024 Q1', 'Q2', 'Q3', 'Q4', '2025 Q1', 'Q2'],
-          datasets: [{
-            label: 'Subscribers (K)',
-            data: [2, 5, 12, 25, 40, 55, 72, 90, 105, 120, 138, 155, 170, 186],
-            borderColor: 'hsl(250, 85%, 68%)',
-            backgroundColor: 'hsla(250, 85%, 68%, 0.1)',
-            fill: true,
-            tension: 0.4,
-            pointRadius: 4,
-            pointHoverRadius: 7,
-            pointBackgroundColor: 'hsl(250, 85%, 68%)',
-            borderWidth: 2.5,
-          }]
+          labels: ['2022 Q1','Q2','Q3','Q4','2023 Q1','Q2','Q3','Q4','2024 Q1','Q2','Q3','Q4','2025 Q1','Q2'],
+          datasets: [{ label: 'Subscribers (K)', data: [2,5,12,25,40,55,72,90,105,120,138,155,170,186], borderColor: accentColor, backgroundColor: accentColor.replace(')',', 0.1)').replace('hsl(','hsla('), fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: accentColor, borderWidth: 2.5 }]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: 'hsl(250, 15%, 14%)',
-              borderColor: 'hsl(250, 20%, 30%)',
-              borderWidth: 1,
-              titleColor: 'hsl(250, 10%, 92%)',
-              bodyColor: 'hsl(250, 10%, 70%)',
-              cornerRadius: 8,
-              padding: 12,
-              callbacks: {
-                label: (ctx) => `${ctx.parsed.y}K subscribers`
-              }
-            }
-          },
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { display: false }, tooltip: { cornerRadius: 8, padding: 12, callbacks: { label: function(ctx) { return ctx.parsed.y + 'K subscribers'; } } } },
           scales: {
-            x: {
-              grid: { color: 'hsla(250, 10%, 30%, 0.3)' },
-              ticks: { color: 'hsl(250, 10%, 50%)', font: { size: 11 } }
-            },
-            y: {
-              beginAtZero: true,
-              grid: { color: 'hsla(250, 10%, 30%, 0.3)' },
-              ticks: {
-                color: 'hsl(250, 10%, 50%)',
-                font: { size: 11 },
-                callback: v => v + 'K'
-              }
-            }
+            x: { grid: { color: borderColor }, ticks: { color: textSecondary, font: { size: 11 } } },
+            y: { beginAtZero: true, grid: { color: borderColor }, ticks: { color: textSecondary, font: { size: 11 }, callback: function(v) { return v+'K'; } } }
           }
         }
       });

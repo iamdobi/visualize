@@ -50,6 +50,10 @@ See [references/libraries.md](references/libraries.md) for detailed CDN links, p
 
 Apply these defaults. They are opinionated and tested — override only when user requests it.
 
+### Design Notes
+- **Use inline SVG for icons, NOT emojis.** Simple path-based SVGs for a professional look. See the Icons section above.
+- **Chart.js charts MUST be destroyed and recreated on theme toggle** — not just CSS variable swaps. Colors are read at render time, so the chart must be rebuilt with new computed values.
+
 ### Typography
 - **Primary font:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
 - **Monospace:** JetBrains Mono or system `'SF Mono', 'Fira Code', 'Consolas', monospace`
@@ -105,6 +109,33 @@ Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f4
 - **Gradient accents:** `bg-gradient-to-r from-blue-500 to-purple-500` on key elements
 - **Transitions:** `transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1)` (Material standard)
 
+### Accessibility (Mandatory)
+
+Every visualization MUST meet these baseline accessibility requirements:
+
+- **Skip navigation:** Add `<a href="#main-content" class="skip-link">Skip to content</a>` at the top of `<body>`. Style: visually hidden, visible on focus.
+- **Landmark roles:** Use `<main>`, `<nav>`, `<header>`, `<footer>`, `<section>` with `aria-label` where there are multiple of the same landmark.
+- **Interactive elements:** All buttons, links, and controls must have `aria-label` if their text content is not descriptive (e.g., icon-only buttons).
+- **Focus indicators:** Add visible `:focus-visible` styles on all interactive elements: `outline: 2px solid var(--accent); outline-offset: 2px;`
+- **Color-only indicators:** Status dots, colored badges, etc. MUST have a text alternative. E.g., a green status dot should also show "Healthy" text or `aria-label="Status: Healthy"`.
+- **Charts and diagrams:** Wrap in a container with `role="img" aria-label="Description of what the chart shows"`.
+- **Screen reader descriptions:** Add `aria-description` or visually-hidden text describing key takeaways for complex visualizations.
+- **Slide decks:** Use `aria-live="polite"` on the slide counter, and `aria-label` on navigation buttons.
+
+### Icons (Inline SVG Only)
+
+Use inline SVG for all icons. **Never use emoji as icons** — they look unprofessional and render inconsistently.
+
+Use simple Lucide-style paths: 24x24 viewBox, stroke-based, `stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`.
+
+Common icons to use:
+- Moon/Sun for theme toggle
+- Download arrow for PNG export  
+- Printer for print
+- Arrow left/right for navigation
+- Check/X for pros/cons
+- Globe, Smartphone, Monitor for device types
+
 ### Animations (CSS-First)
 
 **CSS animations are the primary system.** They're reliable, performant, and never break from JS scoping issues.
@@ -137,6 +168,11 @@ See [references/animations.md](references/animations.md) for complete patterns.
 - Use `@keyframes` for page-load animations, CSS `transition` for hover/state changes
 - `data-reveal` elements show their final content if JS fails (no blank sections)
 - `prefers-reduced-motion` disables all animations automatically
+- `data-reveal` elements MUST have `opacity: 1` as their default CSS state. JS adds `.reveal` class (which sets `opacity: 0`), then `.visible` restores it. If JS fails, content stays visible.
+- On page load, trigger ALL reveal elements visible after a short delay (500ms) so full-page screenshots and PNG exports capture all content:
+  ```javascript
+  setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
+  ```
 
 ## Hamburger Menu (Required)
 

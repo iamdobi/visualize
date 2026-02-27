@@ -37,10 +37,20 @@
     p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -100px; left: 16px; padding: 8px 16px;
+      background: var(--accent); color: #fff; border-radius: 8px; z-index: 99999;
+      text-decoration: none; font-weight: 600; font-size: 0.875rem;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* Focus indicators */
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px;
-      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
@@ -52,34 +62,25 @@
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
     .animate { animation: fadeInUp 0.6s ease-out both; }
     .animate.delay-1 { animation-delay: 0.1s; }
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
     .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
-
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
     }
 
     @media print {
       body { background: white !important; color: black !important; overflow: visible; height: auto; }
-      .viz-menu, .slide-nav, .progress-bar { display: none !important; }
-      .slide { display: block !important; opacity: 1 !important; position: relative !important; page-break-after: always; }
+      .viz-menu, .slide-nav, .progress-bar, .skip-link { display: none !important; }
+      .slide { display: block !important; opacity: 1 !important; position: relative !important; page-break-after: always; height: auto !important; min-height: 100vh; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
+    /* Menu */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
       width: 44px; height: 44px; border-radius: 12px;
@@ -104,8 +105,9 @@
       display: flex; align-items: center; gap: 10px; transition: background 0.15s;
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* ===== SLIDES ===== */
+    /* Slides */
     .slides-container { position: relative; width: 100vw; height: 100vh; }
     .slide {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -128,30 +130,29 @@
     }
     .slide-nav button {
       background: none; border: none; color: var(--text); cursor: pointer;
-      font-size: 18px; padding: 4px 8px; border-radius: 6px; transition: background 0.15s;
+      padding: 4px 8px; border-radius: 6px; transition: background 0.15s;
+      display: flex; align-items: center;
     }
     .slide-nav button:hover { background: var(--surface-hover); }
     .slide-counter { font-size: 14px; color: var(--text-secondary); font-weight: 500; min-width: 48px; text-align: center; }
 
     .slide h1 { font-size: 3rem; font-weight: 800; margin-bottom: 16px; text-align: center; }
     .slide h2 { font-size: 2.25rem; font-weight: 700; margin-bottom: 24px; }
-    .slide h3 { font-size: 1.5rem; font-weight: 600; margin-bottom: 16px; }
     .slide p { font-size: 1.25rem; color: var(--text-secondary); max-width: 700px; text-align: center; }
+    .slide .icon-row { display: flex; align-items: center; gap: 8px; }
+    .slide .icon-row svg { flex-shrink: 0; }
     .slide ul { font-size: 1.125rem; list-style: none; padding: 0; }
-    .slide ul li { padding: 8px 0; padding-left: 24px; position: relative; }
-    .slide ul li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+    .slide ul li { padding: 8px 0; display: flex; align-items: center; gap: 12px; }
+    .slide ul li svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--accent); }
 
     .gradient-text {
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .stat-big { font-size: 3.5rem; font-weight: 800; }
     .stat-label { font-size: 1rem; color: var(--text-secondary); }
 
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; width: 100%; max-width: 900px; }
     .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; width: 100%; max-width: 900px; }
-
     .chart-container { width: 100%; max-width: 600px; height: 320px; }
 
     .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 700px; }
@@ -164,7 +165,8 @@
     }
 
     .cta-btn {
-      display: inline-block; padding: 16px 40px; border-radius: 12px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 16px 40px; border-radius: 12px;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
       color: white; font-size: 1.125rem; font-weight: 600; text-decoration: none;
       margin-top: 24px; cursor: pointer; border: none;
@@ -189,193 +191,227 @@
     }
     .step-card h4 { font-size: 1rem; margin-bottom: 8px; }
     .step-card p { font-size: 0.875rem; text-align: center; }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .slide { padding: 32px 24px; }
+      .slide h1 { font-size: 2rem; }
+      .slide h2 { font-size: 1.5rem; }
+      .slide p { font-size: 1rem; }
+      .three-col { grid-template-columns: 1fr; gap: 16px; }
+      .steps-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .team-grid { grid-template-columns: 1fr; gap: 16px; }
+      .stat-big { font-size: 2.5rem; }
+      .comp-table { font-size: 0.8rem; }
+      .comp-table th, .comp-table td { padding: 8px 10px; }
+      .chart-container { height: 250px; }
+    }
   </style>
 </head>
 <body>
-  <main>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
   <div class="viz-menu">
-    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-      </svg>
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Open menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+      <button onclick="cycleTheme()" role="menuitem">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print / PDF</span>
+      </button>
     </div>
   </div>
 
-  <div class="progress-bar" id="progressBar"></div>
+  <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Slide progress"></div>
 
-  <div class="slides-container">
+  <main id="main-content">
+    <div class="slides-container" role="region" aria-label="Pitch deck slides" aria-roledescription="carousel">
 
-    <!-- Slide 1: Title -->
-    <section class="slide active" data-slide="0" style="background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.15), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(139,92,246,0.12), transparent 50%), var(--bg);">
-      <div style="font-size:5rem; margin-bottom:16px; filter:drop-shadow(0 0 24px rgba(59,130,246,0.3));" class="animate">🍳</div>
-      <h1 class="animate delay-1" style="font-size:4.5rem;"><span class="gradient-text">CookAI</span></h1>
-      <p class="animate delay-2" style="font-size:1.75rem; margin-bottom:8px; color:var(--text);">Your AI-Powered Kitchen Companion</p>
-      <p class="animate delay-3" style="font-size:1.15rem;">Snap your fridge. Get personalized recipes. Waste nothing.</p>
-    </section>
+      <!-- Slide 1: Title -->
+      <section class="slide active" data-slide="0" aria-label="Slide 1: Title" style="background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.15), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(139,92,246,0.12), transparent 50%), var(--bg);">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="animate" aria-hidden="true" style="filter:drop-shadow(0 0 24px rgba(59,130,246,0.3));margin-bottom:16px;">
+          <circle cx="12" cy="8" r="5"/><path d="M7 13h10l1 8H6l1-8z"/><line x1="9" y1="16" x2="15" y2="16"/>
+        </svg>
+        <h1 class="animate delay-1" style="font-size:4.5rem;"><span class="gradient-text">CookAI</span></h1>
+        <p class="animate delay-2" style="font-size:1.75rem; margin-bottom:8px; color:var(--text);">Your AI-Powered Kitchen Companion</p>
+        <p class="animate delay-3" style="font-size:1.15rem;">Snap your fridge. Get personalized recipes. Waste nothing.</p>
+      </section>
 
-    <!-- Slide 2: Problem -->
-    <section class="slide" data-slide="1">
-      <h2 class="animate">The Problem</h2>
-      <div class="three-col animate delay-1">
-        <div class="card" style="text-align:center;">
-          <div class="stat-big gradient-text">40%</div>
-          <div class="stat-label">of groceries are wasted</div>
+      <!-- Slide 2: Problem -->
+      <section class="slide" data-slide="1" aria-label="Slide 2: The Problem">
+        <h2 class="animate">The Problem</h2>
+        <div class="three-col animate delay-1" role="img" aria-label="Problem statistics: 40% groceries wasted, 63% don't know what to cook, $1.5K wasted per household per year">
+          <div class="card" style="text-align:center;">
+            <div class="stat-big gradient-text">40%</div>
+            <div class="stat-label">of groceries are wasted</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="stat-big gradient-text">63%</div>
+            <div class="stat-label">don't know what to cook</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="stat-big gradient-text">$1.5K</div>
+            <div class="stat-label">wasted per household/yr</div>
+          </div>
         </div>
-        <div class="card" style="text-align:center;">
-          <div class="stat-big gradient-text">63%</div>
-          <div class="stat-label">don't know what to cook</div>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="stat-big gradient-text">$1.5K</div>
-          <div class="stat-label">wasted per household/yr</div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Slide 3: Solution -->
-    <section class="slide" data-slide="2">
-      <h2 class="animate">The Solution</h2>
-      <p class="animate delay-1" style="font-size:1.5rem; margin-bottom:32px;">Snap. Cook. Save.</p>
-      <ul class="animate delay-2">
-        <li>📸 Photo your fridge — AI identifies ingredients</li>
-        <li>🍳 Get personalized recipes in seconds</li>
-        <li>🥗 Adapts to dietary preferences & allergies</li>
-        <li>📉 Reduce food waste by up to 60%</li>
-      </ul>
-    </section>
+      <!-- Slide 3: Solution -->
+      <section class="slide" data-slide="2" aria-label="Slide 3: The Solution">
+        <h2 class="animate">The Solution</h2>
+        <p class="animate delay-1" style="font-size:1.5rem; margin-bottom:32px;">Snap. Cook. Save.</p>
+        <ul class="animate delay-2">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Photo your fridge — AI identifies ingredients</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M7 13h10l1 8H6l1-8z"/><line x1="9" y1="16" x2="15" y2="16"/></svg> Get personalized recipes in seconds</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Adapts to dietary preferences &amp; allergies</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Reduce food waste by up to 60%</li>
+        </ul>
+      </section>
 
-    <!-- Slide 4: How It Works -->
-    <section class="slide" data-slide="3">
-      <h2 class="animate">How It Works</h2>
-      <div class="steps-grid animate delay-1">
-        <div class="step-card card">
-          <div class="step-num">1</div>
-          <h4>Snap</h4>
-          <p>Take a photo of your fridge or pantry</p>
+      <!-- Slide 4: How It Works -->
+      <section class="slide" data-slide="3" aria-label="Slide 4: How It Works">
+        <h2 class="animate">How It Works</h2>
+        <div class="steps-grid animate delay-1" role="img" aria-label="4-step process: Snap, Detect, Match, Cook">
+          <div class="step-card card">
+            <div class="step-num">1</div>
+            <h4>Snap</h4>
+            <p>Take a photo of your fridge or pantry</p>
+          </div>
+          <div class="step-card card">
+            <div class="step-num">2</div>
+            <h4>Detect</h4>
+            <p>AI identifies every ingredient instantly</p>
+          </div>
+          <div class="step-card card">
+            <div class="step-num">3</div>
+            <h4>Match</h4>
+            <p>Finds recipes ranked by freshness &amp; taste</p>
+          </div>
+          <div class="step-card card">
+            <div class="step-num">4</div>
+            <h4>Cook</h4>
+            <p>Step-by-step guidance with voice assist</p>
+          </div>
         </div>
-        <div class="step-card card">
-          <div class="step-num">2</div>
-          <h4>Detect</h4>
-          <p>AI identifies every ingredient instantly</p>
-        </div>
-        <div class="step-card card">
-          <div class="step-num">3</div>
-          <h4>Match</h4>
-          <p>Finds recipes ranked by freshness & taste</p>
-        </div>
-        <div class="step-card card">
-          <div class="step-num">4</div>
-          <h4>Cook</h4>
-          <p>Step-by-step guidance with voice assist</p>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Slide 5: Market Size -->
-    <section class="slide" data-slide="4">
-      <h2 class="animate">Market Opportunity</h2>
-      <div class="chart-container animate delay-1">
-        <canvas id="marketChart"></canvas>
-      </div>
-    </section>
-
-    <!-- Slide 6: Traction -->
-    <section class="slide" data-slide="5">
-      <h2 class="animate">Traction</h2>
-      <div class="chart-container animate delay-1" style="max-width:700px; height:340px;">
-        <canvas id="tractionChart"></canvas>
-      </div>
-    </section>
-
-    <!-- Slide 7: Business Model -->
-    <section class="slide" data-slide="6">
-      <h2 class="animate">Business Model</h2>
-      <div class="three-col animate delay-1">
-        <div class="card" style="text-align:center;">
-          <h3 style="font-size:1.25rem;">Free Tier</h3>
-          <div class="stat-big gradient-text" style="font-size:2rem;">$0</div>
-          <p style="font-size:0.875rem;">5 recipes/day, basic features</p>
+      <!-- Slide 5: Market Size -->
+      <section class="slide" data-slide="4" aria-label="Slide 5: Market Opportunity">
+        <h2 class="animate">Market Opportunity</h2>
+        <div class="chart-container animate delay-1" role="img" aria-label="Market size chart: TAM $320B, SAM $45B, SOM $8B">
+          <canvas id="marketChart"></canvas>
         </div>
-        <div class="card" style="text-align:center; border-color: var(--accent);">
-          <h3 style="font-size:1.25rem;">Pro</h3>
-          <div class="stat-big gradient-text" style="font-size:2rem;">$9.99</div>
-          <p style="font-size:0.875rem;">Unlimited recipes, meal planning</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <h3 style="font-size:1.25rem;">Family</h3>
-          <div class="stat-big gradient-text" style="font-size:2rem;">$14.99</div>
-          <p style="font-size:0.875rem;">6 profiles, grocery lists, nutrition</p>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Slide 8: Competition -->
-    <section class="slide" data-slide="7">
-      <h2 class="animate">Competition</h2>
-      <table class="comp-table animate delay-1">
-        <thead>
-          <tr><th>Feature</th><th>CookAI</th><th>Yummly</th><th>Supercook</th><th>ChatGPT</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Photo recognition</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-          <tr><td>Real-time fridge tracking</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-          <tr><td>Dietary adaptation</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-          <tr><td>Waste reduction metrics</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-          <tr><td>Voice-guided cooking</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Slide 9: Team -->
-    <section class="slide" data-slide="8">
-      <h2 class="animate">The Team</h2>
-      <div class="team-grid animate delay-1">
-        <div class="team-member">
-          <div class="team-avatar">SK</div>
-          <h3 style="font-size:1rem;">Sarah Kim</h3>
-          <p style="font-size:0.875rem;">CEO — Ex-Google AI</p>
+      <!-- Slide 6: Traction -->
+      <section class="slide" data-slide="5" aria-label="Slide 6: Traction">
+        <h2 class="animate">Traction</h2>
+        <div class="chart-container animate delay-1" role="img" aria-label="Monthly active users growth from 2.4K in January to 142K in December" style="max-width:700px; height:340px;">
+          <canvas id="tractionChart"></canvas>
         </div>
-        <div class="team-member">
-          <div class="team-avatar">MR</div>
-          <h3 style="font-size:1rem;">Marco Rossi</h3>
-          <p style="font-size:0.875rem;">CTO — ML at Scale</p>
-        </div>
-        <div class="team-member">
-          <div class="team-avatar">JL</div>
-          <h3 style="font-size:1rem;">Jenna Lee</h3>
-          <p style="font-size:0.875rem;">CPO — Ex-Blue Apron</p>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Slide 10: Ask / CTA -->
-    <section class="slide" data-slide="9">
-      <h2 class="animate">The Ask</h2>
-      <div class="stat-big gradient-text animate delay-1" style="margin-bottom:16px;">$3M Seed Round</div>
-      <ul class="animate delay-2" style="margin-bottom:32px;">
-        <li>🔬 Expand AI model to 10K+ ingredients</li>
-        <li>🌍 Launch in 5 markets (US, UK, DE, JP, BR)</li>
-        <li>👥 Grow team to 25 engineers</li>
-      </ul>
-      <button class="cta-btn animate delay-3">Let's Cook Together 🚀</button>
-    </section>
+      <!-- Slide 7: Business Model -->
+      <section class="slide" data-slide="6" aria-label="Slide 7: Business Model">
+        <h2 class="animate">Business Model</h2>
+        <div class="three-col animate delay-1">
+          <div class="card" style="text-align:center;">
+            <h3 style="font-size:1.25rem;">Free Tier</h3>
+            <div class="stat-big gradient-text" style="font-size:2rem;">$0</div>
+            <p style="font-size:0.875rem;">5 recipes/day, basic features</p>
+          </div>
+          <div class="card" style="text-align:center; border-color: var(--accent);">
+            <h3 style="font-size:1.25rem;">Pro</h3>
+            <div class="stat-big gradient-text" style="font-size:2rem;">$9.99</div>
+            <p style="font-size:0.875rem;">Unlimited recipes, meal planning</p>
+          </div>
+          <div class="card" style="text-align:center;">
+            <h3 style="font-size:1.25rem;">Family</h3>
+            <div class="stat-big gradient-text" style="font-size:2rem;">$14.99</div>
+            <p style="font-size:0.875rem;">6 profiles, grocery lists, nutrition</p>
+          </div>
+        </div>
+      </section>
 
-  </div>
+      <!-- Slide 8: Competition -->
+      <section class="slide" data-slide="7" aria-label="Slide 8: Competition">
+        <h2 class="animate">Competition</h2>
+        <div class="animate delay-1" role="img" aria-label="Feature comparison table showing CookAI leads in photo recognition, fridge tracking, waste metrics, and voice-guided cooking">
+          <table class="comp-table">
+            <thead>
+              <tr><th>Feature</th><th>CookAI</th><th>Yummly</th><th>Supercook</th><th>ChatGPT</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Photo recognition</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
+              <tr><td>Real-time fridge tracking</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
+              <tr><td>Dietary adaptation</td><td class="check" aria-label="Yes">✓</td><td class="check" aria-label="Yes">✓</td><td class="check" aria-label="Yes">✓</td><td class="check" aria-label="Yes">✓</td></tr>
+              <tr><td>Waste reduction metrics</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
+              <tr><td>Voice-guided cooking</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Slide 9: Team -->
+      <section class="slide" data-slide="8" aria-label="Slide 9: The Team">
+        <h2 class="animate">The Team</h2>
+        <div class="team-grid animate delay-1">
+          <div class="team-member">
+            <div class="team-avatar" aria-hidden="true">SK</div>
+            <h3 style="font-size:1rem;">Sarah Kim</h3>
+            <p style="font-size:0.875rem;">CEO — Ex-Google AI</p>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar" aria-hidden="true">MR</div>
+            <h3 style="font-size:1rem;">Marco Rossi</h3>
+            <p style="font-size:0.875rem;">CTO — ML at Scale</p>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar" aria-hidden="true">JL</div>
+            <h3 style="font-size:1rem;">Jenna Lee</h3>
+            <p style="font-size:0.875rem;">CPO — Ex-Blue Apron</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Ask / CTA -->
+      <section class="slide" data-slide="9" aria-label="Slide 10: The Ask">
+        <h2 class="animate">The Ask</h2>
+        <div class="stat-big gradient-text animate delay-1" style="margin-bottom:16px;">$3M Seed Round</div>
+        <ul class="animate delay-2" style="margin-bottom:32px;">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Expand AI model to 10K+ ingredients</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Launch in 5 markets (US, UK, DE, JP, BR)</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Grow team to 25 engineers</li>
+        </ul>
+        <button class="cta-btn animate delay-3" aria-label="Contact us to invest">
+          Let's Cook Together
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </section>
+
+    </div>
+  </main>
 
   <!-- Slide Nav -->
-  <nav class="slide-nav">
-    <button onclick="goToSlide(current - 1)" aria-label="Previous">←</button>
-    <span class="slide-counter" id="slideCounter">1 / 10</span>
-    <button onclick="goToSlide(current + 1)" aria-label="Next">→</button>
+  <nav class="slide-nav" aria-label="Slide navigation">
+    <button onclick="goToSlide(current - 1)" aria-label="Previous slide">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="slide-counter" id="slideCounter" aria-live="polite">1 / 10</span>
+    <button onclick="goToSlide(current + 1)" aria-label="Next slide">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
   </nav>
 
-  </main>
   <script>
     // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
@@ -384,45 +420,17 @@
 
     // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    var moonPath = '<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
+    var sunPath = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeIcon').innerHTML = t === 'dark' ? moonPath : sunPath;
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
+      localStorage.setItem('viz-theme', t); currentTheme = t;
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
-
-    // === Scroll Reveal ===
-    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
-
-    // === Number Counter ===
-    function animateCounters() {
-      document.querySelectorAll('[data-count]').forEach(function(el) {
-        if (el.dataset.counted) return;
-        el.dataset.counted = '1';
-        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
-        var start = performance.now(), duration = 1200;
-        (function tick(now) {
-          var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
-          if (p < 1) requestAnimationFrame(tick);
-        })(start);
-      });
-    }
-    var counterEl = document.querySelector('[data-count]');
-    if (counterEl) {
-      var cObs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); cObs.disconnect(); } });
-      }, { threshold: 0.3 });
-      cObs.observe(counterEl);
-    }
 
     // === Download PNG ===
     async function downloadImage() {
@@ -465,7 +473,6 @@
       else goToSlide(current + 1);
     });
 
-    // Init progress bar
     document.getElementById('progressBar').style.width = (1 / totalSlides * 100) + '%';
 
     // === Charts ===
@@ -493,12 +500,7 @@
         type: 'bar',
         data: {
           labels: ['TAM', 'SAM', 'SOM'],
-          datasets: [{
-            label: 'Market Size ($B)',
-            data: [320, 45, 8],
-            backgroundColor: [c.accent, c.accentSecondary, c.positive],
-            borderRadius: 8, barThickness: 40
-          }]
+          datasets: [{ label: 'Market Size ($B)', data: [320, 45, 8], backgroundColor: [c.accent, c.accentSecondary, c.positive], borderRadius: 8, barThickness: 40 }]
         },
         options: {
           indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
@@ -515,12 +517,7 @@
         type: 'line',
         data: {
           labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-          datasets: [{
-            label: 'Monthly Active Users',
-            data: [2400, 4200, 7800, 12500, 18900, 28000, 41000, 52000, 68000, 89000, 112000, 142000],
-            borderColor: c.accent, backgroundColor: c.accent + '22',
-            fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: c.accent
-          }]
+          datasets: [{ label: 'Monthly Active Users', data: [2400,4200,7800,12500,18900,28000,41000,52000,68000,89000,112000,142000], borderColor: c.accent, backgroundColor: c.accent + '22', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: c.accent }]
         },
         options: {
           responsive: true, maintainAspectRatio: false, animation: false,

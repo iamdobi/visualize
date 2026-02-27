@@ -35,36 +35,34 @@
       transition: background 0.3s, color 0.3s;
     }
     h1,h2,h3,h4,h5,h6 { color: var(--text); }
-    p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
+
+    .skip-link {
+      position: absolute; top: -100px; left: 16px; padding: 8px 16px;
+      background: var(--accent); color: #fff; border-radius: 8px; z-index: 99999;
+      text-decoration: none; font-weight: 600;
+    }
+    .skip-link:focus { top: 16px; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px;
-      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .animate { animation: fadeInUp 0.6s ease-out both; }
     .animate.delay-1 { animation-delay: 0.1s; }
     .animate.delay-2 { animation-delay: 0.2s; }
-    .animate.delay-3 { animation-delay: 0.3s; }
-    .animate.delay-4 { animation-delay: 0.4s; }
 
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
+      .reveal { opacity: 1 !important; transform: none !important; }
     }
 
     @media print {
@@ -99,19 +97,17 @@
       display: flex; align-items: center; gap: 10px; transition: background 0.15s;
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* ===== CONTENT ===== */
     .container { max-width: 960px; margin: 0 auto; padding: 48px 24px; }
     section { margin-bottom: 64px; }
 
     .hero { text-align: center; }
-    .hero h1 { font-size: 2.75rem; font-weight: 800; margin-bottom: 12px; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 2.75rem); font-weight: 800; margin-bottom: 12px; }
     .hero p { font-size: 1.25rem; color: var(--text-secondary); }
     .legend { display: flex; justify-content: center; gap: 32px; margin-top: 24px; }
     .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .legend-dot.remote { background: var(--remote); }
-    .legend-dot.office { background: var(--office); }
 
     .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .stat-card { text-align: center; }
@@ -121,160 +117,190 @@
     .office-color { color: var(--office); }
 
     .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .pros-cons h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; }
+    .pros-cons h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .pros-cons h3 svg { width: 20px; height: 20px; }
     .pros-cons ul { list-style: none; padding: 0; }
     .pros-cons li { padding: 8px 0; padding-left: 24px; position: relative; font-size: 0.95rem; }
-    .pros-cons .remote-list li::before { content: '✓'; position: absolute; left: 0; color: var(--remote); font-weight: 700; }
-    .pros-cons .office-list li::before { content: '✓'; position: absolute; left: 0; color: var(--office); font-weight: 700; }
-    .pros-cons .cons-list li::before { content: '✗' !important; color: var(--negative) !important; }
+    .check-icon::before { content: ''; position: absolute; left: 0; top: 12px; width: 14px; height: 14px; border-radius: 50%; }
+    .remote-check::before { background: var(--remote); }
+    .office-check::before { background: var(--office); }
+    .con-icon::before { background: var(--negative) !important; }
+    .sub-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
 
     .chart-section h2 { text-align: center; font-size: 1.75rem; margin-bottom: 24px; }
     .chart-container { height: 400px; max-width: 700px; margin: 0 auto; position: relative; }
-    .chart-container canvas { display: block; }
 
     .insights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .insight-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .insight-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .insight-card h4 svg { width: 18px; height: 18px; flex-shrink: 0; }
     .insight-card p { font-size: 0.9rem; color: var(--text-secondary); }
 
     .sources { text-align: center; }
     .sources h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-secondary); }
     .sources p { font-size: 0.8rem; color: var(--text-secondary); }
 
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .stats-grid, .pros-cons, .insights-grid { grid-template-columns: 1fr; }
+      .chart-container { height: 300px; }
     }
   </style>
 </head>
 <body>
-  <main>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
   <div class="viz-menu">
-    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-      </svg>
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Open menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+      <button onclick="cycleTheme()" role="menuitem">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button onclick="downloadImage()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="window.print()" role="menuitem">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <span>Print / PDF</span>
+      </button>
     </div>
   </div>
 
-  <div class="container">
+  <main id="main-content">
+    <div class="container">
 
-    <header class="hero animate">
-      <h1>Remote Work <span style="color:var(--text-secondary)">vs</span> Office Work</h1>
-      <p>A data-driven comparison of the modern workplace</p>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot remote"></div> Remote</div>
-        <div class="legend-item"><div class="legend-dot office"></div> Office</div>
-      </div>
-    </header>
-
-    <section data-reveal>
-      <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">By the Numbers</h2>
-      <div class="stats-grid">
-        <article class="card stat-card">
-          <div class="stat-num remote-color" data-count="77" data-suffix="%">77%</div>
-          <div class="stat-label">of remote workers report higher productivity</div>
-        </article>
-        <article class="card stat-card">
-          <div class="stat-num office-color" data-count="65" data-suffix="%">65%</div>
-          <div class="stat-label">of office workers prefer in-person collaboration</div>
-        </article>
-        <article class="card stat-card">
-          <div class="stat-num remote-color" data-count="40" data-prefix="$" data-suffix="K">$40K</div>
-          <div class="stat-label">average annual savings per remote employee</div>
-        </article>
-        <article class="card stat-card">
-          <div class="stat-num office-color" data-count="72" data-suffix="%">72%</div>
-          <div class="stat-label">say office culture aids career growth</div>
-        </article>
-      </div>
-    </section>
-
-    <section data-reveal>
-      <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Pros &amp; Cons</h2>
-      <div class="pros-cons">
-        <div class="card">
-          <h3 style="color:var(--remote);">🏠 Remote Work</h3>
-          <h4 style="font-size:0.85rem; color:var(--positive); margin-bottom:8px;">✓ Pros</h4>
-          <ul class="remote-list">
-            <li>Flexible schedule and location</li>
-            <li>No commute saves 40+ min/day</li>
-            <li>Higher reported job satisfaction</li>
-            <li>Lower overhead costs for companies</li>
-            <li>Access to global talent pool</li>
-          </ul>
-          <h4 style="font-size:0.85rem; color:var(--negative); margin:16px 0 8px;">✗ Cons</h4>
-          <ul class="remote-list cons-list" style="opacity:0.85;">
-            <li style="color:var(--text-secondary);">Social isolation and loneliness (33% report)</li>
-            <li style="color:var(--text-secondary);">Blurred work-life boundaries</li>
-            <li style="color:var(--text-secondary);">Harder to build team culture</li>
-            <li style="color:var(--text-secondary);">Distractions at home</li>
-          </ul>
+      <header class="hero animate">
+        <h1>Remote Work <span style="color:var(--text-secondary)">vs</span> Office Work</h1>
+        <p>A data-driven comparison of the modern workplace</p>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--remote)"></div> Remote</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--office)"></div> Office</div>
         </div>
-        <div class="card">
-          <h3 style="color:var(--office);">🏢 Office Work</h3>
-          <h4 style="font-size:0.85rem; color:var(--positive); margin-bottom:8px;">✓ Pros</h4>
-          <ul class="office-list">
-            <li>Spontaneous collaboration & brainstorming</li>
-            <li>Stronger team bonding & culture</li>
-            <li>Clear work-life boundaries</li>
-            <li>Easier mentorship for juniors</li>
-            <li>Better access to equipment & resources</li>
-          </ul>
-          <h4 style="font-size:0.85rem; color:var(--negative); margin:16px 0 8px;">✗ Cons</h4>
-          <ul class="office-list cons-list" style="opacity:0.85;">
-            <li style="color:var(--text-secondary);">Long commutes (avg 27 min each way)</li>
-            <li style="color:var(--text-secondary);">Higher overhead costs for companies</li>
-            <li style="color:var(--text-secondary);">More frequent interruptions</li>
-            <li style="color:var(--text-secondary);">Limited flexibility and autonomy</li>
-          </ul>
+      </header>
+
+      <section data-reveal aria-label="Key statistics">
+        <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">By the Numbers</h2>
+        <div class="stats-grid" role="img" aria-label="Remote workers: 77% higher productivity, $40K savings. Office workers: 65% prefer in-person, 72% say it aids career growth.">
+          <article class="card stat-card">
+            <div class="stat-num remote-color" data-count="77" data-suffix="%">77%</div>
+            <div class="stat-label">of remote workers report higher productivity</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-num office-color" data-count="65" data-suffix="%">65%</div>
+            <div class="stat-label">of office workers prefer in-person collaboration</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-num remote-color" data-count="40" data-prefix="$" data-suffix="K">$40K</div>
+            <div class="stat-label">average annual savings per remote employee</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-num office-color" data-count="72" data-suffix="%">72%</div>
+            <div class="stat-label">say office culture aids career growth</div>
+          </article>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="chart-section" data-reveal>
-      <h2>Employee Satisfaction</h2>
-      <div class="card" style="padding:32px;">
-        <div class="chart-container">
-          <canvas id="satisfactionChart"></canvas>
+      <section data-reveal aria-label="Pros and cons comparison">
+        <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Pros &amp; Cons</h2>
+        <div class="pros-cons">
+          <div class="card">
+            <h3 style="color:var(--remote);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Remote Work
+            </h3>
+            <div class="sub-label" style="color:var(--positive);">Pros</div>
+            <ul>
+              <li class="check-icon remote-check">Flexible schedule and location</li>
+              <li class="check-icon remote-check">No commute saves 40+ min/day</li>
+              <li class="check-icon remote-check">Higher reported job satisfaction</li>
+              <li class="check-icon remote-check">Lower overhead costs for companies</li>
+              <li class="check-icon remote-check">Access to global talent pool</li>
+            </ul>
+            <div class="sub-label" style="color:var(--negative); margin-top:16px;">Cons</div>
+            <ul>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Social isolation and loneliness (33% report)</li>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Blurred work-life boundaries</li>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Harder to build team culture</li>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Distractions at home</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 style="color:var(--office);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+              Office Work
+            </h3>
+            <div class="sub-label" style="color:var(--positive);">Pros</div>
+            <ul>
+              <li class="check-icon office-check">Spontaneous collaboration &amp; brainstorming</li>
+              <li class="check-icon office-check">Stronger team bonding &amp; culture</li>
+              <li class="check-icon office-check">Clear work-life boundaries</li>
+              <li class="check-icon office-check">Easier mentorship for juniors</li>
+              <li class="check-icon office-check">Better access to equipment &amp; resources</li>
+            </ul>
+            <div class="sub-label" style="color:var(--negative); margin-top:16px;">Cons</div>
+            <ul>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Long commutes (avg 27 min each way)</li>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Higher overhead costs for companies</li>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">More frequent interruptions</li>
+              <li class="check-icon con-icon" style="color:var(--text-secondary);">Limited flexibility and autonomy</li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section data-reveal>
-      <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Key Insights</h2>
-      <div class="insights-grid">
-        <article class="card insight-card">
-          <h4>🔄 Hybrid Is the Future</h4>
-          <p>83% of workers prefer a hybrid model — the best of both worlds, 2-3 days remote per week.</p>
-        </article>
-        <article class="card insight-card">
-          <h4>📈 Productivity Gains</h4>
-          <p>Remote workers complete 13% more tasks per day on average, with fewer distractions and meetings.</p>
-        </article>
-        <article class="card insight-card">
-          <h4>🧠 Mental Health</h4>
-          <p>Remote workers report 25% less burnout, but 33% more loneliness — social connection matters.</p>
-        </article>
-        <article class="card insight-card">
-          <h4>💰 Cost Savings</h4>
-          <p>Companies save $11K per remote worker annually. Employees save $4K on commuting and meals.</p>
-        </article>
-      </div>
-    </section>
+      <section class="chart-section" data-reveal>
+        <h2>Employee Satisfaction</h2>
+        <div class="card" style="padding:32px;">
+          <div class="chart-container" role="img" aria-label="Bar chart comparing remote vs office satisfaction across 5 categories. Remote leads in work-life balance (87% vs 54%) and productivity (77% vs 65%). Office leads in collaboration (82% vs 58%) and career growth (72% vs 52%).">
+            <canvas id="satisfactionChart"></canvas>
+          </div>
+        </div>
+      </section>
 
-    <section class="sources" data-reveal>
-      <h3>Sources</h3>
-      <p>Buffer State of Remote Work 2024 · Owl Labs Hybrid Work Report · McKinsey Future of Work Survey · Stanford WFH Research</p>
-    </section>
+      <section data-reveal aria-label="Key insights">
+        <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Key Insights</h2>
+        <div class="insights-grid">
+          <article class="card insight-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+              Hybrid Is the Future
+            </h4>
+            <p>83% of workers prefer a hybrid model — the best of both worlds, 2-3 days remote per week.</p>
+          </article>
+          <article class="card insight-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Productivity Gains
+            </h4>
+            <p>Remote workers complete 13% more tasks per day on average, with fewer distractions and meetings.</p>
+          </article>
+          <article class="card insight-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 00-4 14.93V20h8v-3.07A8 8 0 0012 2z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+              Mental Health
+            </h4>
+            <p>Remote workers report 25% less burnout, but 33% more loneliness — social connection matters.</p>
+          </article>
+          <article class="card insight-card">
+            <h4>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              Cost Savings
+            </h4>
+            <p>Companies save $11K per remote worker annually. Employees save $4K on commuting and meals.</p>
+          </article>
+        </div>
+      </section>
 
-  </div>
+      <section class="sources" data-reveal>
+        <h3>Sources</h3>
+        <p>Buffer State of Remote Work 2024 · Owl Labs Hybrid Work Report · McKinsey Future of Work Survey · Stanford WFH Research</p>
+      </section>
 
+    </div>
   </main>
+
   <script>
     // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
@@ -283,12 +309,13 @@
 
     // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    var moonPath = '<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
+    var sunPath = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeIcon').innerHTML = t === 'dark' ? moonPath : sunPath;
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
+      localStorage.setItem('viz-theme', t); currentTheme = t;
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
@@ -300,12 +327,12 @@
       entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+    setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
 
     // === Number Counter ===
     function animateCounters() {
       document.querySelectorAll('[data-count]').forEach(function(el) {
-        if (el.dataset.counted) return;
-        el.dataset.counted = '1';
+        if (el.dataset.counted) return; el.dataset.counted = '1';
         var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
         var start = performance.now(), duration = 1200;
         (function tick(now) {
@@ -325,8 +352,7 @@
 
     // === Download PNG ===
     async function downloadImage() {
-      var menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
+      var menu = document.querySelector('.viz-menu'); menu.style.display = 'none';
       try {
         var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
         var a = document.createElement('a'); a.href = url;
@@ -336,68 +362,30 @@
     }
 
     // === Chart ===
-    var chartCanvas = document.getElementById('satisfactionChart');
     var chartInstance = null;
-
     function getChartColors() {
       var s = getComputedStyle(document.documentElement);
-      return {
-        text: s.getPropertyValue('--text').trim(),
-        textSecondary: s.getPropertyValue('--text-secondary').trim(),
-        border: s.getPropertyValue('--border').trim(),
-        remote: s.getPropertyValue('--remote').trim(),
-        office: s.getPropertyValue('--office').trim()
-      };
+      return { textSecondary: s.getPropertyValue('--text-secondary').trim(), border: s.getPropertyValue('--border').trim(), remote: s.getPropertyValue('--remote').trim(), office: s.getPropertyValue('--office').trim() };
     }
-
     function buildChart() {
-      var c = getChartColors();
-      Chart.defaults.color = c.textSecondary;
-
-      // Destroy existing chart properly before recreating
-      if (chartInstance) {
-        chartInstance.destroy();
-        chartInstance = null;
-      }
-
-      chartInstance = new Chart(chartCanvas, {
+      var c = getChartColors(); Chart.defaults.color = c.textSecondary;
+      if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+      chartInstance = new Chart(document.getElementById('satisfactionChart'), {
         type: 'bar',
         data: {
-          labels: ['Work-Life Balance', 'Productivity', 'Collaboration', 'Career Growth', 'Overall Satisfaction'],
+          labels: ['Work-Life Balance', 'Productivity', 'Collaboration', 'Career Growth', 'Overall'],
           datasets: [
-            {
-              label: 'Remote',
-              data: [87, 77, 58, 52, 78],
-              backgroundColor: c.remote,
-              borderRadius: 6, barPercentage: 0.7
-            },
-            {
-              label: 'Office',
-              data: [54, 65, 82, 72, 68],
-              backgroundColor: c.office,
-              borderRadius: 6, barPercentage: 0.7
-            }
+            { label: 'Remote', data: [87, 77, 58, 52, 78], backgroundColor: c.remote, borderRadius: 6, barPercentage: 0.7 },
+            { label: 'Office', data: [54, 65, 82, 72, 68], backgroundColor: c.office, borderRadius: 6, barPercentage: 0.7 }
           ]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
-          animation: false,
-          plugins: {
-            legend: { position: 'top' },
-            tooltip: {
-              backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#fff', bodyColor: '#fff',
-              cornerRadius: 8, padding: 10,
-              callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } }
-            }
-          },
-          scales: {
-            x: { grid: { display: false } },
-            y: { beginAtZero: true, grid: { color: c.border }, max: 100, ticks: { callback: function(v) { return v + '%'; } } }
-          }
+          responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { position: 'top' }, tooltip: { backgroundColor: 'rgba(0,0,0,0.8)', cornerRadius: 8, callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } } } },
+          scales: { x: { grid: { display: false } }, y: { beginAtZero: true, grid: { color: c.border }, max: 100, ticks: { callback: function(v) { return v + '%'; } } } }
         }
       });
     }
-
     function onThemeChange() { buildChart(); }
     buildChart();
   </script>
