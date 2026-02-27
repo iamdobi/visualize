@@ -3,115 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cloud-Native E-Commerce — Microservices Architecture</title>
+  <title>E-Commerce Microservices Architecture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root, .theme-dark {
-      --bg: #030712;
-      --surface: #111827;
-      --surface-hover: #1f2937;
+      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
-      --text: #f9fafb;
-      --text-secondary: #9ca3af;
-      --accent: #3b82f6;
-      --accent-secondary: #8b5cf6;
-      --positive: #10b981;
-      --negative: #f43f5e;
-      --warning: #f59e0b;
-      /* Layer colors */
-      --layer-clients: #3b82f6;
-      --layer-clients-bg: rgba(59,130,246,0.08);
-      --layer-clients-border: rgba(59,130,246,0.25);
-      --layer-gateway: #f59e0b;
-      --layer-gateway-bg: rgba(245,158,11,0.08);
-      --layer-gateway-border: rgba(245,158,11,0.25);
-      --layer-services: #10b981;
-      --layer-services-bg: rgba(16,185,129,0.08);
-      --layer-services-border: rgba(16,185,129,0.25);
-      --layer-data: #ec4899;
-      --layer-data-bg: rgba(236,72,153,0.08);
-      --layer-data-border: rgba(236,72,153,0.25);
-      --layer-external: #f43f5e;
-      --layer-external-bg: rgba(244,63,94,0.08);
-      --layer-external-border: rgba(244,63,94,0.25);
+      --text: #f9fafb; --text-secondary: #9ca3af;
+      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      --layer-clients: #3b82f6; --layer-gateway: #f59e0b;
+      --layer-services: #10b981; --layer-data: #ec4899; --layer-external: #f43f5e;
     }
     .theme-light {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-hover: #f1f5f9;
+      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
       --border: rgba(0,0,0,0.08);
-      --text: #0f172a;
-      --text-secondary: #64748b;
-      --accent: #2563eb;
-      --accent-secondary: #7c3aed;
-      --positive: #059669;
-      --negative: #e11d48;
-      --warning: #d97706;
-      --layer-clients: #2563eb;
-      --layer-clients-bg: rgba(37,99,235,0.06);
-      --layer-clients-border: rgba(37,99,235,0.2);
-      --layer-gateway: #d97706;
-      --layer-gateway-bg: rgba(217,119,6,0.06);
-      --layer-gateway-border: rgba(217,119,6,0.2);
-      --layer-services: #059669;
-      --layer-services-bg: rgba(5,150,105,0.06);
-      --layer-services-border: rgba(5,150,105,0.2);
-      --layer-data: #db2777;
-      --layer-data-bg: rgba(219,39,119,0.06);
-      --layer-data-border: rgba(219,39,119,0.2);
-      --layer-external: #e11d48;
-      --layer-external-bg: rgba(225,29,72,0.06);
-      --layer-external-border: rgba(225,29,72,0.2);
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      --layer-clients: #2563eb; --layer-gateway: #d97706;
+      --layer-services: #059669; --layer-data: #db2777; --layer-external: #e11d48;
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
       transition: background 0.3s, color 0.3s;
-      min-height: 100vh;
-      overflow-x: hidden;
     }
+    h1,h2,h3,h4,h5,h6 { color: var(--text); }
+    p,li,td,th,span,label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
-    h1, h2, h3, h4, h5, h6 { color: var(--text); }
-    p, li, td, th, span, label { color: var(--text); }
-    .text-secondary { color: var(--text-secondary); }
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.1s; }
+    .animate.delay-2 { animation-delay: 0.2s; }
+    .animate.delay-3 { animation-delay: 0.3s; }
+    .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .animate.delay-6 { animation-delay: 0.6s; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
 
     @media print {
       body { background: white !important; color: black !important; }
       .viz-menu { display: none !important; }
+      .reveal { opacity: 1 !important; transform: none !important; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .arch-layer { opacity: 1 !important; }
-      .data-flow-dot { display: none !important; }
     }
 
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
@@ -120,16 +83,15 @@
       background: var(--surface); border: 1px solid var(--border);
       color: var(--text); cursor: pointer; display: flex;
       align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      transition: all 0.2s;
+      backdrop-filter: blur(12px); transition: all 0.2s;
     }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
     .viz-menu-dropdown {
       position: absolute; top: 52px; right: 0; min-width: 200px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
-      transform: translateY(-8px); transition: all 0.2s;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px; padding: 8px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: all 0.2s; backdrop-filter: blur(16px);
     }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
     .viz-menu-dropdown button {
@@ -140,253 +102,64 @@
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== ARCHITECTURE LAYOUT ===== */
-    .arch-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 48px 24px 64px;
-    }
+    /* ===== ARCHITECTURE ===== */
+    .container { max-width: 1000px; margin: 0 auto; padding: 48px 24px; }
 
-    header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-    header h1 {
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    header p {
-      color: var(--text-secondary);
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
-      max-width: 600px;
-      margin: 0 auto;
-    }
+    .hero { text-align: center; margin-bottom: 48px; }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
+    .hero p { font-size: 1.125rem; color: var(--text-secondary); }
 
-    /* Layers */
-    .arch-diagram {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
+    .diagram { display: flex; flex-direction: column; gap: 0; align-items: center; margin-bottom: 64px; }
 
-    .arch-layer {
-      position: relative;
-      border-radius: 16px;
-      padding: 28px 24px 24px;
-      transition: opacity 0.4s ease;
+    .layer {
+      width: 100%; padding: 24px; border-radius: 16px; position: relative;
+      border: 1px solid var(--border); background: var(--surface);
     }
-    .arch-diagram:hover .arch-layer {
-      opacity: 0.4;
-    }
-    .arch-diagram:hover .arch-layer:hover {
-      opacity: 1;
-    }
-    .arch-diagram:hover .arch-layer:hover ~ .arch-layer,
-    .arch-diagram:hover .arch-layer:has(~ .arch-layer:hover) {
-      opacity: 0.4;
-    }
-
     .layer-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
     }
-    .layer-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-    }
+    .layer-dot { width: 10px; height: 10px; border-radius: 50%; }
 
-    .layer-clients { background: var(--layer-clients-bg); border: 1px solid var(--layer-clients-border); }
-    .layer-clients .layer-label { color: var(--layer-clients); }
-    .layer-clients .layer-dot { background: var(--layer-clients); }
-
-    .layer-gateway { background: var(--layer-gateway-bg); border: 1px solid var(--layer-gateway-border); }
-    .layer-gateway .layer-label { color: var(--layer-gateway); }
-    .layer-gateway .layer-dot { background: var(--layer-gateway); }
-
-    .layer-services { background: var(--layer-services-bg); border: 1px solid var(--layer-services-border); }
-    .layer-services .layer-label { color: var(--layer-services); }
-    .layer-services .layer-dot { background: var(--layer-services); }
-
-    .layer-data { background: var(--layer-data-bg); border: 1px solid var(--layer-data-border); }
-    .layer-data .layer-label { color: var(--layer-data); }
-    .layer-data .layer-dot { background: var(--layer-data); }
-
-    .layer-external { background: var(--layer-external-bg); border: 1px solid var(--layer-external-border); }
-    .layer-external .layer-label { color: var(--layer-external); }
-    .layer-external .layer-dot { background: var(--layer-external); }
-
-    /* Nodes */
-    .node-grid {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
+    .nodes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
     .node {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
-      text-align: center;
-      min-width: 120px;
-      flex: 1;
-      max-width: 220px;
+      padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
+      border: 1px solid; text-align: center; min-width: 120px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: default;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
     }
-    .node::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 12px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-    .node:hover::before { opacity: 1; }
+    .node:hover { transform: scale(1.08); }
 
-    .layer-clients .node::before { box-shadow: 0 0 24px var(--layer-clients), inset 0 0 24px rgba(59,130,246,0.05); }
-    .layer-clients .node:hover { border-color: var(--layer-clients); }
-    .layer-gateway .node::before { box-shadow: 0 0 24px var(--layer-gateway), inset 0 0 24px rgba(245,158,11,0.05); }
-    .layer-gateway .node:hover { border-color: var(--layer-gateway); }
-    .layer-services .node::before { box-shadow: 0 0 24px var(--layer-services), inset 0 0 24px rgba(16,185,129,0.05); }
-    .layer-services .node:hover { border-color: var(--layer-services); }
-    .layer-data .node::before { box-shadow: 0 0 24px var(--layer-data), inset 0 0 24px rgba(236,72,153,0.05); }
-    .layer-data .node:hover { border-color: var(--layer-data); }
-    .layer-external .node::before { box-shadow: 0 0 24px var(--layer-external), inset 0 0 24px rgba(244,63,94,0.05); }
-    .layer-external .node:hover { border-color: var(--layer-external); }
+    .node-clients { border-color: var(--layer-clients); color: var(--layer-clients); background: color-mix(in srgb, var(--layer-clients) 10%, transparent); }
+    .node-clients:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-clients) 30%, transparent); }
+    .node-gateway { border-color: var(--layer-gateway); color: var(--layer-gateway); background: color-mix(in srgb, var(--layer-gateway) 10%, transparent); }
+    .node-gateway:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-gateway) 30%, transparent); }
+    .node-services { border-color: var(--layer-services); color: var(--layer-services); background: color-mix(in srgb, var(--layer-services) 10%, transparent); }
+    .node-services:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-services) 30%, transparent); }
+    .node-data { border-color: var(--layer-data); color: var(--layer-data); background: color-mix(in srgb, var(--layer-data) 10%, transparent); }
+    .node-data:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-data) 30%, transparent); }
+    .node-external { border-color: var(--layer-external); color: var(--layer-external); background: color-mix(in srgb, var(--layer-external) 10%, transparent); }
+    .node-external:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-external) 30%, transparent); }
 
-    .node-icon {
-      font-size: 1.75rem;
-      margin-bottom: 6px;
-      display: block;
+    .arrow-row {
+      display: flex; justify-content: center; padding: 8px 0;
     }
-    .node-name {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text);
-      display: block;
-    }
-    .node-tech {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      display: block;
-      margin-top: 2px;
-    }
+    .arrow-row svg { width: 24px; height: 24px; }
+    .arrow-row svg path { fill: var(--text-secondary); }
 
-    /* SVG Connectors */
-    .connector-svg {
-      width: 100%;
-      height: 32px;
-      display: block;
-      overflow: visible;
-    }
-    .connector-line {
-      stroke: var(--border);
-      stroke-width: 1.5;
-      stroke-dasharray: 6 4;
-      fill: none;
-    }
-    .connector-arrow {
-      fill: var(--text-secondary);
-    }
+    .annotations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .annotations h2 { grid-column: 1 / -1; text-align: center; font-size: 1.5rem; margin-bottom: 8px; }
+    .annotation-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .annotation-card p { font-size: 0.9rem; color: var(--text-secondary); }
 
-    /* Data flow dots */
-    .data-flow-dot {
-      r: 3.5;
-      opacity: 0.9;
-    }
-    .flow-blue { fill: var(--layer-clients); }
-    .flow-orange { fill: var(--layer-gateway); }
-    .flow-green { fill: var(--layer-services); }
-    .flow-pink { fill: var(--layer-data); }
-
-    /* Annotations */
-    .annotations {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 48px;
-    }
-    .annotation {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.25s;
-    }
-    .annotation:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-    }
-    .annotation::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      border-radius: 14px 14px 0 0;
-    }
-    .annotation:nth-child(1)::after { background: var(--layer-gateway); }
-    .annotation:nth-child(2)::after { background: var(--layer-services); }
-    .annotation:nth-child(3)::after { background: var(--layer-data); }
-    .annotation:nth-child(4)::after { background: var(--accent); }
-
-    .annotation-icon { font-size: 1.3rem; margin-bottom: 8px; display: block; }
-    .annotation h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .annotation p {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    /* Bottom-layer grid for data + external side by side */
-    .bottom-layers {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-    .bottom-layers .arch-layer:first-child {
-      border-radius: 16px 0 0 16px;
-      border-right: none;
-    }
-    .bottom-layers .arch-layer:last-child {
-      border-radius: 0 16px 16px 0;
-    }
-
-    @media (max-width: 700px) {
-      .bottom-layers { grid-template-columns: 1fr; gap: 0; }
-      .bottom-layers .arch-layer:first-child { border-radius: 16px 16px 0 0; border-right: 1px solid var(--layer-data-border); border-bottom: none; }
-      .bottom-layers .arch-layer:last-child { border-radius: 0 0 16px 16px; }
-      .node { min-width: 100px; }
+    @media (max-width: 640px) {
+      .nodes { flex-direction: column; align-items: center; }
+      .annotations { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+  <main>
 
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
@@ -401,314 +174,164 @@
     </div>
   </div>
 
-  <main class="arch-container">
-    <header>
-      <h1>Cloud-Native E-Commerce Platform</h1>
-      <p>Microservices architecture powering scalable, resilient commerce at any scale</p>
+  <div class="container">
+
+    <header class="hero">
+      <h1 class="animate">Microservices Architecture</h1>
+      <p class="animate delay-1">E-Commerce Platform — System Overview</p>
     </header>
 
-    <div class="arch-diagram" id="archDiagram">
+    <section class="diagram animate delay-2">
 
-      <!-- CLIENTS LAYER -->
-      <section class="arch-layer layer-clients" data-layer="clients">
-        <div class="layer-label"><span class="layer-dot"></span> Client Applications</div>
-        <div class="node-grid">
-          <div class="node">
-            <span class="node-icon">🌐</span>
-            <span class="node-name">Web App</span>
-            <span class="node-tech">React · Next.js</span>
-          </div>
-          <div class="node">
-            <span class="node-icon">📱</span>
-            <span class="node-name">Mobile App</span>
-            <span class="node-tech">React Native</span>
-          </div>
-          <div class="node">
-            <span class="node-icon">🔌</span>
-            <span class="node-name">Partner SDK</span>
-            <span class="node-tech">REST · GraphQL</span>
-          </div>
+      <!-- Layer 1: Clients -->
+      <div class="layer">
+        <div class="layer-label"><div class="layer-dot" style="background:var(--layer-clients)"></div> Clients</div>
+        <div class="nodes">
+          <div class="node node-clients">🌐 Web App</div>
+          <div class="node node-clients">📱 Mobile App</div>
+          <div class="node node-clients">🖥️ Admin Panel</div>
         </div>
-      </section>
-
-      <!-- Connector 1 -->
-      <svg class="connector-svg" id="conn1" viewBox="0 0 1000 32" preserveAspectRatio="none">
-        <line class="connector-line" x1="250" y1="0" x2="250" y2="32"/>
-        <line class="connector-line" x1="500" y1="0" x2="500" y2="32"/>
-        <line class="connector-line" x1="750" y1="0" x2="750" y2="32"/>
-        <polygon class="connector-arrow" points="246,28 250,32 254,28"/>
-        <polygon class="connector-arrow" points="496,28 500,32 504,28"/>
-        <polygon class="connector-arrow" points="746,28 750,32 754,28"/>
-        <!-- data flow dots -->
-        <circle class="data-flow-dot flow-blue" cx="250" cy="0"><animate attributeName="cy" values="0;32;0" dur="2s" repeatCount="indefinite"/></circle>
-        <circle class="data-flow-dot flow-blue" cx="500" cy="0"><animate attributeName="cy" values="0;32;0" dur="1.8s" repeatCount="indefinite" begin="0.3s"/></circle>
-        <circle class="data-flow-dot flow-blue" cx="750" cy="0"><animate attributeName="cy" values="0;32;0" dur="2.2s" repeatCount="indefinite" begin="0.6s"/></circle>
-      </svg>
-
-      <!-- GATEWAY LAYER -->
-      <section class="arch-layer layer-gateway" data-layer="gateway">
-        <div class="layer-label"><span class="layer-dot"></span> API Gateway</div>
-        <div class="node-grid">
-          <div class="node" style="max-width:400px;">
-            <span class="node-icon">🚪</span>
-            <span class="node-name">Kong Gateway</span>
-            <span class="node-tech">Rate Limiting · Auth · Load Balancing · SSL</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Connector 2 -->
-      <svg class="connector-svg" id="conn2" viewBox="0 0 1000 32" preserveAspectRatio="none">
-        <line class="connector-line" x1="200" y1="0" x2="200" y2="32"/>
-        <line class="connector-line" x1="400" y1="0" x2="400" y2="32"/>
-        <line class="connector-line" x1="600" y1="0" x2="600" y2="32"/>
-        <line class="connector-line" x1="800" y1="0" x2="800" y2="32"/>
-        <polygon class="connector-arrow" points="196,28 200,32 204,28"/>
-        <polygon class="connector-arrow" points="396,28 400,32 404,28"/>
-        <polygon class="connector-arrow" points="596,28 600,32 604,28"/>
-        <polygon class="connector-arrow" points="796,28 800,32 804,28"/>
-        <circle class="data-flow-dot flow-orange" cx="200" cy="0"><animate attributeName="cy" values="0;32;0" dur="1.6s" repeatCount="indefinite"/></circle>
-        <circle class="data-flow-dot flow-orange" cx="400" cy="0"><animate attributeName="cy" values="0;32;0" dur="1.9s" repeatCount="indefinite" begin="0.2s"/></circle>
-        <circle class="data-flow-dot flow-orange" cx="600" cy="0"><animate attributeName="cy" values="0;32;0" dur="1.7s" repeatCount="indefinite" begin="0.5s"/></circle>
-        <circle class="data-flow-dot flow-orange" cx="800" cy="0"><animate attributeName="cy" values="0;32;0" dur="2.1s" repeatCount="indefinite" begin="0.8s"/></circle>
-      </svg>
-
-      <!-- MICROSERVICES LAYER -->
-      <section class="arch-layer layer-services" data-layer="services">
-        <div class="layer-label"><span class="layer-dot"></span> Microservices</div>
-        <div class="node-grid">
-          <div class="node">
-            <span class="node-icon">🔐</span>
-            <span class="node-name">Auth Service</span>
-            <span class="node-tech">JWT · OAuth 2.0</span>
-          </div>
-          <div class="node">
-            <span class="node-icon">👤</span>
-            <span class="node-name">User Service</span>
-            <span class="node-tech">Profiles · Prefs</span>
-          </div>
-          <div class="node">
-            <span class="node-icon">📦</span>
-            <span class="node-name">Order Service</span>
-            <span class="node-tech">Cart · Checkout</span>
-          </div>
-          <div class="node">
-            <span class="node-icon">🔔</span>
-            <span class="node-name">Notification</span>
-            <span class="node-tech">Email · SMS · Push</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Connector 3 -->
-      <svg class="connector-svg" id="conn3" viewBox="0 0 1000 32" preserveAspectRatio="none">
-        <line class="connector-line" x1="250" y1="0" x2="250" y2="32"/>
-        <line class="connector-line" x1="500" y1="0" x2="500" y2="32"/>
-        <line class="connector-line" x1="750" y1="0" x2="750" y2="32"/>
-        <polygon class="connector-arrow" points="246,28 250,32 254,28"/>
-        <polygon class="connector-arrow" points="496,28 500,32 504,28"/>
-        <polygon class="connector-arrow" points="746,28 750,32 754,28"/>
-        <circle class="data-flow-dot flow-green" cx="250" cy="0"><animate attributeName="cy" values="0;32;0" dur="2.3s" repeatCount="indefinite"/></circle>
-        <circle class="data-flow-dot flow-green" cx="500" cy="0"><animate attributeName="cy" values="0;32;0" dur="1.5s" repeatCount="indefinite" begin="0.4s"/></circle>
-        <circle class="data-flow-dot flow-green" cx="750" cy="0"><animate attributeName="cy" values="0;32;0" dur="1.8s" repeatCount="indefinite" begin="0.7s"/></circle>
-      </svg>
-
-      <!-- DATA + EXTERNAL LAYERS (side by side) -->
-      <div class="bottom-layers">
-        <section class="arch-layer layer-data" data-layer="data">
-          <div class="layer-label"><span class="layer-dot"></span> Data Layer</div>
-          <div class="node-grid">
-            <div class="node">
-              <span class="node-icon">🐘</span>
-              <span class="node-name">PostgreSQL</span>
-              <span class="node-tech">Primary Store</span>
-            </div>
-            <div class="node">
-              <span class="node-icon">⚡</span>
-              <span class="node-name">Redis</span>
-              <span class="node-tech">Cache · Sessions</span>
-            </div>
-            <div class="node">
-              <span class="node-icon">🐇</span>
-              <span class="node-name">RabbitMQ</span>
-              <span class="node-tech">Event Bus</span>
-            </div>
-            <div class="node">
-              <span class="node-icon">🍃</span>
-              <span class="node-name">MongoDB</span>
-              <span class="node-tech">Catalog · Logs</span>
-            </div>
-          </div>
-        </section>
-
-        <section class="arch-layer layer-external" data-layer="external">
-          <div class="layer-label"><span class="layer-dot"></span> External APIs</div>
-          <div class="node-grid">
-            <div class="node">
-              <span class="node-icon">☁️</span>
-              <span class="node-name">AWS S3</span>
-              <span class="node-tech">Object Storage</span>
-            </div>
-            <div class="node">
-              <span class="node-icon">💳</span>
-              <span class="node-name">Stripe</span>
-              <span class="node-tech">Payments</span>
-            </div>
-            <div class="node">
-              <span class="node-icon">✉️</span>
-              <span class="node-name">SendGrid</span>
-              <span class="node-tech">Transactional Email</span>
-            </div>
-            <div class="node">
-              <span class="node-icon">📞</span>
-              <span class="node-name">Twilio</span>
-              <span class="node-tech">SMS · Voice</span>
-            </div>
-          </div>
-        </section>
       </div>
 
-    </div>
+      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
 
-    <!-- ANNOTATION CARDS -->
-    <section class="annotations" aria-label="Architecture notes">
-      <article class="annotation">
-        <span class="annotation-icon">🚪</span>
-        <h3>API Gateway Pattern</h3>
-        <p>Kong handles rate limiting, authentication, SSL termination, and request routing — single entry point for all clients.</p>
+      <!-- Layer 2: API Gateway -->
+      <div class="layer">
+        <div class="layer-label"><div class="layer-dot" style="background:var(--layer-gateway)"></div> API Gateway</div>
+        <div class="nodes">
+          <div class="node node-gateway">🔐 Auth & Rate Limiting</div>
+          <div class="node node-gateway">🔀 Load Balancer</div>
+          <div class="node node-gateway">📊 Request Router</div>
+        </div>
+      </div>
+
+      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+
+      <!-- Layer 3: Microservices -->
+      <div class="layer">
+        <div class="layer-label"><div class="layer-dot" style="background:var(--layer-services)"></div> Microservices</div>
+        <div class="nodes">
+          <div class="node node-services">👤 User Service</div>
+          <div class="node node-services">📦 Product Service</div>
+          <div class="node node-services">🛒 Order Service</div>
+          <div class="node node-services">💳 Payment Service</div>
+          <div class="node node-services">📬 Notification Service</div>
+          <div class="node node-services">🔍 Search Service</div>
+        </div>
+      </div>
+
+      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+
+      <!-- Layer 4: Data Layer -->
+      <div class="layer">
+        <div class="layer-label"><div class="layer-dot" style="background:var(--layer-data)"></div> Data Layer</div>
+        <div class="nodes">
+          <div class="node node-data">🐘 PostgreSQL</div>
+          <div class="node node-data">⚡ Redis Cache</div>
+          <div class="node node-data">🔍 Elasticsearch</div>
+          <div class="node node-data">📨 RabbitMQ</div>
+        </div>
+      </div>
+
+      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+
+      <!-- Layer 5: External APIs -->
+      <div class="layer">
+        <div class="layer-label"><div class="layer-dot" style="background:var(--layer-external)"></div> External APIs</div>
+        <div class="nodes">
+          <div class="node node-external">💰 Stripe</div>
+          <div class="node node-external">📧 SendGrid</div>
+          <div class="node node-external">🚚 ShipStation</div>
+          <div class="node node-external">📊 Analytics</div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="annotations" data-reveal>
+      <h2>Architecture Notes</h2>
+      <article class="card annotation-card">
+        <h4>🔄 Event-Driven</h4>
+        <p>Services communicate asynchronously via RabbitMQ message queues, ensuring loose coupling and resilience.</p>
       </article>
-      <article class="annotation">
-        <span class="annotation-icon">⚡</span>
-        <h3>Event-Driven</h3>
-        <p>Services communicate asynchronously via RabbitMQ. Order events trigger notifications, inventory updates, and analytics in parallel.</p>
+      <article class="card annotation-card">
+        <h4>📈 Auto-Scaling</h4>
+        <p>Each microservice scales independently based on load. Kubernetes manages container orchestration.</p>
       </article>
-      <article class="annotation">
-        <span class="annotation-icon">🗄️</span>
-        <h3>Polyglot Persistence</h3>
-        <p>Each service owns its data store — PostgreSQL for transactions, MongoDB for catalogs, Redis for caching and sessions.</p>
+      <article class="card annotation-card">
+        <h4>🛡️ Security Layers</h4>
+        <p>JWT authentication at the gateway, encrypted data at rest, and mTLS between services.</p>
       </article>
-      <article class="annotation">
-        <span class="annotation-icon">🚀</span>
-        <h3>Cloud Deployment</h3>
-        <p>Kubernetes orchestration with Helm charts, horizontal pod autoscaling, blue-green deploys, and distributed tracing via Jaeger.</p>
+      <article class="card annotation-card">
+        <h4>⚡ Caching Strategy</h4>
+        <p>Redis handles session data and hot product queries. Elasticsearch powers full-text search with sub-50ms latency.</p>
       </article>
     </section>
+
+  </div>
+
   </main>
-
   <script>
-    // Menu
+    // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // Theme
-    const themes = ['dark', 'light'];
-    const themeIcons = { dark: '🌙', light: '☀️' };
-    let currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    // === Theme ===
+    var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = themeIcons[t];
-      document.getElementById('themeLabel').textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
       localStorage.setItem('viz-theme', t);
       currentTheme = t;
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
-    function cycleTheme() { applyTheme(themes[(themes.indexOf(currentTheme) + 1) % themes.length]); }
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // Animations
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReducedMotion && typeof Motion !== 'undefined') {
-      // Staggered spring entrance for layers (top to bottom)
-      const layers = document.querySelectorAll('.arch-layer');
-      layers.forEach((layer, i) => {
-        layer.style.opacity = '0';
-        layer.style.transform = 'translateY(40px)';
-        Motion.animate(layer,
-          { opacity: [0, 1], y: [40, 0] },
-          { delay: 0.15 * i, duration: 0.7, ease: Motion.spring({ stiffness: 180, damping: 20 }) }
-        );
-      });
+    // === Scroll Reveal ===
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
 
-      // Staggered entrance for nodes within each layer
-      document.querySelectorAll('.arch-layer').forEach((layer, li) => {
-        layer.querySelectorAll('.node').forEach((node, ni) => {
-          node.style.opacity = '0';
-          Motion.animate(node,
-            { opacity: [0, 1], scale: [0.9, 1], y: [20, 0] },
-            { delay: 0.15 * li + 0.08 * ni + 0.2, duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
-          );
-        });
-      });
-
-      // Header entrance
-      Motion.animate('header h1',
-        { opacity: [0, 1], y: [30, 0] },
-        { duration: 0.7, ease: Motion.spring({ stiffness: 150, damping: 18 }) }
-      );
-      Motion.animate('header p',
-        { opacity: [0, 1], y: [20, 0] },
-        { delay: 0.15, duration: 0.5, ease: 'ease-out' }
-      );
-
-      // Annotation cards entrance
-      document.querySelectorAll('.annotation').forEach((card, i) => {
-        card.style.opacity = '0';
-        Motion.animate(card,
-          { opacity: [0, 1], y: [30, 0], scale: [0.95, 1] },
-          { delay: 0.8 + 0.1 * i, duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
-        );
-      });
-
-      // Hover glow + scale on nodes
-      document.querySelectorAll('.node').forEach(node => {
-        node.addEventListener('mouseenter', () => {
-          Motion.animate(node, { scale: 1.05, y: -3 }, { duration: 0.2 });
-        });
-        node.addEventListener('mouseleave', () => {
-          Motion.animate(node, { scale: 1, y: 0 }, { duration: 0.3 });
-        });
-      });
-
-      // Hover on annotation cards
-      document.querySelectorAll('.annotation').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          Motion.animate(card, { scale: 1.02, y: -4 }, { duration: 0.2 });
-        });
-        card.addEventListener('mouseleave', () => {
-          Motion.animate(card, { scale: 1, y: 0 }, { duration: 0.3 });
-        });
-      });
-
-      // SVG connectors fade in
-      document.querySelectorAll('.connector-svg').forEach((svg, i) => {
-        svg.style.opacity = '0';
-        Motion.animate(svg,
-          { opacity: [0, 1] },
-          { delay: 0.3 + 0.15 * i, duration: 0.4 }
-        );
+    // === Number Counter ===
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(function(el) {
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), duration = 1200;
+        (function tick(now) {
+          var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        })(start);
       });
     }
+    var counterEl = document.querySelector('[data-count]');
+    if (counterEl) {
+      var cObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); cObs.disconnect(); } });
+      }, { threshold: 0.3 });
+      cObs.observe(counterEl);
+    }
 
-    // Download PNG
+    // === Download PNG ===
     async function downloadImage() {
-      const menu = document.querySelector('.viz-menu');
+      var menu = document.querySelector('.viz-menu');
       menu.style.display = 'none';
       try {
-        const dataUrl = await htmlToImage.toPng(document.body, {
-          quality: 1, pixelRatio: 2,
-          filter: n => !n.classList?.contains('viz-menu')
-        });
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = 'cloud-native-ecommerce-architecture.png';
-        a.click();
+        var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
+        var a = document.createElement('a'); a.href = url;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png'; a.click();
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
+
+    function onThemeChange() {}
   </script>
 </body>
 </html>

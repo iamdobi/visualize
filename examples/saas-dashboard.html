@@ -3,83 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SaaS Metrics Dashboard</title>
+  <title>SaaS Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root, .theme-dark {
-      --bg: #030712;
-      --surface: #111827;
-      --surface-hover: #1f2937;
+      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
-      --text: #f9fafb;
-      --text-secondary: #9ca3af;
-      --accent: #3b82f6;
-      --accent-secondary: #8b5cf6;
-      --positive: #10b981;
-      --negative: #f43f5e;
-      --warning: #f59e0b;
+      --text: #f9fafb; --text-secondary: #9ca3af;
+      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
     .theme-light {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-hover: #f1f5f9;
+      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
       --border: rgba(0,0,0,0.08);
-      --text: #0f172a;
-      --text-secondary: #64748b;
-      --accent: #2563eb;
-      --accent-secondary: #7c3aed;
-      --positive: #059669;
-      --negative: #e11d48;
-      --warning: #d97706;
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
     }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
       transition: background 0.3s, color 0.3s;
     }
+    h1,h2,h3,h4,h5,h6 { color: var(--text); }
+    p,li,td,th,span,label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: box-shadow 0.3s, transform 0.1s;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
-    h1, h2, h3, h4, h5, h6 { color: var(--text); }
-    p, li, td, th, span, label { color: var(--text); }
-    .text-secondary { color: var(--text-secondary); }
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
 
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.1s; }
+    .animate.delay-2 { animation-delay: 0.2s; }
+    .animate.delay-3 { animation-delay: 0.3s; }
+    .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .animate.delay-6 { animation-delay: 0.6s; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
 
     @media print {
       body { background: white !important; color: black !important; }
-      .viz-menu { display: none !important; }
+      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .live-badge { display: none !important; }
     }
 
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
@@ -88,16 +79,15 @@
       background: var(--surface); border: 1px solid var(--border);
       color: var(--text); cursor: pointer; display: flex;
       align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      transition: all 0.2s;
+      backdrop-filter: blur(12px); transition: all 0.2s;
     }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
     .viz-menu-dropdown {
       position: absolute; top: 52px; right: 0; min-width: 200px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
-      transform: translateY(-8px); transition: all 0.2s;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px; padding: 8px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: all 0.2s; backdrop-filter: blur(16px);
     }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
     .viz-menu-dropdown button {
@@ -108,471 +98,292 @@
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== DASHBOARD STYLES ===== */
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 32px 24px 64px;
-    }
+    /* ===== DASHBOARD ===== */
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
 
-    header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 48px;
-    }
-    header h1 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
+    .dash-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .dash-header h1 { font-size: 2rem; font-weight: 800; }
     .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--positive);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
     }
     .live-dot {
-      width: 8px; height: 8px;
-      background: #fff;
-      border-radius: 50%;
-      animation: pulse-dot 1.5s ease-in-out infinite;
+      width: 8px; height: 8px; border-radius: 50%; background: var(--positive);
+      animation: pulse 2s infinite;
     }
-    @keyframes pulse-dot {
+    @keyframes pulse {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.7); }
+      50% { opacity: 0.5; transform: scale(1.4); }
     }
 
-    /* KPI Grid */
     .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 48px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px;
     }
-    @media (max-width: 900px) {
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 560px) {
-      .kpi-grid { grid-template-columns: 1fr; }
-    }
+    .kpi-card { text-align: center; }
+    .kpi-card .kpi-label { font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .kpi-card .kpi-value { font-size: 2.25rem; font-weight: 800; }
+    .kpi-card .kpi-change { font-size: 0.8rem; margin-top: 4px; }
+    .kpi-up { color: var(--positive); }
+    .kpi-down { color: var(--negative); }
 
-    .kpi-card {
-      border-left: 4px solid var(--accent);
-      cursor: default;
-    }
-    .kpi-card:nth-child(1) { border-left-color: var(--accent); }
-    .kpi-card:nth-child(2) { border-left-color: var(--accent-secondary); }
-    .kpi-card:nth-child(3) { border-left-color: #06b6d4; }
-    .kpi-card:nth-child(4) { border-left-color: var(--negative); }
-    .kpi-card:nth-child(5) { border-left-color: var(--warning); }
-    .kpi-card:nth-child(6) { border-left-color: var(--positive); }
-
-    .kpi-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-    }
-    .kpi-value {
-      font-size: 2.25rem;
-      font-weight: 800;
-      line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .kpi-trend {
-      font-size: 13px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .kpi-trend.up { color: var(--positive); }
-    .kpi-trend.down { color: var(--negative); }
-
-    /* Charts */
     .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
     }
-    @media (max-width: 768px) {
-      .charts-grid { grid-template-columns: 1fr; }
-    }
+    .chart-card { padding: 24px; }
+    .chart-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 16px; }
+    .chart-wrap { position: relative; height: 300px; }
 
-    .chart-card {
-      position: relative;
-    }
-    .chart-card:hover {
-      box-shadow: 0 0 24px rgba(59, 130, 246, 0.12);
-    }
-    .chart-card h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 16px;
-      color: var(--text);
-    }
-    .chart-wrap {
-      position: relative;
-      min-height: 300px;
-    }
-    .chart-wrap canvas {
-      width: 100% !important;
-      height: 100% !important;
-      min-height: 300px;
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+  <main>
 
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/>
-        <line x1="3" y1="10" x2="17" y2="10"/>
-        <line x1="3" y1="15" x2="17" y2="15"/>
+        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
       </svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()">
-        <span id="themeIcon">🌙</span>
-        <span id="themeLabel">Dark</span>
-      </button>
-      <button onclick="downloadImage()">
-        <span>📥</span>
-        <span>Download PNG</span>
-      </button>
-      <button onclick="window.print()">
-        <span>🖨️</span>
-        <span>Print / PDF</span>
-      </button>
+      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
+      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
     </div>
   </div>
 
-  <main class="container">
-    <header>
-      <h1>SaaS Metrics Dashboard</h1>
-      <span class="live-badge"><span class="live-dot"></span> Live</span>
+  <div class="container">
+    <header class="dash-header animate">
+      <h1>SaaS Metrics</h1>
+      <div class="live-badge"><div class="live-dot"></div> Live</div>
     </header>
 
-    <section aria-label="Key Performance Indicators">
-      <div class="kpi-grid">
-        <article class="card kpi-card">
-          <div class="kpi-label">Monthly Recurring Revenue</div>
-          <div class="kpi-value" data-value="128000" data-prefix="$" data-format="compact">$128K</div>
-          <div class="kpi-trend up">▲ 12.4% vs last month</div>
-        </article>
-        <article class="card kpi-card">
-          <div class="kpi-label">Annual Recurring Revenue</div>
-          <div class="kpi-value" data-value="1540000" data-prefix="$" data-format="compact">$1.54M</div>
-          <div class="kpi-trend up">▲ 18.2% YoY</div>
-        </article>
-        <article class="card kpi-card">
-          <div class="kpi-label">Active Users</div>
-          <div class="kpi-value" data-value="14280" data-format="number">14,280</div>
-          <div class="kpi-trend up">▲ 8.7% vs last month</div>
-        </article>
-        <article class="card kpi-card">
-          <div class="kpi-label">Churn Rate</div>
-          <div class="kpi-value" data-value="3.2" data-suffix="%" data-decimals="1">3.2%</div>
-          <div class="kpi-trend down">▼ 0.4pp vs last month</div>
-        </article>
-        <article class="card kpi-card">
-          <div class="kpi-label">Lifetime Value</div>
-          <div class="kpi-value" data-value="2840" data-prefix="$" data-format="number">$2,840</div>
-          <div class="kpi-trend up">▲ 6.1% vs last quarter</div>
-        </article>
-        <article class="card kpi-card">
-          <div class="kpi-label">Customer Acquisition Cost</div>
-          <div class="kpi-value" data-value="186" data-prefix="$" data-format="number">$186</div>
-          <div class="kpi-trend up" style="color: var(--positive);">▼ 11.3% vs last quarter</div>
-        </article>
-      </div>
+    <section class="kpi-grid">
+      <article class="card kpi-card animate delay-1">
+        <div class="kpi-label">MRR</div>
+        <div class="kpi-value" data-count="128" data-prefix="$" data-suffix="K">$128K</div>
+        <div class="kpi-change kpi-up">↑ 12% vs last month</div>
+      </article>
+      <article class="card kpi-card animate delay-2">
+        <div class="kpi-label">ARR</div>
+        <div class="kpi-value" data-count="1540" data-prefix="$" data-suffix="K">$1,540K</div>
+        <div class="kpi-change kpi-up">↑ 34% YoY</div>
+      </article>
+      <article class="card kpi-card animate delay-3">
+        <div class="kpi-label">Active Users</div>
+        <div class="kpi-value" data-count="14280">14,280</div>
+        <div class="kpi-change kpi-up">↑ 8% vs last month</div>
+      </article>
+      <article class="card kpi-card animate delay-4">
+        <div class="kpi-label">Churn Rate</div>
+        <div class="kpi-value" data-count="3" data-suffix=".2%">3.2%</div>
+        <div class="kpi-change kpi-down">↓ 0.5% vs last month</div>
+      </article>
+      <article class="card kpi-card animate delay-5">
+        <div class="kpi-label">LTV</div>
+        <div class="kpi-value" data-count="2840" data-prefix="$">$2,840</div>
+        <div class="kpi-change kpi-up">↑ 6% vs last quarter</div>
+      </article>
+      <article class="card kpi-card animate delay-6">
+        <div class="kpi-label">CAC</div>
+        <div class="kpi-value" data-count="186" data-prefix="$">$186</div>
+        <div class="kpi-change kpi-up">↓ 11% vs last quarter</div>
+      </article>
     </section>
 
-    <section aria-label="Charts and Analytics">
-      <div class="charts-grid">
-        <div class="card chart-card">
-          <h3>Revenue Over Time</h3>
-          <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
-        </div>
-        <div class="card chart-card">
-          <h3>Churn Breakdown</h3>
-          <div class="chart-wrap"><canvas id="churnChart"></canvas></div>
-        </div>
-        <div class="card chart-card">
-          <h3>User Growth</h3>
-          <div class="chart-wrap"><canvas id="userGrowthChart"></canvas></div>
-        </div>
-        <div class="card chart-card">
-          <h3>Revenue by Plan</h3>
-          <div class="chart-wrap"><canvas id="planChart"></canvas></div>
-        </div>
-      </div>
+    <section class="charts-grid" data-reveal>
+      <article class="card chart-card">
+        <h3>Monthly Revenue</h3>
+        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+      </article>
+      <article class="card chart-card">
+        <h3>Churn Breakdown</h3>
+        <div class="chart-wrap"><canvas id="churnChart"></canvas></div>
+      </article>
+      <article class="card chart-card">
+        <h3>User Growth</h3>
+        <div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+      </article>
+      <article class="card chart-card">
+        <h3>Revenue by Plan</h3>
+        <div class="chart-wrap"><canvas id="planChart"></canvas></div>
+      </article>
     </section>
+  </div>
+
   </main>
-
   <script>
-    // ===== MENU =====
-    function toggleMenu() {
-      document.getElementById('vizMenuDropdown').classList.toggle('open');
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
+    // === Menu ===
+    function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // ===== THEME =====
-    const themes = ['dark', 'light'];
-    const themeIcons = { dark: '🌙', light: '☀️' };
-    let currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    // === Theme ===
+    var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = themeIcons[t];
-      document.getElementById('themeLabel').textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
       localStorage.setItem('viz-theme', t);
       currentTheme = t;
-      renderAllCharts();
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
-    function cycleTheme() {
-      applyTheme(themes[(themes.indexOf(currentTheme) + 1) % themes.length]);
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    applyTheme(currentTheme);
+
+    // === Scroll Reveal ===
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+
+    // === Number Counter ===
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(function(el) {
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), duration = 1200;
+        (function tick(now) {
+          var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        })(start);
+      });
+    }
+    var counterEl = document.querySelector('[data-count]');
+    if (counterEl) {
+      var cObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); cObs.disconnect(); } });
+      }, { threshold: 0.3 });
+      cObs.observe(counterEl);
     }
 
-    // ===== CHART HELPERS =====
-    function getC() {
-      const s = getComputedStyle(document.documentElement);
+    // === Download PNG ===
+    async function downloadImage() {
+      var menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
+        var a = document.createElement('a'); a.href = url;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png'; a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+
+    // === Charts ===
+    var revenueChart = null;
+    var churnChart = null;
+    var growthChart = null;
+    var planChart = null;
+
+    function getChartColors() {
+      var s = getComputedStyle(document.documentElement);
       return {
         text: s.getPropertyValue('--text').trim(),
         textSecondary: s.getPropertyValue('--text-secondary').trim(),
         border: s.getPropertyValue('--border').trim(),
-        surface: s.getPropertyValue('--surface').trim(),
         accent: s.getPropertyValue('--accent').trim(),
         accentSecondary: s.getPropertyValue('--accent-secondary').trim(),
         positive: s.getPropertyValue('--positive').trim(),
         negative: s.getPropertyValue('--negative').trim(),
-        warning: s.getPropertyValue('--warning').trim(),
+        warning: s.getPropertyValue('--warning').trim()
       };
     }
-    const chartPalette = ['#3b82f6','#8b5cf6','#ec4899','#f59e0b','#10b981','#06b6d4','#f43f5e'];
-    const chartInstances = {};
 
-    function destroyChart(id) {
-      if (chartInstances[id]) { chartInstances[id].destroy(); delete chartInstances[id]; }
-    }
-
-    function renderAllCharts() {
-      const c = getC();
+    function buildCharts() {
+      var c = getChartColors();
       Chart.defaults.color = c.textSecondary;
-      Chart.defaults.borderColor = c.border;
 
-      // Revenue Line
-      destroyChart('revenue');
-      const months = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
-      chartInstances.revenue = new Chart(document.getElementById('revenueChart'), {
+      var months = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
+
+      if (revenueChart) revenueChart.destroy();
+      revenueChart = new Chart(document.getElementById('revenueChart'), {
         type: 'line',
         data: {
           labels: months,
           datasets: [{
-            label: 'MRR ($K)',
-            data: [72,78,81,88,92,96,101,106,112,118,123,128],
-            borderColor: c.accent,
-            backgroundColor: c.accent + '20',
-            fill: true,
-            tension: 0.35,
-            pointRadius: 4,
-            pointHoverRadius: 7,
-            pointBackgroundColor: c.accent,
+            label: 'Revenue ($K)',
+            data: [72, 78, 84, 89, 95, 98, 104, 108, 112, 118, 124, 128],
+            borderColor: c.accent, backgroundColor: c.accent + '22',
+            fill: true, tension: 0.4, pointRadius: 3
           }]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: c.surface,
-              titleColor: c.text,
-              bodyColor: c.text,
-              borderColor: c.border,
-              borderWidth: 1,
-              padding: 12,
-              callbacks: { label: ctx => `MRR: $${ctx.parsed.y}K` }
-            }
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { display: false }, ticks: { color: c.textSecondary } },
-            y: { grid: { color: c.border }, ticks: { color: c.textSecondary, callback: v => '$' + v + 'K' } }
+            x: { grid: { color: c.border } },
+            y: { grid: { color: c.border }, ticks: { callback: function(v) { return '$' + v + 'K'; } } }
           }
         }
       });
 
-      // Churn Doughnut
-      destroyChart('churn');
-      chartInstances.churn = new Chart(document.getElementById('churnChart'), {
+      if (churnChart) churnChart.destroy();
+      churnChart = new Chart(document.getElementById('churnChart'), {
         type: 'doughnut',
         data: {
-          labels: ['Voluntary','Involuntary','Downgrade','Other'],
-          datasets: [{ data: [42,28,18,12], backgroundColor: [chartPalette[6],chartPalette[3],chartPalette[1],chartPalette[5]], borderWidth: 0 }]
+          labels: ['Voluntary', 'Involuntary', 'Downgrade'],
+          datasets: [{
+            data: [1.4, 1.0, 0.8],
+            backgroundColor: [c.negative, c.warning, c.accentSecondary],
+            borderWidth: 0
+          }]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          cutout: '65%',
-          plugins: {
-            legend: { position: 'bottom', labels: { color: c.textSecondary, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-            tooltip: {
-              backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text,
-              borderColor: c.border, borderWidth: 1, padding: 12,
-              callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed}%` }
-            }
-          }
+          plugins: { legend: { position: 'bottom' } },
+          cutout: '65%'
         }
       });
 
-      // User Growth Bar
-      destroyChart('userGrowth');
-      chartInstances.userGrowth = new Chart(document.getElementById('userGrowthChart'), {
+      if (growthChart) growthChart.destroy();
+      growthChart = new Chart(document.getElementById('growthChart'), {
         type: 'bar',
         data: {
           labels: months,
           datasets: [{
             label: 'New Users',
-            data: [820,910,880,1020,1150,1080,1200,1340,1290,1410,1380,1520],
-            backgroundColor: chartPalette[4],
-            borderRadius: 6,
-            hoverBackgroundColor: chartPalette[0],
+            data: [820, 940, 1100, 1280, 1350, 1420, 1500, 1620, 1780, 1890, 1950, 2100],
+            backgroundColor: c.positive, borderRadius: 6
           }]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text,
-              borderColor: c.border, borderWidth: 1, padding: 12,
-              callbacks: { label: ctx => `New Users: ${ctx.parsed.y.toLocaleString()}` }
-            }
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { display: false }, ticks: { color: c.textSecondary } },
-            y: { grid: { color: c.border }, ticks: { color: c.textSecondary } }
+            x: { grid: { display: false } },
+            y: { grid: { color: c.border } }
           }
         }
       });
 
-      // Revenue by Plan Doughnut
-      destroyChart('plan');
-      chartInstances.plan = new Chart(document.getElementById('planChart'), {
+      if (planChart) planChart.destroy();
+      planChart = new Chart(document.getElementById('planChart'), {
         type: 'doughnut',
         data: {
-          labels: ['Enterprise','Pro','Starter','Free'],
-          datasets: [{ data: [48,31,16,5], backgroundColor: [chartPalette[0],chartPalette[1],chartPalette[3],chartPalette[5]], borderWidth: 0 }]
+          labels: ['Enterprise', 'Pro', 'Starter', 'Free'],
+          datasets: [{
+            data: [52, 28, 14, 6],
+            backgroundColor: [c.accent, c.accentSecondary, c.positive, c.warning],
+            borderWidth: 0
+          }]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          cutout: '65%',
-          plugins: {
-            legend: { position: 'bottom', labels: { color: c.textSecondary, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-            tooltip: {
-              backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text,
-              borderColor: c.border, borderWidth: 1, padding: 12,
-              callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed}%` }
-            }
-          }
+          plugins: { legend: { position: 'bottom' } },
+          cutout: '65%'
         }
       });
     }
 
-    // ===== INIT =====
-    applyTheme(currentTheme);
-
-    // ===== ANIMATIONS =====
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReducedMotion && typeof Motion !== 'undefined') {
-      // KPI card spring entrance
-      Motion.animate('.kpi-card',
-        { opacity: [0, 1], y: [40, 0], scale: [0.95, 1] },
-        { delay: Motion.stagger(0.08), duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
-      );
-
-      // Hover micro-interactions on KPI cards
-      document.querySelectorAll('.kpi-card').forEach(card => {
-        card.addEventListener('mouseenter', () => Motion.animate(card, { scale: 1.03, y: -6 }, { duration: 0.2 }));
-        card.addEventListener('mouseleave', () => Motion.animate(card, { scale: 1, y: 0 }, { duration: 0.3 }));
-      });
-
-      // Chart reveal on scroll
-      document.querySelectorAll('.chart-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-      });
-      Motion.inView('.chart-card', (info) => {
-        Motion.animate(info.target,
-          { opacity: [0, 1], y: [30, 0], scale: [0.95, 1] },
-          { duration: 0.6, ease: Motion.spring({ stiffness: 150, damping: 20 }) }
-        );
-      }, { amount: 0.2 });
-
-      // Chart card hover glow
-      document.querySelectorAll('.chart-card').forEach(card => {
-        card.addEventListener('mouseenter', () => Motion.animate(card, { scale: 1.01, y: -3 }, { duration: 0.2 }));
-        card.addEventListener('mouseleave', () => Motion.animate(card, { scale: 1, y: 0 }, { duration: 0.3 }));
-      });
-
-      // Number counter animation
-      Motion.inView('.kpi-value', (info) => {
-        const el = info.target;
-        const raw = parseFloat(el.dataset.value);
-        const prefix = el.dataset.prefix || '';
-        const suffix = el.dataset.suffix || '';
-        const decimals = parseInt(el.dataset.decimals || '0');
-        const fmt = el.dataset.format;
-
-        Motion.animate({ val: 0 }, { val: raw }, {
-          duration: 1.2,
-          ease: [0.25, 0.46, 0.45, 0.94],
-          onUpdate: (latest) => {
-            let v = latest.val;
-            if (fmt === 'compact') {
-              if (v >= 1000000) el.textContent = prefix + (v / 1000000).toFixed(2) + 'M';
-              else if (v >= 1000) el.textContent = prefix + Math.round(v / 1000) + 'K';
-              else el.textContent = prefix + Math.round(v);
-            } else {
-              el.textContent = prefix + v.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + suffix;
-            }
-          }
-        });
-      }, { amount: 0.5 });
-    }
-
-    // ===== DOWNLOAD =====
-    async function downloadImage() {
-      const menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
-      try {
-        const dataUrl = await htmlToImage.toPng(document.body, {
-          quality: 1, pixelRatio: 2,
-          filter: n => !n.classList?.contains('viz-menu')
-        });
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = 'saas-metrics-dashboard.png';
-        a.click();
-      } catch(e) { console.error('Download failed:', e); }
-      menu.style.display = '';
-    }
+    function onThemeChange() { buildCharts(); }
+    buildCharts();
   </script>
 </body>
 </html>

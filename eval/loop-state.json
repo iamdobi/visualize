@@ -1,0 +1,11 @@
+{
+  "currentRound": 4,
+  "loopsSinceResearch": 1,
+  "lastAverage": 7.54,
+  "gate": "NEEDS WORK",
+  "history": [
+    { "round": 1, "avg": 6.40, "gate": "FAIL" },
+    { "round": 2, "avg": 7.41, "gate": "NEEDS WORK" },
+    { "round": 3, "avg": 7.54, "gate": "NEEDS WORK" }
+  ]
+}
