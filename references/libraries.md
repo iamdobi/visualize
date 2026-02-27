@@ -3,12 +3,40 @@
 Preferred CDN libraries and when to use them. Always use jsDelivr for consistent, fast loading.
 
 ## Table of Contents
+- [Motion](#motion) ⭐ (animations — included in skeleton)
 - [Chart.js](#chartjs)
 - [D3.js](#d3js)
 - [Three.js](#threejs)
 - [Mermaid](#mermaid)
 - [Reveal.js](#revealjs)
 - [Leaflet](#leaflet)
+
+---
+
+## Motion
+
+**Best for:** ALL animations. Spring physics, scroll-triggered reveals, staggered entrances, number counters, hover micro-interactions. Replaces raw CSS @keyframes and IntersectionObserver.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
+```
+
+**Included in the mandatory skeleton.** Exposes global `Motion` object.
+
+```javascript
+// Spring-animated card entrance
+Motion.animate('.card',
+  { opacity: [0, 1], y: [40, 0], scale: [0.95, 1] },
+  { delay: Motion.stagger(0.08), duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
+);
+
+// Scroll-triggered reveal
+Motion.inView('.section', (info) => {
+  Motion.animate(info.target, { opacity: 1, y: 0 }, { duration: 0.6 });
+});
+```
+
+See [animations.md](animations.md) for complete API reference and recipes (~15KB gzipped).
 
 ---
 

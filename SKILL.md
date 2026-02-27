@@ -105,12 +105,32 @@ Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f4
 - **Gradient accents:** `bg-gradient-to-r from-blue-500 to-purple-500` on key elements
 - **Transitions:** `transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1)` (Material standard)
 
-### Animations
-- **Entrance:** fade + translateY(20px) with staggered delays (100-150ms apart)
-- **Duration:** 300-600ms (shorter for small elements, longer for large)
-- **Easing:** `cubic-bezier(0.4, 0, 0.2, 1)` for standard, `cubic-bezier(0.34, 1.56, 0.64, 1)` for spring/bounce
-- **Scroll-triggered:** use IntersectionObserver for elements entering viewport
-- **Respect:** always include `@media (prefers-reduced-motion: reduce)` to disable animations
+### Animations (Motion — Framer Motion for Vanilla JS)
+
+**Motion is included in the skeleton** (`https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js`). Use it for ALL animations. It provides spring physics, scroll-triggered reveals, stagger, and orchestration — far superior to raw CSS keyframes.
+
+See [references/animations.md](references/animations.md) for complete API, recipes, and patterns.
+
+**Key APIs:**
+- `Motion.animate(target, keyframes, options)` — animate any element with spring physics
+- `Motion.inView(target, callback)` — trigger animations on scroll (replaces IntersectionObserver)
+- `Motion.stagger(delay)` — stagger animations across child elements
+- `Motion.spring({ stiffness, damping })` — spring physics easing
+- `Motion.scroll(animation)` — link animations to scroll progress
+
+**Default animation patterns:**
+- **Hero entrance:** spring fade+slide with orchestrated title → subtitle → CTA (150ms stagger)
+- **Card grids:** `Motion.stagger(0.08)` with spring ease, `y: [40, 0]`, `scale: [0.95, 1]`
+- **Scroll reveals:** `Motion.inView()` with spring ease — BUT set `opacity: 0` via JS, not CSS (so content is visible without JS)
+- **Stat counters:** animate numbers from 0 to target on scroll-in
+- **Hover micro-interactions:** `scale: 1.02, y: -4` on mouseenter with spring
+- **Slide transitions:** spring-based translateX with orchestrated exit/enter
+
+**Rules:**
+- Always check `prefers-reduced-motion` before running animations — show everything immediately if reduced
+- Never hide content via CSS for scroll animations — hide via JS so print/screenshot shows all content
+- Prefer animating `opacity`, `transform`, `scale`, `x`, `y` (GPU-accelerated)
+- Avoid animating `width`, `height`, `margin` (triggers layout reflow)
 
 ## Hamburger Menu (Required)
 
@@ -231,6 +251,7 @@ Use these when they add value. See [references/css-techniques.md](references/css
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- ADD CDN LIBRARIES HERE (Chart.js, Mermaid, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     /* ===== RESET & BASE ===== */
@@ -288,20 +309,12 @@ Use these when they add value. See [references/css-techniques.md](references/css
     p, li, td, th, span, label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
     
-    /* ===== ENTRANCE ANIMATIONS ===== */
+    /* ===== ANIMATIONS (Motion.js handles these — CSS fallback only) ===== */
+    /* Motion.js provides spring physics via JS. These CSS classes are fallbacks. */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-in {
-      opacity: 0;
-      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    .delay-5 { animation-delay: 0.5s; }
     
     /* ===== REDUCED MOTION (REQUIRED) ===== */
     @media (prefers-reduced-motion: reduce) {
@@ -408,6 +421,22 @@ Use these when they add value. See [references/css-techniques.md](references/css
       applyTheme(next);
     }
     applyTheme(currentTheme);
+
+    // Motion.js animations (spring physics, scroll reveals)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReducedMotion && typeof Motion !== 'undefined') {
+      // Staggered entrance for cards/sections
+      Motion.animate('.card, .animate-in',
+        { opacity: [0, 1], y: [30, 0] },
+        { delay: Motion.stagger(0.08), duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
+      );
+      // Hover micro-interactions on cards
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mouseenter', () => Motion.animate(card, { scale: 1.02, y: -4 }, { duration: 0.2 }));
+        card.addEventListener('mouseleave', () => Motion.animate(card, { scale: 1, y: 0 }, { duration: 0.3 }));
+      });
+      // Add more Motion animations for your specific content here
+    }
 
     // Download PNG
     async function downloadImage() {
