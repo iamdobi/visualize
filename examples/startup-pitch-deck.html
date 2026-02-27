@@ -3,26 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CookAI - Pitch Deck</title>
+  <title>EcoFlow - AI-Powered Sustainability Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root, .theme-dark {
+    /* ===== THEMES ===== */
+    /* CSS prefers-color-scheme for flash-free theme detection */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
+        --border: rgba(255,255,255,0.08);
+        --text: #f9fafb; --text-secondary: #9ca3af;
+        --accent: #10b981; --accent-secondary: #06b6d4;
+        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+        --border: rgba(0,0,0,0.08);
+        --text: #0f172a; --text-secondary: #64748b;
+        --accent: #059669; --accent-secondary: #0891b2;
+        --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      }
+    }
+    /* Manual theme override classes (JS controlled) */
+    .theme-dark {
       --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
       --text: #f9fafb; --text-secondary: #9ca3af;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --accent: #10b981; --accent-secondary: #06b6d4;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
     .theme-light {
       --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
       --border: rgba(0,0,0,0.08);
       --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --accent: #059669; --accent-secondary: #0891b2;
       --positive: #059669; --negative: #e11d48; --warning: #d97706;
     }
 
@@ -30,57 +51,73 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
       line-height: 1.6; -webkit-font-smoothing: antialiased;
-      transition: background 0.3s, color 0.3s;
-      overflow: hidden; height: 100vh;
+      transition: background 0.3s, color 0.3s; overflow: hidden;
     }
     h1,h2,h3,h4,h5,h6 { color: var(--text); }
     p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
-    /* Skip link */
+    /* Skip navigation */
     .skip-link {
-      position: absolute; top: -100px; left: 16px; padding: 8px 16px;
-      background: var(--accent); color: #fff; border-radius: 8px; z-index: 99999;
-      text-decoration: none; font-weight: 600; font-size: 0.875rem;
+      position: absolute; top: -40px; left: 16px; padding: 8px 16px;
+      background: var(--accent); color: white; text-decoration: none;
+      border-radius: 8px; z-index: 10000; font-weight: 600;
     }
     .skip-link:focus { top: 16px; }
 
-    /* Focus indicators */
-    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-    .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-    }
-
+    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
     }
     .animate { animation: fadeInUp 0.6s ease-out both; }
     .animate.delay-1 { animation-delay: 0.1s; }
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
     .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .animate.delay-6 { animation-delay: 0.6s; }
+
+    /* Modern CSS scroll-driven animations (Chrome 115+) */
+    @supports (animation-timeline: view()) {
+      .scroll-reveal {
+        animation: fadeInUp 1ms linear;
+        animation-timeline: view();
+        animation-range: entry 0% entry 50%;
+      }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
 
+    /* ===== FOCUS INDICATORS ===== */
+    *:focus-visible { 
+      outline: 2px solid var(--accent); 
+      outline-offset: 2px; 
+    }
+
+    /* ===== PRINT ===== */
     @media print {
-      body { background: white !important; color: black !important; overflow: visible; height: auto; }
-      .viz-menu, .slide-nav, .progress-bar, .skip-link { display: none !important; }
-      .slide { display: block !important; opacity: 1 !important; position: relative !important; page-break-after: always; height: auto !important; min-height: 100vh; }
-      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      body { background: white !important; color: black !important; overflow: visible; }
+      .viz-menu, .slide-nav { display: none !important; }
+      .slide { transform: none !important; position: static !important; page-break-after: always; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
-    /* Menu */
+    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
       width: 44px; height: 44px; border-radius: 12px;
@@ -105,473 +142,1017 @@
       display: flex; align-items: center; gap: 10px; transition: background 0.15s;
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* Slides */
-    .slides-container { position: relative; width: 100vw; height: 100vh; }
+    /* ===== PITCH DECK SPECIFIC ===== */
+    .pitch-deck {
+      width: 100vw; height: 100vh; position: relative; overflow: hidden;
+      container-type: inline-size;
+    }
+
+    .slides-container {
+      display: flex; height: 100%;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
     .slide {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: clamp(1.5rem, 5vw, 64px) clamp(1.5rem, 6vw, 80px); opacity: 0; pointer-events: none;
-      transition: opacity 0.3s ease;
+      min-width: 100vw; height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; position: relative; padding: 2rem;
+      text-align: center;
     }
-    .slide.active { opacity: 1; pointer-events: auto; }
 
-    .progress-bar {
-      position: fixed; top: 0; left: 0; height: 4px; z-index: 999;
-      background: linear-gradient(90deg, var(--accent), var(--accent-secondary), var(--positive));
-      transition: width 0.3s ease;
-      box-shadow: 0 0 12px rgba(59,130,246,0.6), 0 0 4px rgba(139,92,246,0.4);
+    /* Responsive slide content with container queries */
+    @container (width < 768px) {
+      .slide {
+        padding: 1rem;
+      }
+      .slide h1 {
+        font-size: clamp(2rem, 7vw, 3rem) !important;
+      }
+      .slide h2 {
+        font-size: clamp(1.5rem, 5vw, 2.5rem) !important;
+      }
+      .slide p {
+        font-size: clamp(1rem, 3.5vw, 1.25rem) !important;
+      }
+      .slide .stat-number {
+        font-size: clamp(2rem, 8vw, 3.5rem) !important;
+      }
+      .two-column {
+        flex-direction: column !important;
+        gap: 2rem !important;
+      }
     }
-    .slide-nav {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-      display: flex; align-items: center; gap: 16px; z-index: 999;
+
+    @container (width < 480px) {
+      .slide {
+        padding: 0.75rem;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+      }
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    /* Slide Types */
+    .slide.title-slide {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+      color: white;
+    }
+
+    .slide.title-slide::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.1); z-index: 1;
+    }
+
+    .slide.title-slide .content {
+      position: relative; z-index: 2;
+    }
+
+    .slide.section-slide {
+      background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
+      color: white;
+    }
+
+    .slide.content-slide {
+      background: var(--bg);
+    }
+
+    .slide h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 800; margin-bottom: 1.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .slide h2 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700; margin-bottom: 1.5rem;
+    }
+
+    .slide h3 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600; margin-bottom: 1rem;
+    }
+
+    .slide p {
+      font-size: clamp(1.125rem, 3vw, 1.5rem);
+      opacity: 0.9; max-width: 900px; margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    .slide .subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      opacity: 0.8; font-weight: 300;
+    }
+
+    /* Two column layout */
+    .two-column {
+      display: flex; align-items: center; justify-content: center;
+      gap: 4rem; max-width: 1200px; width: 100%;
+    }
+
+    .two-column > * {
+      flex: 1;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem; max-width: 900px; width: 100%;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800; margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; display: block;
+    }
+
+    .stat-label {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: var(--text-secondary); text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Problem bullets */
+    .problem-list {
+      list-style: none; padding: 0; text-align: left;
+      max-width: 700px;
+    }
+
+    .problem-list li {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1rem 0; font-size: clamp(1.125rem, 3vw, 1.5rem);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .problem-list li:last-child {
+      border-bottom: none;
+    }
+
+    .problem-icon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: var(--negative); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; margin-top: 0.25rem;
+    }
+
+    /* Solution features */
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem; max-width: 1000px; width: 100%;
+    }
+
+    .solution-item {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px 20px; backdrop-filter: blur(12px);
+      border-radius: 1rem; padding: 2rem; text-align: left;
     }
-    .slide-nav button {
-      background: none; border: none; color: var(--text); cursor: pointer;
-      padding: 4px 8px; border-radius: 6px; transition: background 0.15s;
-      display: flex; align-items: center;
-    }
-    .slide-nav button:hover { background: var(--surface-hover); }
-    .slide-counter { font-size: 14px; color: var(--text-secondary); font-weight: 500; min-width: 48px; text-align: center; }
 
-    /* Floating particles for title/closing slides */
-    @keyframes float-particle {
-      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-      25% { transform: translateY(-30px) translateX(10px); opacity: 0.6; }
-      50% { transform: translateY(-15px) translateX(-10px); opacity: 0.4; }
-      75% { transform: translateY(-40px) translateX(5px); opacity: 0.5; }
+    .solution-item h4 {
+      font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;
+      color: var(--accent);
     }
-    .slide[data-slide="0"]::before {
-      content: ''; position: absolute; width: 400px; height: 400px; border-radius: 50%;
-      background: var(--accent); filter: blur(100px); opacity: 0.12; top: 10%; left: 15%;
-      animation: floatOrb 8s ease-in-out infinite; pointer-events: none;
-    }
-    .slide[data-slide="0"]::after, .slide[data-slide="9"]::after {
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-      background-image:
-        radial-gradient(2px 2px at 10% 20%, var(--accent), transparent),
-        radial-gradient(2px 2px at 30% 70%, var(--accent-secondary), transparent),
-        radial-gradient(2px 2px at 50% 30%, var(--accent), transparent),
-        radial-gradient(3px 3px at 70% 60%, var(--accent-secondary), transparent),
-        radial-gradient(2px 2px at 85% 25%, var(--accent), transparent),
-        radial-gradient(2px 2px at 20% 85%, var(--accent-secondary), transparent),
-        radial-gradient(3px 3px at 60% 90%, var(--accent), transparent),
-        radial-gradient(2px 2px at 90% 80%, var(--positive), transparent);
-      animation: float-particle 8s ease-in-out infinite;
-      opacity: 0.5;
-    }
-    @keyframes floatOrb { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -20px) scale(1.1); } }
-    .slide h1 { font-size: 3rem; font-weight: 800; margin-bottom: 16px; text-align: center; }
-    .slide h2 { font-size: 2.25rem; font-weight: 700; margin-bottom: 24px; }
-    .slide p { font-size: 1.25rem; color: var(--text-secondary); max-width: 700px; text-align: center; }
-    .slide .icon-row { display: flex; align-items: center; gap: 8px; }
-    .slide .icon-row svg { flex-shrink: 0; }
-    .slide ul { font-size: 1.125rem; list-style: none; padding: 0; }
-    .slide ul li { padding: 8px 0; display: flex; align-items: center; gap: 12px; }
-    .slide ul li svg { flex-shrink: 0; width: 20px; height: 20px; color: var(--accent); }
 
-    .gradient-text {
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    .solution-item p {
+      font-size: 1rem; color: var(--text-secondary);
     }
-    .stat-big { font-size: 3.5rem; font-weight: 800; }
-    .stat-label { font-size: 1rem; color: var(--text-secondary); }
 
-    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; width: 100%; max-width: 900px; }
-    .chart-container { width: 100%; max-width: 600px; height: 320px; }
+    /* Business model */
+    .revenue-streams {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem; max-width: 800px; width: 100%;
+    }
 
-    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 700px; }
-    .team-member { text-align: center; }
+    .revenue-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1rem; padding: 1.5rem; text-align: center;
+      border-top: 4px solid var(--accent);
+    }
+
+    .revenue-item h4 {
+      font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;
+    }
+
+    .revenue-item .price {
+      font-size: 2rem; font-weight: 700; color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .revenue-item p {
+      font-size: 0.875rem; color: var(--text-secondary);
+    }
+
+    /* Team grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem; max-width: 800px; width: 100%;
+    }
+
+    .team-member {
+      text-align: center;
+    }
+
     .team-avatar {
-      width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 12px;
+      width: 100px; height: 100px; border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; font-weight: 700; color: white;
+      margin: 0 auto 1rem auto; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 700; color: white;
     }
 
-    .cta-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 16px 40px; border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      color: white; font-size: 1.125rem; font-weight: 600; text-decoration: none;
-      margin-top: 24px; cursor: pointer; border: none;
-      transition: transform 0.2s, box-shadow 0.2s;
+    .team-name {
+      font-size: 1.125rem; font-weight: 600; margin-bottom: 0.25rem;
     }
-    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
 
-    .comp-table { width: 100%; max-width: 800px; border-collapse: separate; border-spacing: 0; }
-    .comp-table th, .comp-table td { padding: 12px 20px; text-align: left; border-bottom: 1px solid var(--border); }
-    .comp-table th { font-size: 0.875rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-    .comp-table td:first-child { font-weight: 600; }
-    .check { color: var(--positive); }
-    .cross { color: var(--text-secondary); opacity: 0.4; }
-
-    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; width: 100%; max-width: 900px; }
-    .step-card { text-align: center; padding: 24px 16px; }
-    .step-num {
-      width: 48px; height: 48px; border-radius: 50%; margin: 0 auto 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 1.25rem; color: white;
+    .team-role {
+      font-size: 0.875rem; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.05em;
     }
-    .step-card h4 { font-size: 1rem; margin-bottom: 8px; }
-    .step-card p { font-size: 0.875rem; text-align: center; }
 
-    /* Mobile */
-    @media (max-width: 768px) {
-      .slide { padding: 32px 24px; }
-      .slide h1 { font-size: 2rem; }
-      .slide h2 { font-size: 1.5rem; }
-      .slide p { font-size: 1rem; }
-      .three-col { grid-template-columns: 1fr; gap: 16px; }
-      .steps-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
-      .team-grid { grid-template-columns: 1fr; gap: 16px; }
-      .stat-big { font-size: 2.5rem; }
-      .comp-table { font-size: 0.8rem; }
-      .comp-table th, .comp-table td { padding: 8px 10px; }
-      .chart-container { height: 250px; }
+    /* Chart containers */
+    .chart-container {
+      max-width: 600px; width: 100%;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1rem; padding: 2rem;
+    }
+
+    .chart-wrapper {
+      position: relative; height: 300px;
+    }
+
+    /* Navigation */
+    .slide-nav {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 2rem; padding: 0.75rem 1.5rem;
+      backdrop-filter: blur(12px); z-index: 1000;
+      display: flex; align-items: center; gap: 1rem;
+    }
+
+    .nav-button {
+      width: 40px; height: 40px; border: none; border-radius: 50%;
+      background: transparent; color: var(--text);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .nav-button:hover {
+      background: var(--surface-hover);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+
+    .slide-counter {
+      color: var(--text-secondary); font-size: 0.875rem;
+      font-weight: 500; min-width: 60px; text-align: center;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 4px; background: var(--border); z-index: 1000;
+    }
+
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0;
+    }
+
+    /* Responsive improvements */
+    @container (width < 600px) {
+      .chart-container {
+        padding: 1rem;
+      }
+      .chart-wrapper {
+        height: 250px;
+      }
+      .solution-item,
+      .revenue-item {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to content</a>
-
-  <div class="viz-menu">
-    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Open menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
-      <button onclick="cycleTheme()" role="menuitem">
-        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-        <span id="themeLabel">Dark</span>
-      </button>
-      <button onclick="downloadImage()" role="menuitem">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span>Download PNG</span>
-      </button>
-      <button onclick="window.print()" role="menuitem">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        <span>Print / PDF</span>
-      </button>
-    </div>
-  </div>
-
-  <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Slide progress"></div>
-
   <main id="main-content">
-    <div class="slides-container" role="region" aria-label="Pitch deck slides" aria-roledescription="carousel">
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
-      <!-- Slide 1: Title -->
-      <section class="slide active" data-slide="0" aria-label="Slide 1: Title" style="background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.15), transparent 60%), radial-gradient(ellipse at 70% 70%, rgba(139,92,246,0.12), transparent 50%), var(--bg);">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="animate" aria-hidden="true" style="filter:drop-shadow(0 0 24px rgba(59,130,246,0.3));margin-bottom:16px;">
-          <circle cx="12" cy="8" r="5"/><path d="M7 13h10l1 8H6l1-8z"/><line x1="9" y1="16" x2="15" y2="16"/>
-        </svg>
-        <h1 class="animate delay-1" style="font-size:4.5rem;"><span class="gradient-text">CookAI</span></h1>
-        <p class="animate delay-2" style="font-size:1.75rem; margin-bottom:8px; color:var(--text);">Your AI-Powered Kitchen Companion</p>
-        <p class="animate delay-3" style="font-size:1.15rem;">Snap your fridge. Get personalized recipes. Waste nothing.</p>
-      </section>
-
-      <!-- Slide 2: Problem -->
-      <section class="slide" data-slide="1" aria-label="Slide 2: The Problem">
-        <h2 class="animate">The Problem</h2>
-        <div class="three-col animate delay-1" role="img" aria-label="Problem statistics: 40% groceries wasted, 63% don't know what to cook, $1.5K wasted per household per year">
-          <div class="card" style="text-align:center;">
-            <div class="stat-big gradient-text">40%</div>
-            <div class="stat-label">of groceries are wasted</div>
-          </div>
-          <div class="card" style="text-align:center;">
-            <div class="stat-big gradient-text">63%</div>
-            <div class="stat-label">don't know what to cook</div>
-          </div>
-          <div class="card" style="text-align:center;">
-            <div class="stat-big gradient-text">$1.5K</div>
-            <div class="stat-label">wasted per household/yr</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Slide 3: Solution -->
-      <section class="slide" data-slide="2" aria-label="Slide 3: The Solution">
-        <h2 class="animate">The Solution</h2>
-        <p class="animate delay-1" style="font-size:1.5rem; margin-bottom:32px;">Snap. Cook. Save.</p>
-        <ul class="animate delay-2">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> Photo your fridge — AI identifies ingredients</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M7 13h10l1 8H6l1-8z"/><line x1="9" y1="16" x2="15" y2="16"/></svg> Get personalized recipes in seconds</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Adapts to dietary preferences &amp; allergies</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> Reduce food waste by up to 60%</li>
-        </ul>
-      </section>
-
-      <!-- Slide 4: How It Works -->
-      <section class="slide" data-slide="3" aria-label="Slide 4: How It Works">
-        <h2 class="animate">How It Works</h2>
-        <div class="steps-grid animate delay-1" role="img" aria-label="4-step process: Snap, Detect, Match, Cook">
-          <div class="step-card card">
-            <div class="step-num">1</div>
-            <h4>Snap</h4>
-            <p>Take a photo of your fridge or pantry</p>
-          </div>
-          <div class="step-card card">
-            <div class="step-num">2</div>
-            <h4>Detect</h4>
-            <p>AI identifies every ingredient instantly</p>
-          </div>
-          <div class="step-card card">
-            <div class="step-num">3</div>
-            <h4>Match</h4>
-            <p>Finds recipes ranked by freshness &amp; taste</p>
-          </div>
-          <div class="step-card card">
-            <div class="step-num">4</div>
-            <h4>Cook</h4>
-            <p>Step-by-step guidance with voice assist</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Slide 5: Market Size -->
-      <section class="slide" data-slide="4" aria-label="Slide 5: Market Opportunity">
-        <h2 class="animate">Market Opportunity</h2>
-        <div class="chart-container animate delay-1" role="img" aria-label="Market size chart: TAM $320B, SAM $45B, SOM $8B">
-          <canvas id="marketChart"></canvas>
-        </div>
-      </section>
-
-      <!-- Slide 6: Traction -->
-      <section class="slide" data-slide="5" aria-label="Slide 6: Traction">
-        <h2 class="animate">Traction</h2>
-        <div class="chart-container animate delay-1" role="img" aria-label="Monthly active users growth from 2.4K in January to 142K in December" style="max-width:700px; height:340px;">
-          <canvas id="tractionChart"></canvas>
-        </div>
-      </section>
-
-      <!-- Slide 7: Business Model -->
-      <section class="slide" data-slide="6" aria-label="Slide 7: Business Model">
-        <h2 class="animate">Business Model</h2>
-        <div class="three-col animate delay-1">
-          <div class="card" style="text-align:center;">
-            <h3 style="font-size:1.25rem;">Free Tier</h3>
-            <div class="stat-big gradient-text" style="font-size:2rem;">$0</div>
-            <p style="font-size:0.875rem;">5 recipes/day, basic features</p>
-          </div>
-          <div class="card" style="text-align:center; border-color: var(--accent);">
-            <h3 style="font-size:1.25rem;">Pro</h3>
-            <div class="stat-big gradient-text" style="font-size:2rem;">$9.99</div>
-            <p style="font-size:0.875rem;">Unlimited recipes, meal planning</p>
-          </div>
-          <div class="card" style="text-align:center;">
-            <h3 style="font-size:1.25rem;">Family</h3>
-            <div class="stat-big gradient-text" style="font-size:2rem;">$14.99</div>
-            <p style="font-size:0.875rem;">6 profiles, grocery lists, nutrition</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Slide 8: Competition -->
-      <section class="slide" data-slide="7" aria-label="Slide 8: Competition">
-        <h2 class="animate">Competition</h2>
-        <div class="animate delay-1" role="img" aria-label="Feature comparison table showing CookAI leads in photo recognition, fridge tracking, waste metrics, and voice-guided cooking">
-          <table class="comp-table">
-            <thead>
-              <tr><th>Feature</th><th>CookAI</th><th>Yummly</th><th>Supercook</th><th>ChatGPT</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Photo recognition</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
-              <tr><td>Real-time fridge tracking</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
-              <tr><td>Dietary adaptation</td><td class="check" aria-label="Yes">✓</td><td class="check" aria-label="Yes">✓</td><td class="check" aria-label="Yes">✓</td><td class="check" aria-label="Yes">✓</td></tr>
-              <tr><td>Waste reduction metrics</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
-              <tr><td>Voice-guided cooking</td><td class="check" aria-label="Yes">✓</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td><td class="cross" aria-label="No">✗</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Slide 9: Team -->
-      <section class="slide" data-slide="8" aria-label="Slide 9: The Team">
-        <h2 class="animate">The Team</h2>
-        <div class="team-grid animate delay-1">
-          <div class="team-member">
-            <div class="team-avatar" aria-hidden="true">SK</div>
-            <h3 style="font-size:1rem;">Sarah Kim</h3>
-            <p style="font-size:0.875rem;">CEO — Ex-Google AI</p>
-          </div>
-          <div class="team-member">
-            <div class="team-avatar" aria-hidden="true">MR</div>
-            <h3 style="font-size:1rem;">Marco Rossi</h3>
-            <p style="font-size:0.875rem;">CTO — ML at Scale</p>
-          </div>
-          <div class="team-member">
-            <div class="team-avatar" aria-hidden="true">JL</div>
-            <h3 style="font-size:1rem;">Jenna Lee</h3>
-            <p style="font-size:0.875rem;">CPO — Ex-Blue Apron</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Slide 10: Ask / CTA -->
-      <section class="slide" data-slide="9" aria-label="Slide 10: The Ask">
-        <h2 class="animate">The Ask</h2>
-        <div class="stat-big gradient-text animate delay-1" style="margin-bottom:16px;">$3M Seed Round</div>
-        <ul class="animate delay-2" style="margin-bottom:32px;">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Expand AI model to 10K+ ingredients</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> Launch in 5 markets (US, UK, DE, JP, BR)</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg> Grow team to 25 engineers</li>
-        </ul>
-        <button class="cta-btn animate delay-3" aria-label="Contact us to invest">
-          Let's Cook Together
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        </button>
-      </section>
-
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
+
+    <!-- MENU -->
+    <div class="viz-menu">
+      <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+        </svg>
+      </button>
+      <div class="viz-menu-dropdown" id="vizMenuDropdown">
+        <button onclick="cycleTheme()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><path d="m12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+          </svg>
+          <span id="themeLabel">Dark</span>
+        </button>
+        <button onclick="downloadImage()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/>
+          </svg>
+          <span>Download PNG</span>
+        </button>
+        <button onclick="window.print()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          </svg>
+          <span>Print / PDF</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="pitch-deck">
+      <div class="slides-container" id="slidesContainer">
+        
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide" data-notes="Company introduction and mission statement">
+          <div class="content">
+            <h1 class="animate">EcoFlow</h1>
+            <p class="subtitle animate delay-1">AI-Powered Sustainability Platform for Enterprise</p>
+            <p class="animate delay-2" style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
+              Seed Round Pitch • $2M Raising • January 2026
+            </p>
+          </div>
+        </section>
+
+        <!-- Slide 2: Problem -->
+        <section class="slide content-slide" data-notes="Current challenges in corporate sustainability">
+          <h2 class="animate">The Problem</h2>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">
+            Companies struggle to measure, manage, and reduce their environmental impact
+          </p>
+          <ul class="problem-list animate delay-2">
+            <li>
+              <div class="problem-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              73% of companies lack comprehensive carbon tracking
+            </li>
+            <li>
+              <div class="problem-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              Sustainability reporting takes 120+ hours per month
+            </li>
+            <li>
+              <div class="problem-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              ESG compliance costs average $2.3M annually
+            </li>
+            <li>
+              <div class="problem-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              Fragmented data makes impact optimization impossible
+            </li>
+          </ul>
+        </section>
+
+        <!-- Slide 3: Solution -->
+        <section class="slide section-slide" data-notes="Our solution overview">
+          <div class="content">
+            <h2 class="animate">Our Solution</h2>
+            <p class="animate delay-1">
+              AI-powered platform that automates sustainability tracking, reporting, and optimization
+            </p>
+          </div>
+        </section>
+
+        <!-- Slide 4: Product Features -->
+        <section class="slide content-slide" data-notes="Core platform features and capabilities">
+          <h2 class="animate">How It Works</h2>
+          <div class="solution-grid animate delay-1">
+            <div class="solution-item">
+              <h4>🔍 Smart Data Collection</h4>
+              <p>Automatically connects to 200+ enterprise systems to gather environmental data in real-time</p>
+            </div>
+            <div class="solution-item">
+              <h4>🤖 AI Analytics Engine</h4>
+              <p>Machine learning models identify patterns, predict trends, and recommend optimization strategies</p>
+            </div>
+            <div class="solution-item">
+              <h4>📊 Compliance Dashboard</h4>
+              <p>One-click ESG reporting for all major frameworks: GRI, SASB, TCFD, EU Taxonomy</p>
+            </div>
+            <div class="solution-item">
+              <h4>⚡ Action Insights</h4>
+              <p>Personalized recommendations to reduce emissions, waste, and energy consumption</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 5: Market Opportunity -->
+        <section class="slide content-slide" data-notes="Total addressable market and growth potential">
+          <div class="two-column">
+            <div>
+              <h2 class="animate" style="text-align: left;">Market Opportunity</h2>
+              <p class="animate delay-1" style="text-align: left; margin-bottom: 2rem;">
+                ESG software market growing rapidly driven by regulatory requirements
+              </p>
+              <div class="stats-grid animate delay-2">
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="16.2" data-prefix="$" data-suffix="B">$16.2B</span>
+                  <span class="stat-label">TAM by 2030</span>
+                </div>
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="28" data-suffix="%">28%</span>
+                  <span class="stat-label">Annual Growth (CAGR)</span>
+                </div>
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="84" data-suffix="%">84%</span>
+                  <span class="stat-label">Of F500 have ESG goals</span>
+                </div>
+              </div>
+            </div>
+            <div role="img" aria-label="ESG software market growth chart showing exponential growth from $2.1B in 2022 to projected $16.2B in 2030">
+              <div class="chart-container animate delay-3">
+                <div class="chart-wrapper">
+                  <canvas id="marketChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 6: Business Model -->
+        <section class="slide content-slide" data-notes="Revenue streams and pricing strategy">
+          <h2 class="animate">Business Model</h2>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">
+            SaaS subscription model with tiered pricing based on company size
+          </p>
+          <div class="revenue-streams animate delay-2">
+            <div class="revenue-item">
+              <h4>Starter</h4>
+              <div class="price">$2K</div>
+              <p>per month • Up to 500 employees</p>
+            </div>
+            <div class="revenue-item">
+              <h4>Professional</h4>
+              <div class="price">$8K</div>
+              <p>per month • Up to 5,000 employees</p>
+            </div>
+            <div class="revenue-item">
+              <h4>Enterprise</h4>
+              <div class="price">$25K</div>
+              <p>per month • Unlimited employees</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 7: Traction -->
+        <section class="slide content-slide" data-notes="Current progress and key metrics">
+          <h2 class="animate">Traction</h2>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">
+            Strong early validation from pilot customers and growing pipeline
+          </p>
+          <div class="stats-grid animate delay-2">
+            <div class="stat-item">
+              <span class="stat-number" data-count="12">12</span>
+              <span class="stat-label">Pilot Customers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="340" data-prefix="$" data-suffix="K">$340K</span>
+              <span class="stat-label">Pipeline Value</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="87" data-suffix="%">87%</span>
+              <span class="stat-label">Customer Satisfaction</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="42" data-suffix="%">42%</span>
+              <span class="stat-label">Avg. CO2 Reduction</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 8: Team -->
+        <section class="slide content-slide" data-notes="Founding team and key personnel">
+          <h2 class="animate">Our Team</h2>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">
+            Experienced founders with deep expertise in AI, sustainability, and enterprise software
+          </p>
+          <div class="team-grid animate delay-2">
+            <div class="team-member">
+              <div class="team-avatar">SL</div>
+              <div class="team-name">Sarah Liu</div>
+              <div class="team-role">CEO & Co-Founder</div>
+            </div>
+            <div class="team-member">
+              <div class="team-avatar">MK</div>
+              <div class="team-name">Marcus Kim</div>
+              <div class="team-role">CTO & Co-Founder</div>
+            </div>
+            <div class="team-member">
+              <div class="team-avatar">AR</div>
+              <div class="team-name">Amara Raj</div>
+              <div class="team-role">Head of Product</div>
+            </div>
+            <div class="team-member">
+              <div class="team-avatar">DC</div>
+              <div class="team-name">David Chen</div>
+              <div class="team-role">Head of Sales</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 9: Funding Ask -->
+        <section class="slide section-slide" data-notes="Investment ask and use of funds">
+          <div class="content">
+            <h2 class="animate">Raising $2M Seed Round</h2>
+            <p class="animate delay-1" style="margin-top: 2rem;">
+              To accelerate product development and scale our go-to-market efforts
+            </p>
+          </div>
+        </section>
+
+        <!-- Slide 10: Use of Funds -->
+        <section class="slide content-slide" data-notes="How we'll use the investment">
+          <div class="two-column">
+            <div>
+              <h2 class="animate" style="text-align: left;">Use of Funds</h2>
+              <p class="animate delay-1" style="text-align: left; margin-bottom: 2rem;">
+                Strategic investment in team and technology to capture market opportunity
+              </p>
+              <div class="stats-grid animate delay-2" style="grid-template-columns: 1fr;">
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="60" data-suffix="%">60%</span>
+                  <span class="stat-label">Product Development</span>
+                </div>
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="25" data-suffix="%">25%</span>
+                  <span class="stat-label">Sales & Marketing</span>
+                </div>
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="15" data-suffix="%">15%</span>
+                  <span class="stat-label">Operations & Legal</span>
+                </div>
+              </div>
+            </div>
+            <div role="img" aria-label="Fund allocation pie chart showing 60% product development, 25% sales and marketing, 15% operations">
+              <div class="chart-container animate delay-3">
+                <div class="chart-wrapper">
+                  <canvas id="fundingChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 11: Thank You -->
+        <section class="slide title-slide" data-notes="Closing and contact information">
+          <div class="content">
+            <h2 class="animate">Let's Build a Sustainable Future</h2>
+            <p class="animate delay-1" style="margin: 2rem 0;">
+              Join us in transforming how companies approach sustainability
+            </p>
+            <p class="animate delay-2" style="font-size: 1.125rem; opacity: 0.8;">
+              sarah@ecoflow.ai • ecoflow.ai
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="slide-nav" aria-label="Slide navigation">
+      <button class="nav-button" id="prevBtn" onclick="prevSlide()" aria-label="Previous slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15,18 9,12 15,6"/>
+        </svg>
+      </button>
+      <span class="slide-counter" id="slideCounter" aria-live="polite">1 / 11</span>
+      <button class="nav-button" id="nextBtn" onclick="nextSlide()" aria-label="Next slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"/>
+        </svg>
+      </button>
+    </nav>
   </main>
 
-  <!-- Slide Nav -->
-  <nav class="slide-nav" aria-label="Slide navigation">
-    <button onclick="goToSlide(current - 1)" aria-label="Previous slide">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <span class="slide-counter" id="slideCounter" aria-live="polite">1 / 10</span>
-    <button onclick="goToSlide(current + 1)" aria-label="Next slide">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  </nav>
-
   <script>
+    // === Slide Variables ===
+    var currentSlide = 0;
+    var totalSlides = 11;
+    var marketChart, fundingChart;
+
     // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('click', function(e) { 
+      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); 
+    });
+    document.addEventListener('keydown', function(e) { 
+      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); 
+    });
 
     // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
-    var moonPath = '<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
-    var sunPath = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-    function applyTheme(t) {
-      document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').innerHTML = t === 'dark' ? moonPath : sunPath;
-      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t); currentTheme = t;
+    function applyTheme(theme) {
+      document.documentElement.className = 'theme-' + theme;
+      document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', theme);
+      currentTheme = theme;
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
-    if (!localStorage.getItem('viz-theme')) {
-      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
-    }
     applyTheme(currentTheme);
 
-    // === Download PNG ===
-    async function downloadImage() {
-      var menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
-      try {
-        var url = await htmlToImage.toPng(document.querySelector('.slide.active'), { quality: 1, pixelRatio: 2 });
-        var a = document.createElement('a'); a.href = url;
-        a.download = 'cookai-slide-' + (current + 1) + '.png'; a.click();
-      } catch(e) { console.error('Download failed:', e); }
-      menu.style.display = '';
-    }
-
     // === Slide Navigation ===
-    var current = 0;
-    var transitioning = false;
-    var totalSlides = 10;
+    function updateSlidePosition() {
+      var container = document.getElementById('slidesContainer');
+      container.style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
+      
+      // Update counter
+      document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+      
+      // Update progress
+      var progress = ((currentSlide + 1) / totalSlides) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+      
+      // Update button states
+      document.getElementById('prevBtn').disabled = currentSlide === 0;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
 
-    function goToSlide(n) {
-      if (transitioning || n < 0 || n >= totalSlides || n === current) return;
-      transitioning = true;
-      var slides = document.querySelectorAll('.slide');
-      slides[current].classList.remove('active');
-      current = n;
-      slides[current].classList.add('active');
-      document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + totalSlides;
-      document.getElementById('progressBar').style.width = ((current + 1) / totalSlides * 100) + '%';
-      setTimeout(function() { transitioning = false; }, 350);
+      // Trigger animations for current slide
+      triggerSlideAnimations();
     }
 
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlidePosition();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlidePosition();
+      }
+    }
+
+    function goToSlide(index) {
+      currentSlide = Math.max(0, Math.min(index, totalSlides - 1));
+      updateSlidePosition();
+    }
+
+    function triggerSlideAnimations() {
+      // Reset and trigger number counters for current slide
+      var slides = document.querySelectorAll('.slide');
+      var currentSlideEl = slides[currentSlide];
+      
+      // Reset counter animations
+      currentSlideEl.querySelectorAll('[data-count]').forEach(function(el) {
+        delete el.dataset.counted;
+      });
+      
+      // Trigger counters after a short delay
+      setTimeout(function() {
+        animateCounters(currentSlideEl);
+      }, 300);
+    }
+
+    // === Keyboard Navigation ===
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); goToSlide(current + 1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); goToSlide(current - 1); }
+      if (document.getElementById('vizMenuDropdown').classList.contains('open')) return;
+      
+      switch(e.key) {
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'Enter':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides - 1);
+          break;
+      }
     });
 
-    document.querySelector('.slides-container').addEventListener('click', function(e) {
-      if (e.target.closest('.viz-menu') || e.target.closest('.slide-nav') || e.target.closest('button') || e.target.closest('a')) return;
-      var x = e.clientX / window.innerWidth;
-      if (x < 0.33) goToSlide(current - 1);
-      else goToSlide(current + 1);
+    // === Touch Gestures ===
+    var touchStartX = 0;
+    var touchEndX = 0;
+
+    document.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
     });
 
-    document.getElementById('progressBar').style.width = (1 / totalSlides * 100) + '%';
+    document.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
 
-    // === Charts ===
-    var marketChart = null;
-    var tractionChart = null;
+    function handleSwipe() {
+      var swipeThreshold = 50;
+      var diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          nextSlide(); // Swipe left
+        } else {
+          prevSlide(); // Swipe right
+        }
+      }
+    }
 
+    // === Click Navigation ===
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.viz-menu') || e.target.closest('.slide-nav') || 
+          e.target.closest('button') || e.target.closest('canvas')) {
+        return;
+      }
+      
+      var clickX = e.clientX;
+      var windowWidth = window.innerWidth;
+      
+      if (clickX < windowWidth / 3) {
+        prevSlide(); // Left third
+      } else {
+        nextSlide(); // Right two-thirds
+      }
+    });
+
+    // === Number Counter ===
+    function animateCounters(container) {
+      container = container || document;
+      container.querySelectorAll('[data-count]').forEach(function(el) {
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        
+        var target = parseFloat(el.dataset.count);
+        var prefix = el.dataset.prefix || '';
+        var suffix = el.dataset.suffix || '';
+        var start = performance.now();
+        var duration = 1200;
+        
+        function tick(now) {
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = target * eased;
+          
+          // Handle decimal formatting
+          if (target % 1 !== 0) {
+            current = current.toFixed(1);
+          } else {
+            current = Math.round(current);
+          }
+          
+          el.textContent = prefix + current.toLocaleString() + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        tick(start);
+      });
+    }
+
+    // === Chart Helper ===
     function getChartColors() {
-      var s = getComputedStyle(document.documentElement);
+      var root = getComputedStyle(document.documentElement);
       return {
-        text: s.getPropertyValue('--text').trim(),
-        textSecondary: s.getPropertyValue('--text-secondary').trim(),
-        border: s.getPropertyValue('--border').trim(),
-        accent: s.getPropertyValue('--accent').trim(),
-        accentSecondary: s.getPropertyValue('--accent-secondary').trim(),
-        positive: s.getPropertyValue('--positive').trim()
+        text: root.getPropertyValue('--text').trim(),
+        textSecondary: root.getPropertyValue('--text-secondary').trim(),
+        border: root.getPropertyValue('--border').trim(),
+        surface: root.getPropertyValue('--surface').trim(),
+        accent: root.getPropertyValue('--accent').trim(),
+        accentSecondary: root.getPropertyValue('--accent-secondary').trim(),
+        warning: root.getPropertyValue('--warning').trim()
       };
     }
 
     function resetCanvas(id) {
-      var old = document.getElementById(id);
-      var parent = old.parentNode;
-      var canvas = document.createElement('canvas');
-      canvas.id = id;
-      parent.replaceChild(canvas, old);
-      return canvas;
+      var oldCanvas = document.getElementById(id);
+      if (!oldCanvas) return null;
+      var parent = oldCanvas.parentNode;
+      var newCanvas = document.createElement('canvas');
+      newCanvas.id = id;
+      parent.replaceChild(newCanvas, oldCanvas);
+      return newCanvas;
     }
 
+    // === Build Charts ===
     function buildCharts() {
-      var c = getChartColors();
-      Chart.defaults.color = c.textSecondary;
+      var colors = getChartColors();
+      
+      Chart.defaults.color = colors.textSecondary;
+      Chart.defaults.borderColor = colors.border;
 
+      // Destroy existing charts
       try { if (marketChart) marketChart.destroy(); } catch(e) {}
-      marketChart = new Chart(resetCanvas('marketChart'), {
-        type: 'bar',
-        data: {
-          labels: ['TAM', 'SAM', 'SOM'],
-          datasets: [{ label: 'Market Size ($B)', data: [320, 45, 8], backgroundColor: [c.accent, c.accentSecondary, c.positive], borderRadius: 8, barThickness: 40 }]
-        },
-        options: {
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false, animation: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: c.border }, ticks: { callback: function(v) { return '$' + v + 'B'; } } },
-            y: { grid: { display: false } }
-          }
-        }
-      });
+      try { if (fundingChart) fundingChart.destroy(); } catch(e) {}
 
-      try { if (tractionChart) tractionChart.destroy(); } catch(e) {}
-      tractionChart = new Chart(resetCanvas('tractionChart'), {
-        type: 'line',
-        data: {
-          labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-          datasets: [{ label: 'Monthly Active Users', data: [2400,4200,7800,12500,18900,28000,41000,52000,68000,89000,112000,142000], borderColor: c.accent, backgroundColor: c.accent + '22', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: c.accent }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false, animation: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: c.border } },
-            y: { grid: { color: c.border }, ticks: { callback: function(v) { return (v / 1000) + 'K'; } } }
+      // Market Chart
+      var marketCanvas = resetCanvas('marketChart');
+      if (marketCanvas) {
+        marketChart = new Chart(marketCanvas, {
+          type: 'line',
+          data: {
+            labels: ['2022', '2024', '2026', '2028', '2030'],
+            datasets: [{
+              label: 'Market Size ($B)',
+              data: [2.1, 4.8, 7.2, 11.3, 16.2],
+              borderColor: colors.accent,
+              backgroundColor: colors.accent + '20',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 8,
+              pointBackgroundColor: colors.accent,
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                backgroundColor: colors.surface,
+                titleColor: colors.text,
+                bodyColor: colors.text,
+                borderColor: colors.border,
+                borderWidth: 1,
+                callbacks: {
+                  label: function(context) {
+                    return 'Market Size: $' + context.parsed.y + 'B';
+                  }
+                }
+              },
+              legend: { display: false }
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                grid: { 
+                  color: colors.border,
+                  drawBorder: false
+                },
+                ticks: { 
+                  color: colors.textSecondary,
+                  callback: function(value) {
+                    return '$' + value + 'B';
+                  }
+                },
+                border: { display: false }
+              },
+              x: {
+                grid: { 
+                  color: colors.border,
+                  drawBorder: false
+                },
+                ticks: { color: colors.textSecondary },
+                border: { display: false }
+              }
+            },
+            interaction: {
+              intersect: false,
+              mode: 'index'
+            }
           }
-        }
-      });
+        });
+      }
+
+      // Funding Chart
+      var fundingCanvas = resetCanvas('fundingChart');
+      if (fundingCanvas) {
+        fundingChart = new Chart(fundingCanvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['Product Development', 'Sales & Marketing', 'Operations & Legal'],
+            datasets: [{
+              data: [60, 25, 15],
+              backgroundColor: [
+                colors.accent,
+                colors.accentSecondary, 
+                colors.warning
+              ],
+              borderWidth: 0,
+              hoverOffset: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                enabled: true,
+                backgroundColor: colors.surface,
+                titleColor: colors.text,
+                bodyColor: colors.text,
+                borderColor: colors.border,
+                borderWidth: 1,
+                callbacks: {
+                  label: function(context) {
+                    return context.label + ': ' + context.parsed + '%';
+                  }
+                }
+              },
+              legend: {
+                position: 'bottom',
+                labels: { 
+                  color: colors.text,
+                  padding: 15,
+                  usePointStyle: true,
+                  pointStyle: 'circle'
+                }
+              }
+            },
+            cutout: '60%'
+          }
+        });
+      }
     }
 
-    function onThemeChange() { buildCharts(); }
-    // buildCharts() is already called via applyTheme → onThemeChange on page load
+    // Theme change handler
+    function onThemeChange() {
+      setTimeout(buildCharts, 100);
+    }
+
+    // === Initialize ===
+    updateSlidePosition();
+    setTimeout(buildCharts, 1000);
+
+    // === Download PNG ===
+    async function downloadImage() {
+      var menu = document.querySelector('.viz-menu');
+      var nav = document.querySelector('.slide-nav');
+      var progress = document.querySelector('.progress-bar');
+      
+      menu.style.display = 'none';
+      nav.style.display = 'none';
+      progress.style.display = 'none';
+      
+      try {
+        // Capture current slide only
+        var slides = document.querySelectorAll('.slide');
+        var currentSlideEl = slides[currentSlide];
+        
+        var url = await htmlToImage.toPng(currentSlideEl, { 
+          quality: 1, 
+          pixelRatio: 2,
+          width: 1920,
+          height: 1080
+        });
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'ecoflow-pitch-slide-' + (currentSlide + 1) + '.png';
+        link.click();
+      } catch(error) { 
+        console.error('Download failed:', error); 
+      }
+      
+      menu.style.display = '';
+      nav.style.display = '';
+      progress.style.display = '';
+    }
   </script>
 </body>
 </html>

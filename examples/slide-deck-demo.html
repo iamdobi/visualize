@@ -1,430 +1,926 @@
 <!DOCTYPE html>
-<html lang="ko" class="theme-dark">
+<html lang="en" class="theme-dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>커리어해커 알렉스 — The Story</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Product Launch - Slide Deck Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root, .theme-dark {
-    --hue: 250;
-    --bg: hsl(var(--hue), 20%, 8%); --surface: hsl(var(--hue), 15%, 14%);
-    --text: hsl(var(--hue), 10%, 92%); --text-secondary: hsl(var(--hue), 10%, 60%);
-    --accent: hsl(var(--hue), 85%, 68%); --accent2: hsl(170, 70%, 55%); --accent3: hsl(35, 90%, 60%);
-    --glow: hsla(var(--hue), 85%, 68%, 0.15);
-    --border: hsla(var(--hue), 20%, 30%, 0.5);
-  }
-  .theme-light {
-    --bg: hsl(var(--hue), 15%, 97%); --surface: hsl(0, 0%, 100%);
-    --text: hsl(var(--hue), 20%, 15%); --text-secondary: hsl(var(--hue), 10%, 45%);
-    --accent: hsl(var(--hue), 80%, 50%); --accent2: hsl(170, 65%, 38%); --accent3: hsl(35, 85%, 45%);
-    --glow: hsla(var(--hue), 80%, 50%, 0.1);
-    --border: hsla(var(--hue), 10%, 80%, 0.5);
-  }
+    /* ===== THEMES ===== */
+    /* CSS prefers-color-scheme for flash-free theme detection */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
+        --border: rgba(255,255,255,0.08);
+        --text: #f9fafb; --text-secondary: #9ca3af;
+        --accent: #3b82f6; --accent-secondary: #8b5cf6;
+        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+        --border: rgba(0,0,0,0.08);
+        --text: #0f172a; --text-secondary: #64748b;
+        --accent: #2563eb; --accent-secondary: #7c3aed;
+        --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      }
+    }
+    /* Manual theme override classes (JS controlled) */
+    .theme-dark {
+      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
+      --border: rgba(255,255,255,0.08);
+      --text: #f9fafb; --text-secondary: #9ca3af;
+      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+    }
+    .theme-light {
+      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
+    }
 
-  .skip-link {
-    position: absolute; top: -100px; left: 16px; padding: 8px 16px;
-    background: var(--accent); color: #fff; border-radius: 8px; z-index: 99999;
-    text-decoration: none; font-weight: 600;
-  }
-  .skip-link:focus { top: 16px; }
-  *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s; overflow: hidden;
+    }
+    h1,h2,h3,h4,h5,h6 { color: var(--text); }
+    p,li,td,th,span,label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
 
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--bg); color: var(--text);
-    overflow: hidden; height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    transition: background 0.3s, color 0.3s;
-  }
+    /* Skip navigation */
+    .skip-link {
+      position: absolute; top: -40px; left: 16px; padding: 8px 16px;
+      background: var(--accent); color: white; text-decoration: none;
+      border-radius: 8px; z-index: 10000; font-weight: 600;
+    }
+    .skip-link:focus { top: 16px; }
 
-  .deck { width: 100vw; height: 100vh; position: relative; overflow: hidden; }
-  .slide {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: clamp(1.5rem, 5vw, 5rem) clamp(1.5rem, 6vw, 8rem);
-    opacity: 0; transform: translateX(80px);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-  }
-  .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-  .slide.prev { opacity: 0; transform: translateX(-80px); }
+    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.1s; }
+    .animate.delay-2 { animation-delay: 0.2s; }
+    .animate.delay-3 { animation-delay: 0.3s; }
+    .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .animate.delay-6 { animation-delay: 0.6s; }
 
-  /* Slide types */
-  /* Floating particles for hero slides */
-  @keyframes float-particle {
-    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
-    25% { transform: translateY(-30px) translateX(10px); opacity: 0.6; }
-    50% { transform: translateY(-15px) translateX(-10px); opacity: 0.4; }
-    75% { transform: translateY(-40px) translateX(5px); opacity: 0.5; }
-  }
-  .slide--hero, .slide--closing, .slide--quote { position: relative; overflow: hidden; }
-  .slide--hero::after, .slide--closing::after, .slide--quote::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background-image:
-      radial-gradient(2px 2px at 10% 20%, var(--accent), transparent),
-      radial-gradient(2px 2px at 30% 70%, var(--accent2), transparent),
-      radial-gradient(2px 2px at 50% 30%, var(--accent), transparent),
-      radial-gradient(3px 3px at 70% 60%, var(--accent2), transparent),
-      radial-gradient(2px 2px at 85% 25%, var(--accent), transparent),
-      radial-gradient(2px 2px at 20% 85%, var(--accent2), transparent),
-      radial-gradient(3px 3px at 60% 90%, var(--accent), transparent),
-      radial-gradient(2px 2px at 90% 80%, var(--accent2), transparent);
-    animation: float-particle 8s ease-in-out infinite;
-    opacity: 0.5;
-  }
-  .slide--hero { justify-content: center; align-items: center; text-align: center;
-    background: radial-gradient(ellipse at 30% 50%, var(--glow), transparent 70%), radial-gradient(ellipse at 70% 80%, hsla(170,70%,55%,0.08), transparent 60%), var(--bg); }
-  .slide--hero .eyebrow { font-size: 0.9rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; font-weight: 600; }
-  .slide--hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .slide--hero .subtitle { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--text-secondary); max-width: 600px; }
+    /* Modern CSS scroll-driven animations (Chrome 115+) */
+    @supports (animation-timeline: view()) {
+      .scroll-reveal {
+        animation: fadeInUp 1ms linear;
+        animation-timeline: view();
+        animation-range: entry 0% entry 50%;
+      }
+    }
 
-  .slide--content { background: var(--bg); }
-  .slide--content h2 { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 2.5rem; line-height: 1.2; }
-  .highlight { color: var(--accent); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
 
-  .stat-row { display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; flex: 1; min-width: 180px; position: relative; overflow: hidden; }
-  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); border-radius: 3px 3px 0 0; }
-  .stat-card.green::before { background: var(--accent2); }
-  .stat-card.orange::before { background: var(--accent3); }
-  .stat-value { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1; margin-bottom: 0.5rem; }
-  .stat-card:nth-child(1) .stat-value { color: var(--accent); }
-  .stat-card.green .stat-value { color: var(--accent2); }
-  .stat-card.orange .stat-value { color: var(--accent3); }
-  .stat-label { font-size: 0.95rem; color: var(--text-secondary); }
+    /* ===== FOCUS INDICATORS ===== */
+    *:focus-visible { 
+      outline: 2px solid var(--accent); 
+      outline-offset: 2px; 
+    }
 
-  .timeline { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
-  .timeline-item { display: flex; align-items: flex-start; gap: 1.5rem; }
-  .timeline-dot { flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); margin-top: 6px; box-shadow: 0 0 12px var(--glow); position: relative; }
-  .timeline-item:not(:last-child) .timeline-dot::after { content: ''; position: absolute; top: 18px; left: 50%; transform: translateX(-50%); width: 2px; height: 32px; background: var(--border); }
-  .timeline-year { font-size: 0.8rem; color: var(--accent); font-weight: 700; letter-spacing: 0.05em; min-width: 50px; }
-  .timeline-text { font-size: 1.15rem; line-height: 1.5; color: var(--text-secondary); }
-  .timeline-text strong { color: var(--text); }
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: white !important; color: black !important; overflow: visible; }
+      .viz-menu, .slide-nav { display: none !important; }
+      .slide { transform: none !important; position: static !important; page-break-after: always; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
 
-  .slide--quote { justify-content: center; align-items: center; text-align: center; background: radial-gradient(ellipse at center, var(--glow), transparent 70%), var(--bg); }
-  .slide--quote blockquote { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.3; max-width: 800px; color: var(--text); }
-  .slide--quote blockquote .ko { display: block; font-size: 1.4rem; color: var(--accent); margin-top: 1.5rem; font-weight: 500; }
+    /* ===== MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); transition: all 0.2s;
+    }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown {
+      position: absolute; top: 52px; right: 0; min-width: 200px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: all 0.2s; backdrop-filter: blur(16px);
+    }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button {
+      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text); font-size: 14px;
+      font-family: inherit; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
+    }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-  .chart-container { background: var(--surface); border-radius: 16px; padding: 2rem; margin-top: 1.5rem; border: 1px solid var(--border); width: 100%; max-width: 900px; height: 350px; position: relative; }
+    /* ===== SLIDE DECK SPECIFIC ===== */
+    .slide-deck {
+      width: 100vw; height: 100vh; position: relative; overflow: hidden;
+      container-type: inline-size;
+    }
 
-  .points { list-style: none; display: flex; flex-direction: column; gap: 1.25rem; margin-top: 0.5rem; }
-  .points li { font-size: clamp(1rem, 2vw, 1.3rem); line-height: 1.5; color: var(--text-secondary); display: flex; align-items: baseline; gap: 1rem; }
-  .points li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
-  .points li strong { color: var(--text); }
+    .slides-container {
+      display: flex; height: 100%;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 1.5rem; }
-  .col-card { background: var(--surface); border-radius: 16px; padding: 2rem; border: 1px solid var(--border); }
-  .col-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); display: flex; align-items: center; gap: 8px; }
-  .col-card h3 svg { width: 20px; height: 20px; }
-  .col-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-  .col-card ul li { font-size: 1rem; color: var(--text-secondary); line-height: 1.5; }
-  .col-card ul li::before { content: '•'; color: var(--accent); margin-right: 0.75rem; font-weight: 700; }
+    .slide {
+      min-width: 100vw; height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; position: relative; padding: 2rem;
+      text-align: center;
+    }
 
-  .slide--closing { justify-content: center; align-items: center; text-align: center; background: radial-gradient(ellipse at 50% 50%, var(--glow), transparent 60%), var(--bg); }
-  .slide--closing h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .slide--closing .links { display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
-  .slide--closing .link-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.6rem 1.5rem; font-size: 0.9rem; color: var(--text-secondary); }
-  .slide--closing .link-pill strong { color: var(--accent); }
+    /* Responsive slide content with container queries */
+    @container (width < 768px) {
+      .slide {
+        padding: 1rem;
+      }
+      .slide h1 {
+        font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+      }
+      .slide h2 {
+        font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
+      }
+      .slide p {
+        font-size: clamp(0.875rem, 3vw, 1rem) !important;
+      }
+      .slide .stat-number {
+        font-size: clamp(2rem, 8vw, 3rem) !important;
+      }
+    }
 
-  /* Nav */
-  .nav { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 1.5rem; background: hsla(var(--hue),15%,10%,0.85); backdrop-filter: blur(16px); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem; z-index: 100; }
-  .nav button { background: none; border: none; color: var(--text-secondary); font-size: 1.1rem; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 6px; transition: all 0.2s; display: flex; align-items: center; }
-  .nav button:hover { color: var(--text); background: hsla(var(--hue),20%,25%,0.5); }
-  .nav button svg { width: 18px; height: 18px; }
+    @container (width < 480px) {
+      .slide {
+        padding: 0.75rem;
+      }
+      .two-column {
+        flex-direction: column !important;
+        gap: 1rem !important;
+      }
+    }
 
-  .progress { position: fixed; top: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3)); transition: width 0.6s ease; z-index: 100; box-shadow: 0 0 12px var(--accent), 0 0 4px var(--accent2); }
+    /* Slide Types */
+    .slide.title-slide {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+      color: white;
+    }
 
-  /* Floating background orbs for title slides */
-  .slide--hero::before { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(100px); opacity: 0.12; background: var(--accent); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: floatOrb 8s ease-in-out infinite; pointer-events: none; z-index: 0; }
-  @keyframes floatOrb { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -20px) scale(1.1); } }
+    .slide.title-slide::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.1); z-index: 1;
+    }
 
-  /* Element animations */
-  .slide.active .stat-card, .slide.active .timeline-item, .slide.active .points li, .slide.active .col-card { animation: fadeUp 0.5s ease both; }
-  .slide.active .stat-card:nth-child(1) { animation-delay: 0.1s; }
-  .slide.active .stat-card:nth-child(2) { animation-delay: 0.2s; }
-  .slide.active .stat-card:nth-child(3) { animation-delay: 0.3s; }
-  .slide.active .stat-card:nth-child(4) { animation-delay: 0.4s; }
-  .slide.active .timeline-item:nth-child(1) { animation-delay: 0.05s; }
-  .slide.active .timeline-item:nth-child(2) { animation-delay: 0.15s; }
-  .slide.active .timeline-item:nth-child(3) { animation-delay: 0.25s; }
-  .slide.active .timeline-item:nth-child(4) { animation-delay: 0.35s; }
-  .slide.active .timeline-item:nth-child(5) { animation-delay: 0.45s; }
-  .slide.active .timeline-item:nth-child(6) { animation-delay: 0.55s; }
-  .slide.active .points li:nth-child(1) { animation-delay: 0.1s; }
-  .slide.active .points li:nth-child(2) { animation-delay: 0.2s; }
-  .slide.active .points li:nth-child(3) { animation-delay: 0.3s; }
-  .slide.active .points li:nth-child(4) { animation-delay: 0.4s; }
-  .slide.active .col-card:nth-child(1) { animation-delay: 0.1s; }
-  .slide.active .col-card:nth-child(2) { animation-delay: 0.25s; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .slide.title-slide .content {
+      position: relative; z-index: 2;
+    }
 
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    .slide.section-slide {
+      background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
+      color: white;
+    }
 
-  /* Menu */
-  .viz-menu { position: fixed; top: 1rem; right: 1rem; z-index: 9999; }
-  .viz-menu-toggle { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: hsla(var(--hue),15%,10%,0.7); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.2s; }
-  .viz-menu-toggle:hover { transform: scale(1.05); }
-  .viz-menu-dropdown { position: absolute; top: calc(100% + 8px); right: 0; min-width: 200px; background: hsla(var(--hue),15%,10%,0.85); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 12px; padding: 6px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s; box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-  .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-  .viz-menu-dropdown button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: none; background: transparent; color: var(--text); font-size: 0.875rem; cursor: pointer; border-radius: 8px; transition: background 0.15s; text-align: left; font-family: inherit; }
-  .viz-menu-dropdown button:hover { background: rgba(255,255,255,0.1); }
-  .viz-menu-dropdown svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .slide.content-slide {
+      background: var(--bg);
+    }
 
-  @media print {
-    .viz-menu, .nav, .progress { display: none !important; }
-    body { background: white !important; overflow: visible; height: auto; }
-    .slide { position: relative !important; opacity: 1 !important; transform: none !important; page-break-after: always; height: 100vh; display: flex !important; pointer-events: auto !important; }
-    .slide.prev { display: flex !important; opacity: 1 !important; transform: none !important; }
-    * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-  }
+    .slide h1 {
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 800; margin-bottom: 1.5rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
 
-  @media (max-width: 768px) {
-    .slide { padding: 1.5rem 1rem; }
-    .slide--hero h1 { font-size: 1.8rem; }
-    .slide--content h2 { font-size: 1.5rem; }
-    .slide--quote blockquote { font-size: 1.4rem; }
-    .stat-row { flex-direction: column; }
-    .stat-card { padding: 1.25rem; }
-    .two-col { grid-template-columns: 1fr; gap: 1.5rem; }
-    .chart-container { height: 250px; padding: 1rem; }
-    .nav { bottom: 1rem; padding: 0.4rem 1rem; }
-  }
-</style>
+    .slide h2 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700; margin-bottom: 1rem;
+    }
+
+    .slide p {
+      font-size: clamp(1.125rem, 3vw, 1.5rem);
+      opacity: 0.9; max-width: 800px; margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    .slide .subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      opacity: 0.8; font-weight: 300;
+    }
+
+    /* Two column layout */
+    .two-column {
+      display: flex; align-items: center; justify-content: center;
+      gap: 4rem; max-width: 1200px; width: 100%;
+    }
+
+    .two-column > * {
+      flex: 1;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem; max-width: 800px; width: 100%;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800; margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; display: block;
+    }
+
+    .stat-label {
+      font-size: clamp(0.875rem, 2vw, 1rem);
+      color: var(--text-secondary); text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Features list */
+    .features-list {
+      list-style: none; padding: 0; text-align: left;
+      max-width: 600px;
+    }
+
+    .features-list li {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+    }
+
+    .features-list li:last-child {
+      border-bottom: none;
+    }
+
+    .check-icon {
+      width: 24px; height: 24px; flex-shrink: 0;
+      background: var(--positive); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+    }
+
+    /* Chart container */
+    .chart-container {
+      max-width: 600px; width: 100%;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 1rem; padding: 2rem;
+    }
+
+    .chart-wrapper {
+      position: relative; height: 300px;
+    }
+
+    /* Navigation */
+    .slide-nav {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 2rem; padding: 0.75rem 1.5rem;
+      backdrop-filter: blur(12px); z-index: 1000;
+      display: flex; align-items: center; gap: 1rem;
+    }
+
+    .nav-button {
+      width: 40px; height: 40px; border: none; border-radius: 50%;
+      background: transparent; color: var(--text);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .nav-button:hover {
+      background: var(--surface-hover);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+
+    .slide-counter {
+      color: var(--text-secondary); font-size: 0.875rem;
+      font-weight: 500; min-width: 60px; text-align: center;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 4px; background: var(--border); z-index: 1000;
+    }
+
+    .progress-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0;
+    }
+
+    /* Touch gestures */
+    .slides-container {
+      touch-action: pan-y;
+    }
+
+    /* Responsive improvements */
+    @container (width < 600px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      .chart-container {
+        padding: 1rem;
+      }
+      .chart-wrapper {
+        height: 250px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <a href="#deck" class="skip-link">Skip to slides</a>
+  <main id="main-content">
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <div class="viz-menu">
-    <button class="viz-menu-toggle" onclick="document.getElementById('vizMenuDropdown').classList.toggle('open')" aria-label="Open menu">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
-      <button onclick="cycleTheme()" role="menuitem">
-        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-        <span id="themeLabel">Dark</span>
-      </button>
-      <button onclick="downloadImage()" role="menuitem">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        <span>Download PNG</span>
-      </button>
-      <button onclick="window.print()" role="menuitem">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-        <span>Print / PDF</span>
-      </button>
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
-  </div>
 
-  <div class="progress" id="progress"></div>
-
-  <main>
-  <div class="deck" id="deck" role="region" aria-label="Slide deck" aria-roledescription="carousel">
-
-    <section class="slide slide--hero active" aria-label="Slide 1: Title">
-      <div class="eyebrow">커리어해커 알렉스</div>
-      <h1>From 180+ Rejections<br>to Staff Engineer at Meta</h1>
-      <div class="subtitle">한국에서 혼자 미국으로, 게임중독 소년에서 실리콘밸리 8년차 엔지니어까지</div>
-    </section>
-
-    <section class="slide slide--content" aria-label="Slide 2: By the Numbers">
-      <h2>By the <span class="highlight">Numbers</span></h2>
-      <div class="stat-row">
-        <div class="stat-card"><div class="stat-value">186K</div><div class="stat-label">YouTube Subscribers</div></div>
-        <div class="stat-card green"><div class="stat-value">8 yrs</div><div class="stat-label">Silicon Valley Experience</div></div>
-        <div class="stat-card orange"><div class="stat-value">180+</div><div class="stat-label">Job Rejections Before Meta</div></div>
-        <div class="stat-card"><div class="stat-value">3.93</div><div class="stat-label">GPA at Johns Hopkins</div></div>
+    <!-- MENU -->
+    <div class="viz-menu">
+      <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+        </svg>
+      </button>
+      <div class="viz-menu-dropdown" id="vizMenuDropdown">
+        <button onclick="cycleTheme()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><path d="m12 1v6m0 6v6m11-7h-6m-6 0H1"/>
+          </svg>
+          <span id="themeLabel">Dark</span>
+        </button>
+        <button onclick="downloadImage()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/>
+          </svg>
+          <span>Download PNG</span>
+        </button>
+        <button onclick="window.print()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          </svg>
+          <span>Print / PDF</span>
+        </button>
       </div>
-    </section>
+    </div>
 
-    <section class="slide slide--content" aria-label="Slide 3: The Journey">
-      <h2>The <span class="highlight">Journey</span></h2>
-      <div class="timeline">
-        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">15세</div><div class="timeline-text"><strong>혼자 미국으로</strong> — 게임중독이었던 소년이 한국을 떠나 미국에 홀로 도착</div></div>
-        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">JHU</div><div class="timeline-text"><strong>Johns Hopkins University</strong> — CS 전공, GPA 3.93으로 졸업</div></div>
-        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">180+</div><div class="timeline-text"><strong>끝없는 거절</strong> — 180번 넘게 떨어지고도 포기하지 않음</div></div>
-        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">Meta</div><div class="timeline-text"><strong>Instagram Ads 합류</strong> — 팀이 10명이었을 때부터 300명+까지 성장을 함께함</div></div>
-        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">2023</div><div class="timeline-text"><strong>Advantage+ Creative 런칭</strong> — Meta Q3 실적 발표에서 언급된 GenAI 제품의 Tech Lead</div></div>
-        <div class="timeline-item"><div class="timeline-dot" aria-hidden="true"></div><div class="timeline-year">Now</div><div class="timeline-text"><strong>Staff SWE + Creator</strong> — 186K 유튜브 구독자, AI 네이티브 워크플로우 구축</div></div>
-      </div>
-    </section>
+    <div class="slide-deck">
+      <div class="slides-container" id="slidesContainer">
+        
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide" data-notes="Welcome and introduction to our product launch presentation">
+          <div class="content">
+            <h1 class="animate">Next-Gen Analytics Platform</h1>
+            <p class="subtitle animate delay-1">Revolutionizing data insights for modern businesses</p>
+            <p class="animate delay-2" style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
+              Product Launch Presentation • 2026
+            </p>
+          </div>
+        </section>
 
-    <section class="slide slide--quote" aria-label="Slide 4: Quote">
-      <blockquote>"사람이 전부."<span class="ko">Trust, resilience, execution — not permission.</span></blockquote>
-    </section>
+        <!-- Slide 2: Problem -->
+        <section class="slide content-slide" data-notes="Current challenges in data analytics that our platform addresses">
+          <h2 class="animate">The Challenge</h2>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">
+            Businesses struggle with fragmented data, complex analytics tools, and delayed insights
+          </p>
+          <div class="stats-grid animate delay-2">
+            <div class="stat-item">
+              <span class="stat-number" data-count="73" data-suffix="%">73%</span>
+              <span class="stat-label">Feel overwhelmed by data</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="48">48</span>
+              <span class="stat-label">Hours to generate reports</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="65" data-suffix="%">65%</span>
+              <span class="stat-label">Make decisions without data</span>
+            </div>
+          </div>
+        </section>
 
-    <section class="slide slide--content" aria-label="Slide 5: YouTube Growth">
-      <h2>YouTube <span class="highlight">Growth</span></h2>
-      <div class="chart-container" role="img" aria-label="Line chart showing YouTube subscriber growth from 2K to 186K between 2022 and 2025">
-        <canvas id="growthChart"></canvas>
-      </div>
-    </section>
+        <!-- Slide 3: Solution -->
+        <section class="slide section-slide" data-notes="Our solution overview">
+          <div class="content">
+            <h2 class="animate">Our Solution</h2>
+            <p class="animate delay-1">
+              A unified platform that transforms complex data into actionable insights in real-time
+            </p>
+          </div>
+        </section>
 
-    <section class="slide slide--content" aria-label="Slide 6: Content Evolution">
-      <h2>Content <span class="highlight">Evolution</span></h2>
-      <ul class="points">
-        <li><strong>Phase 1: Career Advice</strong> — 실리콘밸리 취업, 이직, 면접 팁</li>
-        <li><strong>Phase 2: ChatGPT Era</strong> — AI 활용법, 프롬프트 엔지니어링</li>
-        <li><strong>Phase 3: Vibe Coding</strong> — Claude Code, 에이전트 코딩, 1인 팀의 시대</li>
-        <li><strong>Phase 4: AI Native</strong> — 멀티에이전트, 자동화 파이프라인, 감각의 시대</li>
-      </ul>
-    </section>
-
-    <section class="slide slide--content" aria-label="Slide 7: Core Philosophy">
-      <h2>Core <span class="highlight">Philosophy</span></h2>
-      <div class="two-col">
-        <div class="col-card">
-          <h3>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a8 8 0 00-4 14.93V20h8v-3.07A8 8 0 0012 2z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
-            Mindset
-          </h3>
-          <ul>
-            <li>Drop ego → embrace AI native</li>
-            <li>1-person teams > big teams</li>
-            <li>"감각" (intuition) is the new skill</li>
-            <li>Speed × quality × learning loops</li>
+        <!-- Slide 4: Key Features -->
+        <section class="slide content-slide" data-notes="Core features and benefits of our platform">
+          <h2 class="animate">Key Features</h2>
+          <ul class="features-list animate delay-1">
+            <li>
+              <span class="check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              </span>
+              Real-time data processing and visualization
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              </span>
+              AI-powered insights and recommendations
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              </span>
+              No-code dashboard builder
+            </li>
+            <li>
+              <span class="check-icon">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                  <polyline points="20,6 9,17 4,12"/>
+                </svg>
+              </span>
+              Seamless integration with 100+ data sources
+            </li>
           </ul>
-        </div>
-        <div class="col-card">
-          <h3>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
-            Mission
-          </h3>
-          <ul>
-            <li>기술로 선한영향력을 만들고 싶습니다</li>
-            <li>Build, ship, teach, repeat</li>
-            <li>Agents as leverage for individuals</li>
-            <li>Help people feel more capable</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <section class="slide slide--closing" aria-label="Slide 8: Closing">
-      <h2>기술로 선한영향력을</h2>
-      <p style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 0.5rem;">Create positive impact through technology.</p>
-      <div class="links">
-        <div class="link-pill"><strong>YouTube</strong> @CareerHackerAlex</div>
-        <div class="link-pill"><strong>Threads</strong> @careerhackeralex</div>
-        <div class="link-pill"><strong>Instagram</strong> @careerhackeralex</div>
-      </div>
-    </section>
+        <!-- Slide 5: Market Opportunity -->
+        <section class="slide content-slide" data-notes="Market size and opportunity analysis">
+          <div class="two-column">
+            <div>
+              <h2 class="animate" style="text-align: left;">Market Opportunity</h2>
+              <p class="animate delay-1" style="text-align: left; margin-bottom: 2rem;">
+                The global business analytics market is experiencing unprecedented growth
+              </p>
+              <div class="stats-grid animate delay-2" style="grid-template-columns: 1fr;">
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="420" data-prefix="$" data-suffix="B">$420B</span>
+                  <span class="stat-label">Market Size by 2030</span>
+                </div>
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="15.3" data-suffix="%">15.3%</span>
+                  <span class="stat-label">Annual Growth Rate</span>
+                </div>
+              </div>
+            </div>
+            <div role="img" aria-label="Market growth chart showing steady increase in analytics market size from 2020 to 2030">
+              <div class="chart-container animate delay-3">
+                <div class="chart-wrapper">
+                  <canvas id="marketChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  </div>
+        <!-- Slide 6: Traction -->
+        <section class="slide content-slide" data-notes="Current traction and key metrics">
+          <h2 class="animate">Our Traction</h2>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">
+            Rapid growth across all key metrics in our first year
+          </p>
+          <div class="stats-grid animate delay-2">
+            <div class="stat-item">
+              <span class="stat-number" data-count="150" data-suffix="+">150+</span>
+              <span class="stat-label">Enterprise Customers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="2.4" data-prefix="$" data-suffix="M">$2.4M</span>
+              <span class="stat-label">Annual Recurring Revenue</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="98" data-suffix="%">98%</span>
+              <span class="stat-label">Customer Satisfaction</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" data-count="45" data-suffix="%">45%</span>
+              <span class="stat-label">Month-over-month Growth</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 7: What's Next -->
+        <section class="slide section-slide" data-notes="Roadmap and future plans">
+          <div class="content">
+            <h2 class="animate">What's Next</h2>
+            <p class="animate delay-1">
+              Expanding globally while continuing to innovate and deliver exceptional value
+            </p>
+          </div>
+        </section>
+
+        <!-- Slide 8: Thank You -->
+        <section class="slide title-slide" data-notes="Closing slide with contact information">
+          <div class="content">
+            <h2 class="animate">Thank You</h2>
+            <p class="animate delay-1" style="margin: 2rem 0;">
+              Ready to transform your data into insights?
+            </p>
+            <p class="animate delay-2" style="font-size: 1rem; opacity: 0.8;">
+              Contact us: hello@analyticsplatform.com
+            </p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="slide-nav" aria-label="Slide navigation">
+      <button class="nav-button" id="prevBtn" onclick="prevSlide()" aria-label="Previous slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="15,18 9,12 15,6"/>
+        </svg>
+      </button>
+      <span class="slide-counter" id="slideCounter" aria-live="polite">1 / 8</span>
+      <button class="nav-button" id="nextBtn" onclick="nextSlide()" aria-label="Next slide">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"/>
+        </svg>
+      </button>
+    </nav>
   </main>
 
-  <nav class="nav" aria-label="Slide navigation">
-    <button onclick="navigate(-1)" aria-label="Previous slide">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <span id="counter" aria-live="polite">1 / 8</span>
-    <button onclick="navigate(1)" aria-label="Next slide">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  </nav>
-
   <script>
-    var slides = document.querySelectorAll('.slide');
-    var counter = document.getElementById('counter');
-    var progress = document.getElementById('progress');
-    var current = 0;
-    var chartInstance = null;
+    // === Slide Variables ===
+    var currentSlide = 0;
+    var totalSlides = 8;
+    var marketChart;
 
-    function showSlide(i) {
-      slides.forEach(function(s, idx) {
-        s.classList.remove('active', 'prev');
-        if (idx === i) s.classList.add('active');
-        else if (idx < i) s.classList.add('prev');
-      });
-      counter.textContent = (i + 1) + ' / ' + slides.length;
-      progress.style.width = ((i + 1) / slides.length * 100) + '%';
-      if (i === 4 && !chartInstance) initChart();
-    }
-
-    function navigate(dir) {
-      current = Math.max(0, Math.min(slides.length - 1, current + dir));
-      showSlide(current);
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    // === Menu ===
+    function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
+    document.addEventListener('click', function(e) { 
+      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); 
+    });
+    document.addEventListener('keydown', function(e) { 
+      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); 
     });
 
-    document.getElementById('deck').addEventListener('click', function(e) {
-      if (e.target.closest('.nav') || e.target.closest('.viz-menu')) return;
-      navigate(e.clientX / window.innerWidth < 0.33 ? -1 : 1);
-    });
-
-    var touchStartX = 0;
-    document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
-    document.addEventListener('touchend', function(e) {
-      var diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
-    });
-
-    showSlide(0);
-
-    // Menu
-    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
-
-    // Theme
+    // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
-    var moonPath = '<path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>';
-    var sunPath = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-    function applyTheme(t) {
-      document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').innerHTML = t === 'dark' ? moonPath : sunPath;
-      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t); currentTheme = t;
-      if (chartInstance) { chartInstance.destroy(); chartInstance = null; initChart(); }
+    function applyTheme(theme) {
+      document.documentElement.className = 'theme-' + theme;
+      document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', theme);
+      currentTheme = theme;
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
-    if (!localStorage.getItem('viz-theme')) {
-      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
-    }
     applyTheme(currentTheme);
 
-    // Download
-    async function downloadImage() {
-      var target = document.querySelector('.slide.active') || document.body;
-      var menu = document.querySelector('.viz-menu');
-      var nav = document.querySelector('.nav');
-      var prog = document.querySelector('.progress');
-      [menu,nav,prog].forEach(function(el) { if (el) el.style.display = 'none'; });
-      try {
-        var url = await htmlToImage.toPng(target, { quality: 1, pixelRatio: 2, width: target.scrollWidth, height: target.scrollHeight });
-        var a = document.createElement('a'); a.download = document.title + '-slide-' + (current+1) + '.png'; a.href = url; a.click();
-      } catch(e) { console.error('Export failed:', e); }
-      [menu,nav,prog].forEach(function(el) { if (el) el.style.display = ''; });
+    // === Slide Navigation ===
+    function updateSlidePosition() {
+      var container = document.getElementById('slidesContainer');
+      container.style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
+      
+      // Update counter
+      document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+      
+      // Update progress
+      var progress = ((currentSlide + 1) / totalSlides) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+      
+      // Update button states
+      document.getElementById('prevBtn').disabled = currentSlide === 0;
+      document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+
+      // Trigger animations for current slide
+      triggerSlideAnimations();
     }
 
-    // Chart
-    function initChart() {
-      var s = getComputedStyle(document.documentElement);
-      var accentColor = s.getPropertyValue('--accent').trim();
-      var textSecondary = s.getPropertyValue('--text-secondary').trim();
-      var borderColor = s.getPropertyValue('--border').trim();
-      chartInstance = new Chart(document.getElementById('growthChart'), {
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlidePosition();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlidePosition();
+      }
+    }
+
+    function goToSlide(index) {
+      currentSlide = Math.max(0, Math.min(index, totalSlides - 1));
+      updateSlidePosition();
+    }
+
+    function triggerSlideAnimations() {
+      // Reset and trigger number counters for current slide
+      var slides = document.querySelectorAll('.slide');
+      var currentSlideEl = slides[currentSlide];
+      
+      // Reset counter animations
+      currentSlideEl.querySelectorAll('[data-count]').forEach(function(el) {
+        delete el.dataset.counted;
+      });
+      
+      // Trigger counters after a short delay
+      setTimeout(function() {
+        animateCounters(currentSlideEl);
+      }, 300);
+    }
+
+    // === Keyboard Navigation ===
+    document.addEventListener('keydown', function(e) {
+      if (document.getElementById('vizMenuDropdown').classList.contains('open')) return;
+      
+      switch(e.key) {
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'ArrowRight':
+        case 'ArrowDown':
+        case ' ':
+        case 'Enter':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides - 1);
+          break;
+      }
+    });
+
+    // === Touch Gestures ===
+    var touchStartX = 0;
+    var touchEndX = 0;
+
+    document.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      var swipeThreshold = 50;
+      var diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          nextSlide(); // Swipe left
+        } else {
+          prevSlide(); // Swipe right
+        }
+      }
+    }
+
+    // === Click Navigation ===
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('.viz-menu') || e.target.closest('.slide-nav') || 
+          e.target.closest('button') || e.target.closest('canvas')) {
+        return;
+      }
+      
+      var clickX = e.clientX;
+      var windowWidth = window.innerWidth;
+      
+      if (clickX < windowWidth / 3) {
+        prevSlide(); // Left third
+      } else {
+        nextSlide(); // Right two-thirds
+      }
+    });
+
+    // === Number Counter ===
+    function animateCounters(container) {
+      container = container || document;
+      container.querySelectorAll('[data-count]').forEach(function(el) {
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        
+        var target = parseFloat(el.dataset.count);
+        var prefix = el.dataset.prefix || '';
+        var suffix = el.dataset.suffix || '';
+        var start = performance.now();
+        var duration = 1200;
+        
+        function tick(now) {
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          var current = target * eased;
+          
+          // Handle decimal formatting
+          if (target % 1 !== 0) {
+            current = current.toFixed(1);
+          } else {
+            current = Math.round(current);
+          }
+          
+          el.textContent = prefix + current.toLocaleString() + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        tick(start);
+      });
+    }
+
+    // === Chart Helper ===
+    function getChartColors() {
+      var root = getComputedStyle(document.documentElement);
+      return {
+        text: root.getPropertyValue('--text').trim(),
+        textSecondary: root.getPropertyValue('--text-secondary').trim(),
+        border: root.getPropertyValue('--border').trim(),
+        surface: root.getPropertyValue('--surface').trim(),
+        accent: root.getPropertyValue('--accent').trim(),
+        accentSecondary: root.getPropertyValue('--accent-secondary').trim()
+      };
+    }
+
+    function resetCanvas(id) {
+      var oldCanvas = document.getElementById(id);
+      if (!oldCanvas) return null;
+      var parent = oldCanvas.parentNode;
+      var newCanvas = document.createElement('canvas');
+      newCanvas.id = id;
+      parent.replaceChild(newCanvas, oldCanvas);
+      return newCanvas;
+    }
+
+    // === Build Chart ===
+    function buildChart() {
+      var colors = getChartColors();
+      
+      Chart.defaults.color = colors.textSecondary;
+      Chart.defaults.borderColor = colors.border;
+
+      // Destroy existing chart
+      try { if (marketChart) marketChart.destroy(); } catch(e) {}
+
+      var canvas = resetCanvas('marketChart');
+      if (!canvas) return;
+
+      marketChart = new Chart(canvas, {
         type: 'line',
         data: {
-          labels: ['2022 Q1','Q2','Q3','Q4','2023 Q1','Q2','Q3','Q4','2024 Q1','Q2','Q3','Q4','2025 Q1','Q2'],
-          datasets: [{ label: 'Subscribers (K)', data: [2,5,12,25,40,55,72,90,105,120,138,155,170,186], borderColor: accentColor, backgroundColor: accentColor.replace(')',', 0.1)').replace('hsl(','hsla('), fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: accentColor, borderWidth: 2.5 }]
+          labels: ['2020', '2022', '2024', '2026', '2028', '2030'],
+          datasets: [{
+            label: 'Market Size ($B)',
+            data: [195, 245, 305, 340, 380, 420],
+            borderColor: colors.accent,
+            backgroundColor: colors.accent + '20',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 0,
+            pointHoverRadius: 8,
+            pointBackgroundColor: colors.accent,
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2
+          }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false, animation: false,
-          plugins: { legend: { display: false }, tooltip: { cornerRadius: 8, padding: 12, callbacks: { label: function(ctx) { return ctx.parsed.y + 'K subscribers'; } } } },
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              enabled: true,
+              mode: 'index',
+              intersect: false,
+              backgroundColor: colors.surface,
+              titleColor: colors.text,
+              bodyColor: colors.text,
+              borderColor: colors.border,
+              borderWidth: 1,
+              callbacks: {
+                label: function(context) {
+                  return 'Market Size: $' + context.parsed.y + 'B';
+                }
+              }
+            },
+            legend: { display: false }
+          },
           scales: {
-            x: { grid: { color: borderColor }, ticks: { color: textSecondary, font: { size: 11 } } },
-            y: { beginAtZero: true, grid: { color: borderColor }, ticks: { color: textSecondary, font: { size: 11 }, callback: function(v) { return v+'K'; } } }
+            y: {
+              beginAtZero: false,
+              grid: { 
+                color: colors.border,
+                drawBorder: false
+              },
+              ticks: { 
+                color: colors.textSecondary,
+                callback: function(value) {
+                  return '$' + value + 'B';
+                }
+              },
+              border: { display: false }
+            },
+            x: {
+              grid: { 
+                color: colors.border,
+                drawBorder: false
+              },
+              ticks: { color: colors.textSecondary },
+              border: { display: false }
+            }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
           }
         }
       });
+    }
+
+    // Theme change handler
+    function onThemeChange() {
+      setTimeout(buildChart, 100);
+    }
+
+    // === Initialize ===
+    updateSlidePosition();
+    setTimeout(buildChart, 1000);
+
+    // === Download PNG ===
+    async function downloadImage() {
+      var menu = document.querySelector('.viz-menu');
+      var nav = document.querySelector('.slide-nav');
+      var progress = document.querySelector('.progress-bar');
+      
+      menu.style.display = 'none';
+      nav.style.display = 'none';
+      progress.style.display = 'none';
+      
+      try {
+        // Capture current slide only
+        var slides = document.querySelectorAll('.slide');
+        var currentSlideEl = slides[currentSlide];
+        
+        var url = await htmlToImage.toPng(currentSlideEl, { 
+          quality: 1, 
+          pixelRatio: 2,
+          width: 1920,
+          height: 1080
+        });
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'slide-' + (currentSlide + 1) + '-presentation.png';
+        link.click();
+      } catch(error) { 
+        console.error('Download failed:', error); 
+      }
+      
+      menu.style.display = '';
+      nav.style.display = '';
+      progress.style.display = '';
     }
   </script>
 </body>

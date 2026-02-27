@@ -63,34 +63,104 @@ Apply these defaults. They are opinionated and tested — override only when use
 - **Max line width:** 65–75 characters for readability
 - Use `clamp()` for fluid responsive sizing: `clamp(1rem, 2.5vw, 1.25rem)`
 
-### Color System (Dark-First)
+### Modern CSS Techniques (Chrome 105+)
 
-Default dark palette — all derived from CSS custom properties:
+Use these cutting-edge CSS features where supported for better UX:
+
+**Container Queries** — Size elements based on their container, not viewport:
 ```css
-:root, .theme-dark {
-  --bg: #030712;           /* gray-950 */
-  --surface: #111827;       /* gray-900 */
-  --surface-hover: #1f2937; /* gray-800 */
-  --border: rgba(255,255,255,0.1);
-  --text: #f9fafb;          /* gray-50 */
-  --text-secondary: #9ca3af; /* gray-400 */
-  --accent: #3b82f6;        /* blue-500 */
-  --accent-secondary: #8b5cf6; /* violet-500 */
-  --positive: #10b981;      /* emerald-500 */
-  --negative: #f43f5e;      /* rose-500 */
-  --warning: #f59e0b;       /* amber-500 */
+.card-container {
+  container-type: inline-size;
+  container-name: card;
+}
+@container card (width > 400px) {
+  .card-title { font-size: clamp(1.25rem, 4cqi, 2rem); }
 }
 ```
 
-Light theme override:
+**:has() Parent Selector** — Style elements based on their children:
 ```css
+/* Style card if it contains an image */
+.card:has(img) { padding-block: 2rem; }
+/* Reduce spacing on headings followed by subheadings */
+h1:has(+ h2) { margin-bottom: 0.25rem; }
+```
+
+**color-mix() Function** — Dynamic color generation:
+```css
+background: color-mix(in oklch, var(--accent), transparent 20%);
+border-color: color-mix(in srgb, var(--text), var(--bg) 85%);
+```
+
+**light-dark() Function** (Chrome 123+) — Single-property theme switching:
+```css
+:root { color-scheme: light dark; }
+background: light-dark(white, #1a1a1a);
+color: light-dark(#333, #fff);
+```
+
+**@starting-style** (Chrome 117+) — Entry animations for new elements:
+```css
+.modal {
+  opacity: 1; transform: scale(1);
+  transition: opacity 0.3s, transform 0.3s;
+  @starting-style {
+    opacity: 0; transform: scale(0.8);
+  }
+}
+```
+
+### Color System (Dark-First with CSS Detection)
+
+Default dark palette — all derived from CSS custom properties with CSS `prefers-color-scheme` detection to prevent flash:
+```css
+/* CSS prefers-color-scheme for flash-free theme switching */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #030712;           /* gray-950 */
+    --surface: #111827;       /* gray-900 */
+    --surface-hover: #1f2937; /* gray-800 */
+    --border: rgba(255,255,255,0.1);
+    --text: #f9fafb;          /* gray-50 */
+    --text-secondary: #9ca3af; /* gray-400 */
+    --accent: #3b82f6;        /* blue-500 */
+    --accent-secondary: #8b5cf6; /* violet-500 */
+    --positive: #10b981;      /* emerald-500 */
+    --negative: #f43f5e;      /* rose-500 */
+    --warning: #f59e0b;       /* amber-500 */
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-hover: #f1f5f9;
+    --border: rgba(0,0,0,0.08);
+    --text: #0f172a;
+    --text-secondary: #64748b;
+    --accent: #2563eb;
+    --accent-secondary: #7c3aed;
+    --positive: #059669;
+    --negative: #e11d48;
+    --warning: #d97706;
+  }
+}
+
+/* Manual theme override classes (JS controlled) */
+.theme-dark {
+  --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
+  --border: rgba(255,255,255,0.08);
+  --text: #f9fafb; --text-secondary: #9ca3af;
+  --accent: #3b82f6; --accent-secondary: #8b5cf6;
+  --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+}
 .theme-light {
-  --bg: #f9fafb;
-  --surface: #ffffff;
-  --surface-hover: #f3f4f6;
-  --border: rgba(0,0,0,0.1);
-  --text: #111827;
-  --text-secondary: #6b7280;
+  --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+  --border: rgba(0,0,0,0.08);
+  --text: #0f172a; --text-secondary: #64748b;
+  --accent: #2563eb; --accent-secondary: #7c3aed;
+  --positive: #059669; --negative: #e11d48; --warning: #d97706;
 }
 ```
 
@@ -118,7 +188,11 @@ Every visualization MUST meet these baseline accessibility requirements:
 - **Interactive elements:** All buttons, links, and controls must have `aria-label` if their text content is not descriptive (e.g., icon-only buttons).
 - **Focus indicators:** Add visible `:focus-visible` styles on all interactive elements: `outline: 2px solid var(--accent); outline-offset: 2px;`
 - **Color-only indicators:** Status dots, colored badges, etc. MUST have a text alternative. E.g., a green status dot should also show "Healthy" text or `aria-label="Status: Healthy"`.
-- **Charts and diagrams:** Wrap in a container with `role="img" aria-label="Description of what the chart shows"`.
+- **Charts and diagrams (MANDATORY):** 
+  - Wrap chart canvas in container with `role="img" aria-label="Description of what the chart shows"`
+  - **ALL charts MUST have hover tooltips enabled** — never disable Chart.js tooltips
+  - Include data table alternative or visually-hidden summary for screen readers
+  - Use high contrast colors with sufficient color difference between data series
 - **Screen reader descriptions:** Add `aria-description` or visually-hidden text describing key takeaways for complex visualizations.
 - **Slide decks:** Use `aria-live="polite"` on the slide counter, and `aria-label` on navigation buttons.
 
@@ -136,11 +210,25 @@ Common icons to use:
 - Check/X for pros/cons
 - Globe, Smartphone, Monitor for device types
 
-### Animations (CSS-First)
+### Animations (CSS-First with Modern Features)
 
 **CSS animations are the primary system.** They're reliable, performant, and never break from JS scoping issues.
 
 See [references/animations.md](references/animations.md) for complete patterns.
+
+**Modern CSS Animation Features (Progressive Enhancement):**
+
+**Scroll-driven animations** (Chrome 115+) — Replace JS scroll listeners:
+```css
+.scroll-reveal {
+  animation: fadeInUp 1ms linear;
+  animation-timeline: view(); /* Animates based on viewport visibility */
+}
+.progress-bar {
+  animation: grow 1ms linear;  
+  animation-timeline: scroll(root inline); /* Animates based on page scroll */
+}
+```
 
 **Three animation techniques (all baked into the skeleton):**
 
@@ -209,6 +297,12 @@ Choose the right format. See [references/types.md](references/types.md) for deta
 Slides are the most common request. Get these right:
 
 - **16:9 aspect ratio** — `100vw × 100vh`, content centered
+- **Responsive breakpoints** — Use `clamp()` and container queries for mobile-friendly slides:
+  ```css
+  .slide-container { container-type: inline-size; }
+  .slide-title { font-size: clamp(2rem, 8vw, 4rem); }
+  @container (width < 768px) { .slide-content { padding: 1rem; } }
+  ```
 - **One idea per slide** — if you need a second thought, make a second slide
 - **Max 40 words per slide** — more than that, split or use visuals
 - **Headlines max 6 words** — short, punchy, memorable
@@ -300,7 +394,27 @@ Use these when they add value. See [references/css-techniques.md](references/css
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     /* ===== THEMES ===== */
-    :root, .theme-dark {
+    /* CSS prefers-color-scheme for flash-free theme detection */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
+        --border: rgba(255,255,255,0.08);
+        --text: #f9fafb; --text-secondary: #9ca3af;
+        --accent: #3b82f6; --accent-secondary: #8b5cf6;
+        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+        --border: rgba(0,0,0,0.08);
+        --text: #0f172a; --text-secondary: #64748b;
+        --accent: #2563eb; --accent-secondary: #7c3aed;
+        --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      }
+    }
+    /* Manual theme override classes (JS controlled) */
+    .theme-dark {
       --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
       --text: #f9fafb; --text-secondary: #9ca3af;
@@ -542,6 +656,24 @@ Elements must be large enough to read and feel substantial:
 Charts are the second most common failure. Follow these rules:
 
 - **Always wrap in a container div** with explicit `width` and `height` or `aspect-ratio`
+- **MANDATORY: Add accessibility container** with `role="img"` and descriptive `aria-label`:
+  ```html
+  <div role="img" aria-label="Bar chart showing Q4 revenue increased 23% to $2.4M across 4 product lines">
+    <div class="chart-container"><canvas id="myChart"></canvas></div>
+  </div>
+  ```
+- **MANDATORY: Hover tooltips enabled** — never disable Chart.js tooltips:
+  ```javascript
+  options: {
+    plugins: {
+      tooltip: {
+        enabled: true, // NEVER set to false
+        mode: 'index',
+        intersect: false
+      }
+    }
+  }
+  ```
 - **Minimum chart height:** 300px on desktop, 250px on mobile
 - **Set `maintainAspectRatio: false`** and control size via CSS container
 - **Use theme-aware colors:** read CSS vars at render time, re-render on theme change
@@ -549,6 +681,7 @@ Charts are the second most common failure. Follow these rules:
 - **Grid line colors:** use `var(--border)` value
 - **Legend position:** 'top' for horizontal charts, 'right' for vertical with space
 - **Responsive:** `responsive: true` is default, but container must have explicit dimensions
+- **High contrast colors:** Ensure sufficient color difference between data series for accessibility
 
 ```javascript
 // Theme-aware Chart.js setup (include in every chart visualization)
@@ -585,7 +718,8 @@ function resetCanvas(id) {
 3. **Structure** — outline content/sections BEFORE filling in the skeleton
 4. **Build** — add content, charts, styles. Keep all colors as CSS vars.
 5. **Verify checklist:**
-   - [ ] Both `.theme-dark` and `.theme-light` defined?
+   - [ ] CSS `@media (prefers-color-scheme)` for flash-free theme detection?
+   - [ ] Both `.theme-dark` and `.theme-light` manual override classes defined?
    - [ ] All text uses `var(--text)` or `var(--text-secondary)`?
    - [ ] `@media print` hides menu, shows all content?
    - [ ] `@media (prefers-reduced-motion: reduce)` present?
@@ -596,9 +730,13 @@ function resetCanvas(id) {
    - [ ] `.card:hover` has transform effect?
    - [ ] All top-level JS variables use `var` (not `let`/`const`)?
    - [ ] Charts use `var` declarations + `onThemeChange` hook?
+   - [ ] **MANDATORY:** All charts wrapped with `role="img" aria-label="..."`?
+   - [ ] **MANDATORY:** All charts have hover tooltips enabled (never disabled)?
+   - [ ] Animated number counters use `data-count` where stats exist?
    - [ ] Semantic HTML: `<main>`, `<section>`, `<header>`, `<article>`?
    - [ ] All charts have explicit container sizing (≥300px height)?
    - [ ] Hero/title text visible on both themes?
+   - [ ] Minimum sizing rules followed (cards 280px+, text 16px+)?
    - [ ] Zero console errors on load?
 
 The quality bar: **"good, period"** — not "good for AI-generated."
