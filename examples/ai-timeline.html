@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The History of AI</title>
+  <title>The Evolution of Artificial Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ===== THEME SYSTEM ===== */
     :root, .theme-dark {
       --bg: #030712;
       --surface: #111827;
@@ -48,33 +47,153 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* ===== TEXT COLORS ===== */
     h1, h2, h3, h4, h5, h6 { color: var(--text); }
     p, li, td, th, span, label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
-    /* ===== GLASS CARD ===== */
+    /* ===== HERO ===== */
+    .hero {
+      text-align: center;
+      padding: 80px 24px 48px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary), #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .hero-stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+    }
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline-section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      position: relative;
+    }
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent-secondary), var(--positive));
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      position: relative;
+      margin-bottom: 28px;
+    }
+    .timeline-item.left {
+      flex-direction: row;
+      padding-right: calc(50% + 32px);
+    }
+    .timeline-item.right {
+      flex-direction: row-reverse;
+      padding-left: calc(50% + 32px);
+    }
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 24px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      border: 3px solid var(--bg);
+      z-index: 2;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    /* ===== CARD ===== */
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px;
+      padding: 28px;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      min-width: 380px;
+      width: 100%;
+      opacity: 1; /* VISIBLE BY DEFAULT */
+      transition: box-shadow 0.2s;
+      cursor: default;
+    }
+    .card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .card-year {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+    .card-emoji {
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
     }
 
-    /* ===== ENTRANCE ANIMATIONS ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .timeline-line { left: 20px; }
+      .timeline-dot { left: 20px; }
+      .timeline-item.left,
+      .timeline-item.right {
+        flex-direction: row;
+        padding-right: 0;
+        padding-left: 52px;
+      }
+      .card { min-width: 0; }
     }
-    .animate-in {
-      opacity: 0;
-      animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
 
     /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
@@ -84,17 +203,19 @@
       }
     }
 
-    /* ===== PRINT STYLES ===== */
+    /* ===== PRINT ===== */
     @media print {
       body { background: white !important; color: black !important; }
       .viz-menu { display: none !important; }
-      .hero { background: #1e3a5f !important; }
-      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      .hero-title { -webkit-text-fill-color: #111 !important; }
+      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; background: #fff !important; }
+      .card-title { color: #111 !important; }
+      .card-desc { color: #444 !important; }
       .timeline-line { background: #ccc !important; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
-    /* ===== HAMBURGER MENU ===== */
+    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
       width: 44px; height: 44px; border-radius: 12px;
@@ -121,176 +242,12 @@
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== HERO ===== */
-    .hero {
-      min-height: 50vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    /* Footer */
+    .footer {
       text-align: center;
-      padding: 96px 24px 64px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(59,130,246,0.15) 0%, transparent 70%),
-                  radial-gradient(ellipse at 80% 20%, rgba(139,92,246,0.1) 0%, transparent 50%);
-    }
-    .hero-title {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary), #ec4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-      margin-bottom: 16px;
-    }
-    .hero-sub {
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      padding: 48px 24px;
       color: var(--text-secondary);
-      max-width: 500px;
-      position: relative;
-    }
-
-    /* ===== TIMELINE ===== */
-    .timeline-container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 64px 24px 96px;
-      position: relative;
-    }
-    .timeline-line {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      bottom: 0;
-      width: 3px;
-      background: linear-gradient(to bottom, var(--accent), var(--accent-secondary), var(--accent));
-      transform: translateX(-50%);
-      border-radius: 2px;
-    }
-    .timeline-item {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 48px;
-      position: relative;
-    }
-    .timeline-item:last-child { margin-bottom: 0; }
-
-    /* Alternating layout */
-    .timeline-item.left .timeline-card { margin-right: auto; }
-    .timeline-item.right .timeline-card { margin-left: auto; }
-    .timeline-item.left { padding-right: calc(50% + 32px); }
-    .timeline-item.right { padding-left: calc(50% + 32px); }
-
-    /* Dot on the line */
-    .timeline-dot {
-      position: absolute;
-      left: 50%;
-      top: 28px;
-      width: 16px;
-      height: 16px;
-      background: var(--accent);
-      border: 3px solid var(--bg);
-      border-radius: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-      box-shadow: 0 0 0 4px rgba(59,130,246,0.25);
-      transition: background 0.3s, border-color 0.3s;
-    }
-
-    /* Card */
-    .timeline-card {
-      width: 100%;
-      min-width: 320px;
-      padding: 28px 28px 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-      transition: transform 0.25s, box-shadow 0.25s, background 0.3s, border-color 0.3s;
-      /* scroll animation initial state */
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    .timeline-card.visible {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s, background 0.3s;
-    }
-    .timeline-item.left .timeline-card.visible { animation: slideFromLeft 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
-    .timeline-item.right .timeline-card.visible { animation: slideFromRight 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
-
-    @keyframes slideFromLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideFromRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .timeline-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-    .card-emoji {
-      font-size: 2rem;
-      line-height: 1;
-      flex-shrink: 0;
-    }
-    .card-year {
-      display: inline-block;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 999px;
-      letter-spacing: 0.05em;
-    }
-    .card-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .card-desc {
-      font-size: 1rem;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-
-    /* ===== MOBILE ===== */
-    @media (max-width: 700px) {
-      .timeline-line { left: 20px; }
-      .timeline-dot { left: 20px; top: 20px; }
-      .timeline-item.left,
-      .timeline-item.right {
-        padding-left: 52px;
-        padding-right: 0;
-      }
-      .timeline-item.left .timeline-card,
-      .timeline-item.right .timeline-card {
-        margin-left: 0;
-        margin-right: 0;
-        min-width: 0;
-      }
-      .timeline-item.left .timeline-card.visible { animation-name: slideFromRight; }
+      font-size: 0.85rem;
     }
   </style>
 </head>
@@ -300,184 +257,163 @@
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/>
-        <line x1="3" y1="10" x2="17" y2="10"/>
-        <line x1="3" y1="15" x2="17" y2="15"/>
+        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
       </svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()">
-        <span id="themeIcon">🌙</span>
-        <span id="themeLabel">Dark</span>
-      </button>
-      <button onclick="downloadImage()">
-        <span>📥</span>
-        <span>Download PNG</span>
-      </button>
-      <button onclick="window.print()">
-        <span>🖨️</span>
-        <span>Print / PDF</span>
-      </button>
+      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
+      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
     </div>
   </div>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1 class="hero-title animate-in">The History of AI</h1>
-    <p class="hero-sub animate-in delay-2">Seven decades of breakthroughs — from a simple thought experiment to agents that think, code, and create.</p>
-  </section>
-
-  <!-- TIMELINE -->
-  <section class="timeline-container">
-    <div class="timeline-line"></div>
-
-    <div class="timeline-item left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">🧪</span>
-          <span class="card-year">1950</span>
+  <main>
+    <!-- HERO -->
+    <header class="hero">
+      <h1 class="hero-title">The Evolution of Artificial Intelligence</h1>
+      <p class="hero-subtitle">From Alan Turing's thought experiment to autonomous AI agents — 75 years of breakthroughs that reshaped our world.</p>
+      <div class="hero-stats">
+        <div>
+          <span class="hero-stat-number" data-value="75">75</span>
+          <span class="hero-stat-label">Years of Progress</span>
         </div>
-        <h3 class="card-title">The Turing Test</h3>
-        <p class="card-desc">Alan Turing publishes "Computing Machinery and Intelligence," proposing the imitation game — the first formal framework for evaluating machine intelligence.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item right">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">🎓</span>
-          <span class="card-year">1956</span>
+        <div>
+          <span class="hero-stat-number" data-value="11">11</span>
+          <span class="hero-stat-label">Key Milestones</span>
         </div>
-        <h3 class="card-title">Dartmouth Workshop</h3>
-        <p class="card-desc">John McCarthy coins "Artificial Intelligence" at a Dartmouth summer conference. The field is officially born, attracting early pioneers like Minsky and Simon.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">🏥</span>
-          <span class="card-year">1970s</span>
+        <div>
+          <span class="hero-stat-number" data-value="2025">2025</span>
+          <span class="hero-stat-label">The Present</span>
         </div>
-        <h3 class="card-title">Expert Systems</h3>
-        <p class="card-desc">Rule-based programs like MYCIN and DENDRAL bring AI into real-world domains — medical diagnosis, chemical analysis, and business decision-making.</p>
       </div>
-    </div>
+    </header>
 
-    <div class="timeline-item right">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">❄️</span>
-          <span class="card-year">1987</span>
-        </div>
-        <h3 class="card-title">The AI Winter</h3>
-        <p class="card-desc">Hype collapses as expert systems fail to scale. Funding dries up, DARPA pulls back, and the Lisp machine market crashes — AI enters its deepest winter.</p>
-      </div>
-    </div>
+    <!-- TIMELINE -->
+    <section class="timeline-section" aria-label="AI Timeline">
+      <div class="timeline-line" aria-hidden="true"></div>
 
-    <div class="timeline-item left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">♟️</span>
-          <span class="card-year">1997</span>
-        </div>
-        <h3 class="card-title">Deep Blue Defeats Kasparov</h3>
-        <p class="card-desc">IBM's Deep Blue becomes the first computer to beat a reigning world chess champion in a full match, captivating the world and reigniting interest in AI.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item right">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">🖼️</span>
-          <span class="card-year">2012</span>
-        </div>
-        <h3 class="card-title">ImageNet & Deep Learning</h3>
-        <p class="card-desc">AlexNet crushes the ImageNet competition, slashing error rates by 10+ points. Deep learning goes from niche to mainstream, launching the modern AI era.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">🎮</span>
-          <span class="card-year">2016</span>
-        </div>
-        <h3 class="card-title">AlphaGo Defeats Lee Sedol</h3>
-        <p class="card-desc">DeepMind's AlphaGo beats the world Go champion 4-1, a feat thought decades away. Move 37 in Game 2 becomes one of the most famous moves in history.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item right">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">📝</span>
-          <span class="card-year">2020</span>
-        </div>
-        <h3 class="card-title">GPT-3 & Few-Shot Learning</h3>
-        <p class="card-desc">OpenAI's 175-billion-parameter model stuns researchers with emergent abilities — writing code, essays, and poetry from just a few examples.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
-          <span class="card-emoji">💬</span>
-          <span class="card-year">2022</span>
-        </div>
-        <h3 class="card-title">ChatGPT Goes Viral</h3>
-        <p class="card-desc">ChatGPT reaches 100 million users in two months — the fastest-growing consumer app ever. AI goes from research curiosity to dinner-table conversation.</p>
-      </div>
-    </div>
-
-    <div class="timeline-item right">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
+      <div class="timeline-item left">
+        <div class="timeline-dot" style="background:#3b82f6;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(59,130,246,0.15);color:#3b82f6;">1950</span>
           <span class="card-emoji">🧠</span>
-          <span class="card-year">2023</span>
+          <h3 class="card-title">The Turing Test</h3>
+          <p class="card-desc">Alan Turing publishes "Computing Machinery and Intelligence," proposing the imitation game as a measure of machine thinking. This paper laid the philosophical foundation for the entire field of artificial intelligence.</p>
         </div>
-        <h3 class="card-title">GPT-4 & Claude</h3>
-        <p class="card-desc">Multimodal models arrive — GPT-4 passes the bar exam, Claude pioneers constitutional AI. The race for safe, capable frontier models intensifies.</p>
       </div>
-    </div>
 
-    <div class="timeline-item left">
-      <div class="timeline-dot"></div>
-      <div class="timeline-card">
-        <div class="card-header">
+      <div class="timeline-item right">
+        <div class="timeline-dot" style="background:#8b5cf6;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(139,92,246,0.15);color:#8b5cf6;">1956</span>
+          <span class="card-emoji">🎓</span>
+          <h3 class="card-title">Dartmouth Conference</h3>
+          <p class="card-desc">John McCarthy coins "artificial intelligence" at the Dartmouth Summer Research Project. This 8-week workshop brought together the founders who would define the field for decades to come.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot" style="background:#10b981;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(16,185,129,0.15);color:#10b981;">1970s</span>
+          <span class="card-emoji">💼</span>
+          <h3 class="card-title">Expert Systems Era</h3>
+          <p class="card-desc">Rule-based AI systems like MYCIN and DENDRAL prove that encoded human expertise can solve real-world problems. These systems demonstrated commercial viability and drove billions in corporate AI investment.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right">
+        <div class="timeline-dot" style="background:#f43f5e;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(244,63,94,0.15);color:#f43f5e;">1987</span>
+          <span class="card-emoji">❄️</span>
+          <h3 class="card-title">The AI Winter</h3>
+          <p class="card-desc">Overpromised results and underwhelming expert systems trigger a massive funding collapse. Government and industry withdrew support, sending AI research into a decade-long chill.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot" style="background:#06b6d4;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(6,182,212,0.15);color:#06b6d4;">1997</span>
+          <span class="card-emoji">♟️</span>
+          <h3 class="card-title">Deep Blue Defeats Kasparov</h3>
+          <p class="card-desc">IBM's Deep Blue becomes the first computer to defeat a reigning world chess champion under standard tournament conditions. The match captivated the world and reignited public fascination with AI.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right">
+        <div class="timeline-dot" style="background:#f59e0b;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(245,158,11,0.15);color:#f59e0b;">2012</span>
+          <span class="card-emoji">👁️</span>
+          <h3 class="card-title">ImageNet & Deep Learning</h3>
+          <p class="card-desc">AlexNet crushes the ImageNet competition with a deep convolutional neural network, slashing error rates nearly in half. This breakthrough proved that deep learning was the key to modern AI.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot" style="background:#ec4899;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(236,72,153,0.15);color:#ec4899;">2016</span>
+          <span class="card-emoji">🏆</span>
+          <h3 class="card-title">AlphaGo Conquers Go</h3>
+          <p class="card-desc">DeepMind's AlphaGo defeats world champion Lee Sedol in the ancient game of Go, long considered an impossible challenge for machines. It demonstrated that AI could master intuition-like reasoning.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right">
+        <div class="timeline-dot" style="background:#8b5cf6;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(139,92,246,0.15);color:#8b5cf6;">2020</span>
+          <span class="card-emoji">📝</span>
+          <h3 class="card-title">GPT-3 Changes Everything</h3>
+          <p class="card-desc">OpenAI's GPT-3 shows that scaling language models to 175 billion parameters produces emergent abilities in writing, coding, and reasoning. The era of large language models had begun.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot" style="background:#3b82f6;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(59,130,246,0.15);color:#3b82f6;">2022</span>
+          <span class="card-emoji">💬</span>
+          <h3 class="card-title">ChatGPT Goes Viral</h3>
+          <p class="card-desc">ChatGPT reaches 100 million users in just two months, becoming the fastest-growing consumer application in history. AI transformed overnight from a research curiosity to a mainstream tool.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item right">
+        <div class="timeline-dot" style="background:#10b981;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(16,185,129,0.15);color:#10b981;">2023</span>
+          <span class="card-emoji">🚀</span>
+          <h3 class="card-title">GPT-4 & Claude Arrive</h3>
+          <p class="card-desc">Multimodal models like GPT-4 and Anthropic's Claude demonstrate near-human reasoning across text, code, and vision. The race toward artificial general intelligence accelerates dramatically.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item left">
+        <div class="timeline-dot" style="background:#f59e0b;"></div>
+        <div class="card">
+          <span class="card-year" style="background:rgba(245,158,11,0.15);color:#f59e0b;">2025</span>
           <span class="card-emoji">🤖</span>
-          <span class="card-year">2024–25</span>
+          <h3 class="card-title">The Age of AI Agents</h3>
+          <p class="card-desc">AI systems gain the ability to autonomously browse the web, write and execute code, and orchestrate complex multi-step tasks. The line between tool and collaborator begins to blur.</p>
         </div>
-        <h3 class="card-title">The Age of Agents</h3>
-        <p class="card-desc">AI breaks out of the chat box. Autonomous agents write code, browse the web, manage workflows, and collaborate — ushering in a new era of AI-human partnership.</p>
       </div>
-    </div>
 
-  </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>75 years of artificial intelligence — and the best is yet to come.</p>
+  </footer>
 
   <script>
     // Menu
-    function toggleMenu() {
-      document.getElementById('vizMenuDropdown').classList.toggle('open');
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.viz-menu')) {
-        document.getElementById('vizMenuDropdown').classList.remove('open');
-      }
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
+    function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
+    document.addEventListener('click', e => { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
     // Theme
     const themes = ['dark', 'light'];
@@ -490,40 +426,70 @@
       localStorage.setItem('viz-theme', t);
       currentTheme = t;
     }
-    function cycleTheme() {
-      const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-      applyTheme(next);
-    }
+    function cycleTheme() { applyTheme(themes[(themes.indexOf(currentTheme) + 1) % themes.length]); }
     applyTheme(currentTheme);
+
+    // Animations
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion && typeof Motion !== 'undefined') {
+      // Hero entrance
+      Motion.animate('.hero-title',
+        { opacity: [0, 1], scale: [0.92, 1] },
+        { duration: 0.8, ease: Motion.spring({ stiffness: 150, damping: 18 }) }
+      );
+      Motion.animate('.hero-subtitle',
+        { opacity: [0, 1], y: [20, 0] },
+        { delay: 0.2, duration: 0.6, ease: 'ease-out' }
+      );
+      Motion.animate('.hero-stats > div',
+        { opacity: [0, 1], y: [20, 0] },
+        { delay: Motion.stagger(0.12, { start: 0.35 }), duration: 0.5, ease: 'ease-out' }
+      );
+
+      // Stat counter animation
+      document.querySelectorAll('.hero-stat-number').forEach(el => {
+        const target = parseInt(el.dataset.value);
+        const obj = { val: 0 };
+        Motion.animate(obj, { val: target }, {
+          duration: 1.5, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94],
+          onUpdate: () => { el.textContent = Math.round(obj.val).toLocaleString(); }
+        });
+      });
+
+      // Timeline cards: hide via JS, reveal on scroll
+      document.querySelectorAll('.timeline-item').forEach(item => {
+        item.style.opacity = '0';
+        const isLeft = item.classList.contains('left');
+        item.style.transform = `translateX(${isLeft ? '-50px' : '50px'})`;
+      });
+
+      Motion.inView('.timeline-item', (info) => {
+        const isLeft = info.target.classList.contains('left');
+        Motion.animate(info.target,
+          { opacity: [0, 1], x: [isLeft ? -50 : 50, 0] },
+          { duration: 0.6, ease: Motion.spring({ stiffness: 140, damping: 20 }) }
+        );
+      }, { amount: 0.15 });
+
+      // Card hover
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mouseenter', () => Motion.animate(card, { scale: 1.02, y: -4 }, { duration: 0.25 }));
+        card.addEventListener('mouseleave', () => Motion.animate(card, { scale: 1, y: 0 }, { duration: 0.3 }));
+      });
+    }
 
     // Download PNG
     async function downloadImage() {
       const menu = document.querySelector('.viz-menu');
       menu.style.display = 'none';
       try {
-        const dataUrl = await htmlToImage.toPng(document.body, {
-          quality: 1, pixelRatio: 2,
-          filter: n => !n.classList?.contains('viz-menu')
-        });
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png';
-        a.click();
+        const dataUrl = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: n => !n.classList?.contains('viz-menu') });
+        const a = document.createElement('a'); a.href = dataUrl;
+        a.download = 'ai-timeline.png'; a.click();
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
-
-    // Scroll-triggered animations
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.timeline-card').forEach(card => observer.observe(card));
   </script>
 </body>
 </html>

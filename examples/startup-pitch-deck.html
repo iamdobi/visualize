@@ -7,12 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ===== THEME SYSTEM ===== */
     :root, .theme-dark {
       --bg: #030712;
       --surface: #111827;
@@ -25,9 +24,6 @@
       --positive: #10b981;
       --negative: #f43f5e;
       --warning: #f59e0b;
-      --glass-bg: rgba(255,255,255,0.05);
-      --glass-border: rgba(255,255,255,0.1);
-      --hero-overlay: rgba(3,7,18,0.55);
     }
     .theme-light {
       --bg: #f8fafc;
@@ -41,9 +37,6 @@
       --positive: #059669;
       --negative: #e11d48;
       --warning: #d97706;
-      --glass-bg: rgba(0,0,0,0.03);
-      --glass-border: rgba(0,0,0,0.08);
-      --hero-overlay: rgba(248,250,252,0.6);
     }
 
     body {
@@ -54,201 +47,550 @@
       -webkit-font-smoothing: antialiased;
       transition: background 0.3s, color 0.3s;
       overflow: hidden;
-      width: 100vw; height: 100vh;
+      width: 100vw;
+      height: 100vh;
     }
 
     h1, h2, h3, h4, h5, h6 { color: var(--text); }
     p, li, td, th, span, label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
-    /* ===== SLIDE ENGINE ===== */
-    .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-    .slide {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 64px 80px;
-      opacity: 0; transform: translateX(100%);
-      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: none;
+    /* ===== SLIDES ===== */
+    main {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
     }
-    .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-    .slide.prev { opacity: 0; transform: translateX(-100%); }
+
+    section.slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 64px 80px;
+      overflow: hidden;
+    }
+    section.slide.active {
+      display: flex;
+    }
 
     /* ===== PROGRESS BAR ===== */
     .progress-bar {
-      position: fixed; top: 0; left: 0; height: 3px; z-index: 9998;
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
       background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      z-index: 999;
       transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 0 2px 2px 0;
     }
 
     /* ===== SLIDE COUNTER ===== */
     .slide-counter {
-      position: fixed; bottom: 24px; right: 32px; z-index: 9998;
-      font-size: 14px; font-weight: 500; color: var(--text-secondary);
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      z-index: 999;
       font-variant-numeric: tabular-nums;
     }
 
-    /* ===== NAV ZONES ===== */
-    .nav-prev, .nav-next {
-      position: fixed; top: 0; bottom: 0; z-index: 100; cursor: pointer;
+    /* ===== NAV DOTS ===== */
+    .slide-dots {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 999;
     }
-    .nav-prev { left: 0; width: 33%; }
-    .nav-next { right: 0; width: 67%; }
-
-    /* ===== TITLE SLIDE ===== */
-    .slide-title {
-      background: var(--bg);
-      position: relative; overflow: hidden;
+    .slide-dots .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      opacity: 0.3;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
     }
-    .slide-title::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(59,130,246,0.15), transparent),
-        radial-gradient(ellipse 60% 50% at 70% 60%, rgba(139,92,246,0.12), transparent);
+    .slide-dots .dot.active {
+      opacity: 1;
+      background: var(--accent);
+      transform: scale(1.3);
     }
-    .title-content { position: relative; z-index: 2; text-align: center; max-width: 900px; }
-    .title-logo {
-      font-size: 20px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--text-secondary); margin-bottom: 24px;
-    }
-    .title-main {
-      font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 900; line-height: 1.05;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 50%, #ec4899 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 24px;
-      text-shadow: none;
-    }
-    .title-sub {
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 400;
-      color: var(--text-secondary); max-width: 600px; margin: 0 auto 40px;
-      line-height: 1.6;
-    }
-    .title-tag {
-      display: inline-block;
-      padding: 10px 28px; border-radius: 100px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      color: #fff; font-weight: 600; font-size: 15px;
-      letter-spacing: 0.5px;
+    .slide-dots .dot:hover {
+      opacity: 0.7;
     }
 
-    /* ===== GLASS CARD ===== */
+    /* ===== CARD ===== */
     .card {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
       padding: 32px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(59, 130, 246, 0.12);
     }
 
-    /* ===== CONTENT SLIDES ===== */
-    .slide-heading {
-      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
-      margin-bottom: 48px; text-align: center;
-      color: var(--text);
+    /* ===== SLIDE-SPECIFIC STYLES ===== */
+
+    /* Title slide */
+    .slide-title {
+      background: linear-gradient(135deg, var(--bg), var(--surface));
     }
-    .slide-heading .accent-dot {
+    .slide-title header {
+      text-align: center;
+    }
+    .slide-title .logo-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+    }
+    .slide-title h1 {
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 900;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+    .slide-title .tagline {
+      font-size: clamp(20px, 2.5vw, 28px);
+      color: var(--text-secondary);
+      margin-top: 16px;
+      font-weight: 300;
+    }
+    .slide-title .founded {
+      margin-top: 32px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Generic heading */
+    .slide-heading {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 40px;
+      text-align: center;
+      line-height: 1.15;
+    }
+    .slide-heading .accent {
       color: var(--accent);
     }
 
-    /* ===== ICON CIRCLE ===== */
-    .icon-circle {
-      width: 56px; height: 56px; border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      flex-shrink: 0;
+    /* Problem slide */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .problem-grid .card .icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
+    .problem-grid .card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .problem-grid .card p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
 
-    /* ===== TWO-COL / THREE-COL ===== */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; width: 100%; max-width: 1000px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; width: 100%; max-width: 1100px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; max-width: 1100px; }
-
-    .card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-    .card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
-
-    /* ===== STAT BLOCK ===== */
-    .stat-big {
-      font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1.1; margin-bottom: 4px;
+    /* Solution slide */
+    .solution-content {
+      display: flex;
+      align-items: center;
+      gap: 64px;
+      max-width: 1000px;
+      width: 100%;
     }
-    .stat-label { font-size: 0.95rem; color: var(--text-secondary); font-weight: 500; }
+    .solution-text {
+      flex: 1;
+    }
+    .solution-text h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .solution-text p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .solution-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pill {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .pill:hover {
+      border-color: var(--accent);
+      background: var(--surface-hover);
+    }
+    .solution-visual {
+      flex: 0 0 320px;
+      height: 320px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+    }
 
-    /* ===== CHART CONTAINER ===== */
-    .chart-wrap {
-      width: 100%; max-width: 700px;
-      height: 340px;
+    /* How It Works */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      max-width: 1100px;
+      width: 100%;
+    }
+    .step-card {
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      font-weight: 800;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .step-card .icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .step-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .step-arrow {
+      display: none;
+    }
+
+    /* Market Size */
+    .chart-row {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .chart-container {
+      flex: 1;
+      min-height: 300px;
       position: relative;
     }
-    .chart-wrap canvas { width: 100% !important; height: 100% !important; }
+    .chart-legend {
+      flex: 0 0 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .legend-item {
+      padding: 20px 24px;
+    }
+    .legend-item .label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+    .legend-item .value {
+      font-size: 28px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
 
-    /* ===== STEPS ===== */
-    .step-num {
-      width: 40px; height: 40px; border-radius: 12px;
+    /* Traction */
+    .traction-layout {
+      display: flex;
+      gap: 48px;
+      max-width: 1100px;
+      width: 100%;
+      align-items: center;
+    }
+    .traction-chart {
+      flex: 1;
+      min-height: 320px;
+      position: relative;
+    }
+    .traction-stats {
+      flex: 0 0 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .stat-card {
+      padding: 24px;
+      text-align: center;
+    }
+    .stat-card .stat-number {
+      font-size: 36px;
+      font-weight: 900;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      color: #fff; font-weight: 800; font-size: 18px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .step-row { display: flex; align-items: flex-start; gap: 20px; }
+    .stat-card .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
 
-    /* ===== COMPETITION TABLE ===== */
-    .comp-table { width: 100%; max-width: 900px; border-collapse: separate; border-spacing: 0; }
-    .comp-table th {
-      padding: 14px 18px; text-align: left; font-weight: 700; font-size: 0.85rem;
-      text-transform: uppercase; letter-spacing: 1px;
-      color: var(--text-secondary); border-bottom: 1px solid var(--border);
+    /* Business Model */
+    .biz-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      width: 100%;
     }
-    .comp-table td {
-      padding: 14px 18px; font-size: 0.95rem; color: var(--text);
+    .biz-card {
+      padding: 36px 28px;
+      text-align: center;
+    }
+    .biz-card .tier-name {
+      font-size: 13px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .biz-card .price {
+      font-size: 40px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .biz-card .price-period {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .biz-card ul {
+      list-style: none;
+      text-align: left;
+    }
+    .biz-card ul li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
       border-bottom: 1px solid var(--border);
     }
-    .comp-table tr.highlight td {
-      background: rgba(59,130,246,0.08);
+    .biz-card ul li:last-child { border-bottom: none; }
+    .biz-card ul li::before {
+      content: '✓ ';
+      color: var(--positive);
+      font-weight: 700;
+    }
+    .biz-card.featured {
+      border-color: var(--accent);
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
+      position: relative;
+    }
+    .biz-card.featured::before {
+      content: 'POPULAR';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 16px;
+      border-radius: 100px;
+      letter-spacing: 1px;
+    }
+
+    /* Competition */
+    .comp-table-wrap {
+      max-width: 900px;
+      width: 100%;
+      overflow-x: auto;
+    }
+    .comp-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .comp-table th, .comp-table td {
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .comp-table th {
+      background: var(--surface);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+    .comp-table th.highlight {
+      color: var(--accent);
+    }
+    .comp-table td {
+      background: var(--bg);
+      color: var(--text-secondary);
+    }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table td.highlight {
+      background: var(--surface);
+      color: var(--text);
       font-weight: 600;
     }
     .comp-table .check { color: var(--positive); font-weight: 700; }
-    .comp-table .cross { color: var(--negative); font-weight: 700; }
+    .comp-table .cross { color: var(--negative); }
 
-    /* ===== TEAM ===== */
+    /* Team */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      max-width: 900px;
+      width: 100%;
+    }
+    .team-card {
+      text-align: center;
+      padding: 40px 24px;
+    }
     .team-avatar {
-      width: 72px; height: 72px; border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; margin: 0 auto 12px; color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+    }
+    .team-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .team-card .role {
+      font-size: 13px;
+      color: var(--accent);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    .team-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
 
-    /* ===== CTA SLIDE ===== */
+    /* Ask/CTA */
+    .cta-content {
+      text-align: center;
+      max-width: 700px;
+    }
     .cta-amount {
-      font-size: clamp(3rem, 7vw, 5rem); font-weight: 900;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary), #ec4899);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 16px;
     }
+    .cta-purpose {
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+    .cta-uses {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .cta-use-card {
+      padding: 24px;
+      text-align: center;
+    }
+    .cta-use-card .pct {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .cta-use-card .use-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
     .cta-email {
-      font-size: 1.1rem; color: var(--text-secondary); margin-top: 24px;
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-top: 12px;
     }
-    .cta-email a { color: var(--accent); text-decoration: none; font-weight: 600; }
-
-    /* ===== ENTRANCE ANIMATIONS ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
+    .cta-email a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
     }
-    .animate-in { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    .delay-5 { animation-delay: 0.5s; }
-    .delay-6 { animation-delay: 0.6s; }
-    .delay-7 { animation-delay: 0.7s; }
+    .cta-email a:hover { text-decoration: underline; }
 
     /* ===== REDUCED MOTION ===== */
     @media (prefers-reduced-motion: reduce) {
@@ -258,22 +600,16 @@
       }
     }
 
-    /* ===== PRINT STYLES ===== */
+    /* ===== PRINT ===== */
     @media print {
       body { background: white !important; color: black !important; overflow: visible !important; height: auto !important; }
-      .viz-menu, .progress-bar, .slide-counter, .nav-prev, .nav-next { display: none !important; }
-      .deck { overflow: visible !important; height: auto !important; }
-      .slide {
-        position: relative !important; transform: none !important; opacity: 1 !important;
-        pointer-events: auto !important; page-break-after: always;
-        height: 100vh; width: 100vw;
-      }
-      .slide.prev { transform: none !important; opacity: 1 !important; }
+      .viz-menu, .progress-bar, .slide-counter, .slide-dots { display: none !important; }
+      section.slide { position: relative !important; display: flex !important; page-break-after: always; height: 100vh; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
-    /* ===== HAMBURGER MENU ===== */
+    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
       width: 44px; height: 44px; border-radius: 12px;
@@ -299,18 +635,6 @@
       display: flex; align-items: center; gap: 10px; transition: background 0.15s;
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
-
-    /* ===== BULLET LIST ===== */
-    .bullet-list { list-style: none; text-align: left; }
-    .bullet-list li {
-      padding: 8px 0; font-size: 1.05rem; color: var(--text);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .bullet-list li::before {
-      content: '';
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-    }
   </style>
 </head>
 <body>
@@ -331,257 +655,295 @@
 
   <!-- PROGRESS -->
   <div class="progress-bar" id="progressBar"></div>
+
+  <!-- COUNTER -->
   <div class="slide-counter" id="slideCounter"></div>
 
-  <!-- NAV ZONES -->
-  <div class="nav-prev" onclick="prevSlide()"></div>
-  <div class="nav-next" onclick="nextSlide()"></div>
+  <!-- DOTS -->
+  <nav class="slide-dots" id="slideDots" aria-label="Slide navigation"></nav>
 
-  <!-- DECK -->
-  <div class="deck" id="deck">
+  <main>
+    <!-- SLIDE 1: Title -->
+    <section class="slide slide-title active" data-slide="0">
+      <header>
+        <div class="logo-icon">🍳</div>
+        <h1>CookAI</h1>
+        <p class="tagline">Your AI-powered personal chef</p>
+        <p class="founded">Series A · February 2026</p>
+      </header>
+    </section>
 
-    <!-- 1: TITLE -->
-    <div class="slide slide-title active" data-slide="0">
-      <div class="title-content">
-        <div class="title-logo animate-in">🍳 COOKAI</div>
-        <h1 class="title-main animate-in delay-1">Your AI<br>Personal Chef</h1>
-        <p class="title-sub animate-in delay-2">Personalized recipes, smart grocery lists, and step-by-step cooking guidance — powered by AI that learns your taste.</p>
-        <div class="animate-in delay-3"><span class="title-tag">Seed Round — $3M</span></div>
+    <!-- SLIDE 2: Problem -->
+    <section class="slide" data-slide="1">
+      <h2 class="slide-heading">The <span class="accent">Problem</span></h2>
+      <div class="problem-grid">
+        <article class="card">
+          <div class="icon">⏰</div>
+          <h3>No Time to Plan</h3>
+          <p>73% of families decide dinner after 4 PM. Meal planning is tedious and repetitive.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🗑️</div>
+          <h3>Massive Food Waste</h3>
+          <p>The average household throws away $1,500 of food per year. Ingredients expire unused.</p>
+        </article>
+        <article class="card">
+          <div class="icon">🥗</div>
+          <h3>Dietary Chaos</h3>
+          <p>Allergies, preferences, and nutrition goals make cooking for a household overwhelming.</p>
+        </article>
       </div>
-    </div>
+    </section>
 
-    <!-- 2: PROBLEM -->
-    <div class="slide" data-slide="1">
-      <h2 class="slide-heading animate-in">The Problem<span class="accent-dot">.</span></h2>
-      <div class="grid-3 animate-in delay-1">
-        <div class="card" style="text-align:center;">
-          <div class="stat-big">60%</div>
-          <div class="stat-label">of adults say they don't know what to cook each night</div>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="stat-big">$1.2T</div>
-          <div class="stat-label">spent on food delivery — often because cooking feels hard</div>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="stat-big">40%</div>
-          <div class="stat-label">of grocery purchases end up wasted due to poor planning</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3: SOLUTION -->
-    <div class="slide" data-slide="2">
-      <h2 class="slide-heading animate-in">The Solution<span class="accent-dot">.</span></h2>
-      <div class="grid-2 animate-in delay-1">
-        <div class="card">
-          <div class="icon-circle">🧠</div>
-          <h3>AI Taste Profile</h3>
-          <p>Learns your preferences, dietary restrictions, and skill level. Gets smarter every meal.</p>
-        </div>
-        <div class="card">
-          <div class="icon-circle">📋</div>
-          <h3>Smart Meal Plans</h3>
-          <p>Weekly plans that balance nutrition, budget, and variety — auto-generated in seconds.</p>
-        </div>
-        <div class="card">
-          <div class="icon-circle">🛒</div>
-          <h3>One-Tap Groceries</h3>
-          <p>Auto-generated grocery lists synced with Instacart, Amazon Fresh, and Walmart.</p>
-        </div>
-        <div class="card">
-          <div class="icon-circle">👨‍🍳</div>
-          <h3>Live Cook Mode</h3>
-          <p>Voice-guided, step-by-step cooking with real-time timers and technique tips.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4: HOW IT WORKS -->
-    <div class="slide" data-slide="3">
-      <h2 class="slide-heading animate-in">How It Works<span class="accent-dot">.</span></h2>
-      <div style="display:flex;flex-direction:column;gap:24px;max-width:700px;width:100%;">
-        <div class="card step-row animate-in delay-1">
-          <div class="step-num">1</div>
-          <div><h3 style="margin-bottom:4px;">Tell us about you</h3><p class="text-secondary">Dietary needs, allergies, cuisine preferences, household size, budget.</p></div>
-        </div>
-        <div class="card step-row animate-in delay-2">
-          <div class="step-num">2</div>
-          <div><h3 style="margin-bottom:4px;">Get your meal plan</h3><p class="text-secondary">AI generates a personalized weekly plan. Swap any meal with one tap.</p></div>
-        </div>
-        <div class="card step-row animate-in delay-3">
-          <div class="step-num">3</div>
-          <div><h3 style="margin-bottom:4px;">Shop in seconds</h3><p class="text-secondary">Grocery list auto-created and sent to your favorite delivery service.</p></div>
-        </div>
-        <div class="card step-row animate-in delay-4">
-          <div class="step-num">4</div>
-          <div><h3 style="margin-bottom:4px;">Cook with confidence</h3><p class="text-secondary">Voice-guided instructions, smart timers, and real-time tips while you cook.</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5: MARKET SIZE -->
-    <div class="slide" data-slide="4">
-      <h2 class="slide-heading animate-in">Market Opportunity<span class="accent-dot">.</span></h2>
-      <div class="grid-2 animate-in delay-1" style="align-items:center;">
-        <div class="chart-wrap"><canvas id="marketChart"></canvas></div>
-        <div style="display:flex;flex-direction:column;gap:20px;">
-          <div class="card" style="text-align:center;">
-            <div class="stat-big">$320B</div>
-            <div class="stat-label">TAM — Global Meal Kit + Food Tech</div>
-          </div>
-          <div class="card" style="text-align:center;">
-            <div class="stat-big">$48B</div>
-            <div class="stat-label">SAM — US/EU AI-Powered Food</div>
-          </div>
-          <div class="card" style="text-align:center;">
-            <div class="stat-big">$4.8B</div>
-            <div class="stat-label">SOM — Year 5 Capture Target</div>
+    <!-- SLIDE 3: Solution -->
+    <section class="slide" data-slide="2">
+      <h2 class="slide-heading">The <span class="accent">Solution</span></h2>
+      <div class="solution-content">
+        <div class="solution-text">
+          <h3>AI that knows your kitchen</h3>
+          <p>CookAI scans your fridge, learns your family's tastes, and generates personalized meal plans with one-tap grocery ordering — reducing waste and saving hours weekly.</p>
+          <div class="solution-pills">
+            <span class="pill">📸 Fridge Scanning</span>
+            <span class="pill">🧠 Taste Learning</span>
+            <span class="pill">📋 Smart Meal Plans</span>
+            <span class="pill">🛒 Auto Grocery</span>
+            <span class="pill">🥦 Nutrition Tracking</span>
           </div>
         </div>
+        <div class="solution-visual" aria-hidden="true">🤖</div>
       </div>
-    </div>
+    </section>
 
-    <!-- 6: TRACTION -->
-    <div class="slide" data-slide="5">
-      <h2 class="slide-heading animate-in">Traction<span class="accent-dot">.</span></h2>
-      <div class="grid-2 animate-in delay-1" style="align-items:center;">
-        <div style="display:flex;flex-direction:column;gap:20px;">
-          <div class="card" style="text-align:center;">
-            <div class="stat-big">52K</div>
+    <!-- SLIDE 4: How It Works -->
+    <section class="slide" data-slide="3">
+      <h2 class="slide-heading">How It <span class="accent">Works</span></h2>
+      <div class="steps-grid">
+        <article class="card step-card">
+          <div class="step-number">1</div>
+          <div class="icon">📷</div>
+          <h3>Snap Your Fridge</h3>
+          <p>Computer vision identifies every ingredient you have on hand.</p>
+        </article>
+        <article class="card step-card">
+          <div class="step-number">2</div>
+          <div class="icon">🎯</div>
+          <h3>Set Preferences</h3>
+          <p>Dietary needs, cuisine style, cook time — fully personalized.</p>
+        </article>
+        <article class="card step-card">
+          <div class="step-number">3</div>
+          <div class="icon">✨</div>
+          <h3>Get Recipes</h3>
+          <p>AI generates step-by-step recipes using what you already have.</p>
+        </article>
+        <article class="card step-card">
+          <div class="step-number">4</div>
+          <div class="icon">🛒</div>
+          <h3>Order Missing Items</h3>
+          <p>One tap adds missing ingredients to Instacart or Amazon Fresh.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Market Size -->
+    <section class="slide" data-slide="4">
+      <h2 class="slide-heading">Market <span class="accent">Opportunity</span></h2>
+      <div class="chart-row">
+        <div class="chart-container">
+          <canvas id="marketChart"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="card legend-item">
+            <div class="label">TAM</div>
+            <div class="value" style="color: var(--accent);">$320B</div>
+          </div>
+          <div class="card legend-item">
+            <div class="label">SAM</div>
+            <div class="value" style="color: var(--accent-secondary);">$48B</div>
+          </div>
+          <div class="card legend-item">
+            <div class="label">SOM</div>
+            <div class="value" style="color: var(--positive);">$4.2B</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Traction -->
+    <section class="slide" data-slide="5">
+      <h2 class="slide-heading"><span class="accent">Traction</span></h2>
+      <div class="traction-layout">
+        <div class="traction-chart">
+          <canvas id="tractionChart"></canvas>
+        </div>
+        <div class="traction-stats">
+          <div class="card stat-card">
+            <div class="stat-number" data-value="185000" data-suffix="">185,000</div>
             <div class="stat-label">Monthly Active Users</div>
           </div>
-          <div class="card" style="text-align:center;">
-            <div class="stat-big">38%</div>
-            <div class="stat-label">Month-over-Month Growth</div>
+          <div class="card stat-card">
+            <div class="stat-number" data-value="32" data-suffix="%" data-prefix="">32%</div>
+            <div class="stat-label">MoM Growth</div>
           </div>
-          <div class="card" style="text-align:center;">
-            <div class="stat-big">4.8★</div>
-            <div class="stat-label">App Store Rating (2.1K reviews)</div>
+          <div class="card stat-card">
+            <div class="stat-number" data-value="4.8" data-suffix="★" data-decimals="1">4.8★</div>
+            <div class="stat-label">App Store Rating</div>
           </div>
         </div>
-        <div class="chart-wrap"><canvas id="tractionChart"></canvas></div>
       </div>
-    </div>
+    </section>
 
-    <!-- 7: BUSINESS MODEL -->
-    <div class="slide" data-slide="6">
-      <h2 class="slide-heading animate-in">Business Model<span class="accent-dot">.</span></h2>
-      <div class="grid-3 animate-in delay-1">
-        <div class="card" style="text-align:center;">
-          <div class="icon-circle">✨</div>
-          <h3>Freemium</h3>
-          <p>3 free recipes/week. Unlimited access at <strong style="color:var(--accent);">$9.99/mo</strong>.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="icon-circle">🤝</div>
-          <h3>Grocery Affiliate</h3>
-          <p>5–8% commission on every grocery order placed through the app.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="icon-circle">🏢</div>
-          <h3>Enterprise API</h3>
-          <p>White-label meal planning for health insurers, gyms, and wellness brands.</p>
-        </div>
+    <!-- SLIDE 7: Business Model -->
+    <section class="slide" data-slide="6">
+      <h2 class="slide-heading">Business <span class="accent">Model</span></h2>
+      <div class="biz-grid">
+        <article class="card biz-card">
+          <div class="tier-name">Free</div>
+          <div class="price">$0</div>
+          <div class="price-period">forever</div>
+          <ul>
+            <li>3 recipes per week</li>
+            <li>Basic fridge scan</li>
+            <li>Community recipes</li>
+          </ul>
+        </article>
+        <article class="card biz-card featured">
+          <div class="tier-name">Pro</div>
+          <div class="price">$9.99</div>
+          <div class="price-period">per month</div>
+          <ul>
+            <li>Unlimited recipes</li>
+            <li>Smart meal planning</li>
+            <li>Nutrition tracking</li>
+            <li>Grocery integration</li>
+          </ul>
+        </article>
+        <article class="card biz-card">
+          <div class="tier-name">Family</div>
+          <div class="price">$14.99</div>
+          <div class="price-period">per month</div>
+          <ul>
+            <li>Up to 6 profiles</li>
+            <li>Multi-dietary support</li>
+            <li>Budget optimization</li>
+            <li>Pantry management</li>
+          </ul>
+        </article>
       </div>
-      <div class="card animate-in delay-3" style="margin-top:32px;text-align:center;max-width:500px;">
-        <div style="display:flex;justify-content:space-around;">
-          <div><div class="stat-big">$14</div><div class="stat-label">Avg Revenue / User / Mo</div></div>
-          <div><div class="stat-big">$3.20</div><div class="stat-label">CAC</div></div>
-          <div><div class="stat-big">4.4x</div><div class="stat-label">LTV / CAC</div></div>
-        </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- 8: COMPETITION -->
-    <div class="slide" data-slide="7">
-      <h2 class="slide-heading animate-in">Competition<span class="accent-dot">.</span></h2>
-      <div class="card animate-in delay-1" style="max-width:900px;width:100%;padding:0;overflow:hidden;">
+    <!-- SLIDE 8: Competition -->
+    <section class="slide" data-slide="7">
+      <h2 class="slide-heading">Competitive <span class="accent">Edge</span></h2>
+      <div class="comp-table-wrap">
         <table class="comp-table">
           <thead>
-            <tr><th>Feature</th><th>CookAI</th><th>HelloFresh</th><th>Yummly</th><th>ChatGPT</th></tr>
+            <tr>
+              <th>Feature</th>
+              <th class="highlight">CookAI</th>
+              <th>Yummly</th>
+              <th>Mealime</th>
+              <th>ChatGPT</th>
+            </tr>
           </thead>
           <tbody>
-            <tr class="highlight"><td>AI Personalization</td><td class="check">✓ Deep</td><td class="cross">✗</td><td>Basic</td><td>Generic</td></tr>
-            <tr class="highlight"><td>Grocery Integration</td><td class="check">✓ Multi</td><td>Own box</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-            <tr class="highlight"><td>Voice Cook Mode</td><td class="check">✓</td><td class="cross">✗</td><td class="cross">✗</td><td class="cross">✗</td></tr>
-            <tr class="highlight"><td>Nutrition Tracking</td><td class="check">✓ Auto</td><td>Basic</td><td class="check">✓</td><td class="cross">✗</td></tr>
-            <tr class="highlight"><td>No Subscription Box</td><td class="check">✓ Flexible</td><td class="cross">✗ Locked</td><td class="check">✓</td><td class="check">✓</td></tr>
-            <tr class="highlight"><td>Price</td><td style="color:var(--positive)">$9.99/mo</td><td>$60+/wk</td><td>Free</td><td>$20/mo</td></tr>
+            <tr>
+              <td>Fridge scanning</td>
+              <td class="highlight"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
+            <tr>
+              <td>Taste learning</td>
+              <td class="highlight"><span class="check">✓</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
+            <tr>
+              <td>Grocery ordering</td>
+              <td class="highlight"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
+            <tr>
+              <td>Nutrition AI</td>
+              <td class="highlight"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Waste reduction</td>
+              <td class="highlight"><span class="check">✓</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+              <td><span class="cross">✗</span></td>
+            </tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
-    <!-- 9: TEAM -->
-    <div class="slide" data-slide="8">
-      <h2 class="slide-heading animate-in">The Team<span class="accent-dot">.</span></h2>
-      <div class="grid-3 animate-in delay-1">
-        <div class="card" style="text-align:center;">
+    <!-- SLIDE 9: Team -->
+    <section class="slide" data-slide="8">
+      <h2 class="slide-heading">The <span class="accent">Team</span></h2>
+      <div class="team-grid">
+        <article class="card team-card">
           <div class="team-avatar">👩‍💻</div>
-          <h3>Maya Chen</h3>
-          <p class="text-secondary" style="font-size:0.85rem;margin-bottom:8px;">CEO & Co-Founder</p>
-          <p style="font-size:0.85rem;">Ex-Google PM. Led personalization at YouTube. Stanford CS.</p>
-        </div>
-        <div class="card" style="text-align:center;">
+          <h3>Sarah Chen</h3>
+          <div class="role">CEO & Co-Founder</div>
+          <p>Ex-Google PM. Led Google Lens food recognition. Stanford CS & MBA.</p>
+        </article>
+        <article class="card team-card">
           <div class="team-avatar">👨‍🔬</div>
-          <h3>David Park</h3>
-          <p class="text-secondary" style="font-size:0.85rem;margin-bottom:8px;">CTO & Co-Founder</p>
-          <p style="font-size:0.85rem;">Ex-OpenAI. Built recommendation systems at scale. MIT PhD.</p>
-        </div>
-        <div class="card" style="text-align:center;">
-          <div class="team-avatar">👩‍🍳</div>
-          <h3>Sofia Rivera</h3>
-          <p class="text-secondary" style="font-size:0.85rem;margin-bottom:8px;">Head of Culinary AI</p>
-          <p style="font-size:0.85rem;">Michelin-trained chef. 10 years recipe development. Food Network alum.</p>
-        </div>
+          <h3>Marcus Rivera</h3>
+          <div class="role">CTO & Co-Founder</div>
+          <p>Ex-Meta AI Research. Published 12 papers on computer vision. MIT PhD.</p>
+        </article>
+        <article class="card team-card">
+          <div class="team-avatar">👨‍🍳</div>
+          <h3>James Park</h3>
+          <div class="role">Head of Culinary AI</div>
+          <p>Michelin-starred chef turned food tech. Previously VP at HelloFresh.</p>
+        </article>
       </div>
-      <div class="animate-in delay-3" style="margin-top:28px;text-align:center;">
-        <p class="text-secondary" style="font-size:0.95rem;">+ 12 engineers, 3 food scientists, 2 growth marketers</p>
-      </div>
-    </div>
+    </section>
 
-    <!-- 10: ASK / CTA -->
-    <div class="slide slide-title" data-slide="9">
-      <div class="title-content">
-        <h2 class="slide-heading animate-in" style="margin-bottom:16px;">The Ask<span class="accent-dot">.</span></h2>
-        <div class="cta-amount animate-in delay-1">$3M Seed</div>
-        <div class="animate-in delay-2" style="max-width:600px;margin:0 auto;">
-          <div class="grid-2" style="gap:16px;margin-bottom:32px;">
-            <div class="card" style="text-align:center;padding:20px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--accent);margin-bottom:4px;">40%</div>
-              <div class="stat-label">Engineering & AI</div>
-            </div>
-            <div class="card" style="text-align:center;padding:20px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--accent-secondary);margin-bottom:4px;">30%</div>
-              <div class="stat-label">Growth & Marketing</div>
-            </div>
-            <div class="card" style="text-align:center;padding:20px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--positive);margin-bottom:4px;">20%</div>
-              <div class="stat-label">Grocery Partnerships</div>
-            </div>
-            <div class="card" style="text-align:center;padding:20px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--warning);margin-bottom:4px;">10%</div>
-              <div class="stat-label">Operations</div>
-            </div>
-          </div>
+    <!-- SLIDE 10: Ask/CTA -->
+    <section class="slide" data-slide="9">
+      <div class="cta-content">
+        <h2 class="slide-heading">The <span class="accent">Ask</span></h2>
+        <div class="cta-amount">$12M Series A</div>
+        <p class="cta-purpose">Fuel growth to 2M users, expand to 5 markets, and build the world's smartest kitchen AI.</p>
+        <div class="cta-uses">
+          <article class="card cta-use-card">
+            <div class="pct">50%</div>
+            <div class="use-label">Engineering & AI</div>
+          </article>
+          <article class="card cta-use-card">
+            <div class="pct">30%</div>
+            <div class="use-label">Growth & Marketing</div>
+          </article>
+          <article class="card cta-use-card">
+            <div class="pct">20%</div>
+            <div class="use-label">Operations</div>
+          </article>
         </div>
-        <p class="cta-email animate-in delay-3">🍳 <a href="mailto:invest@cookai.app">invest@cookai.app</a> · cookai.app</p>
+        <p class="cta-email">Let's cook the future → <a href="mailto:invest@cookai.com">invest@cookai.com</a></p>
       </div>
-    </div>
-
-  </div>
+    </section>
+  </main>
 
   <script>
-    // ===== MENU =====
+    // ===== Menu =====
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
+    document.addEventListener('click', e => { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // ===== THEME =====
+    // ===== Theme =====
     const themes = ['dark', 'light'];
     const themeIcons = { dark: '🌙', light: '☀️' };
     let currentTheme = localStorage.getItem('viz-theme') || 'dark';
@@ -594,145 +956,289 @@
       renderCharts();
     }
     function cycleTheme() { applyTheme(themes[(themes.indexOf(currentTheme) + 1) % themes.length]); }
+    applyTheme(currentTheme);
 
-    // ===== DOWNLOAD PNG =====
-    async function downloadImage() {
-      const menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
-      try {
-        const slide = document.querySelector('.slide.active');
-        const dataUrl = await htmlToImage.toPng(slide, { quality: 1, pixelRatio: 2 });
-        const a = document.createElement('a');
-        a.href = dataUrl; a.download = 'cookai-slide-' + (currentSlide + 1) + '.png'; a.click();
-      } catch(e) { console.error(e); }
-      menu.style.display = '';
-    }
-
-    // ===== SLIDE NAV =====
+    // ===== Slide Navigation =====
     const slides = document.querySelectorAll('.slide');
-    const total = slides.length;
-    let currentSlide = 0;
+    const totalSlides = slides.length;
+    let current = 0;
+    let transitioning = false;
 
-    function goToSlide(n) {
-      if (n < 0 || n >= total || n === currentSlide) return;
-      const prev = currentSlide;
-      currentSlide = n;
-      slides.forEach((s, i) => {
-        s.classList.remove('active', 'prev');
-        if (i === currentSlide) s.classList.add('active');
-        else if (i < currentSlide) s.classList.add('prev');
-      });
-      // Re-trigger animations
-      const active = slides[currentSlide];
-      active.querySelectorAll('.animate-in').forEach(el => {
-        el.style.animation = 'none';
-        el.offsetHeight;
-        el.style.animation = '';
-      });
-      updateUI();
-    }
-    function nextSlide() { goToSlide(currentSlide + 1); }
-    function prevSlide() { goToSlide(currentSlide - 1); }
-
-    function updateUI() {
-      document.getElementById('progressBar').style.width = ((currentSlide + 1) / total * 100) + '%';
-      document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + total;
-    }
-
-    // Keyboard
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); nextSlide(); }
-      if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    // Build dots
+    const dotsContainer = document.getElementById('slideDots');
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
     });
 
-    // Touch/swipe
-    let touchStartX = 0;
-    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    document.addEventListener('touchend', e => {
-      const diff = e.changedTouches[0].screenX - touchStartX;
-      if (Math.abs(diff) > 50) { diff < 0 ? nextSlide() : prevSlide(); }
-    }, { passive: true });
-
+    function updateUI() {
+      document.getElementById('progressBar').style.width = ((current + 1) / totalSlides * 100) + '%';
+      document.getElementById('slideCounter').textContent = (current + 1) + ' / ' + totalSlides;
+      dotsContainer.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+    }
     updateUI();
 
-    // ===== CHARTS =====
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function goToSlide(n) {
+      if (n === current || n < 0 || n >= totalSlides || transitioning) return;
+      transitioning = true;
+      const dir = n > current ? 1 : -1;
+      const outSlide = slides[current];
+      const inSlide = slides[n];
+      current = n;
+      updateUI();
+
+      if (prefersReducedMotion || typeof Motion === 'undefined') {
+        outSlide.classList.remove('active');
+        inSlide.classList.add('active');
+        transitioning = false;
+        animateSlideContent(inSlide);
+        return;
+      }
+
+      inSlide.classList.add('active');
+      inSlide.style.opacity = '0';
+
+      Motion.animate(outSlide,
+        { opacity: [1, 0], x: [0, -80 * dir] },
+        { duration: 0.35, ease: 'ease-in' }
+      ).finished.then(() => {
+        outSlide.classList.remove('active');
+        outSlide.style.opacity = '';
+        outSlide.style.transform = '';
+        Motion.animate(inSlide,
+          { opacity: [0, 1], x: [80 * dir, 0] },
+          { duration: 0.45, ease: Motion.spring({ stiffness: 200, damping: 25 }) }
+        ).finished.then(() => {
+          transitioning = false;
+          inSlide.style.opacity = '';
+          inSlide.style.transform = '';
+        });
+        animateSlideContent(inSlide);
+      });
+    }
+
+    function animateSlideContent(slide) {
+      if (prefersReducedMotion || typeof Motion === 'undefined') return;
+
+      // Animate headings
+      const heading = slide.querySelector('.slide-heading');
+      if (heading) {
+        Motion.animate(heading, { opacity: [0, 1], y: [30, 0] },
+          { duration: 0.6, ease: Motion.spring({ stiffness: 150, damping: 18 }) });
+      }
+
+      // Animate cards with stagger
+      const cards = slide.querySelectorAll('.card, .pill, .solution-visual');
+      if (cards.length) {
+        Motion.animate(cards,
+          { opacity: [0, 1], y: [40, 0], scale: [0.95, 1] },
+          { delay: Motion.stagger(0.08), duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
+        );
+      }
+
+      // Title slide special
+      if (slide.classList.contains('slide-title')) {
+        const header = slide.querySelector('header');
+        const els = header.children;
+        Array.from(els).forEach((el, i) => {
+          Motion.animate(el, { opacity: [0, 1], y: [40, 0] },
+            { delay: i * 0.15, duration: 0.7, ease: Motion.spring({ stiffness: 150, damping: 18 }) });
+        });
+      }
+
+      // CTA amount
+      const ctaAmount = slide.querySelector('.cta-amount');
+      if (ctaAmount) {
+        Motion.animate(ctaAmount, { opacity: [0, 1], scale: [0.8, 1] },
+          { duration: 0.7, ease: Motion.spring({ stiffness: 150, damping: 15 }) });
+      }
+
+      // Stat counter animations
+      slide.querySelectorAll('.stat-number[data-value]').forEach(el => {
+        const target = parseFloat(el.dataset.value);
+        const suffix = el.dataset.suffix || '';
+        const prefix = el.dataset.prefix || '';
+        const decimals = parseInt(el.dataset.decimals) || 0;
+        const obj = { val: 0 };
+        Motion.animate(obj, { val: target }, {
+          duration: 1.2,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          onUpdate: () => {
+            let display = decimals > 0 ? obj.val.toFixed(decimals) : Math.round(obj.val).toLocaleString();
+            el.textContent = prefix + display + suffix;
+          }
+        });
+      });
+
+      // Table rows
+      const rows = slide.querySelectorAll('.comp-table tbody tr');
+      if (rows.length) {
+        Motion.animate(rows, { opacity: [0, 1], x: [30, 0] },
+          { delay: Motion.stagger(0.06), duration: 0.4, ease: 'ease-out' });
+      }
+
+      // Render charts when their slide is shown
+      const slideIdx = parseInt(slide.dataset.slide);
+      if (slideIdx === 4 || slideIdx === 5) renderCharts();
+    }
+
+    // Keyboard nav
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); goToSlide(current + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); goToSlide(current - 1); }
+    });
+
+    // Click nav
+    document.querySelector('main').addEventListener('click', e => {
+      if (e.target.closest('.viz-menu') || e.target.closest('.slide-dots') || e.target.closest('a') || e.target.closest('button')) return;
+      const x = e.clientX / window.innerWidth;
+      if (x < 0.33) goToSlide(current - 1);
+      else goToSlide(current + 1);
+    });
+
+    // Swipe nav
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) goToSlide(current + (diff > 0 ? 1 : -1));
+    });
+
+    // ===== Charts =====
     let marketChart, tractionChart;
-    function getC() {
+
+    function getChartColors() {
       const s = getComputedStyle(document.documentElement);
       return {
         text: s.getPropertyValue('--text').trim(),
-        textSec: s.getPropertyValue('--text-secondary').trim(),
+        textSecondary: s.getPropertyValue('--text-secondary').trim(),
         border: s.getPropertyValue('--border').trim(),
         accent: s.getPropertyValue('--accent').trim(),
-        accentSec: s.getPropertyValue('--accent-secondary').trim(),
+        accentSecondary: s.getPropertyValue('--accent-secondary').trim(),
         positive: s.getPropertyValue('--positive').trim(),
+        surface: s.getPropertyValue('--surface').trim(),
       };
     }
+
     function renderCharts() {
-      const c = getC();
-      Chart.defaults.color = c.textSec;
+      const c = getChartColors();
+      Chart.defaults.color = c.textSecondary;
 
-      if (marketChart) marketChart.destroy();
-      if (tractionChart) tractionChart.destroy();
-
-      // Market chart — horizontal bar
+      // Market chart
       const mCtx = document.getElementById('marketChart');
       if (mCtx) {
+        if (marketChart) marketChart.destroy();
         marketChart = new Chart(mCtx, {
           type: 'bar',
           data: {
             labels: ['TAM', 'SAM', 'SOM'],
             datasets: [{
-              data: [320, 48, 4.8],
-              backgroundColor: [c.accent, c.accentSec, '#ec4899'],
-              borderRadius: 8, barThickness: 40,
+              data: [320, 48, 4.2],
+              backgroundColor: [c.accent, c.accentSecondary, c.positive],
+              borderRadius: 8,
+              barThickness: 40,
             }]
           },
           options: {
-            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: { display: false },
-              tooltip: { callbacks: { label: ctx => '$' + ctx.raw + 'B' } }
+              tooltip: {
+                callbacks: { label: ctx => '$' + ctx.raw + 'B' }
+              }
             },
             scales: {
-              x: { grid: { color: c.border }, ticks: { callback: v => '$' + v + 'B' } },
-              y: { grid: { display: false } }
+              x: {
+                grid: { color: c.border },
+                ticks: { callback: v => '$' + v + 'B', color: c.textSecondary }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { color: c.text, font: { weight: '700', size: 14 } }
+              }
             }
           }
         });
       }
 
-      // Traction chart — line
+      // Traction chart
       const tCtx = document.getElementById('tractionChart');
       if (tCtx) {
+        if (tractionChart) tractionChart.destroy();
         tractionChart = new Chart(tCtx, {
           type: 'line',
           data: {
-            labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
+            labels: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'],
             datasets: [{
-              label: 'MAU (thousands)',
-              data: [2, 4.5, 8, 14, 22, 33, 42, 52],
-              borderColor: c.accent, backgroundColor: c.accent + '18',
-              fill: true, tension: 0.4, pointRadius: 5, pointBackgroundColor: c.accent,
-              borderWidth: 3,
+              label: 'Monthly Active Users',
+              data: [2000, 5200, 9800, 18000, 28000, 42000, 61000, 85000, 110000, 138000, 160000, 185000],
+              borderColor: c.accent,
+              backgroundColor: c.accent + '20',
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointBackgroundColor: c.accent,
+              pointBorderColor: c.surface,
+              pointBorderWidth: 2,
             }]
           },
           options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true,
+            maintainAspectRatio: false,
             plugins: {
               legend: { display: false },
-              tooltip: { callbacks: { label: ctx => ctx.raw + 'K users' } }
+              tooltip: {
+                callbacks: { label: ctx => ctx.raw.toLocaleString() + ' users' }
+              }
             },
             scales: {
-              x: { grid: { color: c.border } },
-              y: { grid: { color: c.border }, ticks: { callback: v => v + 'K' } }
+              x: { grid: { color: c.border }, ticks: { color: c.textSecondary } },
+              y: {
+                grid: { color: c.border },
+                ticks: { callback: v => (v/1000) + 'k', color: c.textSecondary }
+              }
             }
           }
         });
       }
     }
 
-    applyTheme(currentTheme);
+    // ===== Hover Effects (Motion.js) =====
+    if (!prefersReducedMotion && typeof Motion !== 'undefined') {
+      document.querySelectorAll('.card, .pill').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          Motion.animate(el, { scale: 1.03, y: -4 }, { duration: 0.25, ease: Motion.spring({ stiffness: 300, damping: 20 }) });
+        });
+        el.addEventListener('mouseleave', () => {
+          Motion.animate(el, { scale: 1, y: 0 }, { duration: 0.3, ease: Motion.spring({ stiffness: 200, damping: 25 }) });
+        });
+      });
+    }
+
+    // Initial slide content animation
+    setTimeout(() => animateSlideContent(slides[0]), 100);
+
+    // ===== Download PNG =====
+    async function downloadImage() {
+      const menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        const slide = slides[current];
+        const dataUrl = await htmlToImage.toPng(slide, { quality: 1, pixelRatio: 2, backgroundColor: getComputedStyle(document.body).backgroundColor });
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'cookai-pitch-slide-' + (current + 1) + '.png';
+        a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
   </script>
 </body>
 </html>
