@@ -51,8 +51,8 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 20px rgba(59,130,246,0.1);
     }
 
     @keyframes fadeInUp {
@@ -447,7 +447,7 @@
         if (el.dataset.counted) return;
         el.dataset.counted = '1';
         var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
-        var start = performance.now(), duration = 1200;
+        var start = performance.now(), duration = 1500;
         (function tick(now) {
           var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3);
           el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;

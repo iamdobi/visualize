@@ -1,7 +1,7 @@
 {
-  "currentRound": 7,
-  "loopsSinceResearch": 5,
-  "lastAverage": 8.33,
+  "currentRound": 8,
+  "loopsSinceResearch": 6,
+  "lastAverage": 8.25,
   "gate": "ACCEPTABLE",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -10,6 +10,7 @@
     { "round": 4, "avg": 7.10, "gate": "NEEDS WORK", "notes": "Stricter scoring R4. Fixed: broken bar chart, empty space, arrow nav, connection lines, sparse title, missing cons, chart tooltips, theme toggles" },
     { "round": 5, "avg": 7.0, "gate": "NEEDS WORK", "notes": "R5: Added SVG connection lines to architecture, era markers + decade nav to timeline, scroll-reveal animations, hover effects. Chart.js theme toggle still partially broken on comparison." },
     { "round": 6, "avg": 6.75, "gate": "NEEDS WORK", "notes": "R6 eval: Stricter scoring exposed a11y gaps (all files scored 5). Rebuilt all 6 files: added skip-links, aria-labels, landmark roles, focus indicators, SVG icons replacing emojis, Chart.js destroy/rebuild on theme toggle, mobile breakpoints, scroll-reveal fix (visible by default). Updated SKILL.md with a11y section." },
-    { "round": 7, "avg": 8.33, "gate": "ACCEPTABLE", "notes": "R7: 0 console errors. Responsive clamp() padding on slide decks, filter toolbar on comparison chart, animated connection lines + hover dimming on architecture, prefers-color-scheme detection on all 6 files. Best: ai-timeline 8.50. All scores ≥7." }
+    { "round": 7, "avg": 8.33, "gate": "ACCEPTABLE", "notes": "R7: 0 console errors. Responsive clamp() padding on slide decks, filter toolbar on comparison chart, animated connection lines + hover dimming on architecture, prefers-color-scheme detection on all 6 files. Best: ai-timeline 8.50. All scores ≥7." },
+    { "round": 8, "avg": 8.25, "gate": "ACCEPTABLE", "notes": "R8: 0 console errors. Enhanced progress bars (4px + glow), added floating gradient orbs to slide deck backgrounds, confirmed count-up animations + hover states already present. Slide decks still weakest at 7.88. Need bigger changes to push past 9.0." }
   ]
 }
