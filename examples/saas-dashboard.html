@@ -270,7 +270,7 @@
     }
 
     .chart-period {
-      color: var(--text-secondary); font-size: 0.875rem;
+      color: var(--text-secondary); font-size: 0.875rem; margin-left: 0.5rem;
     }
 
     .chart-wrapper {
@@ -732,7 +732,12 @@
       try { if (acquisitionChart) acquisitionChart.destroy(); } catch(e) {}
 
       // Revenue Chart
-      revenueChart = new Chart(resetCanvas('revenueChart'), {
+      var revCanvas = resetCanvas('revenueChart');
+      var revCtx = revCanvas.getContext('2d');
+      var revGrad = revCtx.createLinearGradient(0, 0, 0, 300);
+      revGrad.addColorStop(0, colors.accent + '40');
+      revGrad.addColorStop(1, colors.accent + '00');
+      revenueChart = new Chart(revCanvas, {
         type: 'line',
         data: {
           labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -740,12 +745,12 @@
             label: 'Revenue ($K)',
             data: [98, 102, 108, 115, 121, 128, 124, 132, 138, 135, 142, 142],
             borderColor: colors.accent,
-            backgroundColor: colors.accent + '20',
+            backgroundColor: revGrad,
             borderWidth: 3,
             fill: true,
             tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 8,
+            pointRadius: 5,
+            pointHoverRadius: 10,
             pointBackgroundColor: colors.accent,
             pointBorderColor: colors.surface,
             pointBorderWidth: 2

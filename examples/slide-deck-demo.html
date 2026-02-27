@@ -230,12 +230,33 @@
       transform-origin: center;
     }
 
-    /* Decorative diamond shape */
-    .title-diamond {
-      width: 12px; height: 12px; background: rgba(255,255,255,0.5);
-      transform: rotate(45deg); margin: 0 auto 1rem;
-      animation: fadeIn 0.5s ease-out 1.3s both;
+    /* Decorative icon */
+    .title-icon {
+      width: 64px; height: 64px; margin: 0 auto 1.5rem;
+      animation: fadeIn 0.8s ease-out 0.1s both;
+      color: rgba(255,255,255,0.8);
     }
+
+    /* Subtle grid pattern overlay */
+    .slide.title-slide::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 1;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
+    }
+
+    /* Floating geometric accents */
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .title-ring {
+      position: absolute; border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 50%; z-index: 1;
+    }
+    .title-ring-1 { width: 500px; height: 500px; top: 50%; left: 50%; margin: -250px 0 0 -250px; animation: spinSlow 60s linear infinite; }
+    .title-ring-2 { width: 700px; height: 700px; top: 50%; left: 50%; margin: -350px 0 0 -350px; animation: spinSlow 90s linear infinite reverse; }
 
     .slide.section-slide {
       background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
@@ -353,8 +374,20 @@
           <div class="orb orb-1"></div>
           <div class="orb orb-2"></div>
           <div class="orb orb-3"></div>
+          <div class="title-ring title-ring-1"></div>
+          <div class="title-ring title-ring-2"></div>
           <div class="content">
-            <div class="title-diamond"></div>
+            <div class="title-icon">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="56" height="56" rx="12"/>
+                <polyline points="16,44 24,28 32,36 40,20 48,24"/>
+                <circle cx="16" cy="44" r="2.5" fill="currentColor"/>
+                <circle cx="24" cy="28" r="2.5" fill="currentColor"/>
+                <circle cx="32" cy="36" r="2.5" fill="currentColor"/>
+                <circle cx="40" cy="20" r="2.5" fill="currentColor"/>
+                <circle cx="48" cy="24" r="2.5" fill="currentColor"/>
+              </svg>
+            </div>
             <h1>Next-Gen Analytics Platform</h1>
             <div class="title-accent-line"></div>
             <p class="subtitle">Revolutionizing data insights for modern businesses</p>
@@ -487,8 +520,9 @@
           <div class="orb orb-1"></div>
           <div class="orb orb-2"></div>
           <div class="orb orb-3"></div>
+          <div class="title-ring title-ring-1"></div>
+          <div class="title-ring title-ring-2"></div>
           <div class="content">
-            <div class="title-diamond"></div>
             <h2 style="animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;">Thank You</h2>
             <div class="title-accent-line"></div>
             <p style="animation: subtitleReveal 0.8s ease-out 0.6s both; margin: 1rem 0;">
@@ -602,12 +636,16 @@
       Chart.defaults.color = c.textSecondary; Chart.defaults.borderColor = c.border;
       try { if (marketChart) marketChart.destroy(); } catch(e) {}
       var canvas = resetCanvas('marketChart'); if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var grad = ctx.createLinearGradient(0, 0, 0, 300);
+      grad.addColorStop(0, c.accent + '40');
+      grad.addColorStop(1, c.accent + '00');
       marketChart = new Chart(canvas, {
         type: 'line',
         data: { labels: ['2020','2022','2024','2026','2028','2030'],
           datasets: [{ label: 'Market Size ($B)', data: [195,245,305,340,380,420],
-            borderColor: c.accent, backgroundColor: c.accent + '20', borderWidth: 3,
-            fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 8,
+            borderColor: c.accent, backgroundColor: grad, borderWidth: 3,
+            fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 8,
             pointBackgroundColor: c.accent, pointBorderColor: '#ffffff', pointBorderWidth: 2 }] },
         options: { responsive: true, maintainAspectRatio: false,
           plugins: { tooltip: { enabled: true, mode: 'index', intersect: false, backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1,

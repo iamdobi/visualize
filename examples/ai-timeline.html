@@ -205,15 +205,16 @@
     }
 
     .timeline {
-      position: relative; padding: 3rem 0;
+      position: relative; padding: 2rem 0;
     }
 
     .timeline::before {
       content: ''; position: absolute;
       left: 50%; top: 0; bottom: 0;
-      width: 4px; background: var(--accent);
+      width: 6px; background: linear-gradient(180deg, var(--accent), var(--accent-secondary));
       transform: translateX(-50%);
-      border-radius: 2px;
+      border-radius: 3px;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
     }
 
     @container (width < 768px) {
@@ -223,7 +224,7 @@
     }
 
     .timeline-item {
-      position: relative; margin: 3rem 0;
+      position: relative; margin: 0.9rem 0;
       display: flex; align-items: center;
     }
 
@@ -288,6 +289,15 @@
       border-left: 4px solid var(--accent);
       padding: 1rem; border-radius: 0 0.5rem 0.5rem 0;
       font-size: 0.875rem; color: var(--text);
+    }
+
+    .era-label {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      background: var(--accent-secondary); color: white;
+      padding: 0.25rem 0.75rem; border-radius: 1rem;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; z-index: 3;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     .future-section {
@@ -388,6 +398,7 @@
       </section>
 
       <section class="timeline" aria-label="AI Development Timeline">
+        <div class="era-label" style="top: 2rem;">Early Foundations</div>
         <article class="timeline-item" data-reveal>
           <div class="timeline-year">1950</div>
           <div class="timeline-content">
@@ -452,6 +463,7 @@
           </div>
         </article>
 
+        <div class="era-label" style="top: 32rem;">Strategic AI</div>
         <article class="timeline-item" data-reveal>
           <div class="timeline-year">1997</div>
           <div class="timeline-content">
@@ -468,6 +480,7 @@
           </div>
         </article>
 
+        <div class="era-label" style="top: 50rem;">Deep Learning Era</div>
         <article class="timeline-item" data-reveal>
           <div class="timeline-year">2006</div>
           <div class="timeline-content">
@@ -516,6 +529,7 @@
           </div>
         </article>
 
+        <div class="era-label" style="top: 78rem;">Generative AI Boom</div>
         <article class="timeline-item" data-reveal>
           <div class="timeline-year">2020</div>
           <div class="timeline-content">
