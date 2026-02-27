@@ -553,7 +553,7 @@ Charts are the second most common failure. Follow these rules:
 ```javascript
 // Theme-aware Chart.js setup (include in every chart visualization)
 function getChartColors() {
-  const s = getComputedStyle(document.documentElement);
+  var s = getComputedStyle(document.documentElement);
   return {
     text: s.getPropertyValue('--text').trim(),
     textSecondary: s.getPropertyValue('--text-secondary').trim(),
@@ -562,7 +562,20 @@ function getChartColors() {
     accent: s.getPropertyValue('--accent').trim(),
   };
 }
-// Call this and update charts whenever theme changes
+
+// REQUIRED: Reset canvas before rebuilding charts (prevents "Canvas already in use" errors)
+function resetCanvas(id) {
+  var old = document.getElementById(id);
+  var parent = old.parentNode;
+  var canvas = document.createElement('canvas');
+  canvas.id = id;
+  parent.replaceChild(canvas, old);
+  return canvas;
+}
+
+// Usage in buildCharts():
+//   try { if (myChart) myChart.destroy(); } catch(e) {}
+//   myChart = new Chart(resetCanvas('myChart'), { ... });
 ```
 
 ## Process

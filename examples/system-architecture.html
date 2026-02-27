@@ -85,7 +85,7 @@
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       .node { break-inside: avoid; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .connector svg line { animation: none !important; }
+      .connector .conn-line { animation: none !important; }
     }
 
     /* Menu */
@@ -193,15 +193,18 @@
       background: var(--surface-hover); color: var(--text-secondary);
     }
 
-    /* Connectors */
-    .connector { width: 100%; height: 48px; position: relative; z-index: 1; }
-    .connector svg { width: 100%; height: 100%; overflow: visible; }
-    .connector line { stroke-width: 2; stroke-dasharray: 6 4; animation: flow-down 1s linear infinite; }
-    @keyframes flow-down { from { stroke-dashoffset: 10; } to { stroke-dashoffset: 0; } }
-    .conn-clients line { stroke: var(--layer-clients); opacity: 0.4; }
-    .conn-gateway line { stroke: var(--layer-gateway); opacity: 0.4; }
-    .conn-services line { stroke: var(--layer-services); opacity: 0.4; }
-    .conn-data line { stroke: var(--layer-data); opacity: 0.4; }
+    /* Connectors — simple CSS vertical lines */
+    .connector { display: flex; justify-content: center; gap: 48px; height: 40px; position: relative; z-index: 1; }
+    @keyframes dash-flow { to { background-position: 0 20px; } }
+    .conn-line { width: 2px; height: 100%; border-radius: 1px; opacity: 0.35; background-size: 2px 10px; background-repeat: repeat-y; animation: dash-flow 1.5s linear infinite; }
+    .conn-clients .conn-line { background: repeating-linear-gradient(to bottom, var(--layer-clients) 0 5px, transparent 5px 10px); }
+    .conn-gateway .conn-line { background: repeating-linear-gradient(to bottom, var(--layer-gateway) 0 5px, transparent 5px 10px); }
+    .conn-services .conn-line { background: repeating-linear-gradient(to bottom, var(--layer-services) 0 5px, transparent 5px 10px); }
+    .conn-data .conn-line { background: repeating-linear-gradient(to bottom, var(--layer-data) 0 5px, transparent 5px 10px); }
+
+    /* Hover highlight: dim non-hovered layers */
+    .diagram.node-hover .layer { opacity: 0.4; transition: opacity 0.3s; }
+    .diagram.node-hover .layer.layer-highlight { opacity: 1; }
 
     .legend { display: flex; gap: 20px; justify-content: center; margin: 24px 0; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary); }
@@ -294,7 +297,7 @@
           </div>
         </div>
 
-        <div class="connector conn-clients" aria-hidden="true"><svg viewBox="0 0 100 48" preserveAspectRatio="none"><line x1="20" y1="0" x2="30" y2="48"/><line x1="50" y1="0" x2="50" y2="48"/><line x1="80" y1="0" x2="70" y2="48"/></svg></div>
+        <div class="connector conn-clients" aria-hidden="true"><div class="conn-line"></div><div class="conn-line"></div><div class="conn-line"></div></div>
 
         <!-- Layer 2: API Gateway -->
         <div class="layer" data-reveal>
@@ -315,7 +318,7 @@
           </div>
         </div>
 
-        <div class="connector conn-gateway" aria-hidden="true"><svg viewBox="0 0 100 48" preserveAspectRatio="none"><line x1="15" y1="0" x2="10" y2="48"/><line x1="30" y1="0" x2="30" y2="48"/><line x1="50" y1="0" x2="50" y2="48"/><line x1="70" y1="0" x2="70" y2="48"/><line x1="85" y1="0" x2="90" y2="48"/></svg></div>
+        <div class="connector conn-gateway" aria-hidden="true"><div class="conn-line"></div><div class="conn-line"></div><div class="conn-line"></div></div>
 
         <!-- Layer 3: Microservices -->
         <div class="layer" data-reveal>
@@ -348,7 +351,7 @@
           </div>
         </div>
 
-        <div class="connector conn-services" aria-hidden="true"><svg viewBox="0 0 100 48" preserveAspectRatio="none"><line x1="20" y1="0" x2="15" y2="48"/><line x1="40" y1="0" x2="38" y2="48"/><line x1="60" y1="0" x2="62" y2="48"/><line x1="80" y1="0" x2="85" y2="48"/></svg></div>
+        <div class="connector conn-services" aria-hidden="true"><div class="conn-line"></div><div class="conn-line"></div><div class="conn-line"></div></div>
 
         <!-- Layer 4: Data Layer -->
         <div class="layer" data-reveal>
@@ -373,7 +376,7 @@
           </div>
         </div>
 
-        <div class="connector conn-data" aria-hidden="true"><svg viewBox="0 0 100 48" preserveAspectRatio="none"><line x1="20" y1="0" x2="15" y2="48"/><line x1="40" y1="0" x2="38" y2="48"/><line x1="60" y1="0" x2="62" y2="48"/><line x1="80" y1="0" x2="85" y2="48"/></svg></div>
+        <div class="connector conn-data" aria-hidden="true"><div class="conn-line"></div><div class="conn-line"></div><div class="conn-line"></div></div>
 
         <!-- Layer 5: External APIs -->
         <div class="layer" data-reveal>
@@ -452,6 +455,9 @@
       localStorage.setItem('viz-theme', t); currentTheme = t;
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    if (!localStorage.getItem('viz-theme')) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
+    }
     applyTheme(currentTheme);
 
     // === Scroll Reveal ===
@@ -479,6 +485,19 @@
       document.getElementById('detailPanel').classList.remove('open');
       document.getElementById('detailOverlay').classList.remove('open');
     }
+
+    // Hover highlight
+    var diagram = document.querySelector('.diagram');
+    document.querySelectorAll('.node').forEach(function(node) {
+      node.addEventListener('mouseenter', function() {
+        diagram.classList.add('node-hover');
+        node.closest('.layer').classList.add('layer-highlight');
+      });
+      node.addEventListener('mouseleave', function() {
+        diagram.classList.remove('node-hover');
+        document.querySelectorAll('.layer-highlight').forEach(function(l) { l.classList.remove('layer-highlight'); });
+      });
+    });
 
     document.querySelectorAll('.node').forEach(function(node) {
       node.addEventListener('click', function() {

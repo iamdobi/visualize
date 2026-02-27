@@ -1,7 +1,7 @@
 {
-  "currentRound": 7,
-  "loopsSinceResearch": 4,
-  "lastAverage": 6.75,
+  "currentRound": 8,
+  "loopsSinceResearch": 5,
+  "lastAverage": 7.05,
   "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -9,6 +9,7 @@
     { "round": 3, "avg": 7.54, "gate": "NEEDS WORK" },
     { "round": 4, "avg": 7.10, "gate": "NEEDS WORK", "notes": "Stricter scoring R4. Fixed: broken bar chart, empty space, arrow nav, connection lines, sparse title, missing cons, chart tooltips, theme toggles" },
     { "round": 5, "avg": 7.0, "gate": "NEEDS WORK", "notes": "R5: Added SVG connection lines to architecture, era markers + decade nav to timeline, scroll-reveal animations, hover effects. Chart.js theme toggle still partially broken on comparison." },
-    { "round": 6, "avg": 6.75, "gate": "NEEDS WORK", "notes": "R6 eval: Stricter scoring exposed a11y gaps (all files scored 5). Rebuilt all 6 files: added skip-links, aria-labels, landmark roles, focus indicators, SVG icons replacing emojis, Chart.js destroy/rebuild on theme toggle, mobile breakpoints, scroll-reveal fix (visible by default). Updated SKILL.md with a11y section." }
+    { "round": 6, "avg": 6.75, "gate": "NEEDS WORK", "notes": "R6 eval: Stricter scoring exposed a11y gaps (all files scored 5). Rebuilt all 6 files: added skip-links, aria-labels, landmark roles, focus indicators, SVG icons replacing emojis, Chart.js destroy/rebuild on theme toggle, mobile breakpoints, scroll-reveal fix (visible by default). Updated SKILL.md with a11y section." },
+    { "round": 7, "avg": 7.05, "gate": "NEEDS WORK", "notes": "R7: Fixed CRITICAL system-architecture broken SVG connectors (replaced with CSS lines), fixed Chart.js canvas reuse crash on theme toggle (resetCanvas pattern across all chart files), added try/catch on chart destroy. Updated SKILL.md with resetCanvas as mandatory pattern." }
   ]
 }

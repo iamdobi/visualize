@@ -47,7 +47,7 @@
   .slide {
     position: absolute; inset: 0;
     display: flex; flex-direction: column; justify-content: center;
-    padding: 5rem 8rem;
+    padding: clamp(1.5rem, 5vw, 5rem) clamp(1.5rem, 6vw, 8rem);
     opacity: 0; transform: translateX(80px);
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
@@ -159,9 +159,14 @@
   }
 
   @media (max-width: 768px) {
-    .slide { padding: 3rem 2rem; }
+    .slide { padding: 1.5rem 1rem; }
+    .slide--hero h1 { font-size: 1.8rem; }
+    .slide--content h2 { font-size: 1.5rem; }
+    .slide--quote blockquote { font-size: 1.4rem; }
     .stat-row { flex-direction: column; }
+    .stat-card { padding: 1.25rem; }
     .two-col { grid-template-columns: 1fr; gap: 1.5rem; }
+    .chart-container { height: 250px; padding: 1rem; }
     .nav { bottom: 1rem; padding: 0.4rem 1rem; }
   }
 </style>
@@ -354,6 +359,9 @@
       if (chartInstance) { chartInstance.destroy(); chartInstance = null; initChart(); }
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    if (!localStorage.getItem('viz-theme')) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
+    }
     applyTheme(currentTheme);
 
     // Download

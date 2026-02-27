@@ -112,7 +112,7 @@
     .slide {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 64px 80px; opacity: 0; pointer-events: none;
+      padding: clamp(1.5rem, 5vw, 64px) clamp(1.5rem, 6vw, 80px); opacity: 0; pointer-events: none;
       transition: opacity 0.3s ease;
     }
     .slide.active { opacity: 1; pointer-events: auto; }
@@ -430,6 +430,9 @@
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    if (!localStorage.getItem('viz-theme')) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
+    }
     applyTheme(currentTheme);
 
     // === Download PNG ===
@@ -491,12 +494,21 @@
       };
     }
 
+    function resetCanvas(id) {
+      var old = document.getElementById(id);
+      var parent = old.parentNode;
+      var canvas = document.createElement('canvas');
+      canvas.id = id;
+      parent.replaceChild(canvas, old);
+      return canvas;
+    }
+
     function buildCharts() {
       var c = getChartColors();
       Chart.defaults.color = c.textSecondary;
 
-      if (marketChart) marketChart.destroy();
-      marketChart = new Chart(document.getElementById('marketChart'), {
+      try { if (marketChart) marketChart.destroy(); } catch(e) {}
+      marketChart = new Chart(resetCanvas('marketChart'), {
         type: 'bar',
         data: {
           labels: ['TAM', 'SAM', 'SOM'],
@@ -512,8 +524,8 @@
         }
       });
 
-      if (tractionChart) tractionChart.destroy();
-      tractionChart = new Chart(document.getElementById('tractionChart'), {
+      try { if (tractionChart) tractionChart.destroy(); } catch(e) {}
+      tractionChart = new Chart(resetCanvas('tractionChart'), {
         type: 'line',
         data: {
           labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
@@ -531,7 +543,7 @@
     }
 
     function onThemeChange() { buildCharts(); }
-    buildCharts();
+    // buildCharts() is already called via applyTheme → onThemeChange on page load
   </script>
 </body>
 </html>

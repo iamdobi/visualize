@@ -129,6 +129,10 @@
 
     .chart-section h2 { text-align: center; font-size: 1.75rem; margin-bottom: 24px; }
     .chart-container { height: 400px; max-width: 700px; margin: 0 auto; position: relative; }
+    .filter-bar { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     .insights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .insight-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
@@ -252,6 +256,12 @@
 
       <section class="chart-section" data-reveal>
         <h2>Employee Satisfaction</h2>
+        <div class="filter-bar" role="toolbar" aria-label="Chart filters">
+          <button class="filter-btn active" data-filter="all" onclick="filterChart('all',this)">All</button>
+          <button class="filter-btn" data-filter="wellbeing" onclick="filterChart('wellbeing',this)">Well-being</button>
+          <button class="filter-btn" data-filter="performance" onclick="filterChart('performance',this)">Performance</button>
+          <button class="filter-btn" data-filter="growth" onclick="filterChart('growth',this)">Growth</button>
+        </div>
         <div class="card" style="padding:32px;">
           <div class="chart-container" role="img" aria-label="Bar chart comparing remote vs office satisfaction across 5 categories. Remote leads in work-life balance (87% vs 54%) and productivity (77% vs 65%). Office leads in collaboration (82% vs 58%) and career growth (72% vs 52%).">
             <canvas id="satisfactionChart"></canvas>
@@ -319,6 +329,9 @@
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    if (!localStorage.getItem('viz-theme')) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
+    }
     applyTheme(currentTheme);
 
     // === Scroll Reveal ===
@@ -367,10 +380,18 @@
       var s = getComputedStyle(document.documentElement);
       return { textSecondary: s.getPropertyValue('--text-secondary').trim(), border: s.getPropertyValue('--border').trim(), remote: s.getPropertyValue('--remote').trim(), office: s.getPropertyValue('--office').trim() };
     }
+    function resetCanvas(id) {
+      var old = document.getElementById(id);
+      var parent = old.parentNode;
+      var canvas = document.createElement("canvas");
+      canvas.id = id;
+      parent.replaceChild(canvas, old);
+      return canvas;
+    }
     function buildChart() {
       var c = getChartColors(); Chart.defaults.color = c.textSecondary;
-      if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
-      chartInstance = new Chart(document.getElementById('satisfactionChart'), {
+      try { if (chartInstance) { chartInstance.destroy(); chartInstance = null; } } catch(e) {}
+      chartInstance = new Chart(resetCanvas('satisfactionChart'), {
         type: 'bar',
         data: {
           labels: ['Work-Life Balance', 'Productivity', 'Collaboration', 'Career Growth', 'Overall'],
@@ -386,8 +407,28 @@
         }
       });
     }
+    var allLabels = ['Work-Life Balance', 'Productivity', 'Collaboration', 'Career Growth', 'Overall'];
+    var allRemote = [87, 77, 58, 52, 78];
+    var allOffice = [54, 65, 82, 72, 68];
+    var filterMap = {
+      all: [0,1,2,3,4],
+      wellbeing: [0,4],
+      performance: [1,2],
+      growth: [3]
+    };
+    function filterChart(key, btn) {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var idx = filterMap[key];
+      if (chartInstance) {
+        chartInstance.data.labels = idx.map(function(i) { return allLabels[i]; });
+        chartInstance.data.datasets[0].data = idx.map(function(i) { return allRemote[i]; });
+        chartInstance.data.datasets[1].data = idx.map(function(i) { return allOffice[i]; });
+        chartInstance.update();
+      }
+    }
     function onThemeChange() { buildChart(); }
-    buildChart();
+    // buildChart called via applyTheme -> onThemeChange
   </script>
 </body>
 </html>

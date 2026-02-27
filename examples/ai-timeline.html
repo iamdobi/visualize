@@ -401,6 +401,9 @@
       localStorage.setItem('viz-theme', t); currentTheme = t;
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    if (!localStorage.getItem('viz-theme')) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
+    }
     applyTheme(currentTheme);
 
     // === Scroll Reveal ===

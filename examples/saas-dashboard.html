@@ -258,6 +258,9 @@
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    if (!localStorage.getItem('viz-theme')) {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) currentTheme = 'light';
+    }
     applyTheme(currentTheme);
 
     // Scroll Reveal
@@ -313,36 +316,44 @@
         warning: s.getPropertyValue('--warning').trim()
       };
     }
+    function resetCanvas(id) {
+      var old = document.getElementById(id);
+      var parent = old.parentNode;
+      var canvas = document.createElement("canvas");
+      canvas.id = id;
+      parent.replaceChild(canvas, old);
+      return canvas;
+    }
     function buildCharts() {
       var c = getChartColors(); Chart.defaults.color = c.textSecondary;
       var months = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
 
-      if (revenueChart) revenueChart.destroy();
-      revenueChart = new Chart(document.getElementById('revenueChart'), {
+      try { if (revenueChart) revenueChart.destroy(); } catch(e) {}
+      revenueChart = new Chart(resetCanvas('revenueChart'), {
         type: 'line', data: { labels: months, datasets: [{ label: 'Revenue ($K)', data: [72,78,84,89,95,98,104,108,112,118,124,128], borderColor: c.accent, backgroundColor: c.accent+'22', fill: true, tension: 0.4, pointRadius: 3 }] },
         options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: c.accent+'ee', cornerRadius: 8, callbacks: { label: function(ctx) { return '$'+ctx.parsed.y+'K'; } } } }, scales: { x: { grid: { color: c.border } }, y: { grid: { color: c.border }, ticks: { callback: function(v) { return '$'+v+'K'; } } } } }
       });
 
-      if (churnChart) churnChart.destroy();
-      churnChart = new Chart(document.getElementById('churnChart'), {
+      try { if (churnChart) churnChart.destroy(); } catch(e) {}
+      churnChart = new Chart(resetCanvas('churnChart'), {
         type: 'doughnut', data: { labels: ['Voluntary','Involuntary','Downgrade'], datasets: [{ data: [1.4,1.0,0.8], backgroundColor: [c.negative, c.warning, c.accentSecondary], borderWidth: 0 }] },
         options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { position: 'bottom' }, tooltip: { cornerRadius: 8, callbacks: { label: function(ctx) { return ctx.label+': '+ctx.parsed+'%'; } } } }, cutout: '65%' }
       });
 
-      if (growthChart) growthChart.destroy();
-      growthChart = new Chart(document.getElementById('growthChart'), {
+      try { if (growthChart) growthChart.destroy(); } catch(e) {}
+      growthChart = new Chart(resetCanvas('growthChart'), {
         type: 'bar', data: { labels: months, datasets: [{ label: 'New Users', data: [820,940,1100,1280,1350,1420,1500,1620,1780,1890,1950,2100], backgroundColor: c.positive, borderRadius: 6 }] },
         options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { display: false }, tooltip: { cornerRadius: 8, callbacks: { label: function(ctx) { return ctx.parsed.y.toLocaleString()+' new users'; } } } }, scales: { x: { grid: { display: false } }, y: { grid: { color: c.border } } } }
       });
 
-      if (planChart) planChart.destroy();
-      planChart = new Chart(document.getElementById('planChart'), {
+      try { if (planChart) planChart.destroy(); } catch(e) {}
+      planChart = new Chart(resetCanvas('planChart'), {
         type: 'doughnut', data: { labels: ['Enterprise','Pro','Starter','Free'], datasets: [{ data: [52,28,14,6], backgroundColor: [c.accent, c.accentSecondary, c.positive, c.warning], borderWidth: 0 }] },
         options: { responsive: true, maintainAspectRatio: false, animation: false, plugins: { legend: { position: 'bottom' }, tooltip: { cornerRadius: 8, callbacks: { label: function(ctx) { return ctx.label+': '+ctx.parsed+'%'; } } } }, cutout: '65%' }
       });
     }
     function onThemeChange() { buildCharts(); }
-    buildCharts();
+    // buildCharts called via applyTheme -> onThemeChange
   </script>
 </body>
 </html>
