@@ -961,8 +961,8 @@
     // ===== Slide Navigation =====
     const slides = document.querySelectorAll('.slide');
     const totalSlides = slides.length;
-    let current = 0;
-    let transitioning = false;
+    var current = 0;
+    var transitioning = false;
 
     // Build dots
     const dotsContainer = document.getElementById('slideDots');
@@ -983,7 +983,7 @@
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function goToSlide(n) {
+    window.goToSlide = function goToSlide(n) {
       if (n === current || n < 0 || n >= totalSlides || transitioning) return;
       transitioning = true;
       const dir = n > current ? 1 : -1;
@@ -1118,7 +1118,7 @@
     });
 
     // ===== Charts =====
-    let marketChart, tractionChart;
+    var marketChart, tractionChart;
 
     function getChartColors() {
       const s = getComputedStyle(document.documentElement);
