@@ -42,11 +42,12 @@
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px;
+      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeInUp {
@@ -59,7 +60,6 @@
     .animate.delay-3 { animation-delay: 0.3s; }
     .animate.delay-4 { animation-delay: 0.4s; }
     .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
 
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -75,6 +75,7 @@
       .reveal { opacity: 1 !important; transform: none !important; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .connector svg { display: block !important; }
     }
 
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
@@ -109,11 +110,12 @@
     .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; }
     .hero p { font-size: 1.125rem; color: var(--text-secondary); }
 
-    .diagram { display: flex; flex-direction: column; gap: 0; align-items: center; margin-bottom: 64px; }
+    .diagram { position: relative; display: flex; flex-direction: column; gap: 0; align-items: center; margin-bottom: 64px; }
 
     .layer {
       width: 100%; padding: 24px; border-radius: 16px; position: relative;
       border: 1px solid var(--border); background: var(--surface);
+      backdrop-filter: blur(12px); z-index: 2;
     }
     .layer-label {
       font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
@@ -121,40 +123,83 @@
     }
     .layer-dot { width: 10px; height: 10px; border-radius: 50%; }
 
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 currentColor; }
+      50% { box-shadow: 0 0 0 6px transparent; }
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+      margin-left: 6px; vertical-align: middle;
+    }
+    .status-dot.healthy { background: var(--positive); color: var(--positive); animation: pulse-dot 2s infinite; }
+    .status-dot.degraded { background: var(--warning); color: var(--warning); animation: pulse-dot 1.5s infinite; }
+    .status-dot.down { background: var(--negative); color: var(--negative); animation: pulse-dot 1s infinite; }
+
     .nodes { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
     .node {
       padding: 12px 20px; border-radius: 10px; font-size: 0.85rem; font-weight: 600;
       border: 1px solid; text-align: center; min-width: 120px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      cursor: default;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
+      cursor: pointer; position: relative;
     }
     .node:hover { transform: scale(1.08); }
 
-    .node-clients { border-color: var(--layer-clients); color: var(--layer-clients); background: color-mix(in srgb, var(--layer-clients) 10%, transparent); }
-    .node-clients:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-clients) 30%, transparent); }
-    .node-gateway { border-color: var(--layer-gateway); color: var(--layer-gateway); background: color-mix(in srgb, var(--layer-gateway) 10%, transparent); }
-    .node-gateway:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-gateway) 30%, transparent); }
-    .node-services { border-color: var(--layer-services); color: var(--layer-services); background: color-mix(in srgb, var(--layer-services) 10%, transparent); }
-    .node-services:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-services) 30%, transparent); }
-    .node-data { border-color: var(--layer-data); color: var(--layer-data); background: color-mix(in srgb, var(--layer-data) 10%, transparent); }
-    .node-data:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-data) 30%, transparent); }
-    .node-external { border-color: var(--layer-external); color: var(--layer-external); background: color-mix(in srgb, var(--layer-external) 10%, transparent); }
-    .node-external:hover { box-shadow: 0 0 20px color-mix(in srgb, var(--layer-external) 30%, transparent); }
+    .node-clients { border-color: var(--layer-clients); color: var(--layer-clients); background: color-mix(in srgb, var(--layer-clients) 8%, transparent); }
+    .node-clients:hover { box-shadow: 0 0 24px color-mix(in srgb, var(--layer-clients) 35%, transparent); background: color-mix(in srgb, var(--layer-clients) 15%, transparent); }
+    .node-gateway { border-color: var(--layer-gateway); color: var(--layer-gateway); background: color-mix(in srgb, var(--layer-gateway) 8%, transparent); }
+    .node-gateway:hover { box-shadow: 0 0 24px color-mix(in srgb, var(--layer-gateway) 35%, transparent); background: color-mix(in srgb, var(--layer-gateway) 15%, transparent); }
+    .node-services { border-color: var(--layer-services); color: var(--layer-services); background: color-mix(in srgb, var(--layer-services) 8%, transparent); }
+    .node-services:hover { box-shadow: 0 0 24px color-mix(in srgb, var(--layer-services) 35%, transparent); background: color-mix(in srgb, var(--layer-services) 15%, transparent); }
+    .node-data { border-color: var(--layer-data); color: var(--layer-data); background: color-mix(in srgb, var(--layer-data) 8%, transparent); }
+    .node-data:hover { box-shadow: 0 0 24px color-mix(in srgb, var(--layer-data) 35%, transparent); background: color-mix(in srgb, var(--layer-data) 15%, transparent); }
+    .node-external { border-color: var(--layer-external); color: var(--layer-external); background: color-mix(in srgb, var(--layer-external) 8%, transparent); }
+    .node-external:hover { box-shadow: 0 0 24px color-mix(in srgb, var(--layer-external) 35%, transparent); background: color-mix(in srgb, var(--layer-external) 15%, transparent); }
 
-    .arrow-row {
-      display: flex; justify-content: center; padding: 8px 0;
+    /* Detail popup on click */
+    .node-detail {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 32px; max-width: 400px; width: 90%; z-index: 10000;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4); backdrop-filter: blur(20px);
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
     }
-    .arrow-row svg { width: 24px; height: 24px; }
-    .arrow-row svg { stroke: var(--text-secondary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .node { position: relative; }
-    .node .tooltip {
-      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-      padding: 8px 12px; font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap;
-      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    .node-detail.open { opacity: 1; pointer-events: auto; }
+    .node-detail h3 { font-size: 1.25rem; margin-bottom: 12px; }
+    .node-detail p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; }
+    .node-detail .detail-close {
+      position: absolute; top: 12px; right: 16px; background: none; border: none;
+      color: var(--text-secondary); font-size: 1.25rem; cursor: pointer;
     }
-    .node:hover .tooltip { opacity: 1; }
+    .node-detail-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .node-detail-overlay.open { opacity: 1; pointer-events: auto; }
+    .detail-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .detail-tag {
+      padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+      background: var(--surface-hover); color: var(--text-secondary);
+    }
+
+    /* SVG Connectors */
+    .connector {
+      width: 100%; height: 48px; position: relative; z-index: 1;
+    }
+    .connector svg { width: 100%; height: 100%; overflow: visible; }
+    .connector line {
+      stroke-width: 2; stroke-dasharray: 6 4;
+      animation: flow-down 1s linear infinite;
+    }
+    @keyframes flow-down {
+      from { stroke-dashoffset: 10; }
+      to { stroke-dashoffset: 0; }
+    }
+    /* Color the connectors by their layer context */
+    .conn-clients line { stroke: var(--layer-clients); opacity: 0.4; }
+    .conn-gateway line { stroke: var(--layer-gateway); opacity: 0.4; }
+    .conn-services line { stroke: var(--layer-services); opacity: 0.4; }
+    .conn-data line { stroke: var(--layer-data); opacity: 0.4; }
+
     .legend { display: flex; gap: 20px; justify-content: center; margin: 24px 0; flex-wrap: wrap; }
     .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-secondary); }
     .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -167,6 +212,7 @@
     @media (max-width: 640px) {
       .nodes { flex-direction: column; align-items: center; }
       .annotations { grid-template-columns: 1fr; }
+      .connector { height: 32px; }
     }
   </style>
 </head>
@@ -186,6 +232,15 @@
     </div>
   </div>
 
+  <!-- Detail popup -->
+  <div class="node-detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
+  <div class="node-detail" id="detailPanel">
+    <button class="detail-close" onclick="closeDetail()">✕</button>
+    <h3 id="detailTitle"></h3>
+    <p id="detailDesc"></p>
+    <div class="detail-meta" id="detailMeta"></div>
+  </div>
+
   <div class="container">
 
     <header class="hero">
@@ -202,65 +257,97 @@
     <section class="diagram animate delay-3">
 
       <!-- Layer 1: Clients -->
-      <div class="layer">
+      <div class="layer" data-reveal>
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-clients)"></div> Clients</div>
         <div class="nodes">
-          <div class="node node-clients">🌐 Web App<span class="tooltip">React SPA · CDN-hosted</span></div>
-          <div class="node node-clients">📱 Mobile App<span class="tooltip">React Native · iOS & Android</span></div>
-          <div class="node node-clients">🖥️ Admin Panel<span class="tooltip">Internal dashboard · RBAC</span></div>
+          <div class="node node-clients" data-name="Web App" data-desc="React single-page application hosted on Cloudflare CDN. Server-side rendering for SEO-critical pages." data-tags="React,CDN,SSR,TypeScript" data-status="healthy">🌐 Web App <span class="status-dot healthy"></span></div>
+          <div class="node node-clients" data-name="Mobile App" data-desc="React Native cross-platform app for iOS and Android. Push notifications via Firebase Cloud Messaging." data-tags="React Native,iOS,Android,FCM" data-status="healthy">📱 Mobile App <span class="status-dot healthy"></span></div>
+          <div class="node node-clients" data-name="Admin Panel" data-desc="Internal dashboard with role-based access control. Used by ops, support, and merchandising teams." data-tags="RBAC,Internal,Vue.js" data-status="healthy">🖥️ Admin Panel <span class="status-dot healthy"></span></div>
         </div>
       </div>
 
-      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+      <!-- Connector: Clients → Gateway -->
+      <div class="connector conn-clients">
+        <svg viewBox="0 0 100 48" preserveAspectRatio="none">
+          <line x1="20" y1="0" x2="30" y2="48"/>
+          <line x1="50" y1="0" x2="50" y2="48"/>
+          <line x1="80" y1="0" x2="70" y2="48"/>
+        </svg>
+      </div>
 
       <!-- Layer 2: API Gateway -->
-      <div class="layer">
+      <div class="layer" data-reveal>
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-gateway)"></div> API Gateway</div>
         <div class="nodes">
-          <div class="node node-gateway">🔐 Auth & Rate Limiting<span class="tooltip">JWT validation · 1K req/min limit</span></div>
-          <div class="node node-gateway">🔀 Load Balancer<span class="tooltip">NGINX · Round-robin</span></div>
-          <div class="node node-gateway">📊 Request Router<span class="tooltip">Path-based routing to services</span></div>
+          <div class="node node-gateway" data-name="Auth & Rate Limiting" data-desc="JWT token validation, OAuth2 flows, and rate limiting at 1,000 requests/min per client. Blocks brute-force attempts." data-tags="JWT,OAuth2,Rate Limit,Security" data-status="healthy">🔐 Auth & Rate Limiting <span class="status-dot healthy"></span></div>
+          <div class="node node-gateway" data-name="Load Balancer" data-desc="NGINX-based load balancer with round-robin and least-connections algorithms. Health checks every 5s." data-tags="NGINX,Round-Robin,Health Checks" data-status="healthy">🔀 Load Balancer <span class="status-dot healthy"></span></div>
+          <div class="node node-gateway" data-name="Request Router" data-desc="Path-based routing to downstream microservices. Handles versioning (v1/v2) and request transformation." data-tags="Routing,API Versioning,gRPC" data-status="healthy">📊 Request Router <span class="status-dot healthy"></span></div>
         </div>
       </div>
 
-      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+      <!-- Connector: Gateway → Services -->
+      <div class="connector conn-gateway">
+        <svg viewBox="0 0 100 48" preserveAspectRatio="none">
+          <line x1="15" y1="0" x2="10" y2="48"/>
+          <line x1="30" y1="0" x2="30" y2="48"/>
+          <line x1="50" y1="0" x2="50" y2="48"/>
+          <line x1="70" y1="0" x2="70" y2="48"/>
+          <line x1="85" y1="0" x2="90" y2="48"/>
+        </svg>
+      </div>
 
       <!-- Layer 3: Microservices -->
-      <div class="layer">
+      <div class="layer" data-reveal>
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-services)"></div> Microservices</div>
         <div class="nodes">
-          <div class="node node-services">👤 User Service<span class="tooltip">Auth, profiles, preferences · Healthy</span></div>
-          <div class="node node-services">📦 Product Service<span class="tooltip">Catalog, inventory, pricing · Healthy</span></div>
-          <div class="node node-services">🛒 Order Service<span class="tooltip">Cart, checkout, order tracking · Healthy</span></div>
-          <div class="node node-services">💳 Payment Service<span class="tooltip">Stripe integration · Degraded (latency)</span></div>
-          <div class="node node-services">📬 Notification Service<span class="tooltip">Email, push, SMS · Healthy</span></div>
-          <div class="node node-services">🔍 Search Service<span class="tooltip">Elasticsearch-powered · Healthy</span></div>
+          <div class="node node-services" data-name="User Service" data-desc="Handles authentication, user profiles, preferences, and session management. Stores data in PostgreSQL." data-tags="Auth,Profiles,PostgreSQL,Go" data-status="healthy">👤 User Service <span class="status-dot healthy"></span></div>
+          <div class="node node-services" data-name="Product Service" data-desc="Product catalog, inventory management, and dynamic pricing engine. Syncs with Elasticsearch for search." data-tags="Catalog,Inventory,Pricing,Python" data-status="healthy">📦 Product Service <span class="status-dot healthy"></span></div>
+          <div class="node node-services" data-name="Order Service" data-desc="Shopping cart, checkout flow, and order lifecycle tracking. Emits events to RabbitMQ on state changes." data-tags="Cart,Checkout,Events,Java" data-status="healthy">🛒 Order Service <span class="status-dot healthy"></span></div>
+          <div class="node node-services" data-name="Payment Service" data-desc="Stripe integration for payments. Currently experiencing elevated latency (p99 > 800ms). Under investigation." data-tags="Stripe,PCI-DSS,Webhooks,Node.js" data-status="degraded">💳 Payment Service <span class="status-dot degraded"></span></div>
+          <div class="node node-services" data-name="Notification Service" data-desc="Email via SendGrid, push via FCM, SMS via Twilio. Processes ~50K messages/day with 99.7% delivery rate." data-tags="Email,Push,SMS,Go" data-status="healthy">📬 Notification Svc <span class="status-dot healthy"></span></div>
+          <div class="node node-services" data-name="Search Service" data-desc="Elasticsearch-powered full-text search with typo tolerance, faceted filtering, and sub-50ms p95 latency." data-tags="Elasticsearch,Facets,NLP,Rust" data-status="healthy">🔍 Search Service <span class="status-dot healthy"></span></div>
         </div>
       </div>
 
-      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+      <!-- Connector: Services → Data -->
+      <div class="connector conn-services">
+        <svg viewBox="0 0 100 48" preserveAspectRatio="none">
+          <line x1="20" y1="0" x2="15" y2="48"/>
+          <line x1="40" y1="0" x2="38" y2="48"/>
+          <line x1="60" y1="0" x2="62" y2="48"/>
+          <line x1="80" y1="0" x2="85" y2="48"/>
+        </svg>
+      </div>
 
       <!-- Layer 4: Data Layer -->
-      <div class="layer">
+      <div class="layer" data-reveal>
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-data)"></div> Data Layer</div>
         <div class="nodes">
-          <div class="node node-data">🐘 PostgreSQL</div>
-          <div class="node node-data">⚡ Redis Cache</div>
-          <div class="node node-data">🔍 Elasticsearch</div>
-          <div class="node node-data">📨 RabbitMQ</div>
+          <div class="node node-data" data-name="PostgreSQL" data-desc="Primary relational database. 3-node cluster with streaming replication. Handles ~8K queries/sec." data-tags="SQL,Replication,3 nodes,12TB" data-status="healthy">🐘 PostgreSQL <span class="status-dot healthy"></span></div>
+          <div class="node node-data" data-name="Redis Cache" data-desc="In-memory cache for sessions, hot queries, and rate limiting. 64GB cluster with 99.99% hit rate." data-tags="Cache,Sessions,64GB,Cluster" data-status="healthy">⚡ Redis Cache <span class="status-dot healthy"></span></div>
+          <div class="node node-data" data-name="Elasticsearch" data-desc="Search and analytics engine. 5-node cluster indexing ~2M products with real-time updates." data-tags="Search,Analytics,5 nodes,2M docs" data-status="healthy">🔍 Elasticsearch <span class="status-dot healthy"></span></div>
+          <div class="node node-data" data-name="RabbitMQ" data-desc="Message broker for async communication between services. Handles ~100K messages/min with durable queues." data-tags="AMQP,Queues,Events,HA" data-status="healthy">📨 RabbitMQ <span class="status-dot healthy"></span></div>
         </div>
       </div>
 
-      <div class="arrow-row"><svg viewBox="0 0 24 24"><path d="M12 4v16m0 0l-4-4m4 4l4-4"/></svg></div>
+      <!-- Connector: Data → External -->
+      <div class="connector conn-data">
+        <svg viewBox="0 0 100 48" preserveAspectRatio="none">
+          <line x1="20" y1="0" x2="15" y2="48"/>
+          <line x1="40" y1="0" x2="38" y2="48"/>
+          <line x1="60" y1="0" x2="62" y2="48"/>
+          <line x1="80" y1="0" x2="85" y2="48"/>
+        </svg>
+      </div>
 
       <!-- Layer 5: External APIs -->
-      <div class="layer">
+      <div class="layer" data-reveal>
         <div class="layer-label"><div class="layer-dot" style="background:var(--layer-external)"></div> External APIs</div>
         <div class="nodes">
-          <div class="node node-external">💰 Stripe</div>
-          <div class="node node-external">📧 SendGrid</div>
-          <div class="node node-external">🚚 ShipStation</div>
-          <div class="node node-external">📊 Analytics</div>
+          <div class="node node-external" data-name="Stripe" data-desc="Payment processing. Handles credit cards, Apple Pay, Google Pay. PCI-DSS Level 1 compliant." data-tags="Payments,PCI,Webhooks" data-status="healthy">💰 Stripe <span class="status-dot healthy"></span></div>
+          <div class="node node-external" data-name="SendGrid" data-desc="Transactional email delivery. 50K emails/day with 98.5% inbox placement rate." data-tags="Email,SMTP,Templates" data-status="healthy">📧 SendGrid <span class="status-dot healthy"></span></div>
+          <div class="node node-external" data-name="ShipStation" data-desc="Shipping and fulfillment. Multi-carrier rate shopping across UPS, FedEx, USPS." data-tags="Shipping,Labels,Tracking" data-status="healthy">🚚 ShipStation <span class="status-dot healthy"></span></div>
+          <div class="node node-external" data-name="Analytics" data-desc="Mixpanel + Google Analytics for product analytics, funnel tracking, and A/B testing." data-tags="Mixpanel,GA4,Events" data-status="healthy">📊 Analytics <span class="status-dot healthy"></span></div>
         </div>
       </div>
 
@@ -268,19 +355,19 @@
 
     <section class="annotations" data-reveal>
       <h2>Architecture Notes</h2>
-      <article class="card annotation-card">
+      <article class="card annotation-card" data-reveal>
         <h4>🔄 Event-Driven</h4>
         <p>Services communicate asynchronously via RabbitMQ message queues, ensuring loose coupling and resilience.</p>
       </article>
-      <article class="card annotation-card">
+      <article class="card annotation-card" data-reveal>
         <h4>📈 Auto-Scaling</h4>
         <p>Each microservice scales independently based on load. Kubernetes manages container orchestration.</p>
       </article>
-      <article class="card annotation-card">
+      <article class="card annotation-card" data-reveal>
         <h4>🛡️ Security Layers</h4>
         <p>JWT authentication at the gateway, encrypted data at rest, and mTLS between services.</p>
       </article>
-      <article class="card annotation-card">
+      <article class="card annotation-card" data-reveal>
         <h4>⚡ Caching Strategy</h4>
         <p>Redis handles session data and hot product queries. Elasticsearch powers full-text search with sub-50ms latency.</p>
       </article>
@@ -293,7 +380,7 @@
     // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
     document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.getElementById('vizMenuDropdown').classList.remove('open'); closeDetail(); } });
 
     // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
@@ -348,6 +435,38 @@
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
+
+    // === Node Click Detail ===
+    function closeDetail() {
+      document.getElementById('detailPanel').classList.remove('open');
+      document.getElementById('detailOverlay').classList.remove('open');
+    }
+
+    document.querySelectorAll('.node').forEach(function(node) {
+      node.addEventListener('click', function() {
+        var panel = document.getElementById('detailPanel');
+        var overlay = document.getElementById('detailOverlay');
+        document.getElementById('detailTitle').textContent = node.dataset.name;
+        document.getElementById('detailDesc').textContent = node.dataset.desc;
+        var meta = document.getElementById('detailMeta');
+        meta.innerHTML = '';
+        var status = node.dataset.status;
+        var statusTag = document.createElement('span');
+        statusTag.className = 'detail-tag';
+        statusTag.style.color = status === 'healthy' ? 'var(--positive)' : status === 'degraded' ? 'var(--warning)' : 'var(--negative)';
+        statusTag.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        meta.appendChild(statusTag);
+        (node.dataset.tags || '').split(',').forEach(function(tag) {
+          if (!tag) return;
+          var el = document.createElement('span');
+          el.className = 'detail-tag';
+          el.textContent = tag.trim();
+          meta.appendChild(el);
+        });
+        panel.classList.add('open');
+        overlay.classList.add('open');
+      });
+    });
 
     function onThemeChange() {}
   </script>

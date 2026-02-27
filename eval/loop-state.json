@@ -1,12 +1,13 @@
 {
-  "currentRound": 5,
-  "loopsSinceResearch": 2,
-  "lastAverage": 7.10,
+  "currentRound": 6,
+  "loopsSinceResearch": 3,
+  "lastAverage": 7.0,
   "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
     { "round": 2, "avg": 7.41, "gate": "NEEDS WORK" },
     { "round": 3, "avg": 7.54, "gate": "NEEDS WORK" },
-    { "round": 4, "avg": 7.10, "gate": "NEEDS WORK", "notes": "Stricter scoring R4. Fixed: broken bar chart, empty space, arrow nav, connection lines, sparse title, missing cons, chart tooltips, theme toggles" }
+    { "round": 4, "avg": 7.10, "gate": "NEEDS WORK", "notes": "Stricter scoring R4. Fixed: broken bar chart, empty space, arrow nav, connection lines, sparse title, missing cons, chart tooltips, theme toggles" },
+    { "round": 5, "avg": 7.0, "gate": "NEEDS WORK", "notes": "R5: Added SVG connection lines to architecture, era markers + decade nav to timeline, scroll-reveal animations, hover effects. Chart.js theme toggle still partially broken on comparison." }
   ]
 }

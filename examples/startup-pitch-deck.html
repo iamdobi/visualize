@@ -40,11 +40,12 @@
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px;
+      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeInUp {

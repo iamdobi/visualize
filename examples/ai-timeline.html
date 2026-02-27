@@ -38,11 +38,12 @@
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 28px;
+      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeInUp {
@@ -53,16 +54,12 @@
     .animate.delay-1 { animation-delay: 0.1s; }
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
-    .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
 
-    /* Scroll-triggered reveal — content visible by default, JS adds .reveal */
     .reveal { opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateX(0) !important; }
     .reveal.from-left { transform: translateX(-40px); }
     .reveal.from-right { transform: translateX(40px); }
-    /* Timeline items visible by default, JS animates entrance */
+    .reveal.from-up { transform: translateY(24px); }
+    .reveal.visible { opacity: 1; transform: translateX(0) translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -71,7 +68,7 @@
 
     @media print {
       body { background: white !important; color: black !important; }
-      .viz-menu { display: none !important; }
+      .viz-menu, .era-nav { display: none !important; }
       .reveal { opacity: 1 !important; transform: none !important; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
@@ -113,20 +110,41 @@
     .hero-stat .num { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .hero-stat .label { font-size: 0.875rem; color: var(--text-secondary); }
 
+    /* Era mini-nav */
+    .era-nav {
+      position: fixed; left: 16px; top: 50%; transform: translateY(-50%);
+      z-index: 999; display: flex; flex-direction: column; gap: 4px;
+    }
+    .era-nav a {
+      display: block; padding: 6px 12px; border-radius: 8px; font-size: 0.7rem;
+      font-weight: 600; color: var(--text-secondary); text-decoration: none;
+      background: var(--surface); border: 1px solid var(--border);
+      backdrop-filter: blur(12px); transition: all 0.2s; white-space: nowrap;
+    }
+    .era-nav a:hover, .era-nav a.active {
+      color: var(--accent); border-color: var(--accent); background: var(--surface-hover);
+    }
+
     .timeline { position: relative; padding: 0; }
     .timeline::before {
       content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
-      width: 2px; background: var(--border); transform: translateX(-50%);
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--accent-secondary));
+      transform: translateX(-50%); opacity: 0.3;
     }
 
     .tl-item { position: relative; margin-bottom: 28px; display: flex; }
     .tl-item.left { justify-content: flex-start; padding-right: calc(50% + 32px); }
     .tl-item.right { justify-content: flex-end; padding-left: calc(50% + 32px); }
 
+    @keyframes dot-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 var(--accent); }
+      50% { box-shadow: 0 0 0 8px transparent; }
+    }
     .tl-dot {
-      position: absolute; left: 50%; top: 32px; width: 14px; height: 14px;
+      position: absolute; left: 50%; top: 32px; width: 16px; height: 16px;
       border-radius: 50%; background: var(--accent); border: 3px solid var(--bg);
       transform: translateX(-50%); z-index: 2;
+      animation: dot-pulse 3s ease-in-out infinite;
     }
 
     .tl-card { min-width: 320px; }
@@ -137,11 +155,23 @@
     .tl-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
     .tl-card p { font-size: 0.95rem; color: var(--text-secondary); }
 
+    /* Decade markers */
+    .decade-marker {
+      text-align: center; margin: 48px 0 32px; position: relative;
+    }
+    .decade-marker span {
+      display: inline-block; padding: 6px 20px; border-radius: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: 0.85rem; font-weight: 700; color: var(--accent);
+      position: relative; z-index: 3;
+    }
+
     @media (max-width: 700px) {
       .timeline::before { left: 20px; }
       .tl-item.left, .tl-item.right { padding-left: 52px; padding-right: 0; justify-content: flex-start; }
       .tl-dot { left: 20px; }
       .tl-card { min-width: 0; }
+      .era-nav { display: none; }
     }
   </style>
 </head>
@@ -160,6 +190,16 @@
       <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
     </div>
   </div>
+
+  <!-- Era mini-nav -->
+  <nav class="era-nav" id="eraNav">
+    <a href="#era-foundations">1950s</a>
+    <a href="#era-expert">1970s</a>
+    <a href="#era-winter">1980s</a>
+    <a href="#era-revival">1990s</a>
+    <a href="#era-deep">2010s</a>
+    <a href="#era-llm">2020s</a>
+  </nav>
 
   <div class="container">
     <header class="hero">
@@ -183,7 +223,9 @@
 
     <section class="timeline">
 
-      <article class="tl-item left">
+      <div class="decade-marker" id="era-foundations"><span>🏛️ Foundations</span></div>
+
+      <article class="tl-item left" data-reveal data-dir="left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1950</div>
@@ -192,7 +234,7 @@
         </div>
       </article>
 
-      <article class="tl-item right">
+      <article class="tl-item right" data-reveal data-dir="right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1958</div>
@@ -201,7 +243,9 @@
         </div>
       </article>
 
-      <article class="tl-item left">
+      <div class="decade-marker" id="era-expert"><span>🧠 Expert Systems</span></div>
+
+      <article class="tl-item left" data-reveal data-dir="left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1970s</div>
@@ -210,7 +254,9 @@
         </div>
       </article>
 
-      <article class="tl-item right">
+      <div class="decade-marker" id="era-winter"><span>❄️ AI Winter</span></div>
+
+      <article class="tl-item right" data-reveal data-dir="right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1987</div>
@@ -219,7 +265,9 @@
         </div>
       </article>
 
-      <article class="tl-item left">
+      <div class="decade-marker" id="era-revival"><span>♟️ Revival</span></div>
+
+      <article class="tl-item left" data-reveal data-dir="left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">1997</div>
@@ -228,7 +276,9 @@
         </div>
       </article>
 
-      <article class="tl-item right">
+      <div class="decade-marker" id="era-deep"><span>🔥 Deep Learning</span></div>
+
+      <article class="tl-item right" data-reveal data-dir="right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2012</div>
@@ -237,7 +287,7 @@
         </div>
       </article>
 
-      <article class="tl-item left">
+      <article class="tl-item left" data-reveal data-dir="left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2016</div>
@@ -246,7 +296,7 @@
         </div>
       </article>
 
-      <article class="tl-item right">
+      <article class="tl-item right" data-reveal data-dir="right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2017</div>
@@ -255,7 +305,9 @@
         </div>
       </article>
 
-      <article class="tl-item left">
+      <div class="decade-marker" id="era-llm"><span>🚀 LLM Era</span></div>
+
+      <article class="tl-item left" data-reveal data-dir="left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2020</div>
@@ -264,7 +316,7 @@
         </div>
       </article>
 
-      <article class="tl-item right">
+      <article class="tl-item right" data-reveal data-dir="right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2022</div>
@@ -273,7 +325,7 @@
         </div>
       </article>
 
-      <article class="tl-item left">
+      <article class="tl-item left" data-reveal data-dir="left">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2023</div>
@@ -282,7 +334,7 @@
         </div>
       </article>
 
-      <article class="tl-item right">
+      <article class="tl-item right" data-reveal data-dir="right">
         <div class="tl-dot"></div>
         <div class="card tl-card">
           <div class="year">2025</div>
@@ -309,6 +361,8 @@
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
       localStorage.setItem('viz-theme', t);
       currentTheme = t;
+      // Update dot border color for theme
+      document.querySelectorAll('.tl-dot').forEach(function(d) { d.style.borderColor = t === 'dark' ? '#030712' : '#f8fafc'; });
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
@@ -319,12 +373,32 @@
       var dir = el.dataset.dir;
       el.classList.add('reveal');
       if (dir === 'left') el.classList.add('from-left');
-      if (dir === 'right') el.classList.add('from-right');
+      else if (dir === 'right') el.classList.add('from-right');
+      else el.classList.add('from-up');
     });
     var revealObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
     }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
     document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+
+    // === Era nav highlight on scroll ===
+    var eraLinks = document.querySelectorAll('.era-nav a');
+    var eraTargets = [];
+    eraLinks.forEach(function(a) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) eraTargets.push({ link: a, el: target });
+    });
+    var eraObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        eraTargets.forEach(function(t) {
+          if (t.el === e.target) {
+            if (e.isIntersecting) t.link.classList.add('active');
+            else t.link.classList.remove('active');
+          }
+        });
+      });
+    }, { threshold: 0.1, rootMargin: '-20% 0px -60% 0px' });
+    eraTargets.forEach(function(t) { eraObserver.observe(t.el); });
 
     // === Number Counter ===
     function animateCounters() {

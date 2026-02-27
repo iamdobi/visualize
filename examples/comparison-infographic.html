@@ -41,11 +41,12 @@
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px;
+      backdrop-filter: blur(12px);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeInUp {
@@ -57,8 +58,6 @@
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
     .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
 
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -173,8 +172,8 @@
       </div>
     </header>
 
-    <section>
-      <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;" class="animate">By the Numbers</h2>
+    <section data-reveal>
+      <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">By the Numbers</h2>
       <div class="stats-grid">
         <article class="card stat-card">
           <div class="stat-num remote-color" data-count="77" data-suffix="%">77%</div>
@@ -195,7 +194,7 @@
       </div>
     </section>
 
-    <section>
+    <section data-reveal>
       <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Pros &amp; Cons</h2>
       <div class="pros-cons">
         <div class="card">
@@ -237,7 +236,7 @@
       </div>
     </section>
 
-    <section class="chart-section">
+    <section class="chart-section" data-reveal>
       <h2>Employee Satisfaction</h2>
       <div class="card" style="padding:32px;">
         <div class="chart-container">
@@ -246,7 +245,7 @@
       </div>
     </section>
 
-    <section>
+    <section data-reveal>
       <h2 style="text-align:center; font-size:1.75rem; margin-bottom:24px;">Key Insights</h2>
       <div class="insights-grid">
         <article class="card insight-card">
@@ -268,7 +267,7 @@
       </div>
     </section>
 
-    <section class="sources">
+    <section class="sources" data-reveal>
       <h3>Sources</h3>
       <p>Buffer State of Remote Work 2024 · Owl Labs Hybrid Work Report · McKinsey Future of Work Survey · Stanford WFH Research</p>
     </section>
@@ -337,6 +336,7 @@
     }
 
     // === Chart ===
+    var chartCanvas = document.getElementById('satisfactionChart');
     var chartInstance = null;
 
     function getChartColors() {
@@ -354,8 +354,13 @@
       var c = getChartColors();
       Chart.defaults.color = c.textSecondary;
 
-      if (chartInstance) chartInstance.destroy();
-      chartInstance = new Chart(document.getElementById('satisfactionChart'), {
+      // Destroy existing chart properly before recreating
+      if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+      }
+
+      chartInstance = new Chart(chartCanvas, {
         type: 'bar',
         data: {
           labels: ['Work-Life Balance', 'Productivity', 'Collaboration', 'Career Growth', 'Overall Satisfaction'],
@@ -377,7 +382,14 @@
         options: {
           responsive: true, maintainAspectRatio: false,
           animation: false,
-          plugins: { legend: { position: 'top' } },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              backgroundColor: 'rgba(0,0,0,0.8)', titleColor: '#fff', bodyColor: '#fff',
+              cornerRadius: 8, padding: 10,
+              callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '%'; } }
+            }
+          },
           scales: {
             x: { grid: { display: false } },
             y: { beginAtZero: true, grid: { color: c.border }, max: 100, ticks: { callback: function(v) { return v + '%'; } } }
