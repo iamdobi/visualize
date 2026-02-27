@@ -105,32 +105,38 @@ Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f4
 - **Gradient accents:** `bg-gradient-to-r from-blue-500 to-purple-500` on key elements
 - **Transitions:** `transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1)` (Material standard)
 
-### Animations (Motion — Framer Motion for Vanilla JS)
+### Animations (CSS-First)
 
-**Motion is included in the skeleton** (`https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js`). Use it for ALL animations. It provides spring physics, scroll-triggered reveals, stagger, and orchestration — far superior to raw CSS keyframes.
+**CSS animations are the primary system.** They're reliable, performant, and never break from JS scoping issues.
 
-See [references/animations.md](references/animations.md) for complete API, recipes, and patterns.
+See [references/animations.md](references/animations.md) for complete patterns.
 
-**Key APIs:**
-- `Motion.animate(target, keyframes, options)` — animate any element with spring physics
-- `Motion.inView(target, callback)` — trigger animations on scroll (replaces IntersectionObserver)
-- `Motion.stagger(delay)` — stagger animations across child elements
-- `Motion.spring({ stiffness, damping })` — spring physics easing
-- `Motion.scroll(animation)` — link animations to scroll progress
+**Three animation techniques (all baked into the skeleton):**
 
-**Default animation patterns:**
-- **Hero entrance:** spring fade+slide with orchestrated title → subtitle → CTA (150ms stagger)
-- **Card grids:** `Motion.stagger(0.08)` with spring ease, `y: [40, 0]`, `scale: [0.95, 1]`
-- **Scroll reveals:** `Motion.inView()` with spring ease — BUT set `opacity: 0` via JS, not CSS (so content is visible without JS)
-- **Stat counters:** animate numbers from 0 to target on scroll-in
-- **Hover micro-interactions:** `scale: 1.02, y: -4` on mouseenter with spring
-- **Slide transitions:** spring-based translateX with orchestrated exit/enter
+1. **Page-load entrance:** Add class `animate` (+ `delay-1` through `delay-6` for stagger)
+   ```html
+   <h1 class="animate">Title</h1>
+   <div class="card animate delay-1">Card 1</div>
+   <div class="card animate delay-2">Card 2</div>
+   ```
+
+2. **Scroll reveal:** Add `data-reveal` attribute. JS adds `.reveal` class (opacity:0), then `.visible` on scroll.
+   ```html
+   <section data-reveal>This fades in when scrolled into view</section>
+   ```
+
+3. **Number counters:** Add `data-count` attribute. JS animates from 0 to target.
+   ```html
+   <span data-count="77" data-suffix="%">77%</span>
+   ```
+
+**Hover effects** are pure CSS, baked into `.card` (translateY + scale on :hover).
 
 **Rules:**
-- Always check `prefers-reduced-motion` before running animations — show everything immediately if reduced
-- Never hide content via CSS for scroll animations — hide via JS so print/screenshot shows all content
-- Prefer animating `opacity`, `transform`, `scale`, `x`, `y` (GPU-accelerated)
-- Avoid animating `width`, `height`, `margin` (triggers layout reflow)
+- Content is ALWAYS visible in CSS — JS animations are progressive enhancement
+- Use `@keyframes` for page-load animations, CSS `transition` for hover/state changes
+- `data-reveal` elements show their final content if JS fails (no blank sections)
+- `prefers-reduced-motion` disables all animations automatically
 
 ## Hamburger Menu (Required)
 
@@ -239,7 +245,9 @@ Use these when they add value. See [references/css-techniques.md](references/css
 
 ## Mandatory HTML Skeleton
 
-**EVERY visualization MUST start from this skeleton.** Do not write HTML from scratch. Copy this, then add content. This ensures light theme, print styles, Inter font, animations, reduced-motion, and menu are never missing.
+**EVERY visualization MUST start from this skeleton.** Copy it, then add content. This gives you themes, print styles, Inter font, animations, menu, and hover effects — all working out of the box.
+
+**Design philosophy: CSS-first, JS-minimal.** Animations use CSS `@keyframes` and `transition` (always reliable). JavaScript is only for: menu, theme toggle, scroll observer, number counters, and PNG download. No animation libraries required.
 
 ```html
 <!DOCTYPE html>
@@ -251,104 +259,105 @@ Use these when they add value. See [references/css-techniques.md](references/css
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- ADD CDN LIBRARIES HERE (Chart.js, Mermaid, etc.) -->
-  <script src="https://cdn.jsdelivr.net/npm/motion@12/dist/motion.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
-    /* ===== RESET & BASE ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    /* ===== THEME SYSTEM (REQUIRED — both themes must exist) ===== */
+
+    /* ===== THEMES ===== */
     :root, .theme-dark {
-      --bg: #030712;
-      --surface: #111827;
-      --surface-hover: #1f2937;
+      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
-      --text: #f9fafb;
-      --text-secondary: #9ca3af;
-      --accent: #3b82f6;
-      --accent-secondary: #8b5cf6;
-      --positive: #10b981;
-      --negative: #f43f5e;
-      --warning: #f59e0b;
+      --text: #f9fafb; --text-secondary: #9ca3af;
+      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
     .theme-light {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-hover: #f1f5f9;
+      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
       --border: rgba(0,0,0,0.08);
-      --text: #0f172a;
-      --text-secondary: #64748b;
-      --accent: #2563eb;
-      --accent-secondary: #7c3aed;
-      --positive: #059669;
-      --negative: #e11d48;
-      --warning: #d97706;
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
     }
-    
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);           /* CRITICAL: always use var(--text), never rely on defaults */
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
       transition: background 0.3s, color 0.3s;
     }
-    
-    /* ===== GLASS CARD (reuse everywhere) ===== */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
-    
-    /* ===== TEXT COLORS (NEVER use raw white/black — always CSS vars) ===== */
-    h1, h2, h3, h4, h5, h6 { color: var(--text); }
-    p, li, td, th, span, label { color: var(--text); }
+    h1,h2,h3,h4,h5,h6 { color: var(--text); }
+    p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
-    
-    /* ===== ANIMATIONS (Motion.js handles these — CSS fallback only) ===== */
-    /* Motion.js provides spring physics via JS. These CSS classes are fallbacks. */
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+
+    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
-    /* ===== REDUCED MOTION (REQUIRED) ===== */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-    
-    /* ===== PRINT STYLES (REQUIRED) ===== */
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.1s; }
+    .animate.delay-2 { animation-delay: 0.2s; }
+    .animate.delay-3 { animation-delay: 0.3s; }
+    .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .animate.delay-6 { animation-delay: 0.6s; }
+
+    /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ===== PRINT ===== */
     @media print {
       body { background: white !important; color: black !important; }
-      .viz-menu { display: none !important; }
+      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
-    
-    /* ===== HAMBURGER MENU ===== */
+
+    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
       width: 44px; height: 44px; border-radius: 12px;
       background: var(--surface); border: 1px solid var(--border);
       color: var(--text); cursor: pointer; display: flex;
       align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      transition: all 0.2s;
+      backdrop-filter: blur(12px); transition: all 0.2s;
     }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
     .viz-menu-dropdown {
       position: absolute; top: 52px; right: 0; min-width: 200px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden;
-      transform: translateY(-8px); transition: all 0.2s;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px; padding: 8px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: all 0.2s; backdrop-filter: blur(16px);
     }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
     .viz-menu-dropdown button {
@@ -358,115 +367,114 @@ Use these when they add value. See [references/css-techniques.md](references/css
       display: flex; align-items: center; gap: 10px; transition: background 0.15s;
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
-    
-    /* ===== YOUR CUSTOM STYLES BELOW ===== */
+
+    /* ===== ADD YOUR STYLES BELOW ===== */
   </style>
 </head>
 <body>
+  <main>
 
-  <!-- MENU (REQUIRED — copy exactly) -->
+  <!-- MENU -->
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/>
-        <line x1="3" y1="10" x2="17" y2="10"/>
-        <line x1="3" y1="15" x2="17" y2="15"/>
+        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
       </svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()">
-        <span id="themeIcon">🌙</span>
-        <span id="themeLabel">Dark</span>
-      </button>
-      <button onclick="downloadImage()">
-        <span>📥</span>
-        <span>Download PNG</span>
-      </button>
-      <button onclick="window.print()">
-        <span>🖨️</span>
-        <span>Print / PDF</span>
-      </button>
+      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
+      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
     </div>
   </div>
 
-  <!-- YOUR CONTENT HERE -->
+  <!-- YOUR CONTENT HERE (use <section>, <header>, <article> for semantics) -->
 
+  </main>
   <script>
-    // Menu
-    function toggleMenu() {
-      document.getElementById('vizMenuDropdown').classList.toggle('open');
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.viz-menu')) {
-        document.getElementById('vizMenuDropdown').classList.remove('open');
-      }
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open');
-    });
+    // === Menu ===
+    function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
+    document.addEventListener('click', e => { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // Theme
-    const themes = ['dark', 'light'];
-    const themeIcons = { dark: '🌙', light: '☀️' };
-    let currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    // === Theme ===
+    var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = themeIcons[t];
-      document.getElementById('themeLabel').textContent = t.charAt(0).toUpperCase() + t.slice(1);
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
       localStorage.setItem('viz-theme', t);
       currentTheme = t;
+      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
     }
-    function cycleTheme() {
-      const next = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-      applyTheme(next);
-    }
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // Motion.js animations (spring physics, scroll reveals)
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!prefersReducedMotion && typeof Motion !== 'undefined') {
-      // Staggered entrance for cards/sections
-      Motion.animate('.card, .animate-in',
-        { opacity: [0, 1], y: [30, 0] },
-        { delay: Motion.stagger(0.08), duration: 0.5, ease: Motion.spring({ stiffness: 200, damping: 22 }) }
-      );
-      // Hover micro-interactions on cards
-      document.querySelectorAll('.card').forEach(card => {
-        card.addEventListener('mouseenter', () => Motion.animate(card, { scale: 1.02, y: -4 }, { duration: 0.2 }));
-        card.addEventListener('mouseleave', () => Motion.animate(card, { scale: 1, y: 0 }, { duration: 0.3 }));
+    // === Scroll Reveal (adds .reveal then .visible — content visible without JS) ===
+    document.querySelectorAll('[data-reveal]').forEach(el => el.classList.add('reveal'));
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // === Number Counter (use data-count="77" data-suffix="%" on elements) ===
+    function animateCounters() {
+      document.querySelectorAll('[data-count]').forEach(function(el) {
+        if (el.dataset.counted) return;
+        el.dataset.counted = '1';
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), duration = 1200;
+        (function tick(now) {
+          var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        })(start);
       });
-      // Add more Motion animations for your specific content here
+    }
+    var counterEl = document.querySelector('[data-count]');
+    if (counterEl) {
+      var cObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); cObs.disconnect(); } });
+      }, { threshold: 0.3 });
+      cObs.observe(counterEl);
     }
 
-    // Download PNG
+    // === Download PNG ===
     async function downloadImage() {
-      const menu = document.querySelector('.viz-menu');
+      var menu = document.querySelector('.viz-menu');
       menu.style.display = 'none';
       try {
-        const dataUrl = await htmlToImage.toPng(document.body, {
-          quality: 1, pixelRatio: 2,
-          filter: n => !n.classList?.contains('viz-menu')
-        });
-        const a = document.createElement('a');
-        a.href = dataUrl;
-        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png';
-        a.click();
+        var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
+        var a = document.createElement('a'); a.href = url;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png'; a.click();
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
+
+    // === YOUR SCRIPTS BELOW (use var for top-level variables, define onThemeChange for chart re-renders) ===
   </script>
 </body>
 </html>
 ```
 
-**Non-negotiable rules for the skeleton:**
-- NEVER omit `.theme-light` — both themes must exist
-- NEVER use raw colors like `white`, `#fff`, `black` — always `var(--text)`, `var(--bg)`, etc.
-- NEVER omit `@media print` or `@media (prefers-reduced-motion: reduce)`
-- NEVER use a menu class other than `.viz-menu`, `.viz-menu-toggle`, `.viz-menu-dropdown`
-- ALWAYS include `html-to-image` CDN and the download function
-- ALWAYS set `<html lang="en" class="theme-dark">`
-- ALWAYS use Inter font — it's loaded in the skeleton
+### Skeleton Rules
+
+**Do:**
+- Use `var` for all top-level variables (avoids TDZ errors when functions are hoisted)
+- Use `data-reveal` attribute on sections/cards for scroll animation
+- Use `data-count="77" data-suffix="%"` for animated number counters
+- Use `.animate.delay-N` classes for page-load entrance animations
+- Use CSS `:hover` for hover effects (baked into `.card` already)
+- Define `function onThemeChange() {}` to re-render charts on theme toggle
+- Use `<main>`, `<section>`, `<header>`, `<article>` for semantic HTML
+- Keep all chart variables as `var` (not `let`/`const`) at script top level
+
+**Don't:**
+- Don't include Motion.js unless you specifically need spring physics
+- Don't hide content via JS/CSS for animation — use `data-reveal` pattern instead
+- Don't use `let`/`const` for variables that might be referenced before declaration
+- Don't use `.finished` Promise chains for sequencing — use `setTimeout`
+- Don't put animation logic that could crash before nav/chart setup code
 
 ## Minimum Sizing Rules
 
@@ -530,12 +538,18 @@ function getChartColors() {
 5. **Verify checklist:**
    - [ ] Both `.theme-dark` and `.theme-light` defined?
    - [ ] All text uses `var(--text)` or `var(--text-secondary)`?
-   - [ ] `@media print` hides menu, forces white bg?
+   - [ ] `@media print` hides menu, shows all content?
    - [ ] `@media (prefers-reduced-motion: reduce)` present?
    - [ ] `.viz-menu` with toggle, theme, download, print?
    - [ ] Inter font loaded and applied?
-   - [ ] Entrance animations with staggered delays?
+   - [ ] Entrance animations via `.animate` classes (CSS @keyframes)?
+   - [ ] Scroll sections use `data-reveal` (visible without JS)?
+   - [ ] `.card:hover` has transform effect?
+   - [ ] All top-level JS variables use `var` (not `let`/`const`)?
+   - [ ] Charts use `var` declarations + `onThemeChange` hook?
+   - [ ] Semantic HTML: `<main>`, `<section>`, `<header>`, `<article>`?
    - [ ] All charts have explicit container sizing (≥300px height)?
    - [ ] Hero/title text visible on both themes?
+   - [ ] Zero console errors on load?
 
 The quality bar: **"good, period"** — not "good for AI-generated."
