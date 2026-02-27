@@ -1,7 +1,7 @@
 {
-  "currentRound": 9,
-  "loopsSinceResearch": 0,
-  "lastAverage": 8.25,
+  "currentRound": 10,
+  "loopsSinceResearch": 1,
+  "lastAverage": 8.04,
   "gate": "ACCEPTABLE",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -12,6 +12,7 @@
     { "round": 6, "avg": 6.75, "gate": "NEEDS WORK", "notes": "R6 eval: Stricter scoring exposed a11y gaps (all files scored 5). Rebuilt all 6 files: added skip-links, aria-labels, landmark roles, focus indicators, SVG icons replacing emojis, Chart.js destroy/rebuild on theme toggle, mobile breakpoints, scroll-reveal fix (visible by default). Updated SKILL.md with a11y section." },
     { "round": 7, "avg": 8.33, "gate": "ACCEPTABLE", "notes": "R7: 0 console errors. Responsive clamp() padding on slide decks, filter toolbar on comparison chart, animated connection lines + hover dimming on architecture, prefers-color-scheme detection on all 6 files. Best: ai-timeline 8.50. All scores ≥7." },
     { "round": 8, "avg": 8.25, "gate": "ACCEPTABLE", "notes": "R8: 0 console errors. Enhanced progress bars (4px + glow), added floating gradient orbs to slide deck backgrounds, confirmed count-up animations + hover states already present. Slide decks still weakest at 7.88. Need bigger changes to push past 9.0." },
-    { "round": 9, "avg": null, "gate": "ACCEPTABLE", "notes": "R9 RESEARCH ROUND: Researched CSS scroll-driven animations, @starting-style, container queries, :has(), color-mix(). Rebuilt all 6 files with: CSS prefers-color-scheme media query, enhanced entrance animations, better responsive breakpoints, Chart.js with hover tooltips, improved a11y. Reset loopsSinceResearch." }
+    { "round": 9, "avg": null, "gate": "ACCEPTABLE", "notes": "R9 RESEARCH ROUND: Researched CSS scroll-driven animations, @starting-style, container queries, :has(), color-mix(). Rebuilt all 6 files with: CSS prefers-color-scheme media query, enhanced entrance animations, better responsive breakpoints, Chart.js with hover tooltips, improved a11y. Reset loopsSinceResearch." },
+    { "round": 10, "avg": 8.04, "gate": "ACCEPTABLE", "notes": "R10: 0 console errors on all 6 files. Added floating orbs + CSS title animations + divider lines to both slide decks. Added aria-live regions for slide transitions. Fixed donut legend truncation on SaaS dashboard. Slide decks still weakest (7.50) — need more content-slide polish to push past 8. Top files: ai-timeline 8.38, system-architecture 8.38." }
   ]
 }

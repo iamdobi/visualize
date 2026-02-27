@@ -205,11 +205,58 @@
 
     .slide.title-slide::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.1); z-index: 1;
+      background: rgba(0,0,0,0.05); z-index: 1;
     }
 
     .slide.title-slide .content {
       position: relative; z-index: 2;
+    }
+
+    /* Floating orbs for title slides */
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(30px, -40px) scale(1.1); }
+      50% { transform: translate(-20px, -60px) scale(0.95); }
+      75% { transform: translate(40px, -20px) scale(1.05); }
+    }
+    @keyframes titleReveal {
+      from { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(8px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    @keyframes subtitleReveal {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 0.9; transform: translateY(0); }
+    }
+    @keyframes lineExpand {
+      from { width: 0; }
+      to { width: 80px; }
+    }
+    .slide.title-slide .orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
+      animation: floatOrb 8s ease-in-out infinite; pointer-events: none;
+    }
+    .slide.title-slide .orb-1 {
+      width: 300px; height: 300px; background: rgba(255,255,255,0.3);
+      top: 10%; left: 10%; animation-delay: 0s;
+    }
+    .slide.title-slide .orb-2 {
+      width: 200px; height: 200px; background: rgba(255,255,255,0.2);
+      bottom: 15%; right: 15%; animation-delay: -3s;
+    }
+    .slide.title-slide .orb-3 {
+      width: 150px; height: 150px; background: rgba(255,255,255,0.15);
+      top: 50%; left: 60%; animation-delay: -5s;
+    }
+    .slide.title-slide h1 {
+      animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+    }
+    .slide.title-slide .subtitle {
+      animation: subtitleReveal 0.8s ease-out 0.4s both !important;
+    }
+    .slide.title-slide .divider-line {
+      display: block; height: 2px; background: rgba(255,255,255,0.5);
+      margin: 1.5rem auto; border-radius: 1px;
+      animation: lineExpand 0.8s ease-out 0.6s both;
     }
 
     .slide.section-slide {
@@ -488,14 +535,18 @@
     </div>
 
     <div class="pitch-deck">
-      <div class="slides-container" id="slidesContainer">
+      <div class="slides-container" id="slidesContainer" aria-live="polite" role="region" aria-label="Slide presentation">
         
         <!-- Slide 1: Title -->
         <section class="slide title-slide" data-notes="Company introduction and mission statement">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
           <div class="content">
-            <h1 class="animate">EcoFlow</h1>
-            <p class="subtitle animate delay-1">AI-Powered Sustainability Platform for Enterprise</p>
-            <p class="animate delay-2" style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
+            <h1>EcoFlow</h1>
+            <span class="divider-line"></span>
+            <p class="subtitle">AI-Powered Sustainability Platform for Enterprise</p>
+            <p style="margin-top: 2rem; font-size: 1rem; opacity: 0.7; animation: subtitleReveal 0.8s ease-out 0.8s both;">
               Seed Round Pitch • $2M Raising • January 2026
             </p>
           </div>

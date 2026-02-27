@@ -11,8 +11,6 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ===== THEMES ===== */
-    /* CSS prefers-color-scheme for flash-free theme detection */
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
@@ -31,7 +29,6 @@
         --positive: #059669; --negative: #e11d48; --warning: #d97706;
       }
     }
-    /* Manual theme override classes (JS controlled) */
     .theme-dark {
       --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
@@ -53,11 +50,9 @@
       line-height: 1.6; -webkit-font-smoothing: antialiased;
       transition: background 0.3s, color 0.3s; overflow: hidden;
     }
-    h1,h2,h3,h4,h5,h6 { color: var(--text); }
-    p,li,td,th,span,label { color: var(--text); }
+    h1,h2,h3,h4,h5,h6,p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
-    /* Skip navigation */
     .skip-link {
       position: absolute; top: -40px; left: 16px; padding: 8px 16px;
       background: var(--accent); color: white; text-decoration: none;
@@ -65,23 +60,40 @@
     }
     .skip-link:focus { top: 16px; }
 
-    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
+    /* ===== ANIMATIONS ===== */
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes titleReveal {
+      0% { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(8px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
     }
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes subtitleReveal {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 0.9; transform: translateY(0); }
     }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes lineGrow {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
     }
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-40px, 30px) scale(0.85); }
+      66% { transform: translate(25px, -35px) scale(1.15); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0) scale(1.05); }
+      50% { transform: translate(35px, 25px) scale(0.95); }
+    }
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }
+
     .animate { animation: fadeInUp 0.6s ease-out both; }
     .animate.delay-1 { animation-delay: 0.1s; }
     .animate.delay-2 { animation-delay: 0.2s; }
@@ -90,29 +102,14 @@
     .animate.delay-5 { animation-delay: 0.5s; }
     .animate.delay-6 { animation-delay: 0.6s; }
 
-    /* Modern CSS scroll-driven animations (Chrome 115+) */
-    @supports (animation-timeline: view()) {
-      .scroll-reveal {
-        animation: fadeInUp 1ms linear;
-        animation-timeline: view();
-        animation-range: entry 0% entry 50%;
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* ===== FOCUS INDICATORS ===== */
-    *:focus-visible { 
-      outline: 2px solid var(--accent); 
-      outline-offset: 2px; 
-    }
-
-    /* ===== PRINT ===== */
     @media print {
       body { background: white !important; color: black !important; overflow: visible; }
-      .viz-menu, .slide-nav { display: none !important; }
+      .viz-menu, .slide-nav, .theme-toggle-btn { display: none !important; }
       .slide { transform: none !important; position: static !important; page-break-after: always; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
@@ -143,17 +140,30 @@
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== SLIDE DECK SPECIFIC ===== */
+    /* ===== VISIBLE THEME TOGGLE ===== */
+    .theme-toggle-btn {
+      position: fixed; top: 16px; right: 72px; z-index: 9999;
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); transition: all 0.2s;
+    }
+    .theme-toggle-btn:hover { background: var(--surface-hover); }
+    .theme-toggle-btn .sun { display: none; }
+    .theme-toggle-btn .moon { display: block; }
+    .theme-light .theme-toggle-btn .sun { display: block; }
+    .theme-light .theme-toggle-btn .moon { display: none; }
+
+    /* ===== SLIDE DECK ===== */
     .slide-deck {
       width: 100vw; height: 100vh; position: relative; overflow: hidden;
       container-type: inline-size;
     }
-
     .slides-container {
       display: flex; height: 100%;
       transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
     .slide {
       min-width: 100vw; height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
@@ -161,220 +171,153 @@
       text-align: center;
     }
 
-    /* Responsive slide content with container queries */
     @container (width < 768px) {
-      .slide {
-        padding: 1rem;
-      }
-      .slide h1 {
-        font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
-      }
-      .slide h2 {
-        font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
-      }
-      .slide p {
-        font-size: clamp(0.875rem, 3vw, 1rem) !important;
-      }
-      .slide .stat-number {
-        font-size: clamp(2rem, 8vw, 3rem) !important;
-      }
+      .slide { padding: 1rem; }
+      .slide h1 { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
+      .slide h2 { font-size: clamp(1.25rem, 4vw, 1.75rem) !important; }
+      .slide p { font-size: clamp(0.875rem, 3vw, 1rem) !important; }
+      .slide .stat-number { font-size: clamp(2rem, 8vw, 3rem) !important; }
     }
-
     @container (width < 480px) {
-      .slide {
-        padding: 0.75rem;
-      }
-      .two-column {
-        flex-direction: column !important;
-        gap: 1rem !important;
-      }
+      .slide { padding: 0.75rem; }
+      .two-column { flex-direction: column !important; gap: 1rem !important; }
     }
 
-    /* Slide Types */
+    /* ===== TITLE SLIDE — KEYNOTE STYLE ===== */
     .slide.title-slide {
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
-      color: white;
+      color: white; overflow: hidden;
+    }
+    .slide.title-slide .content { position: relative; z-index: 2; }
+
+    /* Floating gradient orbs */
+    .slide.title-slide .orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+      animation: pulse 4s ease-in-out infinite;
+    }
+    .slide.title-slide .orb-1 {
+      width: 400px; height: 400px; top: -10%; left: -5%;
+      background: rgba(255,255,255,0.2);
+      animation: float1 12s ease-in-out infinite;
+    }
+    .slide.title-slide .orb-2 {
+      width: 300px; height: 300px; bottom: -15%; right: -5%;
+      background: rgba(255,255,255,0.15);
+      animation: float2 15s ease-in-out infinite;
+    }
+    .slide.title-slide .orb-3 {
+      width: 200px; height: 200px; top: 30%; right: 20%;
+      background: rgba(255,255,255,0.1);
+      animation: float3 10s ease-in-out infinite;
     }
 
-    .slide.title-slide::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.1); z-index: 1;
+    /* Animated title text */
+    .slide.title-slide h1 {
+      animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    }
+    .slide.title-slide .subtitle {
+      animation: subtitleReveal 0.8s ease-out 0.6s both;
+    }
+    .slide.title-slide .meta {
+      animation: subtitleReveal 0.8s ease-out 0.9s both;
     }
 
-    .slide.title-slide .content {
-      position: relative; z-index: 2;
+    /* Decorative accent line */
+    .title-accent-line {
+      width: 80px; height: 3px; background: rgba(255,255,255,0.6);
+      margin: 1.5rem auto; border-radius: 2px;
+      animation: lineGrow 0.6s ease-out 1.1s both;
+      transform-origin: center;
+    }
+
+    /* Decorative diamond shape */
+    .title-diamond {
+      width: 12px; height: 12px; background: rgba(255,255,255,0.5);
+      transform: rotate(45deg); margin: 0 auto 1rem;
+      animation: fadeIn 0.5s ease-out 1.3s both;
     }
 
     .slide.section-slide {
       background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
-      color: white;
+      color: white; overflow: hidden;
     }
+    .slide.section-slide .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; }
+    .slide.section-slide .orb-1 { width: 300px; height: 300px; top: -10%; right: -5%; background: rgba(255,255,255,0.15); animation: float2 12s ease-in-out infinite; }
+    .slide.section-slide .orb-2 { width: 250px; height: 250px; bottom: -10%; left: -5%; background: rgba(255,255,255,0.1); animation: float1 14s ease-in-out infinite; }
 
-    .slide.content-slide {
-      background: var(--bg);
-    }
+    .slide.content-slide { background: var(--bg); }
 
     .slide h1 {
       font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 800; margin-bottom: 1.5rem;
+      font-weight: 800; margin-bottom: 0.5rem;
       text-shadow: 0 2px 10px rgba(0,0,0,0.3);
     }
+    .slide h2 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+    .slide p { font-size: clamp(1.125rem, 3vw, 1.5rem); opacity: 0.9; max-width: 800px; margin: 0 auto; line-height: 1.4; }
+    .slide .subtitle { font-size: clamp(1rem, 2.5vw, 1.25rem); opacity: 0.8; font-weight: 300; }
 
-    .slide h2 {
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 700; margin-bottom: 1rem;
-    }
+    .two-column { display: flex; align-items: center; justify-content: center; gap: 4rem; max-width: 1200px; width: 100%; }
+    .two-column > * { flex: 1; }
 
-    .slide p {
-      font-size: clamp(1.125rem, 3vw, 1.5rem);
-      opacity: 0.9; max-width: 800px; margin: 0 auto;
-      line-height: 1.4;
-    }
-
-    .slide .subtitle {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      opacity: 0.8; font-weight: 300;
-    }
-
-    /* Two column layout */
-    .two-column {
-      display: flex; align-items: center; justify-content: center;
-      gap: 4rem; max-width: 1200px; width: 100%;
-    }
-
-    .two-column > * {
-      flex: 1;
-    }
-
-    /* Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem; max-width: 800px; width: 100%;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 800px; width: 100%; }
+    .stat-item { text-align: center; }
     .stat-number {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800; margin-bottom: 0.5rem;
+      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin-bottom: 0.5rem;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text; display: block;
     }
+    .stat-label { font-size: clamp(0.875rem, 2vw, 1rem); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    .stat-label {
-      font-size: clamp(0.875rem, 2vw, 1rem);
-      color: var(--text-secondary); text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+    .features-list { list-style: none; padding: 0; text-align: left; max-width: 600px; }
+    .features-list li { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); font-size: clamp(1rem, 2.5vw, 1.25rem); }
+    .features-list li:last-child { border-bottom: none; }
+    .check-icon { width: 24px; height: 24px; flex-shrink: 0; background: var(--positive); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
 
-    /* Features list */
-    .features-list {
-      list-style: none; padding: 0; text-align: left;
-      max-width: 600px;
-    }
-
-    .features-list li {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 1rem 0; border-bottom: 1px solid var(--border);
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-    }
-
-    .features-list li:last-child {
-      border-bottom: none;
-    }
-
-    .check-icon {
-      width: 24px; height: 24px; flex-shrink: 0;
-      background: var(--positive); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: white;
-    }
-
-    /* Chart container */
-    .chart-container {
-      max-width: 600px; width: 100%;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 1rem; padding: 2rem;
-    }
-
-    .chart-wrapper {
-      position: relative; height: 300px;
-    }
+    .chart-container { max-width: 600px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; }
+    .chart-wrapper { position: relative; height: 300px; }
 
     /* Navigation */
     .slide-nav {
-      position: fixed; bottom: 2rem; left: 50%;
-      transform: translateX(-50%);
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 2rem; padding: 0.75rem 1.5rem;
       backdrop-filter: blur(12px); z-index: 1000;
       display: flex; align-items: center; gap: 1rem;
     }
-
     .nav-button {
       width: 40px; height: 40px; border: none; border-radius: 50%;
       background: transparent; color: var(--text);
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: background 0.2s;
     }
+    .nav-button:hover { background: var(--surface-hover); }
+    .nav-button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .slide-counter { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; min-width: 60px; text-align: center; }
 
-    .nav-button:hover {
-      background: var(--surface-hover);
-    }
+    .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 1000; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-secondary)); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 0; }
 
-    .nav-button:disabled {
-      opacity: 0.5; cursor: not-allowed;
-    }
+    .slides-container { touch-action: pan-y; }
 
-    .slide-counter {
-      color: var(--text-secondary); font-size: 0.875rem;
-      font-weight: 500; min-width: 60px; text-align: center;
-    }
-
-    /* Progress bar */
-    .progress-bar {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: 4px; background: var(--border); z-index: 1000;
-    }
-
-    .progress-fill {
-      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 0;
-    }
-
-    /* Touch gestures */
-    .slides-container {
-      touch-action: pan-y;
-    }
-
-    /* Responsive improvements */
     @container (width < 600px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-      }
-      .chart-container {
-        padding: 1rem;
-      }
-      .chart-wrapper {
-        height: 250px;
-      }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .chart-container { padding: 1rem; }
+      .chart-wrapper { height: 250px; }
     }
   </style>
 </head>
 <body>
-  <main id="main-content">
-    <a href="#main-content" class="skip-link">Skip to content</a>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <!-- Progress bar -->
-    <div class="progress-bar">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
+  <!-- Visible theme toggle button -->
+  <button class="theme-toggle-btn" onclick="cycleTheme()" aria-label="Toggle light/dark theme">
+    <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+
+  <main id="main-content" role="main">
+    <div class="progress-bar" role="progressbar" aria-label="Slide progress"><div class="progress-fill" id="progressFill"></div></div>
 
     <!-- MENU -->
     <div class="viz-menu">
@@ -385,42 +328,44 @@
       </button>
       <div class="viz-menu-dropdown" id="vizMenuDropdown">
         <button onclick="cycleTheme()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/><path d="m12 1v6m0 6v6m11-7h-6m-6 0H1"/>
-          </svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="m12 1v6m0 6v6m11-7h-6m-6 0H1"/></svg>
           <span id="themeLabel">Dark</span>
         </button>
         <button onclick="downloadImage()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/>
-          </svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/></svg>
           <span>Download PNG</span>
         </button>
         <button onclick="window.print()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-          </svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
           <span>Print / PDF</span>
         </button>
       </div>
     </div>
 
-    <div class="slide-deck">
+    <!-- Aria-live region for slide announcements -->
+    <div id="slideAnnounce" aria-live="polite" aria-atomic="true" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);"></div>
+
+    <div class="slide-deck" role="region" aria-roledescription="slide deck" aria-label="Next-Gen Analytics Platform Presentation">
       <div class="slides-container" id="slidesContainer">
-        
+
         <!-- Slide 1: Title -->
-        <section class="slide title-slide" data-notes="Welcome and introduction to our product launch presentation">
+        <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Slide 1 of 8: Title">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
           <div class="content">
-            <h1 class="animate">Next-Gen Analytics Platform</h1>
-            <p class="subtitle animate delay-1">Revolutionizing data insights for modern businesses</p>
-            <p class="animate delay-2" style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
+            <div class="title-diamond"></div>
+            <h1>Next-Gen Analytics Platform</h1>
+            <div class="title-accent-line"></div>
+            <p class="subtitle">Revolutionizing data insights for modern businesses</p>
+            <p class="meta" style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
               Product Launch Presentation • 2026
             </p>
           </div>
         </section>
 
         <!-- Slide 2: Problem -->
-        <section class="slide content-slide" data-notes="Current challenges in data analytics that our platform addresses">
+        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 2 of 8: The Challenge">
           <h2 class="animate">The Challenge</h2>
           <p class="animate delay-1" style="margin-bottom: 3rem;">
             Businesses struggle with fragmented data, complex analytics tools, and delayed insights
@@ -442,7 +387,9 @@
         </section>
 
         <!-- Slide 3: Solution -->
-        <section class="slide section-slide" data-notes="Our solution overview">
+        <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Slide 3 of 8: Our Solution">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
           <div class="content">
             <h2 class="animate">Our Solution</h2>
             <p class="animate delay-1">
@@ -452,46 +399,30 @@
         </section>
 
         <!-- Slide 4: Key Features -->
-        <section class="slide content-slide" data-notes="Core features and benefits of our platform">
+        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 4 of 8: Key Features">
           <h2 class="animate">Key Features</h2>
           <ul class="features-list animate delay-1">
             <li>
-              <span class="check-icon">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20,6 9,17 4,12"/>
-                </svg>
-              </span>
+              <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></span>
               Real-time data processing and visualization
             </li>
             <li>
-              <span class="check-icon">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20,6 9,17 4,12"/>
-                </svg>
-              </span>
+              <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></span>
               AI-powered insights and recommendations
             </li>
             <li>
-              <span class="check-icon">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20,6 9,17 4,12"/>
-                </svg>
-              </span>
+              <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></span>
               No-code dashboard builder
             </li>
             <li>
-              <span class="check-icon">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20,6 9,17 4,12"/>
-                </svg>
-              </span>
+              <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg></span>
               Seamless integration with 100+ data sources
             </li>
           </ul>
         </section>
 
         <!-- Slide 5: Market Opportunity -->
-        <section class="slide content-slide" data-notes="Market size and opportunity analysis">
+        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 5 of 8: Market Opportunity">
           <div class="two-column">
             <div>
               <h2 class="animate" style="text-align: left;">Market Opportunity</h2>
@@ -509,22 +440,18 @@
                 </div>
               </div>
             </div>
-            <div role="img" aria-label="Market growth chart showing steady increase in analytics market size from 2020 to 2030">
+            <div role="img" aria-label="Market growth chart showing steady increase from 2020 to 2030">
               <div class="chart-container animate delay-3">
-                <div class="chart-wrapper">
-                  <canvas id="marketChart"></canvas>
-                </div>
+                <div class="chart-wrapper"><canvas id="marketChart"></canvas></div>
               </div>
             </div>
           </div>
         </section>
 
         <!-- Slide 6: Traction -->
-        <section class="slide content-slide" data-notes="Current traction and key metrics">
+        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 6 of 8: Our Traction">
           <h2 class="animate">Our Traction</h2>
-          <p class="animate delay-1" style="margin-bottom: 3rem;">
-            Rapid growth across all key metrics in our first year
-          </p>
+          <p class="animate delay-1" style="margin-bottom: 3rem;">Rapid growth across all key metrics in our first year</p>
           <div class="stats-grid animate delay-2">
             <div class="stat-item">
               <span class="stat-number" data-count="150" data-suffix="+">150+</span>
@@ -546,23 +473,28 @@
         </section>
 
         <!-- Slide 7: What's Next -->
-        <section class="slide section-slide" data-notes="Roadmap and future plans">
+        <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Slide 7 of 8: What's Next">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
           <div class="content">
             <h2 class="animate">What's Next</h2>
-            <p class="animate delay-1">
-              Expanding globally while continuing to innovate and deliver exceptional value
-            </p>
+            <p class="animate delay-1">Expanding globally while continuing to innovate and deliver exceptional value</p>
           </div>
         </section>
 
         <!-- Slide 8: Thank You -->
-        <section class="slide title-slide" data-notes="Closing slide with contact information">
+        <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Slide 8 of 8: Thank You">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
           <div class="content">
-            <h2 class="animate">Thank You</h2>
-            <p class="animate delay-1" style="margin: 2rem 0;">
+            <div class="title-diamond"></div>
+            <h2 style="animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;">Thank You</h2>
+            <div class="title-accent-line"></div>
+            <p style="animation: subtitleReveal 0.8s ease-out 0.6s both; margin: 1rem 0;">
               Ready to transform your data into insights?
             </p>
-            <p class="animate delay-2" style="font-size: 1rem; opacity: 0.8;">
+            <p style="animation: subtitleReveal 0.8s ease-out 0.9s both; font-size: 1rem; opacity: 0.8;">
               Contact us: hello@analyticsplatform.com
             </p>
           </div>
@@ -574,353 +506,130 @@
     <!-- Navigation -->
     <nav class="slide-nav" aria-label="Slide navigation">
       <button class="nav-button" id="prevBtn" onclick="prevSlide()" aria-label="Previous slide">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15,18 9,12 15,6"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
       </button>
-      <span class="slide-counter" id="slideCounter" aria-live="polite">1 / 8</span>
+      <span class="slide-counter" id="slideCounter">1 / 8</span>
       <button class="nav-button" id="nextBtn" onclick="nextSlide()" aria-label="Next slide">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9,18 15,12 9,6"/>
-        </svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
       </button>
     </nav>
   </main>
 
   <script>
-    // === Slide Variables ===
-    var currentSlide = 0;
-    var totalSlides = 8;
-    var marketChart;
+    var currentSlide = 0, totalSlides = 8, marketChart;
 
-    // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', function(e) { 
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
-    document.addEventListener('keydown', function(e) { 
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(theme) {
       document.documentElement.className = 'theme-' + theme;
       document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', theme);
-      currentTheme = theme;
+      localStorage.setItem('viz-theme', theme); currentTheme = theme;
       if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // === Slide Navigation ===
     function updateSlidePosition() {
-      var container = document.getElementById('slidesContainer');
-      container.style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
-      
-      // Update counter
+      document.getElementById('slidesContainer').style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
       document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
-      
-      // Update progress
-      var progress = ((currentSlide + 1) / totalSlides) * 100;
-      document.getElementById('progressFill').style.width = progress + '%';
-      
-      // Update button states
+      document.getElementById('progressFill').style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
       document.getElementById('prevBtn').disabled = currentSlide === 0;
       document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-
-      // Trigger animations for current slide
-      triggerSlideAnimations();
-    }
-
-    function nextSlide() {
-      if (currentSlide < totalSlides - 1) {
-        currentSlide++;
-        updateSlidePosition();
-      }
-    }
-
-    function prevSlide() {
-      if (currentSlide > 0) {
-        currentSlide--;
-        updateSlidePosition();
-      }
-    }
-
-    function goToSlide(index) {
-      currentSlide = Math.max(0, Math.min(index, totalSlides - 1));
-      updateSlidePosition();
-    }
-
-    function triggerSlideAnimations() {
-      // Reset and trigger number counters for current slide
+      // Announce slide change
       var slides = document.querySelectorAll('.slide');
-      var currentSlideEl = slides[currentSlide];
-      
-      // Reset counter animations
-      currentSlideEl.querySelectorAll('[data-count]').forEach(function(el) {
-        delete el.dataset.counted;
-      });
-      
-      // Trigger counters after a short delay
-      setTimeout(function() {
-        animateCounters(currentSlideEl);
-      }, 300);
+      var label = slides[currentSlide].getAttribute('aria-label') || ('Slide ' + (currentSlide + 1));
+      document.getElementById('slideAnnounce').textContent = label;
+      setTimeout(function() { animateCounters(slides[currentSlide]); }, 300);
     }
 
-    // === Keyboard Navigation ===
+    function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateSlidePosition(); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlidePosition(); } }
+    function goToSlide(i) { currentSlide = Math.max(0, Math.min(i, totalSlides - 1)); updateSlidePosition(); }
+
     document.addEventListener('keydown', function(e) {
       if (document.getElementById('vizMenuDropdown').classList.contains('open')) return;
-      
       switch(e.key) {
-        case 'ArrowLeft':
-        case 'ArrowUp':
-          e.preventDefault();
-          prevSlide();
-          break;
-        case 'ArrowRight':
-        case 'ArrowDown':
-        case ' ':
-        case 'Enter':
-          e.preventDefault();
-          nextSlide();
-          break;
-        case 'Home':
-          e.preventDefault();
-          goToSlide(0);
-          break;
-        case 'End':
-          e.preventDefault();
-          goToSlide(totalSlides - 1);
-          break;
+        case 'ArrowLeft': case 'ArrowUp': e.preventDefault(); prevSlide(); break;
+        case 'ArrowRight': case 'ArrowDown': case ' ': case 'Enter': e.preventDefault(); nextSlide(); break;
+        case 'Home': e.preventDefault(); goToSlide(0); break;
+        case 'End': e.preventDefault(); goToSlide(totalSlides - 1); break;
       }
     });
 
-    // === Touch Gestures ===
     var touchStartX = 0;
-    var touchEndX = 0;
-
-    document.addEventListener('touchstart', function(e) {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
+    document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
     document.addEventListener('touchend', function(e) {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
+      var diff = touchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
     });
 
-    function handleSwipe() {
-      var swipeThreshold = 50;
-      var diff = touchStartX - touchEndX;
-      
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-          nextSlide(); // Swipe left
-        } else {
-          prevSlide(); // Swipe right
-        }
-      }
-    }
-
-    // === Click Navigation ===
     document.addEventListener('click', function(e) {
-      if (e.target.closest('.viz-menu') || e.target.closest('.slide-nav') || 
-          e.target.closest('button') || e.target.closest('canvas')) {
-        return;
-      }
-      
-      var clickX = e.clientX;
-      var windowWidth = window.innerWidth;
-      
-      if (clickX < windowWidth / 3) {
-        prevSlide(); // Left third
-      } else {
-        nextSlide(); // Right two-thirds
-      }
+      if (e.target.closest('.viz-menu,.slide-nav,.theme-toggle-btn,button,canvas')) return;
+      e.clientX < window.innerWidth / 3 ? prevSlide() : nextSlide();
     });
 
-    // === Number Counter ===
     function animateCounters(container) {
-      container = container || document;
-      container.querySelectorAll('[data-count]').forEach(function(el) {
+      (container || document).querySelectorAll('[data-count]').forEach(function(el) {
         if (el.dataset.counted) return;
         el.dataset.counted = '1';
-        
-        var target = parseFloat(el.dataset.count);
-        var prefix = el.dataset.prefix || '';
-        var suffix = el.dataset.suffix || '';
-        var start = performance.now();
-        var duration = 1200;
-        
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), duration = 1200;
         function tick(now) {
-          var progress = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          var current = target * eased;
-          
-          // Handle decimal formatting
-          if (target % 1 !== 0) {
-            current = current.toFixed(1);
-          } else {
-            current = Math.round(current);
-          }
-          
-          el.textContent = prefix + current.toLocaleString() + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
+          var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3), cur = target * eased;
+          el.textContent = prefix + (target % 1 !== 0 ? cur.toFixed(1) : Math.round(cur)).toLocaleString() + suffix;
+          if (p < 1) requestAnimationFrame(tick);
         }
         tick(start);
       });
     }
 
-    // === Chart Helper ===
     function getChartColors() {
-      var root = getComputedStyle(document.documentElement);
-      return {
-        text: root.getPropertyValue('--text').trim(),
-        textSecondary: root.getPropertyValue('--text-secondary').trim(),
-        border: root.getPropertyValue('--border').trim(),
-        surface: root.getPropertyValue('--surface').trim(),
-        accent: root.getPropertyValue('--accent').trim(),
-        accentSecondary: root.getPropertyValue('--accent-secondary').trim()
-      };
+      var r = getComputedStyle(document.documentElement);
+      return { text: r.getPropertyValue('--text').trim(), textSecondary: r.getPropertyValue('--text-secondary').trim(),
+        border: r.getPropertyValue('--border').trim(), surface: r.getPropertyValue('--surface').trim(),
+        accent: r.getPropertyValue('--accent').trim(), accentSecondary: r.getPropertyValue('--accent-secondary').trim() };
     }
-
     function resetCanvas(id) {
-      var oldCanvas = document.getElementById(id);
-      if (!oldCanvas) return null;
-      var parent = oldCanvas.parentNode;
-      var newCanvas = document.createElement('canvas');
-      newCanvas.id = id;
-      parent.replaceChild(newCanvas, oldCanvas);
-      return newCanvas;
+      var old = document.getElementById(id); if (!old) return null;
+      var c = document.createElement('canvas'); c.id = id; old.parentNode.replaceChild(c, old); return c;
     }
 
-    // === Build Chart ===
     function buildChart() {
-      var colors = getChartColors();
-      
-      Chart.defaults.color = colors.textSecondary;
-      Chart.defaults.borderColor = colors.border;
-
-      // Destroy existing chart
+      var c = getChartColors();
+      Chart.defaults.color = c.textSecondary; Chart.defaults.borderColor = c.border;
       try { if (marketChart) marketChart.destroy(); } catch(e) {}
-
-      var canvas = resetCanvas('marketChart');
-      if (!canvas) return;
-
+      var canvas = resetCanvas('marketChart'); if (!canvas) return;
       marketChart = new Chart(canvas, {
         type: 'line',
-        data: {
-          labels: ['2020', '2022', '2024', '2026', '2028', '2030'],
-          datasets: [{
-            label: 'Market Size ($B)',
-            data: [195, 245, 305, 340, 380, 420],
-            borderColor: colors.accent,
-            backgroundColor: colors.accent + '20',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 0,
-            pointHoverRadius: 8,
-            pointBackgroundColor: colors.accent,
-            pointBorderColor: '#ffffff',
-            pointBorderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1,
-              callbacks: {
-                label: function(context) {
-                  return 'Market Size: $' + context.parsed.y + 'B';
-                }
-              }
-            },
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: false,
-              grid: { 
-                color: colors.border,
-                drawBorder: false
-              },
-              ticks: { 
-                color: colors.textSecondary,
-                callback: function(value) {
-                  return '$' + value + 'B';
-                }
-              },
-              border: { display: false }
-            },
-            x: {
-              grid: { 
-                color: colors.border,
-                drawBorder: false
-              },
-              ticks: { color: colors.textSecondary },
-              border: { display: false }
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index'
-          }
-        }
+        data: { labels: ['2020','2022','2024','2026','2028','2030'],
+          datasets: [{ label: 'Market Size ($B)', data: [195,245,305,340,380,420],
+            borderColor: c.accent, backgroundColor: c.accent + '20', borderWidth: 3,
+            fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 8,
+            pointBackgroundColor: c.accent, pointBorderColor: '#ffffff', pointBorderWidth: 2 }] },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { tooltip: { enabled: true, mode: 'index', intersect: false, backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1,
+              callbacks: { label: function(ctx) { return 'Market Size: $' + ctx.parsed.y + 'B'; } } }, legend: { display: false } },
+          scales: { y: { beginAtZero: false, grid: { color: c.border, drawBorder: false }, ticks: { color: c.textSecondary, callback: function(v) { return '$'+v+'B'; } }, border: { display: false } },
+            x: { grid: { color: c.border, drawBorder: false }, ticks: { color: c.textSecondary }, border: { display: false } } },
+          interaction: { intersect: false, mode: 'index' } }
       });
     }
+    function onThemeChange() { setTimeout(buildChart, 100); }
 
-    // Theme change handler
-    function onThemeChange() {
-      setTimeout(buildChart, 100);
-    }
-
-    // === Initialize ===
     updateSlidePosition();
     setTimeout(buildChart, 1000);
 
-    // === Download PNG ===
     async function downloadImage() {
-      var menu = document.querySelector('.viz-menu');
-      var nav = document.querySelector('.slide-nav');
-      var progress = document.querySelector('.progress-bar');
-      
-      menu.style.display = 'none';
-      nav.style.display = 'none';
-      progress.style.display = 'none';
-      
+      var els = ['.viz-menu','.slide-nav','.theme-toggle-btn'].map(function(s){return document.querySelector(s);});
+      els.forEach(function(el){if(el)el.style.display='none';});
       try {
-        // Capture current slide only
-        var slides = document.querySelectorAll('.slide');
-        var currentSlideEl = slides[currentSlide];
-        
-        var url = await htmlToImage.toPng(currentSlideEl, { 
-          quality: 1, 
-          pixelRatio: 2,
-          width: 1920,
-          height: 1080
-        });
-        var link = document.createElement('a');
-        link.href = url;
-        link.download = 'slide-' + (currentSlide + 1) + '-presentation.png';
-        link.click();
-      } catch(error) { 
-        console.error('Download failed:', error); 
-      }
-      
-      menu.style.display = '';
-      nav.style.display = '';
-      progress.style.display = '';
+        var url = await htmlToImage.toPng(document.querySelectorAll('.slide')[currentSlide], { quality: 1, pixelRatio: 2, width: 1920, height: 1080 });
+        var a = document.createElement('a'); a.href = url; a.download = 'slide-'+(currentSlide+1)+'-presentation.png'; a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      els.forEach(function(el){if(el)el.style.display='';});
     }
   </script>
 </body>
