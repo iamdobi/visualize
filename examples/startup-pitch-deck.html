@@ -264,6 +264,14 @@
     .theme-light .title-accent-line {
       background: rgba(15, 23, 42, 0.4);
     }
+    /* Light theme card shadows */
+    .theme-light .stat-item,
+    .theme-light .solution-item,
+    .theme-light .revenue-item,
+    .theme-light .chart-container,
+    .theme-light .card {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    }
 
     /* Dark theme: deep, saturated eco gradients */
     .theme-dark .slide.section-slide {
@@ -477,12 +485,13 @@
               <path d="M28 24C28 12 16 4 4 8c0 16 8 24 24 16"/>
               <path d="M28 32C28 20 40 12 52 16c0 16-8 24-24 16"/>
             </svg>
-            <h1>EcoFlow</h1>
-            <div class="title-accent-line"></div>
-            <p class="subtitle">AI-Powered Sustainability Platform for Enterprise</p>
-            <p class="meta" style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
+            <h1 style="font-size: clamp(3.5rem, 12vw, 6rem); letter-spacing: -0.03em;">EcoFlow</h1>
+            <div class="title-accent-line" style="width: 120px;"></div>
+            <p class="subtitle" style="font-size: clamp(1.25rem, 3vw, 1.75rem); max-width: 600px; margin: 0 auto;">AI-Powered Sustainability Platform for Enterprise</p>
+            <p class="meta" style="margin-top: 2.5rem; font-size: 1.125rem; opacity: 0.7;">
               Seed Round Pitch • $2M Raising • January 2026
             </p>
+            <svg width="500" height="2" style="margin-top: 1.5rem; opacity: 0.12;" aria-hidden="true"><line x1="0" y1="1" x2="500" y2="1" stroke="currentColor" stroke-width="1"/></svg>
           </div>
         </section>
 
@@ -643,8 +652,14 @@
           <div class="orb orb-1"></div>
           <div class="orb orb-2"></div>
           <div class="content">
-            <h2 class="animate">Raising $2M Seed Round</h2>
-            <p class="animate delay-1" style="margin-top: 2rem;">To accelerate product development and scale our go-to-market efforts</p>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1.5rem; display: block; opacity: 0.7;" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <h2 class="animate" style="font-size: clamp(2.5rem, 7vw, 4rem);">Raising $2M Seed Round</h2>
+            <p class="animate delay-1" style="margin-top: 2rem; font-size: clamp(1.25rem, 3vw, 1.5rem); max-width: 700px;">To accelerate product development and scale our go-to-market efforts</p>
+            <div class="animate delay-2" style="display: flex; gap: 2rem; margin-top: 3rem; justify-content: center; flex-wrap: wrap;">
+              <span style="font-size: 1rem; opacity: 0.7; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2rem;">60% Product</span>
+              <span style="font-size: 1rem; opacity: 0.7; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2rem;">25% Go-to-Market</span>
+              <span style="font-size: 1rem; opacity: 0.7; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2rem;">15% Operations</span>
+            </div>
           </div>
         </section>
 

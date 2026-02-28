@@ -62,6 +62,35 @@
     .theme-light .hero h1 { color: #1e293b; text-shadow: none; }
     .theme-light .hero .subtitle { color: #475569; }
 
+    /* Light theme card shadows */
+    .theme-light .stat-card,
+    .theme-light .node,
+    .theme-light .note-card,
+    .theme-light .card {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .theme-light .layer {
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    /* Sticky section nav */
+    .section-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; overflow-x: auto;
+      margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem;
+    }
+    .section-nav a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 13px; white-space: nowrap;
+      padding: 4px 12px; border-radius: 20px; transition: all 0.2s;
+    }
+    .section-nav a:hover, .section-nav a.active {
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent), transparent 90%);
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
@@ -648,10 +677,19 @@
         </div>
       </section>
 
+      <nav class="section-nav" aria-label="Layer quick navigation">
+        <a href="#layer-clients">Clients</a>
+        <a href="#layer-gateway">API Gateway</a>
+        <a href="#layer-services">Services</a>
+        <a href="#layer-data">Data & Storage</a>
+        <a href="#layer-external">External</a>
+        <a href="#layer-notes">Principles</a>
+      </nav>
+
       <section class="diagram" role="img" aria-label="Microservices architecture diagram showing 5 layers with connections" data-reveal>
 
         <!-- Layer 1: Client Applications -->
-        <div class="layer layer-clients" role="group" aria-label="Client Applications Layer" data-reveal>
+        <div class="layer layer-clients" id="layer-clients" role="group" aria-label="Client Applications Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             Client Applications
@@ -721,7 +759,7 @@
         </div>
 
         <!-- Layer 2: API Gateway -->
-        <div class="layer layer-gateway" role="group" aria-label="API Gateway Layer" data-reveal>
+        <div class="layer layer-gateway" id="layer-gateway" role="group" aria-label="API Gateway Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             API Gateway Layer
@@ -775,7 +813,7 @@
         </div>
 
         <!-- Layer 3: Business Logic Services -->
-        <div class="layer layer-services" role="group" aria-label="Business Logic Services Layer" data-reveal>
+        <div class="layer layer-services" id="layer-services" role="group" aria-label="Business Logic Services Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             Business Logic Services
@@ -901,7 +939,7 @@
         </div>
 
         <!-- Layer 4: Data Layer -->
-        <div class="layer layer-data" role="group" aria-label="Data and Storage Layer" data-reveal>
+        <div class="layer layer-data" id="layer-data" role="group" aria-label="Data and Storage Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             Data & Storage Layer
@@ -970,7 +1008,7 @@
         </div>
 
         <!-- Layer 5: External Services -->
-        <div class="layer layer-external" role="group" aria-label="External Services Layer" data-reveal>
+        <div class="layer layer-external" id="layer-external" role="group" aria-label="External Services Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             External Services & APIs
@@ -1037,7 +1075,7 @@
 
       </section>
 
-      <section class="architecture-notes" role="region" aria-label="Architecture principles">
+      <section class="architecture-notes" id="layer-notes" role="region" aria-label="Architecture principles">
         <div class="note-card" data-reveal>
           <h4>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

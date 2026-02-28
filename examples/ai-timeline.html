@@ -81,6 +81,38 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
+    /* Light theme card shadows */
+    .theme-light .stat-card,
+    .theme-light .timeline-card,
+    .theme-light .card {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* Sticky section nav */
+    .section-nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg); padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 12px; overflow-x: auto;
+      margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem;
+    }
+    .section-nav a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 13px; white-space: nowrap;
+      padding: 4px 12px; border-radius: 20px; transition: all 0.2s;
+    }
+    .section-nav a:hover, .section-nav a.active {
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent), transparent 90%);
+    }
+
+    /* Timeline card staggered entrance */
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .timeline-card { animation: cardSlideIn 0.6s ease-out both; }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
@@ -511,8 +543,16 @@
         </div>
       </section>
 
+      <nav class="section-nav" aria-label="Era quick navigation">
+        <a href="#era-foundations">Early Foundations</a>
+        <a href="#era-strategic">Strategic AI</a>
+        <a href="#era-deeplearning">Deep Learning</a>
+        <a href="#era-generative">Generative AI</a>
+        <a href="#era-future">The Future</a>
+      </nav>
+
       <section class="timeline" role="list" aria-label="AI Development Timeline">
-        <div class="era-label" style="top: 2rem;">Early Foundations</div>
+        <div class="era-label" id="era-foundations" style="top: 2rem;">Early Foundations</div>
         <article class="timeline-item" role="listitem" data-reveal aria-label="1950: Alan Turing proposes the Turing Test as a measure of machine intelligence">
           <div class="timeline-year">1950</div>
           <div class="timeline-content">
@@ -581,7 +621,7 @@
           </div>
         </article>
 
-        <div class="era-label" style="top: 32rem;">Strategic AI</div>
+        <div class="era-label" id="era-strategic" style="top: 32rem;">Strategic AI</div>
         <article class="timeline-item" role="listitem" data-reveal aria-label="1997: IBM's Deep Blue defeats world chess champion Garry Kasparov">
           <div class="timeline-year">1997</div>
           <div class="timeline-content">
@@ -598,7 +638,7 @@
           </div>
         </article>
 
-        <div class="era-label" style="top: 50rem;">Deep Learning Era</div>
+        <div class="era-label" id="era-deeplearning" style="top: 50rem;">Deep Learning Era</div>
         <article class="timeline-item" role="listitem" data-reveal aria-label="2006: Geoffrey Hinton's breakthroughs spark the Deep Learning Renaissance">
           <div class="timeline-year">2006</div>
           <div class="timeline-content">
@@ -651,7 +691,7 @@
           </div>
         </article>
 
-        <div class="era-label" style="top: 78rem;">Generative AI Boom</div>
+        <div class="era-label" id="era-generative" style="top: 78rem;">Generative AI Boom</div>
         <article class="timeline-item" role="listitem" data-reveal aria-label="2020: OpenAI releases GPT-3 with 175 billion parameters, sparking generative AI boom">
           <div class="timeline-year">2020</div>
           <div class="timeline-content">
@@ -685,7 +725,7 @@
         </article>
       </section>
 
-      <section class="future-section" role="region" aria-label="Future of AI" data-reveal>
+      <section id="era-future" class="future-section" role="region" aria-label="Future of AI" data-reveal>
         <h2 class="future-title">The Next Frontier</h2>
         <p class="future-description">
           As we look toward 2025 and beyond, AI continues evolving toward artificial general intelligence (AGI), 
