@@ -56,6 +56,25 @@ Apply these defaults. They are opinionated and tested — override only when use
 
 ### Typography
 - **Primary font:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
+- **Multilingual support:** When content includes non-Latin text (Korean, Japanese, Chinese, etc.), add the appropriate Google Fonts:
+  - **Korean:** Noto Sans KR — `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap`
+  - **Japanese:** Noto Sans JP — `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap`
+  - **Chinese (Simplified):** Noto Sans SC — `https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&display=swap`
+  - **Arabic:** Noto Sans Arabic — `https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap`
+  - Set `font-family: 'Noto Sans KR', 'Inter', sans-serif;` (CJK font first, then Inter fallback for numbers/Latin)
+  - Set `<html lang="ko">` (or appropriate language code)
+- **Custom fonts:** When the user requests a specific font or vibe:
+  - **Serif/editorial:** Lora, Playfair Display, Source Serif Pro
+  - **Monospace/code:** JetBrains Mono, Fira Code, Source Code Pro
+  - **Display/creative:** Space Grotesk, Outfit, Sora, Poppins
+  - **Handwritten:** Caveat, Patrick Hand
+  - Always load via Google Fonts CDN: `https://fonts.googleapis.com/css2?family=FONTNAME:wght@WEIGHTS&display=swap`
+  - Update the `--font-primary` CSS var and `body { font-family: ... }` accordingly
+- **Font detection:** Infer the right font from context:
+  - Korean/Japanese/Chinese content → auto-add Noto Sans KR/JP/SC
+  - Code-heavy content (cheat sheets) → add JetBrains Mono for code blocks
+  - Formal/editorial content → consider a serif font for headings
+  - Playful/creative content → consider display fonts
 - **Monospace:** JetBrains Mono or system `'SF Mono', 'Fira Code', 'Consolas', monospace`
 - **Fallback:** `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
 - **Type scale (1.25 ratio):** 14 → 16 → 20 → 25 → 31 → 39 → 49px
@@ -504,6 +523,8 @@ Use these when they add value. See [references/css-techniques.md](references/css
   <title>YOUR TITLE HERE</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- ADD LANGUAGE FONTS IF NEEDED: e.g. Noto Sans KR for Korean, Noto Sans JP for Japanese -->
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"> -->
   <!-- ADD CDN LIBRARIES HERE (Chart.js, Mermaid, etc.) -->
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
@@ -840,7 +861,8 @@ function resetCanvas(id) {
    - [ ] `@media print` hides menu, shows all content?
    - [ ] `@media (prefers-reduced-motion: reduce)` present?
    - [ ] `.viz-menu` with toggle, theme, download, print?
-   - [ ] Inter font loaded and applied?
+   - [ ] Correct font loaded? (Inter default, Noto Sans KR for Korean, etc.)
+   - [ ] Non-Latin content has appropriate CJK/RTL font?
    - [ ] Entrance animations via `.animate` classes (CSS @keyframes)?
    - [ ] Scroll sections use `data-reveal` (visible without JS)?
    - [ ] `.card:hover` has transform effect?
