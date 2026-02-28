@@ -14,7 +14,7 @@
       :root {
         --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a;
         --border: rgba(255,255,255,0.06);
-        --text: #ededed; --text-secondary: #888;
+        --text: #ededed; --text-secondary: #d1d5db;
         --accent: #0070f3; --accent-secondary: #7928ca;
         --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623;
       }
@@ -31,7 +31,7 @@
     .theme-dark {
       --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a;
       --border: rgba(255,255,255,0.06);
-      --text: #ededed; --text-secondary: #888;
+      --text: #ededed; --text-secondary: #d1d5db;
       --accent: #0070f3; --accent-secondary: #7928ca;
       --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623;
     }
@@ -46,14 +46,22 @@
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
-      background-image: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 95%, var(--accent)) 50%, var(--bg) 100%);
       color: var(--text);
       line-height: 1.6; -webkit-font-smoothing: antialiased;
       letter-spacing: -0.011em; font-feature-settings: 'cv11', 'ss01';
       transition: background 0.3s, color 0.3s;
       font-weight: 400;
     }
-    .theme-light body { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%); }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 50% 20%, 
+        color-mix(in srgb, var(--accent), transparent 92%), transparent);
+    }
+    .theme-light body { background: #f8fafc; }
+    .theme-light body::before {
+      background: radial-gradient(ellipse 80% 50% at 50% 20%, 
+        color-mix(in srgb, var(--accent), transparent 95%), transparent);
+    }
     h1, h2, h3 { color: var(--text); letter-spacing: -0.03em; line-height: 1.05; font-weight: 700; }
     h2 { font-weight: 600; letter-spacing: -0.02em; }
     h3 { font-weight: 600; letter-spacing: -0.02em; }
@@ -99,19 +107,22 @@
     }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
     .viz-menu-dropdown {
-      position: absolute; top: 48px; right: 0; min-width: 180px;
+      position: absolute; top: 48px; right: 0; min-width: 160px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 4px; opacity: 0; visibility: hidden;
+      border-radius: 8px; padding: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+      opacity: 0; visibility: hidden;
       transform: translateY(-4px); transition: all 0.15s;
     }
-    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); animation: dropdownIn 0.15s ease; }
+    @keyframes dropdownIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     .viz-menu-dropdown button {
       width: 100%; padding: 8px 12px; border: none; border-radius: 6px;
-      background: transparent; color: var(--text); font-size: 13px;
+      background: transparent; color: var(--text-secondary); font-size: 0.875rem;
       font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 8px; transition: background 0.1s;
+      display: flex; align-items: center; gap: 8px; transition: background 0.15s, color 0.15s;
     }
-    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); color: var(--text); }
 
     /* Layout */
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
@@ -222,9 +233,7 @@
       transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
     .timeline-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 12px 32px rgba(0,0,0,0.2);
-      background: var(--surface-hover);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 8px 16px rgba(0,0,0,0.15);
     }
     .comparison-block:hover, .card:hover, [data-reveal]:hover { border-color: rgba(255,255,255,0.12); }
     .theme-light .timeline-item { 

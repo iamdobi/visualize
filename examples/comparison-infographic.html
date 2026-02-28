@@ -12,24 +12,26 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #9ca3af; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #10b981; --office: #8b5cf6; }
+      :root { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #10b981; --office: #8b5cf6; }
     }
     @media (prefers-color-scheme: light) {
       :root { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #059669; --office: #7c3aed; }
     }
-    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #9ca3af; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #10b981; --office: #8b5cf6; }
+    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #10b981; --office: #8b5cf6; }
     .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #059669; --office: #7c3aed; }
 
     body { 
       font-family: 'Inter', -apple-system, sans-serif; 
       background: var(--bg);
-      background-image: linear-gradient(180deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 95%, var(--accent)) 50%, var(--bg) 100%); 
       color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; 
       letter-spacing: -0.011em; font-feature-settings: 'cv11', 'ss01'; 
       font-weight: 400;
       transition: background 0.3s, color 0.3s;
     }
-    .theme-light body { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%); }
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: -1; opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
     h1, h2, h3 { color: var(--text); letter-spacing: -0.03em; line-height: 1.05; font-weight: 700; }
     h2 { font-weight: 600; letter-spacing: -0.02em; }
     h3 { font-weight: 600; letter-spacing: -0.02em; }
@@ -49,10 +51,11 @@
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle { width: 40px; height: 40px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown { position: absolute; top: 48px; right: 0; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.15s; }
-    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
-    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown { position: absolute; top: 48px; right: 0; min-width: 160px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.15s; }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); animation: dropdownIn 0.15s ease; }
+    @keyframes dropdownIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text-secondary); font-size: 0.875rem; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; transition: background 0.15s, color 0.15s; }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); color: var(--text); }
 
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
@@ -116,8 +119,7 @@
       background: color-mix(in srgb, var(--surface) 85%, var(--office) 15%);
     }
     .comparison-block:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 12px 32px rgba(0,0,0,0.2);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 8px 16px rgba(0,0,0,0.15);
       border-color: rgba(255,255,255,0.12);
     }
     .theme-light .comparison-block { border: 1px solid rgba(0,0,0,0.08); }
@@ -406,8 +408,8 @@
         data: {
           labels: ['Task Completion', 'Quality Score', 'Hours Worked', 'Overall Rating'],
           datasets: [
-            { label: 'Remote', data: [116, 118, 95, 116], backgroundColor: '#10b981', borderRadius: 6, barPercentage: 0.8, categoryPercentage: 0.7 },
-            { label: 'Office', data: [100, 100, 100, 100], backgroundColor: '#8b5cf6', borderRadius: 6, barPercentage: 0.8, categoryPercentage: 0.7 }
+            { label: 'Remote', data: [116, 118, 95, 116], backgroundColor: 'rgba(16, 185, 129, 0.75)', borderRadius: 4, barPercentage: 0.8, categoryPercentage: 0.7 },
+            { label: 'Office', data: [100, 100, 100, 100], backgroundColor: 'rgba(139, 92, 246, 0.75)', borderRadius: 4, barPercentage: 0.8, categoryPercentage: 0.7 }
           ]
         },
         options: {

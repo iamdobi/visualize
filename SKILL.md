@@ -160,7 +160,7 @@ Default dark palette — all derived from CSS custom properties with CSS `prefer
     --surface-hover: #1f2937; /* gray-800 */
     --border: rgba(255,255,255,0.1);
     --text: #f9fafb;          /* gray-50 */
-    --text-secondary: #9ca3af; /* gray-400 */
+    --text-secondary: #d1d5db; /* gray-300 — bumped from gray-400 for WCAG AA contrast */
     --accent: #3b82f6;        /* blue-500 */
     --accent-secondary: #8b5cf6; /* violet-500 */
     --positive: #10b981;      /* emerald-500 */
@@ -262,6 +262,60 @@ Always add `<title>` elements inside SVG shapes for native browser tooltips:
 - **Glass morphism:** Use sparingly, only for floating UI elements (menus, tooltips), not cards
 - **Restrained accents:** Use accent color for ONE thing per section (a button, a link, an icon) — not everywhere
 - **Transitions:** `transition: box-shadow 0.2s ease` — only animate what changes
+
+### Background Atmosphere (Avoid Generic Dark)
+Every visualization should have a SUBTLE background personality. Avoid flat `--bg` backgrounds that look like every dark template. Choose ONE technique per file:
+
+1. **Subtle radial gradient** — a single, very faint radial gradient from the center:
+   ```css
+   body { background: var(--bg); }
+   body::before {
+     content: ''; position: fixed; inset: 0; z-index: -1;
+     background: radial-gradient(ellipse 80% 50% at 50% 20%, 
+       color-mix(in srgb, var(--accent), transparent 92%), transparent);
+   }
+   ```
+2. **Noise/grain texture** (Vercel-style): use a tiny inline SVG noise filter:
+   ```css
+   body::after {
+     content: ''; position: fixed; inset: 0; z-index: -1; opacity: 0.03;
+     background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+   }
+   ```
+3. **Dot grid** (use sparingly, only for tech/architecture files):
+   ```css
+   body { background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+     background-size: 24px 24px; }
+   ```
+
+Choose the technique that matches the content personality. Timelines → radial gradient. Dashboards → grain. Architecture → dot grid. Slide decks → radial gradient with content-specific accent color.
+
+### Dropdown Menu Styling (Mandatory)
+The settings/export dropdown MUST look polished:
+```css
+.dropdown-menu {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+  padding: 4px;
+  min-width: 160px;
+  animation: dropdownIn 0.15s ease;
+}
+.dropdown-menu button {
+  width: 100%; text-align: left; padding: 8px 12px;
+  border-radius: 6px; border: none; background: transparent;
+  color: var(--text-secondary); font-size: 0.875rem; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.dropdown-menu button:hover {
+  background: var(--surface-hover); color: var(--text);
+}
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+```
 
 ### Visual Restraint Anti-Patterns (NEVER DO)
 - ❌ **Floating gradient orbs** — decorative blurred circles behind content look amateurish
