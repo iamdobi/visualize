@@ -1,7 +1,7 @@
 {
-  "currentRound": 19,
-  "loopsSinceResearch": 2,
-  "lastAverage": 7.7,
+  "currentRound": 20,
+  "loopsSinceResearch": 3,
+  "lastAverage": 7.2,
   "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -22,6 +22,7 @@
     { "round": 16, "avg": 7.88, "gate": "NEEDS WORK", "notes": "R16: Stricter evaluator dropped scores. 0 console errors. Scores: ai-timeline 7.63, comparison 8.00, saas-dashboard 8.00, slide-deck-demo 7.75, startup-pitch-deck 7.88, system-architecture 8.00. FIXED: slide deck light themes (pastel gradients), animation scale transforms, card hover border-color transitions. Theme Support was 6→expected 8+ post-fix. loopsSinceResearch=7 → research due next round." },
     { "round": 17, "avg": null, "gate": "ACCEPTABLE", "notes": "R17 RESEARCH ROUND: Researched interpolate-size, CSS anchor positioning, ::details-content, styleable details. Core fix: slide deck theme-aware gradients (dark=deep saturated, light=soft pastel). Added interpolate-size: allow-keywords to all files. Enhanced chart hover micro-interactions, SVG icon hover effects, staggered scroll-reveal animations. Updated SKILL.md with Theme-Aware Slide Gradients section. 0 console errors all 6 files. Reset loopsSinceResearch." },
     { "round": 18, "avg": 8.15, "gate": "ACCEPTABLE", "notes": "R18: 0 console errors. Scores: ai-timeline 8.0, comparison 8.0, saas-dashboard 8.3, slide-deck-demo 8.4, startup-pitch-deck 8.1, system-architecture 8.1. Fixed: chart interactivity (tooltips, hover highlights), a11y (ARIA labels, focus-visible), system-architecture mobile responsiveness, micro-interactions across all files. Weakest dimension: comparison interactivity (6→fixed). Top: slide-deck-demo 8.4." },
-    { "round": 19, "avg": 7.7, "gate": "NEEDS WORK", "notes": "R19: Stricter evaluator. 0 console errors. Scores: ai-timeline 7.6, comparison 7.4, saas-dashboard 7.5, slide-deck-demo 8.0, startup-pitch-deck 8.1, system-architecture 7.5. Weakest dimension: responsiveness (6-7 across all). FIXED: mobile breakpoints (768px/480px) for all 6 files, saas-dashboard a11y (+15 ARIA attrs), system-architecture broken HTML nodes, gradient hero text on ai-timeline. Top: startup-pitch-deck 8.1." }
+    { "round": 19, "avg": 7.7, "gate": "NEEDS WORK", "notes": "R19: Stricter evaluator. 0 console errors. Scores: ai-timeline 7.6, comparison 7.4, saas-dashboard 7.5, slide-deck-demo 8.0, startup-pitch-deck 8.1, system-architecture 7.5. Weakest dimension: responsiveness (6-7 across all). FIXED: mobile breakpoints (768px/480px) for all 6 files, saas-dashboard a11y (+15 ARIA attrs), system-architecture broken HTML nodes, gradient hero text on ai-timeline. Top: startup-pitch-deck 8.1." },
+    { "round": 20, "avg": 7.2, "gate": "NEEDS WORK", "notes": "R20: 0 console errors. Scores: ai-timeline 6.8, comparison 6.8, saas-dashboard 7.3, slide-deck-demo 7.6, startup-pitch-deck 7.6, system-architecture 7.0. Weakest dimensions: animation (6.3 avg), interactivity (6.7 avg). FIXED: dedicated floating theme toggles on ai-timeline/comparison/system-architecture (consistency), scroll-reveal data-reveal attrs on stat grids, chartGrow CSS animation on charts, visually-hidden chart data summaries for a11y. All 6 validated: 0 errors, both themes working." }
   ]
 }

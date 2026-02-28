@@ -310,6 +310,16 @@
     canvas { transition: filter 0.2s ease; }
     canvas:hover { filter: brightness(1.05); }
 
+    /* Chart grow animation */
+    @keyframes chartGrow {
+      from { opacity: 0; transform: scaleY(0.3); }
+      to { opacity: 1; transform: scaleY(1); }
+    }
+    .chart-wrapper canvas {
+      animation: chartGrow 0.8s ease-out 0.3s both;
+      transform-origin: bottom;
+    }
+
     /* Enhanced card hover effects with shadow elevation */
     .kpi-card, .chart-container {
       transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -491,7 +501,7 @@
         <p class="dashboard-subtitle">Real-time performance metrics and insights</p>
       </header>
 
-      <section class="kpi-grid" role="region" aria-label="Key Performance Indicators">
+      <section class="kpi-grid" role="region" aria-label="Key Performance Indicators" data-reveal>
         <div class="kpi-card animate delay-1" role="group" aria-label="Active Users: 8,547, up 12.5%">
           <div class="kpi-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -568,6 +578,7 @@
               <canvas id="revenueChart"></canvas>
             </div>
           </div>
+          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Revenue grew from $98K in January to $142K in December, with steady monthly increases.</div>
         </div>
 
         <div role="img" aria-label="User acquisition channels pie chart showing organic search 45%, paid ads 28%, referrals 15%, direct 12%">
@@ -580,6 +591,7 @@
               <canvas id="acquisitionChart"></canvas>
             </div>
           </div>
+          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Organic Search 45%, Paid Ads 28%, Referrals 15%, Direct 12%.</div>
         </div>
       </section>
 

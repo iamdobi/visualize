@@ -156,6 +156,21 @@
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
+    /* ===== VISIBLE THEME TOGGLE ===== */
+    .theme-toggle-btn {
+      position: fixed; top: 16px; right: 72px; z-index: 9999;
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); transition: all 0.2s;
+    }
+    .theme-toggle-btn:hover { background: var(--surface-hover); }
+    .theme-toggle-btn .sun { display: none; }
+    .theme-toggle-btn .moon { display: block; }
+    .theme-light .theme-toggle-btn .sun { display: block; }
+    .theme-light .theme-toggle-btn .moon { display: none; }
+
     /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle {
@@ -411,10 +426,14 @@
       z-index: 2; position: relative;
     }
 
-    /* Chart hover effects */
-    .chart-container canvas:hover {
-      filter: brightness(1.05);
-      transition: filter 0.15s ease;
+    /* Chart grow animation */
+    @keyframes chartGrow {
+      from { opacity: 0; transform: scaleY(0.3); }
+      to { opacity: 1; transform: scaleY(1); }
+    }
+    .chart-wrapper canvas {
+      animation: chartGrow 0.8s ease-out both;
+      transform-origin: bottom;
     }
 
     /* Responsive improvements */
@@ -448,6 +467,12 @@
   <main id="main-content">
     <a href="#main-content" class="skip-link">Skip to content</a>
 
+    <!-- Visible theme toggle -->
+    <button class="theme-toggle-btn" onclick="cycleTheme()" aria-label="Toggle light/dark theme">
+      <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+
     <!-- MENU -->
     <div class="viz-menu">
       <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
@@ -480,7 +505,7 @@
         </div>
       </header>
 
-      <section class="stats-overview" role="region" aria-label="Work Environment Statistics">
+      <section class="stats-overview" role="region" aria-label="Work Environment Statistics" data-reveal>
         <div class="stat-card animate delay-1">
           <span class="stat-number" data-count="42" data-suffix="%">42%</span>
           <span class="stat-label">Remote Workers Globally</span>
@@ -699,6 +724,7 @@
               <canvas id="productivityChart"></canvas>
             </div>
           </div>
+          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Remote work scores — Task Completion: 116, Quality: 118, Hours Worked: 95, Overall: 116. Office work baseline: 100 for all categories.</div>
         </div>
 
         <div role="img" aria-label="Employee satisfaction chart comparing different aspects of remote versus office work">
@@ -717,6 +743,7 @@
               <canvas id="preferenceChart"></canvas>
             </div>
           </div>
+          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Hybrid 73%, Remote Only 19%, Office Only 8%.</div>
         </div>
 
         <div role="img" aria-label="Cost analysis bar chart comparing annual costs of remote versus office work setups">
