@@ -1,8 +1,8 @@
 {
-  "currentRound": 15,
-  "loopsSinceResearch": 6,
-  "lastAverage": 8.62,
-  "gate": "ACCEPTABLE",
+  "currentRound": 16,
+  "loopsSinceResearch": 7,
+  "lastAverage": 7.88,
+  "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
     { "round": 2, "avg": 7.41, "gate": "NEEDS WORK" },
@@ -18,6 +18,7 @@
     { "round": 12, "avg": 7.62, "gate": "NEEDS WORK", "notes": "R12: 0 console errors. MAJOR fix: slide deck content slides now have gradient backgrounds, dot grid patterns, card/pill list items with distinct SVG icons, staggered entrance animations. Added visible sun/moon theme toggles to ai-timeline and system-architecture. Enhanced scroll-reveal animations (30px translateY + stagger delays). Slide decks improved from 7.0/7.19 → need re-eval. SaaS dashboard best at 8.19." },
     { "round": 13, "avg": 5.67, "gate": "NEEDS WORK", "notes": "R13: Much stricter evaluator (benchmarking against Apple/Stripe/NYT/Vercel). 0 console errors all files. Rebuilt all 6: added theme toggles to all files, slide transitions (CSS translateX), card hover effects, system-architecture major overhaul (gradient header, animated connections, expandable nodes), chart interactivity improvements. SaaS dashboard still top (6.56). Next: loopsSinceResearch=4, approaching research trigger." },
     { "round": 14, "avg": 7.60, "gate": "NEEDS WORK", "notes": "R14: Fairer evaluator (actually interacted with files). 0 console errors. Added: card hover microinteractions (translateY + shadow), :focus-visible with border-radius, ARIA roles/labels to ai-timeline/comparison/system-architecture, enriched sparse slide 3 on both decks with SVG icons. Updated SKILL.md with hover patterns, focus-visible standard, a11y checklist. Top: saas-dashboard + startup-pitch-deck (8.00). Weakest: ai-timeline + comparison (7.25). loopsSinceResearch=5 → next round should be RESEARCH." },
-    { "round": 15, "avg": 8.62, "gate": "ACCEPTABLE", "notes": "R15: Major jump +1.02. Evaluator scored all 6 files. 0 console errors. Scores: ai-timeline 8.0, comparison 8.5, saas-dashboard 8.9, slide-deck-demo 8.8, startup-pitch-deck 8.9, system-architecture 8.6. FIXED: ai-timeline light theme completely broken (hero/CTA/timeline stayed dark in light mode) — added .theme-light overrides for gradient sections, hero text, CTA, timeline axis. Theme Support was 5→expected 9 post-fix. Top: saas-dashboard & startup-pitch-deck (8.9). Weakest dimension: accessibility (avg 8.0). Next: push interactivity (chart tooltips, expandable cards) to reach SHIP gate." }
+    { "round": 15, "avg": 8.62, "gate": "ACCEPTABLE", "notes": "R15: Major jump +1.02. 0 console errors. Scores: ai-timeline 8.0, comparison 8.5, saas-dashboard 8.9, slide-deck-demo 8.8, startup-pitch-deck 8.9, system-architecture 8.6. FIXED: ai-timeline light theme completely broken. Top: saas-dashboard & startup-pitch-deck (8.9)." },
+    { "round": 16, "avg": 7.88, "gate": "NEEDS WORK", "notes": "R16: Stricter evaluator dropped scores. 0 console errors. Scores: ai-timeline 7.63, comparison 8.00, saas-dashboard 8.00, slide-deck-demo 7.75, startup-pitch-deck 7.88, system-architecture 8.00. FIXED: slide deck light themes (pastel gradients), animation scale transforms, card hover border-color transitions. Theme Support was 6→expected 8+ post-fix. loopsSinceResearch=7 → research due next round." }
   ]
 }

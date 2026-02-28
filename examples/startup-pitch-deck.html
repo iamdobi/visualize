@@ -205,6 +205,37 @@
     .title-ring-1 { width: 500px; height: 500px; top: 50%; left: 50%; margin: -250px 0 0 -250px; animation: spinSlow 60s linear infinite; }
     .title-ring-2 { width: 700px; height: 700px; top: 50%; left: 50%; margin: -350px 0 0 -350px; animation: spinSlow 90s linear infinite reverse; }
 
+    /* Light theme overrides for gradient slides */
+    .theme-light .slide.title-slide {
+      background: linear-gradient(135deg, #6ee7b7 0%, #67e8f9 100%);
+    }
+    .theme-light .slide.section-slide {
+      background: linear-gradient(135deg, #67e8f9 0%, #6ee7b7 100%);
+    }
+    .theme-light .slide.title-slide h1,
+    .theme-light .slide.title-slide h2,
+    .theme-light .slide.section-slide h2 { color: #1e293b; text-shadow: none; }
+    .theme-light .slide.title-slide .subtitle,
+    .theme-light .slide.title-slide .meta,
+    .theme-light .slide.section-slide p { color: #334155; }
+    .theme-light .stat-item {
+      background: #ffffff; border-color: rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .theme-light .problem-list li,
+    .theme-light .solution-item,
+    .theme-light .revenue-item {
+      background: #ffffff; border-color: rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    .theme-light .chart-container {
+      background: #ffffff; border-color: rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .theme-light .team-avatar {
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
     .slide.section-slide {
       background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
       color: white; overflow: hidden;

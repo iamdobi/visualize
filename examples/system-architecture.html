@@ -54,6 +54,13 @@
       --layer-services: #059669; --layer-data: #db2777; --layer-external: #7c3aed;
     }
 
+    /* Light theme overrides for gradient sections */
+    .theme-light .hero {
+      background: linear-gradient(135deg, #bfdbfe 0%, #ddd6fe 100%);
+    }
+    .theme-light .hero h1 { color: #1e293b; text-shadow: none; }
+    .theme-light .hero .subtitle { color: #475569; }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
@@ -109,8 +116,8 @@
     .animate.delay-6 { animation-delay: 0.6s; }
 
     /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal { opacity: 0; transform: translateY(24px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
 
     /* ===== FOCUS INDICATORS ===== */
     *:focus-visible { 
