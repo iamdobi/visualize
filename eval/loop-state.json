@@ -1,7 +1,7 @@
 {
-  "currentRound": 13,
-  "loopsSinceResearch": 4,
-  "lastAverage": 5.67,
+  "currentRound": 14,
+  "loopsSinceResearch": 5,
+  "lastAverage": 7.60,
   "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -16,6 +16,7 @@
     { "round": 10, "avg": 8.04, "gate": "ACCEPTABLE", "notes": "R10: 0 console errors on all 6 files. Added floating orbs + CSS title animations + divider lines to both slide decks. Added aria-live regions for slide transitions. Fixed donut legend truncation on SaaS dashboard. Slide decks still weakest (7.50) — need more content-slide polish to push past 8. Top files: ai-timeline 8.38, system-architecture 8.38." },
     { "round": 11, "avg": 7.86, "gate": "NEEDS WORK", "notes": "R11: Stricter scoring. 0 console errors. Fixed: slide deck title slides (added SVG icons, grid pattern overlay, rotating orbital rings — replacing tiny diamond/emoji), tightened timeline spacing 40%, gradient fills on charts, faster connection line animation on architecture, fixed SVG path error in pitch deck. Slide decks improved but still weakest (7.44). Next: need content-slide overhaul — inner slides are too plain." },
     { "round": 12, "avg": 7.62, "gate": "NEEDS WORK", "notes": "R12: 0 console errors. MAJOR fix: slide deck content slides now have gradient backgrounds, dot grid patterns, card/pill list items with distinct SVG icons, staggered entrance animations. Added visible sun/moon theme toggles to ai-timeline and system-architecture. Enhanced scroll-reveal animations (30px translateY + stagger delays). Slide decks improved from 7.0/7.19 → need re-eval. SaaS dashboard best at 8.19." },
-    { "round": 13, "avg": 5.67, "gate": "NEEDS WORK", "notes": "R13: Much stricter evaluator (benchmarking against Apple/Stripe/NYT/Vercel). 0 console errors all files. Rebuilt all 6: added theme toggles to all files, slide transitions (CSS translateX), card hover effects, system-architecture major overhaul (gradient header, animated connections, expandable nodes), chart interactivity improvements. SaaS dashboard still top (6.56). Next: loopsSinceResearch=4, approaching research trigger." }
+    { "round": 13, "avg": 5.67, "gate": "NEEDS WORK", "notes": "R13: Much stricter evaluator (benchmarking against Apple/Stripe/NYT/Vercel). 0 console errors all files. Rebuilt all 6: added theme toggles to all files, slide transitions (CSS translateX), card hover effects, system-architecture major overhaul (gradient header, animated connections, expandable nodes), chart interactivity improvements. SaaS dashboard still top (6.56). Next: loopsSinceResearch=4, approaching research trigger." },
+    { "round": 14, "avg": 7.60, "gate": "NEEDS WORK", "notes": "R14: Fairer evaluator (actually interacted with files). 0 console errors. Added: card hover microinteractions (translateY + shadow), :focus-visible with border-radius, ARIA roles/labels to ai-timeline/comparison/system-architecture, enriched sparse slide 3 on both decks with SVG icons. Updated SKILL.md with hover patterns, focus-visible standard, a11y checklist. Top: saas-dashboard + startup-pitch-deck (8.00). Weakest: ai-timeline + comparison (7.25). loopsSinceResearch=5 → next round should be RESEARCH." }
   ]
 }

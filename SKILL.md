@@ -172,6 +172,49 @@ Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f4
 - **Container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
 - **Card gaps:** `gap-6` minimum
 
+### Card Hover Microinteractions
+All cards, stat items, and interactive containers MUST have hover effects:
+```css
+.card, .stat-card, .kpi-card, .stat-item, .chart-container {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover, .stat-card:hover, .kpi-card:hover, .stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+```
+- Timeline items: subtle highlight on hover
+- Architecture nodes: `translateY(-4px) scale(1.02)` on hover
+- List items in slide decks: `translateX(4px)` on hover
+
+### :focus-visible Standard
+Every file MUST include:
+```css
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+```
+
+### SVG Chart Hover Pattern
+For inline SVG chart elements (bars, donut segments, data points):
+```css
+svg rect, svg circle, svg path.data-element {
+  transition: opacity 0.2s, transform 0.2s;
+}
+svg rect:hover, svg circle:hover {
+  opacity: 0.8;
+  filter: brightness(1.1);
+}
+```
+Always add `<title>` elements inside SVG shapes for native browser tooltips:
+```html
+<rect x="10" y="20" width="50" height="100">
+  <title>Revenue: $142K</title>
+</rect>
+```
+
 ### Visual Polish
 - **Rounded corners:** `rounded-2xl` (16px) for cards, `rounded-xl` (12px) for smaller elements
 - **Shadows:** `shadow-lg` or `0 4px 24px rgba(0,0,0,0.15)` for depth
@@ -182,6 +225,16 @@ Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f4
 ### Accessibility (Mandatory)
 
 Every visualization MUST meet these baseline accessibility requirements:
+
+**Minimum Accessibility Checklist:**
+- [ ] Skip-to-content link present
+- [ ] `role="region"` on all major sections with `aria-label`
+- [ ] `role="group"` on comparison sections, architecture layers, slide groups
+- [ ] `role="list"` / `role="listitem"` on timeline sections and items
+- [ ] `aria-label` on all icon-only buttons
+- [ ] `aria-describedby` on chart sections linking to data descriptions
+- [ ] `:focus-visible` with `border-radius: 4px` on all interactive elements
+- [ ] `aria-live="polite"` on slide counters / dynamic content
 
 - **Skip navigation:** Add `<a href="#main-content" class="skip-link">Skip to content</a>` at the top of `<body>`. Style: visually hidden, visible on focus.
 - **Landmark roles:** Use `<main>`, `<nav>`, `<header>`, `<footer>`, `<section>` with `aria-label` where there are multiple of the same landmark.

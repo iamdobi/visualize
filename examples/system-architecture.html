@@ -115,7 +115,8 @@
     /* ===== FOCUS INDICATORS ===== */
     *:focus-visible { 
       outline: 2px solid var(--accent); 
-      outline-offset: 2px; 
+      outline-offset: 2px;
+      border-radius: 4px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -492,7 +493,7 @@
         </div>
       </header>
 
-      <section class="stats-overview" aria-label="System Statistics">
+      <section class="stats-overview" role="region" aria-label="System Statistics">
         <div class="stat-card animate delay-1">
           <span class="stat-number" data-count="99.97" data-suffix="%">99.97%</span>
           <span class="stat-label">System Uptime</span>
@@ -514,7 +515,7 @@
       <section class="diagram" role="img" aria-label="Microservices architecture diagram showing 5 layers with connections" data-reveal>
 
         <!-- Layer 1: Client Applications -->
-        <div class="layer layer-clients" data-reveal>
+        <div class="layer layer-clients" role="group" aria-label="Client Applications Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             Client Applications
@@ -584,7 +585,7 @@
         </div>
 
         <!-- Layer 2: API Gateway -->
-        <div class="layer layer-gateway" data-reveal>
+        <div class="layer layer-gateway" role="group" aria-label="API Gateway Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             API Gateway Layer
@@ -638,7 +639,7 @@
         </div>
 
         <!-- Layer 3: Business Logic Services -->
-        <div class="layer layer-services" data-reveal>
+        <div class="layer layer-services" role="group" aria-label="Business Logic Services Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             Business Logic Services
@@ -764,7 +765,7 @@
         </div>
 
         <!-- Layer 4: Data Layer -->
-        <div class="layer layer-data" data-reveal>
+        <div class="layer layer-data" role="group" aria-label="Data and Storage Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             Data & Storage Layer
@@ -833,7 +834,7 @@
         </div>
 
         <!-- Layer 5: External Services -->
-        <div class="layer layer-external" data-reveal>
+        <div class="layer layer-external" role="group" aria-label="External Services Layer" data-reveal>
           <div class="layer-label">
             <div class="layer-dot"></div>
             External Services & APIs
@@ -900,7 +901,7 @@
 
       </section>
 
-      <section class="architecture-notes" aria-label="Architecture principles">
+      <section class="architecture-notes" role="region" aria-label="Architecture principles">
         <div class="note-card" data-reveal>
           <h4>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

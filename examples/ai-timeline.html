@@ -107,7 +107,8 @@
     /* ===== FOCUS INDICATORS ===== */
     *:focus-visible { 
       outline: 2px solid var(--accent); 
-      outline-offset: 2px; 
+      outline-offset: 2px;
+      border-radius: 4px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -366,7 +367,7 @@
         <p class="subtitle">From Alan Turing's Vision to Modern AI Revolution</p>
       </header>
 
-      <section class="stats-grid" aria-label="AI Development Statistics">
+      <section class="stats-grid" role="region" aria-label="AI Development Statistics">
         <div class="stat-card animate delay-1">
           <span class="stat-number" data-count="75" data-suffix="+">75+</span>
           <span class="stat-label">Years of AI Research</span>
@@ -385,9 +386,9 @@
         </div>
       </section>
 
-      <section class="timeline" aria-label="AI Development Timeline">
+      <section class="timeline" role="list" aria-label="AI Development Timeline">
         <div class="era-label" style="top: 2rem;">Early Foundations</div>
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">1950</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -403,7 +404,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">1956</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -419,7 +420,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">1966</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -435,7 +436,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">1980s</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -452,7 +453,7 @@
         </article>
 
         <div class="era-label" style="top: 32rem;">Strategic AI</div>
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">1997</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -469,7 +470,7 @@
         </article>
 
         <div class="era-label" style="top: 50rem;">Deep Learning Era</div>
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">2006</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -485,7 +486,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">2012</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -501,7 +502,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">2016</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -518,7 +519,7 @@
         </article>
 
         <div class="era-label" style="top: 78rem;">Generative AI Boom</div>
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">2020</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -534,7 +535,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal>
           <div class="timeline-year">2022</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -551,7 +552,7 @@
         </article>
       </section>
 
-      <section class="future-section" data-reveal>
+      <section class="future-section" role="region" aria-label="Future of AI" data-reveal>
         <h2 class="future-title">The Next Frontier</h2>
         <p class="future-description">
           As we look toward 2025 and beyond, AI continues evolving toward artificial general intelligence (AGI), 

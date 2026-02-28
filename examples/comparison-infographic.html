@@ -126,7 +126,8 @@
     /* ===== FOCUS INDICATORS ===== */
     *:focus-visible { 
       outline: 2px solid var(--accent); 
-      outline-offset: 2px; 
+      outline-offset: 2px;
+      border-radius: 4px;
     }
 
     /* ===== PRINT ===== */
@@ -205,6 +206,11 @@
     .stat-card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 1rem; padding: 2rem; text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     }
 
     .stat-number {
@@ -236,6 +242,11 @@
     .comparison-section {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 1rem; padding: 2.5rem; position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .comparison-section:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     }
 
     .comparison-section.remote {
@@ -317,6 +328,11 @@
     .chart-container {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 1rem; padding: 2rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chart-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     }
 
     .chart-title {
@@ -404,7 +420,7 @@
         </div>
       </header>
 
-      <section class="stats-overview" aria-label="Work Environment Statistics">
+      <section class="stats-overview" role="region" aria-label="Work Environment Statistics">
         <div class="stat-card animate delay-1">
           <span class="stat-number" data-count="42" data-suffix="%">42%</span>
           <span class="stat-label">Remote Workers Globally</span>
@@ -423,8 +439,8 @@
         </div>
       </section>
 
-      <div class="comparison-grid" data-reveal>
-        <article class="comparison-section remote">
+      <div class="comparison-grid" role="region" aria-label="Remote vs Office comparison" data-reveal>
+        <article class="comparison-section remote" role="group" aria-label="Remote Work">
           <div class="section-title">
             <div class="section-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -519,7 +535,7 @@
           </div>
         </article>
 
-        <article class="comparison-section office">
+        <article class="comparison-section office" role="group" aria-label="Office Work">
           <div class="section-title">
             <div class="section-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

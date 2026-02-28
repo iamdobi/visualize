@@ -105,7 +105,7 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
-    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
     @media print {
       body { background: white !important; color: black !important; overflow: visible; }
@@ -323,6 +323,11 @@
     .stat-item {
       text-align: center; background: var(--surface); border: 1px solid var(--border);
       border-radius: 12px; padding: 1.5rem 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     }
     .stat-number {
       font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin-bottom: 0.5rem;
@@ -468,10 +473,28 @@
           <div class="orb orb-1"></div>
           <div class="orb orb-2"></div>
           <div class="content">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1.5rem; display: block; opacity: 0.85;" aria-hidden="true">
+              <circle cx="32" cy="32" r="28"/>
+              <path d="M20 32l8 8 16-16"/>
+            </svg>
             <h2 class="animate">Our Solution</h2>
             <p class="animate delay-1">
               A unified platform that transforms complex data into actionable insights in real-time
             </p>
+            <div style="display: flex; gap: 3rem; margin-top: 2.5rem; justify-content: center; flex-wrap: wrap;">
+              <div class="animate delay-2" style="text-align: center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; display: block; opacity: 0.8;" aria-hidden="true"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                <span style="font-size: 0.875rem; opacity: 0.8;">Real-time</span>
+              </div>
+              <div class="animate delay-3" style="text-align: center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; display: block; opacity: 0.8;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h4a2 2 0 012 2v1"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+                <span style="font-size: 0.875rem; opacity: 0.8;">AI-Powered</span>
+              </div>
+              <div class="animate delay-4" style="text-align: center;">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; display: block; opacity: 0.8;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span style="font-size: 0.875rem; opacity: 0.8;">No-Code</span>
+              </div>
+            </div>
           </div>
         </section>
 
