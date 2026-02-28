@@ -291,6 +291,47 @@ Choose the right format. See [references/types.md](references/types.md) for deta
 | **One-Pager** | Summaries, briefs | Single viewport, print-friendly |
 | **Mind Map** | Concept relationships | Radial SVG layout |
 | **Kanban** | Status tracking | Column-based cards |
+| **Carousel Cards** | Social media (IG/LinkedIn) | 1080×1080 per card, swipeable, bold text |
+| **Event Poster** | Conferences, meetups, webinars | Portrait A4/letter, bold headline, date/venue |
+| **Resume/CV** | Job applications | One-page, two-column, print-optimized |
+| **Banner/Header** | Email, blog, social cover | 1200×630 or 1500×500, centered text on visual bg |
+| **Quote Card** | Social proof, testimonials | Portrait/square, large quote, attribution |
+| **Process Guide** | How-to, step-by-step | Numbered steps, icons, clear flow |
+| **Status Report** | Executive updates | KPIs + progress bars + highlights, one-page |
+| **Org Chart** | Team structure | Hierarchical tree, photos/avatars, roles |
+| **Data Story** | Narrative + data | Scrollytelling, charts woven with narrative text |
+| **Product Card** | Feature highlight, launch | Hero image area, feature pills, CTA |
+
+### Carousel Card Rules
+
+Carousel cards are huge for social media. Get these right:
+
+- **Square format** — `1080×1080px` (or configurable via CSS var)
+- **One idea per card** — bold headline + 1-2 supporting points max
+- **Swipe nav** — arrows + dots + touch swipe + keyboard
+- **Card counter** — "3 / 8" visible
+- **Download all** — PNG export of individual cards or full set
+- **Typography dominates** — headline at 2.5-4rem, minimal body text
+- **Color-coded** — each card can have a subtle accent shift
+- **Print layout** — grid of all cards for printing
+- **Max 10 cards** — keep it focused
+
+### Event Poster Rules
+
+- **Portrait orientation** — A4/letter ratio or square
+- **Visual hierarchy** — Event name (largest) → Date/Time → Location → Description → CTA
+- **Bold headline** — 3-5rem, max 6 words
+- **Date/time prominent** — styled as a badge or highlighted block
+- **QR code area** — placeholder box for registration link
+- **Print-first** — looks great printed, dark or light theme
+
+### Quote Card Rules
+
+- **Large quotation marks** — decorative " " in accent color, oversized
+- **Quote text** — 1.5-2.5rem, serif or italic weight for contrast
+- **Attribution** — name, title, company below quote
+- **Square or portrait** — optimized for social sharing
+- **Minimal design** — quote is the hero, everything else is subtle
 
 ## Slide Deck Rules
 
