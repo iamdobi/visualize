@@ -869,6 +869,24 @@ Use these when they add value. See [references/css-techniques.md](references/css
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
+    /* ===== DETAILS ACCORDION (Chrome 120+ exclusive, 131+ animated) ===== */
+    details { overflow: hidden; }
+    details summary { cursor: pointer; list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    ::details-content {
+      transition: block-size 0.3s ease, opacity 0.3s ease;
+      block-size: 0; opacity: 0; overflow: hidden;
+    }
+    details[open]::details-content { block-size: auto; opacity: 1; }
+
+    /* ===== POPOVER (Chrome 114+, zero-JS tooltips/panels) ===== */
+    [popover] {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px; max-width: 320px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2); color: var(--text);
+    }
+    [popover]::backdrop { background: rgba(0,0,0,0.3); }
+
     /* ===== ADD YOUR STYLES BELOW ===== */
   </style>
 </head>
@@ -890,6 +908,27 @@ Use these when they add value. See [references/css-techniques.md](references/css
   </div>
 
   <!-- YOUR CONTENT HERE (use <section>, <header>, <article> for semantics) -->
+
+  <!-- EXAMPLE: Exclusive accordion (only one open at a time, no JS needed) -->
+  <!--
+  <details name="faq" open>
+    <summary>Section 1</summary>
+    <div class="section-body"><p>Content</p></div>
+  </details>
+  <details name="faq">
+    <summary>Section 2</summary>
+    <div class="section-body"><p>Content</p></div>
+  </details>
+  -->
+
+  <!-- EXAMPLE: Popover (zero-JS tooltip/info panel) -->
+  <!--
+  <button popovertarget="info-panel">Details</button>
+  <div id="info-panel" popover>
+    <h3>More Information</h3>
+    <p>Content shown on click, no JS needed.</p>
+  </div>
+  -->
 
   </main>
   <script>

@@ -9,149 +9,72 @@
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
 
     @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #d1d5db;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      }
+      :root { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; }
     }
     @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      }
+      :root { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; }
     }
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-      --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #d1d5db;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
-      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-    }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-      --border: rgba(0,0,0,0.08);
-      --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
-      --positive: #059669; --negative: #e11d48; --warning: #d97706;
-    }
+    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; }
+    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; }
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
       line-height: 1.6; -webkit-font-smoothing: antialiased;
       transition: background 0.3s, color 0.3s;
-      min-height: 100vh; padding: 32px 16px;
+      min-height: 100vh; padding: 48px 16px;
       display: flex; flex-direction: column; align-items: center;
     }
-
-    .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 20px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1;
+      background: radial-gradient(ellipse 80% 50% at 50% 20%, color-mix(in srgb, var(--accent-secondary), transparent 94%), transparent);
     }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
     .animate { animation: fadeInUp 0.6s ease-out both; }
     .animate.delay-1 { animation-delay: 0.1s; }
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
     .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
-
-    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
     }
 
-    @media print {
-      body { background: white !important; color: black !important; }
-      .viz-menu, .fullscreen-overlay { display: none !important; }
-      .reveal { opacity: 1 !important; transform: none !important; }
-      .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
-      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    }
-
-    /* ===== MENU ===== */
-    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
-    .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 8px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
-    .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .viz-menu-dropdown {
-      position: absolute; top: 52px; right: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 8px;
-      opacity: 0; visibility: hidden; transform: translateY(-8px);
-      transition: all 0.2s; backdrop-filter: blur(16px);
-    }
-    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text); font-size: 14px;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
-    }
-    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-    /* ===== QUOTE CARDS ===== */
-    .page-title {
-      font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800;
-      text-align: center; margin-bottom: 8px;
-    }
-    .page-subtitle {
-      font-size: 1rem; color: var(--text-secondary); text-align: center; margin-bottom: 32px;
-    }
+    .page-title { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; text-align: center; margin-bottom: 8px; letter-spacing: -0.03em; }
+    .page-subtitle { font-size: 1rem; color: var(--text-secondary); text-align: center; margin-bottom: 40px; }
 
     .quotes-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(300px, 480px));
-      gap: 18px; max-width: 1000px;
+      display: grid; grid-template-columns: repeat(2, minmax(300px, 480px));
+      gap: 20px; max-width: 1000px;
     }
-    @media (max-width: 700px) {
-      .quotes-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 700px) { .quotes-grid { grid-template-columns: 1fr; } }
 
     .quote-card {
       aspect-ratio: 1; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 32px; display: flex; flex-direction: column;
+      border: 1px solid var(--border); border-radius: 16px;
+      padding: 40px; display: flex; flex-direction: column;
       justify-content: center; position: relative; overflow: hidden;
-      cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer; transition: box-shadow 0.3s ease;
+    }
+    .quote-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--q-accent, var(--accent)), transparent 94%), transparent);
+      pointer-events: none;
     }
     .quote-card:hover {
-      background: var(--surface-hover);
-      box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 0 0 1px var(--border), 0 12px 32px rgba(0,0,0,0.15);
     }
-    .quote-card:nth-child(1) { animation: fadeInUp 0.5s ease both; animation-delay: 0s; }
-    .quote-card:nth-child(2) { animation: fadeInUp 0.5s ease both; animation-delay: 0.08s; }
-    .quote-card:nth-child(3) { animation: fadeInUp 0.5s ease both; animation-delay: 0.16s; }
-    .quote-card:nth-child(4) { animation: fadeInUp 0.5s ease both; animation-delay: 0.24s; }
-    .quote-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .quote-card:nth-child(1) { animation: fadeInUp 0.5s ease both 0s; }
+    .quote-card:nth-child(2) { animation: fadeInUp 0.5s ease both 0.08s; }
+    .quote-card:nth-child(3) { animation: fadeInUp 0.5s ease both 0.16s; }
+    .quote-card:nth-child(4) { animation: fadeInUp 0.5s ease both 0.24s; }
 
     .quote-card:nth-child(1) { --q-accent: #3b82f6; }
     .quote-card:nth-child(2) { --q-accent: #8b5cf6; }
@@ -160,8 +83,8 @@
 
     .quote-mark {
       font-size: 5rem; line-height: 1; font-weight: 900;
-      color: var(--q-accent, var(--accent)); opacity: 0.25;
-      position: absolute; top: 20px; left: 32px;
+      color: var(--q-accent, var(--accent)); opacity: 0.2;
+      position: absolute; top: 24px; left: 40px;
       font-family: 'Lora', Georgia, serif;
     }
     .quote-text {
@@ -172,18 +95,22 @@
       position: relative; z-index: 1;
     }
     .quote-attribution { position: relative; z-index: 1; }
-    .quote-name {
-      font-weight: 700; font-size: 0.95rem; color: var(--text);
-    }
-    .quote-title-company {
-      font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;
-    }
-    .quote-divider {
-      width: 40px; height: 3px; border-radius: 2px;
-      background: var(--q-accent, var(--accent)); margin-bottom: 12px; opacity: 0.6;
-    }
+    .quote-divider { width: 40px; height: 3px; border-radius: 2px; background: var(--q-accent, var(--accent)); margin-bottom: 12px; opacity: 0.5; }
+    .quote-name { font-weight: 700; font-size: 0.95rem; }
+    .quote-title-company { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
 
-    /* Fullscreen overlay */
+    .copy-btn {
+      position: absolute; bottom: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text-secondary); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .quote-card:hover .copy-btn { opacity: 1; }
+    .copy-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); color: var(--text); }
+
+    /* Fullscreen */
     .fullscreen-overlay {
       position: fixed; inset: 0; z-index: 9998;
       background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
@@ -191,27 +118,34 @@
       padding: 32px; cursor: pointer;
     }
     .fullscreen-overlay.active { display: flex; }
-    .fullscreen-overlay .quote-card {
-      width: min(90vmin, 600px); max-width: none;
-      cursor: default; transform: none;
-    }
-    .fullscreen-overlay .quote-card:hover { transform: none; }
+    .fullscreen-overlay .quote-card { width: min(90vmin, 600px); max-width: none; cursor: default; }
+    .fullscreen-overlay .quote-card:hover { box-shadow: none; }
+    .fullscreen-overlay .copy-btn { opacity: 1; }
     .fullscreen-close {
       position: absolute; top: 24px; right: 24px;
       width: 44px; height: 44px; border-radius: 50%;
       background: rgba(255,255,255,0.1); border: none;
       color: #fff; cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      transition: background 0.2s;
+      align-items: center; justify-content: center; transition: background 0.2s;
     }
     .fullscreen-close:hover { background: rgba(255,255,255,0.2); }
-    .fullscreen-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    .skip-link {
-      position: absolute; top: -100px; left: 16px; padding: 8px 16px;
-      background: var(--accent); color: #fff; border-radius: 8px;
-      text-decoration: none; z-index: 99999; font-weight: 600;
+    @media print {
+      body { background: white !important; color: black !important; }
+      .viz-menu, .fullscreen-overlay, .copy-btn { display: none !important; }
+      .quote-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
+
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle { width: 44px; height: 44px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.2s; }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown { position: absolute; top: 52px; right: 0; min-width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s; backdrop-filter: blur(16px); }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button { width: 100%; padding: 10px 14px; border: none; border-radius: 8px; background: transparent; color: var(--text); font-size: 14px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; transition: background 0.15s; }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+
+    .skip-link { position: absolute; top: -100px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; border-radius: 8px; text-decoration: none; z-index: 99999; font-weight: 600; }
     .skip-link:focus { top: 16px; }
   </style>
 </head>
@@ -221,14 +155,12 @@
 
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-      </svg>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
+      <button onclick="cycleTheme()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Download PNG</span></button>
+      <button onclick="window.print()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Print / PDF</span></button>
     </div>
   </div>
 
@@ -237,92 +169,104 @@
     <p class="page-subtitle animate delay-1">Wisdom from the builders shaping our future</p>
   </header>
 
-  <section class="quotes-grid" aria-label="Quote cards">
-    <div class="quote-card animate delay-1" data-reveal tabindex="0" role="button" aria-label="View quote by Satya Nadella fullscreen" onclick="openFullscreen(0)">
-      <div class="quote-mark">"</div>
+  <section class="quotes-grid" role="region" aria-label="Quote cards">
+    <div class="quote-card" tabindex="0" role="button" aria-label="View quote by Satya Nadella fullscreen" onclick="openFullscreen(0)">
+      <div class="quote-mark" aria-hidden="true">"</div>
       <blockquote class="quote-text">Our industry does not respect tradition — it only respects innovation. The true scarce commodity is increasingly human attention.</blockquote>
       <div class="quote-attribution">
         <div class="quote-divider"></div>
         <div class="quote-name">Satya Nadella</div>
         <div class="quote-title-company">CEO, Microsoft</div>
       </div>
+      <button class="copy-btn" onclick="event.stopPropagation();copyQuote(0)" aria-label="Copy quote">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </button>
     </div>
 
-    <div class="quote-card animate delay-2" data-reveal tabindex="0" role="button" aria-label="View quote by Jensen Huang fullscreen" onclick="openFullscreen(1)">
-      <div class="quote-mark">"</div>
+    <div class="quote-card" tabindex="0" role="button" aria-label="View quote by Jensen Huang fullscreen" onclick="openFullscreen(1)">
+      <div class="quote-mark" aria-hidden="true">"</div>
       <blockquote class="quote-text">Software is eating the world, but AI is going to eat software. The more you learn, the more you realize how much you don't know.</blockquote>
       <div class="quote-attribution">
         <div class="quote-divider"></div>
         <div class="quote-name">Jensen Huang</div>
         <div class="quote-title-company">CEO, NVIDIA</div>
       </div>
+      <button class="copy-btn" onclick="event.stopPropagation();copyQuote(1)" aria-label="Copy quote">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </button>
     </div>
 
-    <div class="quote-card animate delay-3" data-reveal tabindex="0" role="button" aria-label="View quote by Mira Murati fullscreen" onclick="openFullscreen(2)">
-      <div class="quote-mark">"</div>
+    <div class="quote-card" tabindex="0" role="button" aria-label="View quote by Mira Murati fullscreen" onclick="openFullscreen(2)">
+      <div class="quote-mark" aria-hidden="true">"</div>
       <blockquote class="quote-text">The most important thing is to build technology that genuinely helps people. Safety and capability aren't at odds — they reinforce each other.</blockquote>
       <div class="quote-attribution">
         <div class="quote-divider"></div>
         <div class="quote-name">Mira Murati</div>
         <div class="quote-title-company">Former CTO, OpenAI</div>
       </div>
+      <button class="copy-btn" onclick="event.stopPropagation();copyQuote(2)" aria-label="Copy quote">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </button>
     </div>
 
-    <div class="quote-card animate delay-4" data-reveal tabindex="0" role="button" aria-label="View quote by Gwynne Shotwell fullscreen" onclick="openFullscreen(3)">
-      <div class="quote-mark">"</div>
+    <div class="quote-card" tabindex="0" role="button" aria-label="View quote by Gwynne Shotwell fullscreen" onclick="openFullscreen(3)">
+      <div class="quote-mark" aria-hidden="true">"</div>
       <blockquote class="quote-text">I always tell people: focus on being really good at what you do. Success follows competence. Simplicity scales, complexity fails.</blockquote>
       <div class="quote-attribution">
         <div class="quote-divider"></div>
         <div class="quote-name">Gwynne Shotwell</div>
-        <div class="quote-title-company">President & COO, SpaceX</div>
+        <div class="quote-title-company">President &amp; COO, SpaceX</div>
       </div>
+      <button class="copy-btn" onclick="event.stopPropagation();copyQuote(3)" aria-label="Copy quote">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </button>
     </div>
   </section>
 
-  <!-- Fullscreen overlay -->
   <div class="fullscreen-overlay" id="fullscreenOverlay" onclick="closeFullscreen(event)">
     <button class="fullscreen-close" onclick="closeFullscreen(event)" aria-label="Close fullscreen view">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
     </button>
     <div id="fullscreenContent"></div>
   </div>
 
   </main>
   <script>
-    // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
     document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.getElementById('vizMenuDropdown').classList.remove('open'); closeFullscreen(e); } });
 
-    // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
-      if (typeof onThemeChange === 'function') onThemeChange();
+      localStorage.setItem('viz-theme', t); currentTheme = t;
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // === Scroll Reveal ===
-    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
-    setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
-
-    // === Fullscreen ===
     var quoteCards = document.querySelectorAll('.quotes-grid .quote-card');
+    var quoteTexts = [];
+    quoteCards.forEach(function(c) {
+      var q = c.querySelector('.quote-text').textContent.trim();
+      var n = c.querySelector('.quote-name').textContent.trim();
+      quoteTexts.push('"' + q + '" — ' + n);
+    });
+
+    function copyQuote(i) {
+      navigator.clipboard.writeText(quoteTexts[i]).then(function() {
+        var btn = quoteCards[i].querySelector('.copy-btn');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--positive)" stroke-width="2.5" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>';
+        setTimeout(function() {
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+        }, 1500);
+      });
+    }
+
     function openFullscreen(index) {
       var card = quoteCards[index];
       var clone = card.cloneNode(true);
-      clone.removeAttribute('onclick');
-      clone.removeAttribute('tabindex');
-      clone.removeAttribute('role');
+      clone.removeAttribute('onclick'); clone.removeAttribute('tabindex'); clone.removeAttribute('role');
       clone.style.cursor = 'default';
       var container = document.getElementById('fullscreenContent');
       container.innerHTML = '';
@@ -334,14 +278,12 @@
       document.getElementById('fullscreenOverlay').classList.remove('active');
     }
 
-    // === Download PNG ===
     async function downloadImage() {
       var menu = document.querySelector('.viz-menu');
       menu.style.display = 'none';
       try {
         var url = await htmlToImage.toPng(document.querySelector('main'), { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
-        var a = document.createElement('a'); a.href = url;
-        a.download = 'tech-leader-quotes.png'; a.click();
+        var a = document.createElement('a'); a.href = url; a.download = 'tech-leader-quotes.png'; a.click();
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
