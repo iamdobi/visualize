@@ -54,6 +54,10 @@ Apply these defaults. They are opinionated and tested — override only when use
 ### Design Notes
 - **Use inline SVG for icons, NOT emojis.** Simple path-based SVGs for a professional look. See the Icons section above.
 - **Chart.js charts MUST be destroyed and recreated on theme toggle** — not just CSS variable swaps. Colors are read at render time, so the chart must be rebuilt with new computed values.
+- **Chart.js: DISABLE default animation** — Add `Chart.defaults.animation = false;` before creating charts. Default animations cause charts to appear blank/broken in screenshots, Playwright tests, and initial renders. This is a recurring bug that caused "broken charts" in rounds 13-25.
+- **Chart.js: Use explicit color values** — Don't concatenate CSS variable values with hex alpha suffixes (e.g., `c.remote + '18'`). Use explicit `rgba()` values instead: `'rgba(12, 206, 107, 0.15)'`.
+- **Chart.js: Don't use resetCanvas** — Just reuse the same canvas element. Destroy the old chart instance with `.destroy()` then create a new one on the same canvas.
+- **Chart.js: Build after layout is stable** — Use `window.addEventListener('load', ...)` with a short `setTimeout(200)` and trigger `window.dispatchEvent(new Event('resize'))` after building.
 
 ### Typography
 - **Primary font:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
