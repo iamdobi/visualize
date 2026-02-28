@@ -9,7 +9,11 @@ Every iteration runs these 4 phases in order:
 - Score all examples against 8 dimensions
 - Benchmark: Apple keynotes, Stripe, NYT interactive, Vercel
 - Standards increase each round (scores that passed last round may not pass this round)
+- **Capture screenshots** of every file (dark theme default + light theme) and save to `eval/screenshots/round{N}/`
+  - Filename format: `{example-name}-dark.png`, `{example-name}-light.png`
+  - For slide decks: also capture slides 1, 3, and 5
 - Write results to `eval/eval-round{N}-raw.md`
+- **Embed screenshots in the eval report** using relative markdown image links
 
 ### Phase 2: Plan
 - Read eval results, identify top issues (bugs > visual > interactivity > polish)
