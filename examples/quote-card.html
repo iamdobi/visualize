@@ -153,13 +153,6 @@
     .quote-card:nth-child(4) { animation: fadeInUp 0.5s ease both; animation-delay: 0.24s; }
     .quote-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    .quote-card::before {
-      content: ''; position: absolute; top: -20%; right: -20%;
-      width: 60%; height: 60%;
-      background: radial-gradient(circle, var(--q-accent, var(--accent)) 0%, transparent 70%);
-      opacity: 0.06; pointer-events: none;
-    }
-
     .quote-card:nth-child(1) { --q-accent: #3b82f6; }
     .quote-card:nth-child(2) { --q-accent: #8b5cf6; }
     .quote-card:nth-child(3) { --q-accent: #10b981; }

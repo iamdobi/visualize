@@ -1,7 +1,7 @@
 {
-  "currentRound": 29,
-  "loopsSinceResearch": 5,
-  "lastAverage": 7.73,
+  "currentRound": 30,
+  "loopsSinceResearch": 6,
+  "lastAverage": 7.85,
   "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -32,6 +32,7 @@
     { "round": 26, "avg": 6.1, "gate": "FAIL" },
     { "round": 27, "avg": 6.7, "gate": "FAIL" },
     { "round": 28, "avg": 7.1, "gate": "NEEDS WORK", "notes": "R28: Systemic SKILL.md fixes — bumped --text-secondary contrast, added background atmosphere guidance, polished dropdown menu styling, removed translateY hover anti-patterns." },
-    { "round": 29, "avg": 7.73, "gate": "NEEDS WORK", "notes": "R29: Pre-fix avg 7.73 (15 files, 0 console errors). Best: status-report 8.50, cheatsheet-claude-code 8.13. Lowest: carousel-threads 7.13. SKILL.md fixes: entrance animations (mandatory), theme-adaptive gradients, slide deck light mode, chart accessibility sr-only, --text-secondary consistency. Rebuilt 8 files. Trend: +0.63 from R28. loopsSinceResearch=5, next round triggers RESEARCH." }
+    { "round": 29, "avg": 7.73, "gate": "NEEDS WORK", "notes": "R29: Pre-fix avg 7.73 (15 files, 0 console errors). Best: status-report 8.50, cheatsheet-claude-code 8.13. Lowest: carousel-threads 7.13. SKILL.md fixes: entrance animations (mandatory), theme-adaptive gradients, slide deck light mode, chart accessibility sr-only, --text-secondary consistency. Rebuilt 8 files. Trend: +0.63 from R28. loopsSinceResearch=5, next round triggers RESEARCH." },
+    { "round": 30, "avg": 7.85, "gate": "NEEDS WORK", "notes": "R30: Calibrated avg 7.85 (evaluator reported 8.75 but inflated ~1pt). 0 console errors across all 15 files. Fixed: carousel-threads sparse cover (added subtitle + SVG icons + animated arrow), quote-card gradient orbs removed (violated SKILL.md), saas-dashboard stray skip-link dot, event-poster QR placeholder replaced with SVG QR pattern. 4 files modified. Trend: +0.12 from R29. loopsSinceResearch=6, next round should trigger RESEARCH." }
   ]
 }
