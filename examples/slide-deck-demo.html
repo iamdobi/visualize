@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
 
     @media (prefers-color-scheme: dark) {
       :root {
@@ -101,6 +102,12 @@
     .animate.delay-4 { animation-delay: 0.4s; }
     .animate.delay-5 { animation-delay: 0.5s; }
     .animate.delay-6 { animation-delay: 0.6s; }
+    
+    /* Staggered reveal for cards within sections */
+    .stat-item:nth-child(1) { animation-delay: 0.1s; }
+    .stat-item:nth-child(2) { animation-delay: 0.2s; }
+    .stat-item:nth-child(3) { animation-delay: 0.3s; }
+    .stat-item:nth-child(4) { animation-delay: 0.4s; }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -184,9 +191,15 @@
     }
 
     /* ===== TITLE SLIDE — KEYNOTE STYLE ===== */
-    .slide.title-slide {
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+    /* Dark theme: deep, saturated gradients */
+    .theme-dark .slide.title-slide {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%);
       color: white; overflow: hidden;
+    }
+    /* Light theme: soft, pastel gradients */
+    .theme-light .slide.title-slide {
+      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #dbeafe 100%);
+      color: #1e293b; overflow: hidden;
     }
     .slide.title-slide .content { position: relative; z-index: 2; }
 
@@ -258,35 +271,30 @@
     .title-ring-1 { width: 500px; height: 500px; top: 50%; left: 50%; margin: -250px 0 0 -250px; animation: spinSlow 60s linear infinite; }
     .title-ring-2 { width: 700px; height: 700px; top: 50%; left: 50%; margin: -350px 0 0 -350px; animation: spinSlow 90s linear infinite reverse; }
 
-    /* Light theme overrides for gradient slides */
-    .theme-light .slide.title-slide {
-      background: linear-gradient(135deg, #93c5fd 0%, #c4b5fd 100%);
-    }
-    .theme-light .slide.section-slide {
-      background: linear-gradient(135deg, #c4b5fd 0%, #93c5fd 100%);
-    }
+    /* Light theme text adjustments */
     .theme-light .slide.title-slide h1,
     .theme-light .slide.title-slide h2,
-    .theme-light .slide.section-slide h2 { color: #1e293b; text-shadow: none; }
+    .theme-light .slide.section-slide h2 { 
+      color: #1e293b; text-shadow: 0 1px 2px rgba(255,255,255,0.5); 
+    }
     .theme-light .slide.title-slide .subtitle,
     .theme-light .slide.title-slide .meta,
-    .theme-light .slide.section-slide p { color: #334155; }
-    .theme-light .stat-item {
-      background: #ffffff; border-color: rgba(0,0,0,0.1);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    .theme-light .slide.section-slide p { 
+      color: #334155; 
     }
-    .theme-light .features-list li {
-      background: #ffffff; border-color: rgba(0,0,0,0.1);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    }
-    .theme-light .chart-container {
-      background: #ffffff; border-color: rgba(0,0,0,0.1);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    .theme-light .title-accent-line {
+      background: rgba(30, 41, 59, 0.4);
     }
 
-    .slide.section-slide {
-      background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
+    /* Dark theme: deep, saturated gradients */
+    .theme-dark .slide.section-slide {
+      background: linear-gradient(135deg, #4c1d95 0%, #1e3a8a 50%, #1e40af 100%);
       color: white; overflow: hidden;
+    }
+    /* Light theme: soft, pastel gradients */
+    .theme-light .slide.section-slide {
+      background: linear-gradient(135deg, #c4b5fd 0%, #a5b4fc 50%, #93c5fd 100%);
+      color: #1e293b; overflow: hidden;
     }
     .slide.section-slide .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; }
     .slide.section-slide .orb-1 { width: 300px; height: 300px; top: -10%; right: -5%; background: rgba(255,255,255,0.15); animation: float2 12s ease-in-out infinite; }
@@ -373,8 +381,20 @@
     .features-list li:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
     .check-icon { width: 32px; height: 32px; flex-shrink: 0; background: linear-gradient(135deg, var(--positive), var(--accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
 
-    .chart-container { max-width: 600px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; }
+    .chart-container { 
+      max-width: 600px; width: 100%; background: var(--surface); 
+      border: 1px solid var(--border); border-radius: 1rem; padding: 2rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chart-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
     .chart-wrapper { position: relative; height: 300px; }
+    
+    /* Chart element hover effects */
+    canvas { transition: filter 0.2s ease; }
+    canvas:hover { filter: brightness(1.05); }
 
     /* Navigation */
     .slide-nav {

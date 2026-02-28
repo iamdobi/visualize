@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
 
     /* ===== THEMES ===== */
     /* CSS prefers-color-scheme for flash-free theme detection */
@@ -115,6 +116,12 @@
     .animate.delay-4 { animation-delay: 0.4s; }
     .animate.delay-5 { animation-delay: 0.5s; }
     .animate.delay-6 { animation-delay: 0.6s; }
+    
+    /* Staggered reveal for cards within chart sections */
+    .chart-container:nth-child(1) .reveal { transition-delay: 0.1s; }
+    .chart-container:nth-child(2) .reveal { transition-delay: 0.2s; }
+    .chart-container:nth-child(3) .reveal { transition-delay: 0.3s; }
+    .chart-container:nth-child(4) .reveal { transition-delay: 0.4s; }
 
     /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
     .reveal { opacity: 0; transform: translateY(30px) scale(0.97); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -356,6 +363,10 @@
     .chart-wrapper {
       position: relative; height: 300px;
     }
+    
+    /* Chart element hover effects */
+    canvas { transition: filter 0.2s ease; }
+    canvas:hover { filter: brightness(1.05); }
 
     .conclusion {
       margin-top: 4rem; padding: 3rem;

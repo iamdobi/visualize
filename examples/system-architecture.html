@@ -9,6 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
 
     /* ===== THEMES ===== */
     /* CSS prefers-color-scheme for flash-free theme detection */
@@ -114,6 +115,14 @@
     .animate.delay-4 { animation-delay: 0.4s; }
     .animate.delay-5 { animation-delay: 0.5s; }
     .animate.delay-6 { animation-delay: 0.6s; }
+    
+    /* Staggered reveal for architecture nodes */
+    .node:nth-child(1) .reveal { transition-delay: 0.1s; }
+    .node:nth-child(2) .reveal { transition-delay: 0.15s; }
+    .node:nth-child(3) .reveal { transition-delay: 0.2s; }
+    .node:nth-child(4) .reveal { transition-delay: 0.25s; }
+    .node:nth-child(5) .reveal { transition-delay: 0.3s; }
+    .node:nth-child(6) .reveal { transition-delay: 0.35s; }
 
     /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
     .reveal { opacity: 0; transform: translateY(24px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -292,6 +301,11 @@
       width: 40px; height: 40px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; margin-top: 0.25rem;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    .node-icon:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
     }
 
     .node-content h4 {

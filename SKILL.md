@@ -410,8 +410,29 @@ Slides are the most common request. Get these right:
 - **Entrance animations** — elements within slides animate in with staggered delays
 - **Speaker notes** — `data-notes` attribute, visible in print only
 
+### Theme-Aware Slide Gradients (CRITICAL)
+
+Slide decks MUST look visually distinct in dark vs light themes. Gradient backgrounds must change:
+
+```css
+/* Dark theme: deep, saturated gradients */
+.theme-dark .slide-title { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%); }
+.theme-dark .slide-content { background: var(--bg); }
+
+/* Light theme: soft, pastel gradients */
+.theme-light .slide-title { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #dbeafe 100%); }
+.theme-light .slide-content { background: var(--bg); }
+```
+
+Rules:
+- Title/section slides: use theme-specific gradient pairs (dark=deep+saturated, light=soft+pastel)
+- Content slides: use `var(--bg)` or `var(--surface)` — NOT hardcoded dark backgrounds
+- Data cards on slides: use `var(--surface)` with `var(--border)` — they auto-adapt
+- Never hardcode `#1a1a2e` or similar dark colors on slide content — use CSS variables
+- Test: toggle theme and every slide should look intentionally designed for that mode
+
 ### Slide Types
-1. **Title** — gradient background, big headline, subtitle. Center aligned.
+1. **Title** — theme-aware gradient background, big headline, subtitle. Center aligned.
 2. **Content** — heading + bullets OR heading + visual. Never text-heavy.
 3. **Section divider** — full-bleed accent color, section title only.
 4. **Stat** — one big number, one label, one insight sentence.
@@ -463,6 +484,7 @@ Use these when they add value. See [references/css-techniques.md](references/css
 - **Conic gradients** — `conic-gradient()` for pure CSS pie/donut charts
 - **Number animations** — animate counters from 0 to target value on scroll
 - **Spring easing** — `cubic-bezier(0.34, 1.56, 0.64, 1)` for playful micro-interactions
+- **Animate to auto** — `interpolate-size: allow-keywords` on `:root` enables smooth `height: auto` transitions (Chrome 129+)
 - **CSS counters** — auto-numbering for step-by-step processes
 - **View Transitions API** — smooth theme switching animations
 - **Inline SVG icons** — draw simple icons as `<svg>` paths, no icon library needed

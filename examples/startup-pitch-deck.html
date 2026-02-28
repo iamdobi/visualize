@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
 
     @media (prefers-color-scheme: dark) {
       :root {
@@ -83,6 +84,14 @@
     .animate.delay-2 { animation-delay: 0.2s; }
     .animate.delay-3 { animation-delay: 0.3s; }
     .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .animate.delay-6 { animation-delay: 0.6s; }
+    
+    /* Staggered reveal for cards within sections */
+    .stat-item:nth-child(1) { animation-delay: 0.1s; }
+    .stat-item:nth-child(2) { animation-delay: 0.2s; }
+    .stat-item:nth-child(3) { animation-delay: 0.3s; }
+    .stat-item:nth-child(4) { animation-delay: 0.4s; }
 
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
     *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
@@ -159,9 +168,15 @@
     }
 
     /* ===== TITLE SLIDE — KEYNOTE STYLE ===== */
-    .slide.title-slide {
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+    /* Dark theme: deep, saturated eco gradients */
+    .theme-dark .slide.title-slide {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #0f766e 100%);
       color: white; overflow: hidden;
+    }
+    /* Light theme: soft, pastel eco gradients */
+    .theme-light .slide.title-slide {
+      background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 50%, #5eead4 100%);
+      color: #0f172a; overflow: hidden;
     }
     .slide.title-slide .content { position: relative; z-index: 2; }
     .slide.title-slide .orb {
@@ -235,10 +250,30 @@
     .theme-light .team-avatar {
       box-shadow: 0 2px 12px rgba(0,0,0,0.1);
     }
+    /* Light theme text adjustments */
+    .theme-light .slide.title-slide h1,
+    .theme-light .slide.title-slide h2,
+    .theme-light .slide.section-slide h2 { 
+      color: #0f172a; text-shadow: 0 1px 2px rgba(255,255,255,0.5); 
+    }
+    .theme-light .slide.title-slide .subtitle,
+    .theme-light .slide.title-slide .meta,
+    .theme-light .slide.section-slide p { 
+      color: #334155; 
+    }
+    .theme-light .title-accent-line {
+      background: rgba(15, 23, 42, 0.4);
+    }
 
-    .slide.section-slide {
-      background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
+    /* Dark theme: deep, saturated eco gradients */
+    .theme-dark .slide.section-slide {
+      background: linear-gradient(135deg, #0f766e 0%, #0891b2 50%, #0369a1 100%);
       color: white; overflow: hidden;
+    }
+    /* Light theme: soft, pastel eco gradients */
+    .theme-light .slide.section-slide {
+      background: linear-gradient(135deg, #5eead4 0%, #67e8f9 50%, #7dd3fc 100%);
+      color: #0f172a; overflow: hidden;
     }
     .slide.section-slide .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; }
     .slide.section-slide .orb-1 { width: 300px; height: 300px; top: -10%; right: -5%; background: rgba(255,255,255,0.15); animation: float2 12s ease-in-out infinite; }
@@ -331,8 +366,20 @@
     .team-name { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.25rem; }
     .team-role { font-size: 0.875rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    .chart-container { max-width: 600px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; }
+    .chart-container { 
+      max-width: 600px; width: 100%; background: var(--surface); 
+      border: 1px solid var(--border); border-radius: 1rem; padding: 2rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chart-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
     .chart-wrapper { position: relative; height: 300px; }
+    
+    /* Chart element hover effects */
+    canvas { transition: filter 0.2s ease; }
+    canvas:hover { filter: brightness(1.05); }
 
     .slide-nav {
       position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
