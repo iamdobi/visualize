@@ -213,8 +213,38 @@
     .slide.section-slide .orb-1 { width: 300px; height: 300px; top: -10%; right: -5%; background: rgba(255,255,255,0.15); animation: float2 12s ease-in-out infinite; }
     .slide.section-slide .orb-2 { width: 250px; height: 250px; bottom: -10%; left: -5%; background: rgba(255,255,255,0.1); animation: float1 14s ease-in-out infinite; }
 
-    .slide.content-slide { background: var(--bg); }
+    .slide.content-slide {
+      background: var(--bg); overflow: hidden;
+    }
+    .slide.content-slide::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 80%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--accent-secondary) 5%, transparent) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .slide.content-slide::after {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(color-mix(in srgb, var(--text) 4%, transparent) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
+      pointer-events: none;
+    }
 
+    @keyframes itemFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide.active-slide .stagger-item { animation: itemFadeIn 0.4s ease-out both; }
+    .slide.active-slide .stagger-item:nth-child(1) { animation-delay: 0.15s; }
+    .slide.active-slide .stagger-item:nth-child(2) { animation-delay: 0.25s; }
+    .slide.active-slide .stagger-item:nth-child(3) { animation-delay: 0.35s; }
+    .slide.active-slide .stagger-item:nth-child(4) { animation-delay: 0.45s; }
+    .slide.active-slide .stagger-item:nth-child(5) { animation-delay: 0.55s; }
+
+    .slide > * { position: relative; z-index: 1; }
     .slide h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 800; margin-bottom: 0.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
     .slide h2 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 700; margin-bottom: 1.5rem; }
     .slide h3 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 600; margin-bottom: 1rem; }
@@ -225,7 +255,10 @@
     .two-column > * { flex: 1; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 900px; width: 100%; }
-    .stat-item { text-align: center; }
+    .stat-item {
+      text-align: center; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem 1rem;
+    }
     .stat-number {
       font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin-bottom: 0.5rem;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
@@ -233,10 +266,15 @@
     }
     .stat-label { font-size: clamp(0.875rem, 2vw, 1rem); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
 
-    .problem-list { list-style: none; padding: 0; text-align: left; max-width: 700px; }
-    .problem-list li { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0; font-size: clamp(1.125rem, 3vw, 1.5rem); border-bottom: 1px solid var(--border); }
-    .problem-list li:last-child { border-bottom: none; }
-    .problem-icon { width: 32px; height: 32px; flex-shrink: 0; background: var(--negative); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-top: 0.25rem; }
+    .problem-list { list-style: none; padding: 0; text-align: left; max-width: 700px; display: flex; flex-direction: column; gap: 0.75rem; }
+    .problem-list li {
+      display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; transition: transform 0.2s;
+    }
+    .problem-list li:hover { transform: translateX(4px); }
+    .problem-icon { width: 32px; height: 32px; flex-shrink: 0; background: var(--negative); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; margin-top: 0.1rem; }
 
     .solution-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1000px; width: 100%; }
     .solution-item { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; text-align: left; }
@@ -348,21 +386,21 @@
           <p class="animate delay-1" style="margin-bottom: 3rem;">
             Companies struggle to measure, manage, and reduce their environmental impact
           </p>
-          <ul class="problem-list animate delay-2">
-            <li>
+          <ul class="problem-list">
+            <li class="stagger-item">
               <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
               73% of companies lack comprehensive carbon tracking
             </li>
-            <li>
-              <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+            <li class="stagger-item">
+              <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v10l4.5 4.5"/><circle cx="12" cy="12" r="10"/></svg></div>
               Sustainability reporting takes 120+ hours per month
             </li>
-            <li>
-              <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+            <li class="stagger-item">
+              <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
               ESG compliance costs average $2.3M annually
             </li>
-            <li>
-              <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+            <li class="stagger-item">
+              <div class="problem-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div>
               Fragmented data makes impact optimization impossible
             </li>
           </ul>
@@ -560,6 +598,7 @@
       document.getElementById('prevBtn').disabled = currentSlide === 0;
       document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
       var slides = document.querySelectorAll('.slide');
+      slides.forEach(function(s, i) { s.classList.toggle('active-slide', i === currentSlide); });
       var label = slides[currentSlide].getAttribute('aria-label') || ('Slide ' + (currentSlide + 1));
       document.getElementById('slideAnnounce').textContent = label;
       setTimeout(function() { animateCounters(slides[currentSlide]); }, 300);
