@@ -47,8 +47,9 @@
     .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    .slides-container { display: flex; height: 100vh; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px; text-align: center; position: relative; }
+    .slides-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    .slide { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px; text-align: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0.4s; }
+    .slide.active { opacity: 1; visibility: visible; pointer-events: auto; }
 
     .slide.title-slide { 
       background: linear-gradient(135deg, var(--bg) 0%, #0d1117 50%, var(--bg) 100%);
@@ -182,7 +183,7 @@
       transition: transform 0.2s ease;
     }
     .stat-cell:hover {
-      transform: translateY(-4px);
+      background: var(--surface-hover);
     }
     .stat-cell .num { 
       font-size: 5rem; 
@@ -423,12 +424,12 @@
     applyTheme(currentTheme);
 
     function updateSlide() {
-      document.getElementById('slidesContainer').style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
+      var slides = document.querySelectorAll('.slide');
+      slides.forEach(function(s, i) { s.classList.toggle('active', i === currentSlide); });
       document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
       document.getElementById('progressFill').style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
       document.getElementById('prevBtn').disabled = currentSlide === 0;
       document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-      var slides = document.querySelectorAll('.slide');
       document.getElementById('slideAnnounce').textContent = slides[currentSlide].getAttribute('aria-label') || '';
       setTimeout(function() { animateCounters(slides[currentSlide]); }, 200);
     }
@@ -460,6 +461,7 @@
     function buildCharts() {
       var c = getColors();
       Chart.defaults.color = c.sub;
+      Chart.defaults.animation = false;
       var tt = { backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1, padding: 12, cornerRadius: 8, titleFont: { size: 14 }, bodyFont: { size: 13 } };
       try { if (marketChart) marketChart.destroy(); } catch(e) {}
       try { if (fundingChart) fundingChart.destroy(); } catch(e) {}

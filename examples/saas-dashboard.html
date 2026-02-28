@@ -400,6 +400,10 @@
       setTimeout(buildCharts, 300);
     }
 
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) { setTimeout(buildCharts, 200); }
+    });
+
     async function downloadImage() {
       var m = document.querySelector('.viz-menu'); m.style.display = 'none';
       try { var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } }); var a = document.createElement('a'); a.href = url; a.download = 'saas-dashboard.png'; a.click(); } catch(e) { console.error(e); }

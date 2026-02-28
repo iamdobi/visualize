@@ -48,8 +48,9 @@
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
     /* Slides */
-    .slides-container { display: flex; height: 100vh; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px; text-align: center; position: relative; }
+    .slides-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    .slide { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px; text-align: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0.4s; }
+    .slide.active { opacity: 1; visibility: visible; pointer-events: auto; }
 
     /* Title slide */
     .slide.title-slide { 
@@ -187,7 +188,7 @@
       transition: transform 0.2s ease;
     }
     .stat-cell:hover {
-      transform: translateY(-4px);
+      background: var(--surface-hover);
     }
     .stat-cell .num { 
       font-size: 5rem; 
@@ -364,12 +365,12 @@
     applyTheme(currentTheme);
 
     function updateSlide() {
-      document.getElementById('slidesContainer').style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
+      var slides = document.querySelectorAll('.slide');
+      slides.forEach(function(s, i) { s.classList.toggle('active', i === currentSlide); });
       document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
       document.getElementById('progressFill').style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
       document.getElementById('prevBtn').disabled = currentSlide === 0;
       document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-      var slides = document.querySelectorAll('.slide');
       var label = slides[currentSlide].getAttribute('aria-label') || ('Slide ' + (currentSlide + 1));
       document.getElementById('slideAnnounce').textContent = label;
       setTimeout(function() { animateCounters(slides[currentSlide]); }, 200);
@@ -402,6 +403,7 @@
     function buildChart() {
       var c = getColors();
       Chart.defaults.color = c.sub;
+      Chart.defaults.animation = false;
       
       try { if (marketChart) marketChart.destroy(); } catch(e) {}
       var cv = getCanvas('marketChart'); if (!cv) return;

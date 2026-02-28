@@ -12,13 +12,13 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
+      :root { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #9ca3af; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #10b981; --office: #8b5cf6; }
     }
     @media (prefers-color-scheme: light) {
-      :root { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
+      :root { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #059669; --office: #7c3aed; }
     }
-    .theme-dark { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
-    .theme-light { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
+    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #9ca3af; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #10b981; --office: #8b5cf6; }
+    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #059669; --office: #7c3aed; }
 
     body { 
       font-family: 'Inter', -apple-system, sans-serif; 
@@ -54,7 +54,7 @@
     .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
     /* Hero — infographic style, not dashboard */
     .hero { padding: 80px 0 48px; text-align: center; }
@@ -110,7 +110,8 @@
       transition: box-shadow 0.2s ease, border-color 0.2s ease;
     }
     .comparison-block:hover {
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 8px 16px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 12px 32px rgba(0,0,0,0.2);
       border-color: rgba(255,255,255,0.12);
     }
     .theme-light .comparison-block { border: 1px solid rgba(0,0,0,0.08); }
@@ -390,8 +391,8 @@
       var tooltipStyle = { backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1, padding: 12, cornerRadius: 8, titleFont: { size: 14 }, bodyFont: { size: 13 } };
 
       // Use explicit colors instead of CSS var concatenation for better reliability
-      var remoteColor = '#0cce6b';
-      var officeColor = '#7928ca';
+      var remoteColor = '#10b981';
+      var officeColor = '#8b5cf6';
       var accentColor = '#3b82f6';
 
       productivityChart = new Chart(getCanvas('productivityChart'), {
@@ -399,8 +400,8 @@
         data: {
           labels: ['Task Completion', 'Quality Score', 'Hours Worked', 'Overall Rating'],
           datasets: [
-            { label: 'Remote', data: [116, 118, 95, 116], backgroundColor: '#0cce6b', borderRadius: 6, barPercentage: 0.8, categoryPercentage: 0.7 },
-            { label: 'Office', data: [100, 100, 100, 100], backgroundColor: '#7928ca', borderRadius: 6, barPercentage: 0.8, categoryPercentage: 0.7 }
+            { label: 'Remote', data: [116, 118, 95, 116], backgroundColor: '#10b981', borderRadius: 6, barPercentage: 0.8, categoryPercentage: 0.7 },
+            { label: 'Office', data: [100, 100, 100, 100], backgroundColor: '#8b5cf6', borderRadius: 6, barPercentage: 0.8, categoryPercentage: 0.7 }
           ]
         },
         options: {
@@ -421,8 +422,8 @@
         type: 'radar',
         data: { labels: ['Work-Life Balance', 'Stress Level', 'Collaboration', 'Focus Time', 'Career Growth', 'Satisfaction'],
           datasets: [
-            { label: 'Remote', data: [90, 75, 65, 85, 70, 80], backgroundColor: 'rgba(12, 206, 107, 0.15)', borderColor: remoteColor, pointBackgroundColor: remoteColor, pointRadius: 0, pointHoverRadius: 8, borderWidth: 3 },
-            { label: 'Office', data: [65, 60, 85, 70, 80, 75], backgroundColor: 'rgba(121, 40, 202, 0.15)', borderColor: officeColor, pointBackgroundColor: officeColor, pointRadius: 0, pointHoverRadius: 8, borderWidth: 3 }
+            { label: 'Remote', data: [90, 75, 65, 85, 70, 80], backgroundColor: 'rgba(16, 185, 129, 0.15)', borderColor: remoteColor, pointBackgroundColor: remoteColor, pointRadius: 0, pointHoverRadius: 8, borderWidth: 3 },
+            { label: 'Office', data: [65, 60, 85, 70, 80, 75], backgroundColor: 'rgba(139, 92, 246, 0.15)', borderColor: officeColor, pointBackgroundColor: officeColor, pointRadius: 0, pointHoverRadius: 8, borderWidth: 3 }
           ] },
         options: { responsive: true, maintainAspectRatio: false, layout: { padding: 20 },
           plugins: { tooltip: { enabled: true, ...tooltipStyle }, legend: { position: 'top', labels: { color: c.text, font: { size: 14 }, usePointStyle: true, padding: 20 } } },
@@ -464,6 +465,10 @@
         window.dispatchEvent(new Event('resize'));
       }, 200);
     }
+
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) { setTimeout(buildCharts, 200); }
+    });
 
     async function downloadImage() {
       var m = document.querySelector('.viz-menu'); m.style.display = 'none';
