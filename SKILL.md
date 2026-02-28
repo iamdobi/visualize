@@ -21,6 +21,7 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 3. **Beautiful by default** — the first output should look professional with zero iteration.
 4. **Content-first** — the visualization serves the message. Never sacrifice clarity for aesthetics.
 5. **Responsive** — works on desktop, tablet, and mobile unless explicitly fixed-dimension (e.g., 16:9 slides).
+6. **Visual restraint** — Professional designs avoid decorative elements that add noise. No floating gradient orbs, rainbow borders, or ornamental animations.
 
 ## Philosophy
 
@@ -56,6 +57,14 @@ Apply these defaults. They are opinionated and tested — override only when use
 
 ### Typography
 - **Primary font:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
+- **Professional letter-spacing:** Apply tight tracking like Apple/Stripe:
+  - **Headings (h1-h3):** `letter-spacing: -0.02em` for tighter feel
+  - **Body text:** `letter-spacing: -0.01em` for refined readability
+  - **Font features:** `font-feature-settings: 'cv11', 'ss01';` for Inter's stylistic alternates
+- **Font-weight contrast:** Clear hierarchy with stronger weight differences:
+  - **h1:** `font-weight: 800` (extrabold)
+  - **h2:** `font-weight: 700` (bold)
+  - **Body text:** `font-weight: 400` (regular)
 - **Multilingual support:** When content includes non-Latin text (Korean, Japanese, Chinese, etc.), add the appropriate Google Fonts:
   - **Korean:** Noto Sans KR — `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap`
   - **Japanese:** Noto Sans JP — `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap`
@@ -77,8 +86,8 @@ Apply these defaults. They are opinionated and tested — override only when use
   - Playful/creative content → consider display fonts
 - **Monospace:** JetBrains Mono or system `'SF Mono', 'Fira Code', 'Consolas', monospace`
 - **Fallback:** `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
-- **Type scale (1.25 ratio):** 14 → 16 → 20 → 25 → 31 → 39 → 49px
-- **Line-height:** 1.5–1.7 for body, 1.1–1.2 for headings
+- **Type scale (dramatic):** Make hero titles bigger, body should breathe more — 14 → 16 → 20 → 25 → 31 → 39 → 49px
+- **Line-height:** 1.5–1.7 for body, 1.1 for headings (tight for professional feel)
 - **Max line width:** 65–75 characters for readability
 - Use `clamp()` for fluid responsive sizing: `clamp(1rem, 2.5vw, 1.25rem)`
 
@@ -235,10 +244,11 @@ Always add `<title>` elements inside SVG shapes for native browser tooltips:
 ```
 
 ### Visual Polish
-- **Rounded corners:** `rounded-2xl` (16px) for cards, `rounded-xl` (12px) for smaller elements
-- **Shadows:** `shadow-lg` or `0 4px 24px rgba(0,0,0,0.15)` for depth
-- **Glass morphism cards:** `backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl`
-- **Gradient accents:** `bg-gradient-to-r from-blue-500 to-purple-500` on key elements
+- **Refined rounded corners:** `8-10px` border-radius for cards (more refined than 16px)
+- **Subtle multi-layer shadows:** `box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)` for depth without glow
+- **Clean card borders:** `border: 1px solid var(--border)` instead of gradient top-borders
+- **Glass morphism cards:** `backdrop-blur-md bg-white/5 border border-white/10 rounded-xl` (when appropriate)
+- **Restrained accents:** Use accent colors sparingly, not everywhere
 - **Transitions:** `transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1)` (Material standard)
 
 ### Accessibility (Mandatory)
@@ -570,21 +580,30 @@ Use these when they add value. See [references/css-techniques.md](references/css
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
       line-height: 1.6; -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
       transition: background 0.3s, color 0.3s;
     }
-    h1,h2,h3,h4,h5,h6 { color: var(--text); }
+    h1,h2,h3,h4,h5,h6 { 
+      color: var(--text); 
+      letter-spacing: -0.02em; 
+      line-height: 1.1;
+    }
+    h1 { font-weight: 800; }
+    h2 { font-weight: 700; }
+    body, p, li, td, th, span, label { font-weight: 400; }
     p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
     /* ===== CARD ===== */
     .card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 24px;
+      border-radius: 10px; padding: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .card:hover {
       transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
     }
 
     /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
@@ -812,11 +831,15 @@ Charts are the second most common failure. Follow these rules:
   }
   ```
 - **Minimum chart height:** 300px on desktop, 250px on mobile
+- **Font size defaults:** Increase readability with labels at 13px, titles at 15px minimum
+- **Chart padding:** Add `layout: { padding: 16 }` for breathing room around charts
 - **Set `maintainAspectRatio: false`** and control size via CSS container
 - **Use theme-aware colors:** read CSS vars at render time, re-render on theme change
 - **Chart text colors:** set `Chart.defaults.color = getComputedStyle(root).getPropertyValue('--text-secondary').trim()`
 - **Grid line colors:** use `var(--border)` value
 - **Legend position:** 'top' for horizontal charts, 'right' for vertical with space
+- **Axis labels:** Keep horizontal when possible - avoid rotation unless absolutely necessary
+- **Donut/pie charts:** Always include percentage labels on segments
 - **Responsive:** `responsive: true` is default, but container must have explicit dimensions
 - **High contrast colors:** Ensure sufficient color difference between data series for accessibility
 

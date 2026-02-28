@@ -1,8 +1,8 @@
 {
-  "currentRound": 22,
-  "loopsSinceResearch": 5,
-  "lastAverage": 7.65,
-  "gate": "ACCEPTABLE",
+  "currentRound": 23,
+  "loopsSinceResearch": 6,
+  "lastAverage": 7.0,
+  "gate": "NEEDS WORK",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
     { "round": 2, "avg": 7.41, "gate": "NEEDS WORK" },
@@ -25,6 +25,7 @@
     { "round": 19, "avg": 7.7, "gate": "NEEDS WORK", "notes": "R19: Stricter evaluator. 0 console errors. Scores: ai-timeline 7.6, comparison 7.4, saas-dashboard 7.5, slide-deck-demo 8.0, startup-pitch-deck 8.1, system-architecture 7.5. Weakest dimension: responsiveness (6-7 across all). FIXED: mobile breakpoints (768px/480px) for all 6 files, saas-dashboard a11y (+15 ARIA attrs), system-architecture broken HTML nodes, gradient hero text on ai-timeline. Top: startup-pitch-deck 8.1." },
     { "round": 20, "avg": 7.2, "gate": "NEEDS WORK", "notes": "R20: 0 console errors. Scores: ai-timeline 6.8, comparison 6.8, saas-dashboard 7.3, slide-deck-demo 7.6, startup-pitch-deck 7.6, system-architecture 7.0. Weakest dimensions: animation (6.3 avg), interactivity (6.7 avg). FIXED: dedicated floating theme toggles on ai-timeline/comparison/system-architecture (consistency), scroll-reveal data-reveal attrs on stat grids, chartGrow CSS animation on charts, visually-hidden chart data summaries for a11y. All 6 validated: 0 errors, both themes working." },
     { "round": 21, "avg": 7.21, "gate": "NEEDS WORK", "notes": "R21: 0 console errors all 6 files. Scores: ai-timeline 7.25, comparison 7.00, saas-dashboard 7.25, slide-deck-demo 7.25, startup-pitch-deck 7.25, system-architecture 7.25. FIXED: sticky section nav on ai-timeline (era-based) and system-architecture (layer-based), light theme card shadows on all 6 files, staggered card entrance animations on ai-timeline and comparison, slide deck title slides enlarged (5.5-6rem headings + SVG dividers + accent pills), chart tooltip verification. loopsSinceResearch=4." },
-    { "round": 22, "avg": 7.65, "gate": "ACCEPTABLE", "notes": "R22: 0 console errors all 6 files. Scores: ai-timeline 7.88, comparison 7.50, saas-dashboard 7.63, slide-deck-demo 7.50, startup-pitch-deck 7.63, system-architecture 7.75. FIXED: staggered data-reveal with --i delays on all scroll files, chart-tooltip CSS + elements on comparison/saas, slide transition CSS on both decks, enhanced focus-visible with box-shadow on all 6, filled sparse slides (48px icons, sub-labels, metric pills). loopsSinceResearch=5 → research due next round." }
+    { "round": 22, "avg": 7.65, "gate": "ACCEPTABLE", "notes": "R22: 0 console errors all 6 files. Scores: ai-timeline 7.88, comparison 7.50, saas-dashboard 7.63, slide-deck-demo 7.50, startup-pitch-deck 7.63, system-architecture 7.75. FIXED: staggered data-reveal with --i delays on all scroll files, chart-tooltip CSS + elements on comparison/saas, slide transition CSS on both decks, enhanced focus-visible with box-shadow on all 6, filled sparse slides (48px icons, sub-labels, metric pills). loopsSinceResearch=5 → research due next round." },
+    { "round": 23, "avg": 7.0, "gate": "NEEDS WORK", "notes": "R23: Evaluator inflated scores (reported 8.95). Manual image review shows visual design ~5.5-6.5 range. Real issues: amateur typography (poor letterspacing/weight vs Apple/Stripe), generic template energy (gradient borders, decorative glow), unsophisticated card design, cramped/illegible chart labels, comparison looks like dashboard not infographic. No code changes this round — proceeding to build phase targeting typography, card refinement, chart readability." }
   ]
 }

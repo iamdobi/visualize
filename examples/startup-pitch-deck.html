@@ -49,9 +49,18 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
       line-height: 1.6; -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
       transition: background 0.3s, color 0.3s; overflow: hidden;
     }
-    h1,h2,h3,h4,h5,h6,p,li,td,th,span,label { color: var(--text); }
+    h1,h2,h3,h4,h5,h6 { 
+      color: var(--text); 
+      letter-spacing: -0.02em; 
+      line-height: 1.1;
+    }
+    h1 { font-weight: 800; }
+    h2 { font-weight: 700; }
+    body, p, li, td, th, span, label { font-weight: 400; }
+    p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
 
     .skip-link {
@@ -70,9 +79,7 @@
     }
     @keyframes subtitleReveal { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 0.9; transform: translateY(0); } }
     @keyframes lineGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-    @keyframes float1 { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, -40px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
-    @keyframes float2 { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(-40px, 30px) scale(0.85); } 66% { transform: translate(25px, -35px) scale(1.15); } }
-    @keyframes float3 { 0%, 100% { transform: translate(0, 0) scale(1.05); } 50% { transform: translate(35px, 25px) scale(0.95); } }
+    /* Removed floating animations for visual restraint */
     @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }
     @keyframes leafFloat {
       0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -188,13 +195,7 @@
       color: #0f172a; overflow: hidden;
     }
     .slide.title-slide .content { position: relative; z-index: 2; }
-    .slide.title-slide .orb {
-      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
-      animation: pulse 4s ease-in-out infinite;
-    }
-    .slide.title-slide .orb-1 { width: 400px; height: 400px; top: -10%; left: -5%; background: rgba(255,255,255,0.2); animation: float1 12s ease-in-out infinite; }
-    .slide.title-slide .orb-2 { width: 300px; height: 300px; bottom: -15%; right: -5%; background: rgba(255,255,255,0.15); animation: float2 15s ease-in-out infinite; }
-    .slide.title-slide .orb-3 { width: 200px; height: 200px; top: 30%; right: 20%; background: rgba(255,255,255,0.1); animation: float3 10s ease-in-out infinite; }
+    /* Removed floating gradient orbs for professional appearance */
 
     .slide.title-slide h1 { animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
     .slide.title-slide .subtitle { animation: subtitleReveal 0.8s ease-out 0.6s both; }
@@ -292,9 +293,7 @@
       background: linear-gradient(135deg, #5eead4 0%, #67e8f9 50%, #7dd3fc 100%);
       color: #0f172a; overflow: hidden;
     }
-    .slide.section-slide .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3; }
-    .slide.section-slide .orb-1 { width: 300px; height: 300px; top: -10%; right: -5%; background: rgba(255,255,255,0.15); animation: float2 12s ease-in-out infinite; }
-    .slide.section-slide .orb-2 { width: 250px; height: 250px; bottom: -10%; left: -5%; background: rgba(255,255,255,0.1); animation: float1 14s ease-in-out infinite; }
+    /* Removed section slide orbs for visual restraint */
 
     .slide.content-slide {
       background: var(--bg); overflow: hidden;
@@ -483,9 +482,6 @@
 
         <!-- Slide 1: Title -->
         <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Slide 1 of 11: EcoFlow">
-          <div class="orb orb-1"></div>
-          <div class="orb orb-2"></div>
-          <div class="orb orb-3"></div>
           <div class="title-ring title-ring-1"></div>
           <div class="title-ring title-ring-2"></div>
           <div class="content">
@@ -532,8 +528,6 @@
 
         <!-- Slide 3: Solution -->
         <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Slide 3 of 11: Our Solution">
-          <div class="orb orb-1"></div>
-          <div class="orb orb-2"></div>
           <div class="content">
             <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="margin: 0 auto 1.5rem; display: block; opacity: 0.85;" aria-hidden="true">
               <path d="M28 48V24"/><path d="M28 24C28 12 16 4 4 8c0 16 8 24 24 16"/><path d="M28 32C28 20 40 12 52 16c0 16-8 24-24 16"/>
@@ -666,8 +660,6 @@
 
         <!-- Slide 9: Funding Ask -->
         <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Slide 9 of 11: Raising $2M Seed Round">
-          <div class="orb orb-1"></div>
-          <div class="orb orb-2"></div>
           <div class="content">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1.5rem; display: block; opacity: 0.7;" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
             <h2 class="animate" style="font-size: clamp(2.5rem, 7vw, 4rem);">Raising $2M Seed Round</h2>
@@ -700,9 +692,6 @@
 
         <!-- Slide 11: Thank You -->
         <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Slide 11 of 11: Thank You">
-          <div class="orb orb-1"></div>
-          <div class="orb orb-2"></div>
-          <div class="orb orb-3"></div>
           <div class="content">
             <svg class="title-leaf" viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
               <path d="M28 48V24"/>
