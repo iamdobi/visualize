@@ -5,1127 +5,197 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Commerce Microservices Architecture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { interpolate-size: allow-keywords; }
 
-    /* ===== THEMES ===== */
-    /* CSS prefers-color-scheme for flash-free theme detection */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #9ca3af;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-        --layer-clients: #3b82f6; --layer-gateway: #f59e0b;
-        --layer-services: #10b981; --layer-data: #ec4899; --layer-external: #8b5cf6;
-      }
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-        --layer-clients: #2563eb; --layer-gateway: #d97706;
-        --layer-services: #059669; --layer-data: #db2777; --layer-external: #7c3aed;
-      }
-    }
-    /* Manual theme override classes (JS controlled) */
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-      --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #9ca3af;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
-      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      --layer-clients: #3b82f6; --layer-gateway: #f59e0b;
-      --layer-services: #10b981; --layer-data: #ec4899; --layer-external: #8b5cf6;
-    }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-      --border: rgba(0,0,0,0.08);
-      --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
-      --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      --layer-clients: #2563eb; --layer-gateway: #d97706;
-      --layer-services: #059669; --layer-data: #db2777; --layer-external: #7c3aed;
-    }
+    .theme-dark { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
+    .theme-light { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
 
-    /* Light theme overrides for gradient sections */
-    .theme-light .hero {
-      background: linear-gradient(135deg, #bfdbfe 0%, #ddd6fe 100%);
-    }
-    .theme-light .hero h1 { color: #1e293b; text-shadow: none; }
-    .theme-light .hero .subtitle { color: #475569; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; letter-spacing: -0.011em; }
+    h1, h2, h3 { color: var(--text); letter-spacing: -0.03em; line-height: 1.08; font-weight: 700; }
+    h2 { font-weight: 600; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
-    /* Light theme card shadows */
-    .theme-light .stat-card,
-    .theme-light .node,
-    .theme-light .note-card,
-    .theme-light .card {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .theme-light .layer {
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    /* Sticky section nav */
-    .section-nav {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--bg); padding: 8px 16px;
-      border-bottom: 1px solid var(--border);
-      display: flex; gap: 12px; overflow-x: auto;
-      margin: 0 -1rem; padding-left: 1rem; padding-right: 1rem;
-    }
-    .section-nav a {
-      color: var(--text-secondary); text-decoration: none;
-      font-size: 13px; white-space: nowrap;
-      padding: 4px 12px; border-radius: 20px; transition: all 0.2s;
-    }
-    .section-nav a:hover, .section-nav a.active {
-      color: var(--accent);
-      background: color-mix(in srgb, var(--accent), transparent 90%);
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
-      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
-      transition: background 0.3s, color 0.3s;
-    }
-    h1,h2,h3,h4,h5,h6 { 
-      color: var(--text); 
-      letter-spacing: -0.02em; 
-      line-height: 1.1;
-    }
-    h1 { font-weight: 800; }
-    h2 { font-weight: 700; }
-    body, p, li, td, th, span, label { font-weight: 400; }
-    p,li,td,th,span,label { color: var(--text); }
-    .text-secondary { color: var(--text-secondary); }
-
-    /* Skip navigation */
-    .skip-link {
-      position: absolute; top: -40px; left: 16px; padding: 8px 16px;
-      background: var(--accent); color: white; text-decoration: none;
-      border-radius: 8px; z-index: 10000; font-weight: 600;
-    }
+    .skip-link { position: absolute; top: -40px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px; z-index: 10000; }
     .skip-link:focus { top: 16px; }
 
-    /* ===== CARD ===== */
-    .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 24px; min-width: 280px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.4s, transform 0.4s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+    @media print { body { background: #fff !important; color: #000 !important; } .viz-menu { display: none !important; } .reveal { opacity: 1 !important; transform: none !important; } * { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 
-    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .animate { animation: fadeInUp 0.6s ease-out both; }
-    .animate.delay-1 { animation-delay: 0.1s; }
-    .animate.delay-2 { animation-delay: 0.2s; }
-    .animate.delay-3 { animation-delay: 0.3s; }
-    .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
-    
-    /* Staggered reveal for architecture nodes */
-    .node:nth-child(1) .reveal { transition-delay: 0.1s; }
-    .node:nth-child(2) .reveal { transition-delay: 0.15s; }
-    .node:nth-child(3) .reveal { transition-delay: 0.2s; }
-    .node:nth-child(4) .reveal { transition-delay: 0.25s; }
-    .node:nth-child(5) .reveal { transition-delay: 0.3s; }
-    .node:nth-child(6) .reveal { transition-delay: 0.35s; }
-
-    /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
-    .reveal { opacity: 0; transform: translateY(24px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible, [data-reveal].revealed { opacity: 1; transform: translateY(0) scale(1); }
-    [data-reveal] { transition-delay: calc(var(--i, 0) * 0.1s); }
-
-    /* ===== FOCUS INDICATORS ===== */
-    *:focus-visible { 
-      outline: 2px solid var(--accent, #6366f1); 
-      outline-offset: 3px;
-      border-radius: 4px;
-    }
-    a:focus-visible, button:focus-visible {
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
-
-    /* ===== PRINT ===== */
-    @media print {
-      body { background: white !important; color: black !important; }
-      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
-      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
-      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    }
-
-    /* ===== VISIBLE THEME TOGGLE ===== */
-    .theme-toggle-btn {
-      position: fixed; top: 16px; right: 72px; z-index: 9999;
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
-    .theme-toggle-btn:hover { background: var(--surface-hover); }
-    .theme-toggle-btn .sun { display: none; }
-    .theme-toggle-btn .moon { display: block; }
-    .theme-light .theme-toggle-btn .sun { display: block; }
-    .theme-light .theme-toggle-btn .moon { display: none; }
-
-    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
-    .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
+    .viz-menu-toggle { width: 40px; height: 40px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown {
-      position: absolute; top: 52px; right: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px;
-      opacity: 0; visibility: hidden; transform: translateY(-8px);
-      transition: all 0.2s; backdrop-filter: blur(16px);
-    }
+    .viz-menu-dropdown { position: absolute; top: 48px; right: 0; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.15s; }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text); font-size: 14px;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
-    }
+    .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== ARCHITECTURE SPECIFIC ===== */
-    .container {
-      max-width: 1400px; margin: 0 auto; padding: 2rem 1rem;
-      container-type: inline-size;
-    }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
-    .hero {
-      text-align: center; padding: 4rem 2rem;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
-      margin: -2rem -1rem 4rem -1rem; border-radius: 0 0 2rem 2rem;
-      position: relative; overflow: hidden;
-    }
+    .hero { padding: 64px 0 48px; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 8px; }
+    .hero p { color: var(--text-secondary); font-size: 1.0625rem; }
 
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
-      pointer-events: none;
-    }
+    /* Stats bar */
+    .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 48px; }
+    .stat { background: var(--surface); padding: 20px; text-align: center; }
+    .stat-num { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.03em; display: block; margin-bottom: 2px; }
+    .stat-label { font-size: 0.6875rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
-    .hero-content {
-      position: relative; z-index: 2;
-    }
+    /* Section nav */
+    .section-nav { position: sticky; top: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--border); padding: 10px 0; display: flex; gap: 8px; overflow-x: auto; margin-bottom: 40px; }
+    .section-nav a { color: var(--text-secondary); text-decoration: none; font-size: 13px; padding: 4px 12px; border-radius: 6px; white-space: nowrap; font-weight: 500; }
+    .section-nav a:hover { color: var(--text); background: var(--surface); }
 
-    .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 800; color: white; margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
+    /* Layer */
+    .layer { margin-bottom: 32px; }
+    .layer-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+    .layer-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .layer-name { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); }
 
-    .hero .subtitle {
-      font-size: clamp(1.125rem, 3vw, 1.5rem);
-      color: rgba(255,255,255,0.9); font-weight: 300;
-    }
+    .nodes { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .node { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; gap: 12px; transition: box-shadow 0.15s; cursor: pointer; }
+    .node:hover { box-shadow: 0 0 0 1px var(--border), 0 4px 12px rgba(0,0,0,0.08); }
 
-    .stats-overview {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem; margin: 3rem 0;
-    }
+    .node-icon { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--surface-hover); color: var(--text-secondary); }
+    .node h4 { font-size: 0.8125rem; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; letter-spacing: -0.01em; }
+    .node p { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 8px; }
+    .node-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tag { font-size: 0.625rem; padding: 2px 6px; border-radius: 4px; background: var(--surface-hover); color: var(--text-secondary); font-weight: 500; }
 
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 2rem; text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+    .status { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .status.ok { background: var(--positive); }
+    .status.warn { background: var(--warning); }
 
-    .stat-card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
+    /* Connection indicator */
+    .connector { display: flex; justify-content: center; padding: 8px 0; }
+    .conn-arrow { width: 1px; height: 24px; background: var(--border); position: relative; }
+    .conn-arrow::after { content: ''; position: absolute; bottom: -4px; left: -3px; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--border); }
 
-    .stat-number {
-      font-size: 3rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; display: block; margin-bottom: 0.5rem;
-    }
+    /* Notes */
+    .notes-section { margin-top: 48px; border-top: 1px solid var(--border); padding-top: 40px; }
+    .notes-section h2 { font-size: 1.25rem; margin-bottom: 20px; }
+    .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .note { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+    .note h3 { font-size: 0.8125rem; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .note p { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5; }
 
-    .stat-label {
-      color: var(--text-secondary); font-size: 0.875rem;
-      text-transform: uppercase; letter-spacing: 0.05em;
-    }
-
-    .diagram { 
-      position: relative; display: flex; flex-direction: column; 
-      gap: 0; align-items: center; margin: 4rem 0;
-    }
-
-    .layer {
-      width: 100%; padding: 2rem; border-radius: 10px; position: relative;
-      border: 1px solid var(--border); 
-      background: var(--surface);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      z-index: 2; margin-bottom: 1rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .layer:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
-
-    .layer-label {
-      font-size: 0.875rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; margin-bottom: 1.5rem; 
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-
-    .layer-dot { 
-      width: 12px; height: 12px; border-radius: 50%;
-      animation: pulse-layer 3s ease-in-out infinite;
-    }
-
-    @keyframes pulse-layer {
-      0%, 100% { box-shadow: 0 0 0 0 currentColor; }
-      50% { box-shadow: 0 0 0 8px transparent; }
-    }
-
-    .nodes { 
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem; 
-    }
-
-    .node {
-      padding: 1.5rem; border-radius: 12px; font-size: 0.875rem; font-weight: 600;
-      border: 2px solid; text-align: left; cursor: pointer; position: relative;
-      background: linear-gradient(135deg, transparent, color-mix(in srgb, var(--accent) 3%, transparent));
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex; align-items: flex-start; gap: 1rem;
-    }
-
-    .node:hover { 
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-    }
-
-    .node-icon {
-      width: 40px; height: 40px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; margin-top: 0.25rem;
-      transition: transform 0.2s ease, filter 0.2s ease;
-    }
-    .node-icon:hover {
-      transform: scale(1.1);
-      filter: brightness(1.2);
-    }
-
-    .node-content h4 {
-      font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-
-    .node-content p {
-      font-size: 0.75rem; color: var(--text-secondary);
-      line-height: 1.4; margin-bottom: 0.75rem;
-    }
-
-    .node-meta {
-      display: flex; gap: 0.5rem; flex-wrap: wrap;
-    }
-
-    .node-tag {
-      padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.625rem;
-      font-weight: 500; background: var(--surface-hover);
-      color: var(--text-secondary);
-    }
-
-    .status-dot {
-      width: 8px; height: 8px; border-radius: 50%; 
-      display: inline-block; margin-left: 0.5rem;
-    }
-
-    .status-dot.healthy { 
-      background: var(--positive); 
-      animation: pulse-dot 2s infinite; 
-    }
-    .status-dot.degraded { 
-      background: var(--warning); 
-      animation: pulse-dot 1.5s infinite; 
-    }
-    .status-dot.down { 
-      background: var(--negative); 
-      animation: pulse-dot 1s infinite; 
-    }
-
-    @keyframes pulse-dot {
-      0%, 100% { box-shadow: 0 0 0 0 currentColor; }
-      50% { box-shadow: 0 0 0 4px transparent; }
-    }
-
-    /* Layer-specific styling */
-    .layer-clients { border-left: 6px solid var(--layer-clients); }
-    .layer-clients .layer-dot { color: var(--layer-clients); background: var(--layer-clients); }
-    .layer-clients .node { border-color: var(--layer-clients); }
-    .layer-clients .node-icon { background: color-mix(in oklch, var(--layer-clients), transparent 85%); color: var(--layer-clients); }
-
-    .layer-gateway { border-left: 6px solid var(--layer-gateway); }
-    .layer-gateway .layer-dot { color: var(--layer-gateway); background: var(--layer-gateway); }
-    .layer-gateway .node { border-color: var(--layer-gateway); }
-    .layer-gateway .node-icon { background: color-mix(in oklch, var(--layer-gateway), transparent 85%); color: var(--layer-gateway); }
-
-    .layer-services { border-left: 6px solid var(--layer-services); }
-    .layer-services .layer-dot { color: var(--layer-services); background: var(--layer-services); }
-    .layer-services .node { border-color: var(--layer-services); }
-    .layer-services .node-icon { background: color-mix(in oklch, var(--layer-services), transparent 85%); color: var(--layer-services); }
-
-    .layer-data { border-left: 6px solid var(--layer-data); }
-    .layer-data .layer-dot { color: var(--layer-data); background: var(--layer-data); }
-    .layer-data .node { border-color: var(--layer-data); }
-    .layer-data .node-icon { background: color-mix(in oklch, var(--layer-data), transparent 85%); color: var(--layer-data); }
-
-    .layer-external { border-left: 6px solid var(--layer-external); }
-    .layer-external .layer-dot { color: var(--layer-external); background: var(--layer-external); }
-    .layer-external .node { border-color: var(--layer-external); }
-    .layer-external .node-icon { background: color-mix(in oklch, var(--layer-external), transparent 85%); color: var(--layer-external); }
-
-    /* Connection lines */
-    .connector { 
-      display: flex; justify-content: space-around; 
-      height: 60px; position: relative; z-index: 1;
-      margin: -0.5rem 0;
-    }
-
-    @keyframes dash-flow { 
-      from { background-position: 0 0; }
-      to { background-position: 0 20px; } 
-    }
-
-    .conn-line { 
-      width: 3px; height: 100%; border-radius: 1.5px; opacity: 0.7;
-      background-size: 3px 10px; background-repeat: repeat-y; 
-      animation: dash-flow 1.5s linear infinite;
-    }
-
-    .conn-clients .conn-line { 
-      background: repeating-linear-gradient(to bottom, var(--layer-clients) 0 5px, transparent 5px 10px); 
-    }
-    .conn-gateway .conn-line { 
-      background: repeating-linear-gradient(to bottom, var(--layer-gateway) 0 5px, transparent 5px 10px); 
-    }
-    .conn-services .conn-line { 
-      background: repeating-linear-gradient(to bottom, var(--layer-services) 0 5px, transparent 5px 10px); 
-    }
-    .conn-data .conn-line { 
-      background: repeating-linear-gradient(to bottom, var(--layer-data) 0 5px, transparent 5px 10px); 
-    }
-
-    /* Detail popup */
-    .node-detail {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      padding: 2rem; max-width: 500px; width: 90%; z-index: 10000;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.4); backdrop-filter: blur(20px);
-      opacity: 0; pointer-events: none; transition: opacity 0.2s;
-    }
-    .node-detail.open { opacity: 1; pointer-events: auto; }
-    .node-detail h3 { font-size: 1.5rem; margin-bottom: 1rem; }
-    .node-detail p { font-size: 1rem; color: var(--text-secondary); margin-bottom: 0.5rem; line-height: 1.6; }
-    .node-detail .detail-close {
-      position: absolute; top: 16px; right: 20px; background: none; border: none;
-      color: var(--text-secondary); cursor: pointer; padding: 4px;
-    }
-    .node-detail-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999;
-      opacity: 0; pointer-events: none; transition: opacity 0.2s;
-    }
-    .node-detail-overlay.open { opacity: 1; pointer-events: auto; }
-    .detail-meta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; }
-    .detail-tag {
-      padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;
-      background: var(--surface-hover); color: var(--text-secondary);
-    }
-
-    .architecture-notes {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem; margin: 4rem 0;
-    }
-
-    .note-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 1rem; padding: 2rem;
-      border-left: 4px solid var(--accent);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .note-card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-    }
-
-    .note-card h4 {
-      font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;
-      display: flex; align-items: center; gap: 0.75rem;
-    }
-
-    .note-card h4 svg { 
-      width: 24px; height: 24px; color: var(--accent); flex-shrink: 0; 
-    }
-
-    .note-card p {
-      color: var(--text-secondary); line-height: 1.6;
-    }
-
-    /* Mobile responsiveness with pinch-zoom */
-    .architecture-diagram {
-      position: relative;
-      overflow: auto;
-      /* Enable pinch-zoom on mobile */
-      touch-action: pan-x pan-y pinch-zoom;
-      scroll-behavior: smooth;
-    }
-    
-    /* Mobile layout optimizations */
-    @container (width < 768px) {
-      .hero { padding: 2rem 1rem; margin-bottom: 2rem; }
-      .container { padding: 1rem; }
-      .node-detail { padding: 1.5rem; max-width: 95%; }
-      
-      /* Simplified mobile view */
-      .nodes { 
-        grid-template-columns: 1fr; 
-        gap: 1.5rem;
-        min-width: 100%;
-        padding: 1rem 0;
-      }
-      .connector { 
-        height: 30px;
-        margin: 0.5rem 0;
-      }
-      .conn-line {
-        height: 2px;
-      }
-      
-      /* Mobile node stacking */
-      .node {
-        max-width: none;
-        margin: 0 auto;
-      }
-    }
-    
-    /* Extra small screens - very compact layout */
-    @container (width < 480px) {
-      .nodes {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
-    }
-
-    /* Media query fallbacks for mobile */
-    @media (max-width: 768px) {
-      .nodes { grid-template-columns: 1fr; gap: 1rem; }
-      .stats-overview { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .architecture-notes { grid-template-columns: 1fr; }
-      .hero { padding: 2rem 1rem; margin-bottom: 2rem; }
-      .layer { padding: 1.5rem; }
-      .connector { height: 30px; }
-      .stat-number { font-size: 2.25rem; }
-      .node { flex-direction: column; gap: 0.75rem; }
-    }
-    @media (max-width: 480px) {
-      .stats-overview { grid-template-columns: 1fr; }
-      .node-meta { gap: 0.25rem; }
-      .node-tag { font-size: 0.6rem; }
-      .layer { padding: 1rem; }
-      .layer-label { font-size: 0.75rem; margin-bottom: 1rem; }
-    }
-    
-    /* Zoom controls for mobile */
-    .zoom-controls {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 1000;
-    }
-    @media (max-width: 768px) {
-      .zoom-controls {
-        display: flex;
-      }
-    }
-    .zoom-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      transition: background 0.2s ease;
-      backdrop-filter: blur(12px);
-    }
-    .zoom-btn:hover {
-      background: var(--surface-hover);
-    }
-    .zoom-btn:active {
-      transform: scale(0.95);
+    @media (max-width: 640px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+      .nodes { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <!-- Visible theme toggle -->
-  <button class="theme-toggle-btn" onclick="cycleTheme()" aria-label="Toggle light/dark theme">
-    <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-  </button>
-
-  <!-- MENU -->
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-      </svg>
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
       <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
+      <button onclick="downloadImage()"><span>📥</span> Download PNG</button>
+      <button onclick="window.print()"><span>🖨️</span> Print / PDF</button>
     </div>
-  </div>
-
-  <!-- Detail popup -->
-  <div class="node-detail-overlay" id="detailOverlay" onclick="closeDetail()"></div>
-  <div class="node-detail" id="detailPanel" role="dialog" aria-label="Component details">
-    <button class="detail-close" onclick="closeDetail()" aria-label="Close details">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-      </svg>
-    </button>
-    <h3 id="detailTitle"></h3>
-    <p id="detailDesc"></p>
-    <div class="detail-meta" id="detailMeta"></div>
   </div>
 
   <main id="main-content">
     <div class="container">
-      <header class="hero animate">
-        <div class="hero-content">
-          <h1>Microservices Architecture</h1>
-          <p class="subtitle">E-Commerce Platform System Overview</p>
-        </div>
+
+      <header class="hero">
+        <h1>Microservices Architecture</h1>
+        <p>E-Commerce Platform System Overview</p>
       </header>
 
-      <section class="stats-overview" role="region" aria-label="System Statistics" data-reveal>
-        <div class="stat-card animate delay-1" data-reveal style="--i: 1">
-          <span class="stat-number" data-count="99.97" data-suffix="%">99.97%</span>
-          <span class="stat-label">System Uptime</span>
-        </div>
-        <div class="stat-card animate delay-2" data-reveal style="--i: 2">
-          <span class="stat-number" data-count="12" data-suffix="K">12K</span>
-          <span class="stat-label">Requests per Second</span>
-        </div>
-        <div class="stat-card animate delay-3" data-reveal style="--i: 3">
-          <span class="stat-number" data-count="47">47</span>
-          <span class="stat-label">Microservices</span>
-        </div>
-        <div class="stat-card animate delay-4" data-reveal style="--i: 4">
-          <span class="stat-number" data-count="2.3" data-suffix="TB">2.3TB</span>
-          <span class="stat-label">Data Processed Daily</span>
-        </div>
+      <section class="stats-bar" role="region" aria-label="System stats">
+        <div class="stat"><span class="stat-num" data-count="99.97" data-suffix="%">99.97%</span><span class="stat-label">Uptime</span></div>
+        <div class="stat"><span class="stat-num" data-count="12" data-suffix="K">12K</span><span class="stat-label">Req/sec</span></div>
+        <div class="stat"><span class="stat-num" data-count="47">47</span><span class="stat-label">Services</span></div>
+        <div class="stat"><span class="stat-num" data-count="2.3" data-suffix="TB">2.3TB</span><span class="stat-label">Daily Data</span></div>
       </section>
 
-      <nav class="section-nav" aria-label="Layer quick navigation">
-        <a href="#layer-clients">Clients</a>
-        <a href="#layer-gateway">API Gateway</a>
-        <a href="#layer-services">Services</a>
-        <a href="#layer-data">Data & Storage</a>
-        <a href="#layer-external">External</a>
-        <a href="#layer-notes">Principles</a>
+      <nav class="section-nav" aria-label="Layer navigation">
+        <a href="#clients">Clients</a>
+        <a href="#gateway">Gateway</a>
+        <a href="#services">Services</a>
+        <a href="#data">Data</a>
+        <a href="#external">External</a>
+        <a href="#principles">Principles</a>
       </nav>
 
-      <section class="diagram" role="img" aria-label="Microservices architecture diagram showing 5 layers with connections" data-reveal>
-
-        <!-- Layer 1: Client Applications -->
-        <div class="layer layer-clients" id="layer-clients" role="group" aria-label="Client Applications Layer" data-reveal>
-          <div class="layer-label">
-            <div class="layer-dot"></div>
-            Client Applications
-          </div>
-          <div class="nodes">
-            <div class="node" data-reveal style="--i: 1" data-name="Web Application" data-desc="React-based single-page application with server-side rendering for SEO. Hosted on Cloudflare CDN with edge caching. Handles 8K+ concurrent users during peak hours." data-tags="React,SSR,CDN,TypeScript,WebSockets" data-status="healthy" aria-label="Web Application: React SPA with SSR and edge caching, handles 8K concurrent users">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Web Application <span class="status-dot healthy"></span></h4>
-                <p>React SPA with SSR, edge caching, and real-time updates</p>
-                <div class="node-meta">
-                  <span class="node-tag">React</span>
-                  <span class="node-tag">SSR</span>
-                  <span class="node-tag">CDN</span>
-                </div>
-              </div>
-            </div>
-            
-            <div class="node" data-reveal style="--i: 2" data-name="Mobile Applications" data-desc="Native iOS and Android apps with React Native shared codebase. Push notifications via Firebase Cloud Messaging. Offline-first architecture with local SQLite caching." data-tags="React Native,iOS,Android,FCM,SQLite" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                  <line x1="12" y1="18" x2="12.01" y2="18"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Mobile Applications <span class="status-dot healthy"></span></h4>
-                <p>Native iOS/Android apps with offline-first architecture</p>
-                <div class="node-meta">
-                  <span class="node-tag">React Native</span>
-                  <span class="node-tag">FCM</span>
-                  <span class="node-tag">Offline</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 3" data-name="Admin Dashboard" data-desc="Internal operations dashboard built with Vue.js. Role-based access control with SAML SSO integration. Used by ops, support, and merchandising teams for system monitoring and content management." data-tags="Vue.js,RBAC,SAML,Internal,Monitoring" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                  <line x1="8" y1="21" x2="16" y2="21"/>
-                  <line x1="12" y1="17" x2="12" y2="21"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Admin Dashboard <span class="status-dot healthy"></span></h4>
-                <p>Internal ops dashboard with RBAC and SAML integration</p>
-                <div class="node-meta">
-                  <span class="node-tag">Vue.js</span>
-                  <span class="node-tag">RBAC</span>
-                  <span class="node-tag">SAML</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- Clients -->
+      <section class="layer" id="clients" data-reveal>
+        <div class="layer-header"><div class="layer-dot" style="background:var(--accent)"></div><span class="layer-name">Client Applications</span></div>
+        <div class="nodes">
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10 15 15 0 014-10z"/></svg></div><div><h4>Web App <span class="status ok"></span></h4><p>React SPA with SSR, edge caching, 8K concurrent users</p><div class="node-tags"><span class="tag">React</span><span class="tag">SSR</span><span class="tag">CDN</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div><h4>Mobile Apps <span class="status ok"></span></h4><p>React Native iOS/Android with offline-first architecture</p><div class="node-tags"><span class="tag">React Native</span><span class="tag">Offline</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><h4>Admin Dashboard <span class="status ok"></span></h4><p>Vue.js internal ops dashboard with RBAC and SAML SSO</p><div class="node-tags"><span class="tag">Vue.js</span><span class="tag">RBAC</span></div></div></div>
         </div>
-
-        <div class="connector conn-clients">
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-        </div>
-
-        <!-- Layer 2: API Gateway -->
-        <div class="layer layer-gateway" id="layer-gateway" role="group" aria-label="API Gateway Layer" data-reveal>
-          <div class="layer-label">
-            <div class="layer-dot"></div>
-            API Gateway Layer
-          </div>
-          <div class="nodes">
-            <div class="node" data-reveal style="--i: 4" data-name="Authentication Gateway" data-desc="JWT-based authentication with OAuth2 and OpenID Connect support. Rate limiting at 1,000 requests/min per client. Implements circuit breaker pattern for downstream service protection." data-tags="JWT,OAuth2,OIDC,Rate Limiting,Circuit Breaker" data-status="healthy" aria-label="Authentication Gateway: JWT-based auth with OAuth2 and rate limiting at 1000 requests per minute">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0110 0v4"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Auth Gateway <span class="status-dot healthy"></span></h4>
-                <p>JWT authentication, OAuth2 flows, and rate limiting</p>
-                <div class="node-meta">
-                  <span class="node-tag">JWT</span>
-                  <span class="node-tag">OAuth2</span>
-                  <span class="node-tag">Rate Limit</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 5" data-name="Load Balancer" data-desc="NGINX-based load balancer with round-robin and least-connections algorithms. Health checks every 5 seconds with automatic failover. SSL termination with TLS 1.3 support." data-tags="NGINX,Load Balancing,Health Checks,TLS 1.3" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="16 3 21 3 21 8"/>
-                  <line x1="4" y1="20" x2="21" y2="3"/>
-                  <polyline points="21 16 21 21 16 21"/>
-                  <line x1="15" y1="15" x2="21" y2="21"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Load Balancer <span class="status-dot healthy"></span></h4>
-                <p>NGINX with health checks and automatic failover</p>
-                <div class="node-meta">
-                  <span class="node-tag">NGINX</span>
-                  <span class="node-tag">HA</span>
-                  <span class="node-tag">TLS 1.3</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="connector conn-gateway">
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-        </div>
-
-        <!-- Layer 3: Business Logic Services -->
-        <div class="layer layer-services" id="layer-services" role="group" aria-label="Business Logic Services Layer" data-reveal>
-          <div class="layer-label">
-            <div class="layer-dot"></div>
-            Business Logic Services
-          </div>
-          <div class="nodes">
-            <div class="node" data-reveal style="--i: 6" data-name="User Service" data-desc="Handles user authentication, profiles, preferences, and session management. Implements GDPR compliance with data portability and right-to-be-forgotten features. Stores encrypted PII in PostgreSQL." data-tags="Authentication,Profiles,GDPR,PostgreSQL,Go" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>User Service <span class="status-dot healthy"></span></h4>
-                <p>Authentication, profiles, and GDPR-compliant user data</p>
-                <div class="node-meta">
-                  <span class="node-tag">Go</span>
-                  <span class="node-tag">GDPR</span>
-                  <span class="node-tag">PostgreSQL</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 7" data-name="Product Catalog" data-desc="Product catalog with inventory management and dynamic pricing engine. Syncs with Elasticsearch for search. Supports A/B testing for pricing strategies. Processes 2M+ products with real-time updates." data-tags="Catalog,Inventory,Pricing,Elasticsearch,Python" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-                  <line x1="12" y1="22.08" x2="12" y2="12"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Product Catalog <span class="status-dot healthy"></span></h4>
-                <p>Inventory management with dynamic pricing and search</p>
-                <div class="node-meta">
-                  <span class="node-tag">Python</span>
-                  <span class="node-tag">Elasticsearch</span>
-                  <span class="node-tag">A/B Testing</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 8" data-name="Order Management" data-desc="Shopping cart, checkout flow, and order lifecycle tracking. Implements saga pattern for distributed transactions. Emits events to RabbitMQ on state changes. Handles 5K+ orders daily with 99.9% success rate." data-tags="Orders,Saga Pattern,Events,RabbitMQ,Java" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="9" cy="21" r="1"/>
-                  <circle cx="20" cy="21" r="1"/>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Order Management <span class="status-dot healthy"></span></h4>
-                <p>Cart, checkout, and order lifecycle with saga pattern</p>
-                <div class="node-meta">
-                  <span class="node-tag">Java</span>
-                  <span class="node-tag">Saga</span>
-                  <span class="node-tag">Events</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 9" data-name="Payment Service" data-desc="Stripe integration for payment processing. Currently experiencing elevated latency (p99 > 800ms) due to increased transaction volume. Auto-scaling and optimization in progress. Handles $2M+ transactions monthly." data-tags="Stripe,PCI-DSS,Webhooks,Auto-scaling,Node.js" data-status="degraded">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
-                  <line x1="1" y1="10" x2="23" y2="10"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Payment Service <span class="status-dot degraded"></span></h4>
-                <p>Stripe integration with elevated latency under optimization</p>
-                <div class="node-meta">
-                  <span class="node-tag">Stripe</span>
-                  <span class="node-tag">PCI-DSS</span>
-                  <span class="node-tag">Node.js</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 10" data-name="Notification Hub" data-desc="Multi-channel notification service: email via SendGrid, push notifications via FCM, SMS via Twilio. Processes 50K+ messages daily with 99.7% delivery rate and template engine support." data-tags="Email,Push,SMS,Templates,Delivery" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                  <polyline points="22 6 12 13 2 6"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Notification Hub <span class="status-dot healthy"></span></h4>
-                <p>Multi-channel messaging with templates and analytics</p>
-                <div class="node-meta">
-                  <span class="node-tag">SendGrid</span>
-                  <span class="node-tag">FCM</span>
-                  <span class="node-tag">Twilio</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 11" data-name="Search Engine" data-desc="Elasticsearch-powered search with typo tolerance, faceted filtering, autocomplete, and sub-50ms p95 latency. Implements semantic search with ML-based ranking algorithms. Handles 100K+ search queries daily." data-tags="Elasticsearch,ML,Semantic Search,Autocomplete,Rust" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Search Engine <span class="status-dot healthy"></span></h4>
-                <p>ML-powered search with semantic understanding</p>
-                <div class="node-meta">
-                  <span class="node-tag">Elasticsearch</span>
-                  <span class="node-tag">ML</span>
-                  <span class="node-tag">Rust</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="connector conn-services">
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-        </div>
-
-        <!-- Layer 4: Data Layer -->
-        <div class="layer layer-data" id="layer-data" role="group" aria-label="Data and Storage Layer" data-reveal>
-          <div class="layer-label">
-            <div class="layer-dot"></div>
-            Data & Storage Layer
-          </div>
-          <div class="nodes">
-            <div class="node" data-reveal style="--i: 12" data-name="PostgreSQL Cluster" data-desc="Primary relational database with 3-node cluster and streaming replication. Handles 12K+ queries/sec with connection pooling via PgBouncer. Automated backups with point-in-time recovery. Stores 2.3TB of structured data." data-tags="PostgreSQL,Streaming Replication,PgBouncer,3 nodes,12TB" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>PostgreSQL Cluster <span class="status-dot healthy"></span></h4>
-                <p>Primary DB with streaming replication and connection pooling</p>
-                <div class="node-meta">
-                  <span class="node-tag">PostgreSQL</span>
-                  <span class="node-tag">HA</span>
-                  <span class="node-tag">2.3TB</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 13" data-name="Redis Cache Cluster" data-desc="In-memory cache for sessions, hot queries, and rate limiting data. 6-node cluster with 128GB total memory and 99.99% cache hit rate. Redis Sentinel for high availability and automatic failover." data-tags="Redis,Cache,Sessions,128GB,Sentinel" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Redis Cache Cluster <span class="status-dot healthy"></span></h4>
-                <p>In-memory cache with Sentinel HA and 99.99% hit rate</p>
-                <div class="node-meta">
-                  <span class="node-tag">Redis</span>
-                  <span class="node-tag">128GB</span>
-                  <span class="node-tag">Sentinel</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 14" data-name="Message Queue" data-desc="RabbitMQ cluster for async communication between microservices. Handles 200K+ messages/min with durable queues and dead letter exchanges. Implements publisher confirms and consumer acknowledgments for reliability." data-tags="RabbitMQ,AMQP,Durable Queues,DLX,Cluster" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Message Queue <span class="status-dot healthy"></span></h4>
-                <p>RabbitMQ with durable queues and dead letter handling</p>
-                <div class="node-meta">
-                  <span class="node-tag">RabbitMQ</span>
-                  <span class="node-tag">AMQP</span>
-                  <span class="node-tag">DLX</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="connector conn-data">
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-          <div class="conn-line"></div>
-        </div>
-
-        <!-- Layer 5: External Services -->
-        <div class="layer layer-external" id="layer-external" role="group" aria-label="External Services Layer" data-reveal>
-          <div class="layer-label">
-            <div class="layer-dot"></div>
-            External Services & APIs
-          </div>
-          <div class="nodes">
-            <div class="node" data-reveal style="--i: 15" data-name="Payment Gateways" data-desc="Multiple payment processors: Stripe for cards and digital wallets, PayPal for alternative payments. PCI-DSS Level 1 compliant with tokenization. Processes $5M+ monthly with 99.95% success rate." data-tags="Stripe,PayPal,PCI-DSS,Tokenization,Digital Wallets" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="12" y1="1" x2="12" y2="23"/>
-                  <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Payment Gateways <span class="status-dot healthy"></span></h4>
-                <p>Stripe and PayPal with PCI-DSS compliance</p>
-                <div class="node-meta">
-                  <span class="node-tag">Stripe</span>
-                  <span class="node-tag">PayPal</span>
-                  <span class="node-tag">PCI-DSS</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 16" data-name="Fulfillment Partners" data-desc="ShipStation for shipping and logistics with multi-carrier rate shopping. Integrates with UPS, FedEx, USPS, and DHL. Real-time tracking updates and automated label generation. Handles 8K+ shipments monthly." data-tags="ShipStation,Multi-carrier,Tracking,Label Generation" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="1" y="3" width="15" height="13"/>
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                  <circle cx="5.5" cy="18.5" r="2.5"/>
-                  <circle cx="18.5" cy="18.5" r="2.5"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Fulfillment Partners <span class="status-dot healthy"></span></h4>
-                <p>ShipStation with multi-carrier shipping and tracking</p>
-                <div class="node-meta">
-                  <span class="node-tag">ShipStation</span>
-                  <span class="node-tag">Multi-carrier</span>
-                  <span class="node-tag">Tracking</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="node" data-reveal style="--i: 17" data-name="Analytics & Monitoring" data-desc="Comprehensive observability with DataDog for infrastructure monitoring, Mixpanel for product analytics, and Google Analytics for web analytics. Real-time alerting and automated incident response." data-tags="DataDog,Mixpanel,Google Analytics,Observability" data-status="healthy">
-              <div class="node-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="20" x2="18" y2="10"/>
-                  <line x1="12" y1="20" x2="12" y2="4"/>
-                  <line x1="6" y1="20" x2="6" y2="14"/>
-                </svg>
-              </div>
-              <div class="node-content">
-                <h4>Analytics & Monitoring <span class="status-dot healthy"></span></h4>
-                <p>DataDog, Mixpanel, and GA4 for complete observability</p>
-                <div class="node-meta">
-                  <span class="node-tag">DataDog</span>
-                  <span class="node-tag">Mixpanel</span>
-                  <span class="node-tag">GA4</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </section>
 
-      <section class="architecture-notes" id="layer-notes" role="region" aria-label="Architecture principles">
-        <div class="note-card" data-reveal style="--i: 1">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23 4 23 10 17 10"/>
-              <polyline points="1 20 1 14 7 14"/>
-              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
-            </svg>
-            Event-Driven Architecture
-          </h4>
-          <p>Services communicate asynchronously via RabbitMQ message queues, ensuring loose coupling and system resilience. Each service publishes domain events that others can subscribe to.</p>
-        </div>
+      <div class="connector"><div class="conn-arrow"></div></div>
 
-        <div class="note-card" data-reveal style="--i: 2">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-              <polyline points="17 6 23 6 23 12"/>
-            </svg>
-            Auto-Scaling & Resilience
-          </h4>
-          <p>Each microservice scales independently based on load metrics. Kubernetes orchestrates containers with circuit breakers and bulkhead patterns for fault isolation.</p>
+      <!-- Gateway -->
+      <section class="layer" id="gateway" data-reveal>
+        <div class="layer-header"><div class="layer-dot" style="background:var(--warning)"></div><span class="layer-name">API Gateway</span></div>
+        <div class="nodes">
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div><h4>Auth Gateway <span class="status ok"></span></h4><p>JWT + OAuth2, rate limiting at 1K req/min, circuit breaker</p><div class="node-tags"><span class="tag">JWT</span><span class="tag">OAuth2</span><span class="tag">Rate Limit</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg></div><div><h4>Load Balancer <span class="status ok"></span></h4><p>NGINX with health checks, TLS 1.3, automatic failover</p><div class="node-tags"><span class="tag">NGINX</span><span class="tag">HA</span><span class="tag">TLS</span></div></div></div>
         </div>
+      </section>
 
-        <div class="note-card" data-reveal style="--i: 3">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            Security & Compliance
-          </h4>
-          <p>Multi-layered security with JWT authentication, encrypted data at rest and in transit, mTLS between services, and comprehensive audit logging for compliance.</p>
+      <div class="connector"><div class="conn-arrow"></div></div>
+
+      <!-- Services -->
+      <section class="layer" id="services" data-reveal>
+        <div class="layer-header"><div class="layer-dot" style="background:var(--positive)"></div><span class="layer-name">Business Services</span></div>
+        <div class="nodes">
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><h4>User Service <span class="status ok"></span></h4><p>Auth, profiles, GDPR compliance with encrypted PII</p><div class="node-tags"><span class="tag">Go</span><span class="tag">GDPR</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div><h4>Product Catalog <span class="status ok"></span></h4><p>2M+ products, dynamic pricing, Elasticsearch sync</p><div class="node-tags"><span class="tag">Python</span><span class="tag">ES</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><div><h4>Orders <span class="status ok"></span></h4><p>Cart, checkout, saga pattern, 5K+ orders/day</p><div class="node-tags"><span class="tag">Java</span><span class="tag">Saga</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div><h4>Payments <span class="status warn"></span></h4><p>Stripe, elevated latency (p99 &gt; 800ms), auto-scaling</p><div class="node-tags"><span class="tag">Node.js</span><span class="tag">PCI-DSS</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div><div><h4>Notifications <span class="status ok"></span></h4><p>Email, push, SMS — 50K+ messages/day, 99.7% delivery</p><div class="node-tags"><span class="tag">SendGrid</span><span class="tag">Twilio</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div><h4>Search <span class="status ok"></span></h4><p>Elasticsearch, semantic search, &lt;50ms p95, 100K queries/day</p><div class="node-tags"><span class="tag">Rust</span><span class="tag">ML</span></div></div></div>
         </div>
+      </section>
 
-        <div class="note-card" data-reveal style="--i: 4">
-          <h4>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-            High Performance Caching
-          </h4>
-          <p>Multi-level caching strategy with Redis for session data, CDN edge caching for static assets, and Elasticsearch for search queries achieving sub-50ms response times.</p>
+      <div class="connector"><div class="conn-arrow"></div></div>
+
+      <!-- Data -->
+      <section class="layer" id="data" data-reveal>
+        <div class="layer-header"><div class="layer-dot" style="background:#ec4899"></div><span class="layer-name">Data & Storage</span></div>
+        <div class="nodes">
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div><div><h4>PostgreSQL <span class="status ok"></span></h4><p>3-node cluster, streaming replication, 12K queries/sec</p><div class="node-tags"><span class="tag">HA</span><span class="tag">PgBouncer</span><span class="tag">2.3TB</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div><h4>Redis Cache <span class="status ok"></span></h4><p>6-node cluster, 128GB, 99.99% hit rate, Sentinel HA</p><div class="node-tags"><span class="tag">Redis</span><span class="tag">128GB</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div><div><h4>Message Queue <span class="status ok"></span></h4><p>RabbitMQ, 200K+ msg/min, durable queues, DLX</p><div class="node-tags"><span class="tag">RabbitMQ</span><span class="tag">AMQP</span></div></div></div>
+        </div>
+      </section>
+
+      <div class="connector"><div class="conn-arrow"></div></div>
+
+      <!-- External -->
+      <section class="layer" id="external" data-reveal>
+        <div class="layer-header"><div class="layer-dot" style="background:var(--accent-secondary)"></div><span class="layer-name">External Services</span></div>
+        <div class="nodes">
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div><h4>Payment Gateways <span class="status ok"></span></h4><p>Stripe + PayPal, PCI-DSS L1, $5M+/month</p><div class="node-tags"><span class="tag">Stripe</span><span class="tag">PayPal</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div><h4>Fulfillment <span class="status ok"></span></h4><p>ShipStation, multi-carrier, real-time tracking</p><div class="node-tags"><span class="tag">ShipStation</span><span class="tag">UPS</span></div></div></div>
+          <div class="node"><div class="node-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div><h4>Monitoring <span class="status ok"></span></h4><p>DataDog + Mixpanel + GA4, real-time alerting</p><div class="node-tags"><span class="tag">DataDog</span><span class="tag">Mixpanel</span></div></div></div>
+        </div>
+      </section>
+
+      <!-- Architecture Notes -->
+      <section class="notes-section" id="principles" data-reveal>
+        <h2>Architecture Principles</h2>
+        <div class="notes-grid">
+          <div class="note"><h3>Event-Driven</h3><p>Services communicate via RabbitMQ for loose coupling. Each publishes domain events others subscribe to.</p></div>
+          <div class="note"><h3>Auto-Scaling</h3><p>Kubernetes HPA scales pods based on CPU/memory. Circuit breakers prevent cascade failures.</p></div>
+          <div class="note"><h3>Security-First</h3><p>Zero-trust networking, mTLS between services, encrypted at rest. SOC 2 Type II compliant.</p></div>
+          <div class="note"><h3>Observability</h3><p>Distributed tracing with Jaeger, structured logging with ELK stack, custom dashboards.</p></div>
         </div>
       </section>
 
@@ -1133,188 +203,40 @@
   </main>
 
   <script>
-    // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', function(e) { 
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
-    document.addEventListener('keydown', function(e) { 
-      if (e.key === 'Escape') { 
-        document.getElementById('vizMenuDropdown').classList.remove('open'); 
-        closeDetail(); 
-      } 
-    });
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
       document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
-      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
+      localStorage.setItem('viz-theme', t); currentTheme = t;
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // === Scroll Reveal (adds .reveal then .visible — content visible without JS) ===
     document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { 
-        if (e.isIntersecting) { 
-          e.target.classList.add('visible'); e.target.classList.add('revealed'); 
-          revealObserver.unobserve(e.target); 
-        } 
-      });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+    var ro = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } }); }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+    setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
 
-    // Also observe individual data-reveal children
-    document.querySelectorAll('[data-reveal]').forEach(function(el) {
-      if (!el.classList.contains('reveal')) {
-        revealObserver.observe(el);
-      }
-    });
-
-    // Force reveal all elements after 500ms for screenshots
-    setTimeout(function() { 
-      document.querySelectorAll('.reveal, [data-reveal]').forEach(function(el) { 
-        el.classList.add('visible'); 
-        el.classList.add('revealed');
-      }); 
-    }, 500);
-
-    // === Number Counter (use data-count="77" data-suffix="%" on elements) ===
     function animateCounters() {
       document.querySelectorAll('[data-count]').forEach(function(el) {
-        if (el.dataset.counted) return;
-        el.dataset.counted = '1';
-        var target = parseFloat(el.dataset.count);
-        var prefix = el.dataset.prefix || '';
-        var suffix = el.dataset.suffix || '';
-        var start = performance.now();
-        var duration = 1200;
-        
-        function tick(now) {
-          var progress = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          var current = target * eased;
-          
-          // Handle decimal formatting
-          if (target % 1 !== 0) {
-            current = current.toFixed(1);
-          } else {
-            current = Math.round(current);
-          }
-          
-          el.textContent = prefix + current.toLocaleString() + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        tick(start);
+        if (el.dataset.counted) return; el.dataset.counted = '1';
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), dur = 1000;
+        (function tick(now) { var p = Math.min((now - start) / dur, 1), e = 1 - Math.pow(1 - p, 3), cur = target * e; el.textContent = prefix + (target % 1 !== 0 ? cur.toFixed(2) : Math.round(cur)).toLocaleString() + suffix; if (p < 1) requestAnimationFrame(tick); })(start);
       });
     }
+    setTimeout(animateCounters, 300);
 
-    var counterEl = document.querySelector('[data-count]');
-    if (counterEl) {
-      var counterObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { 
-          if (e.isIntersecting) { 
-            animateCounters(); 
-            counterObserver.disconnect(); 
-          } 
-        });
-      }, { threshold: 0.3 });
-      counterObserver.observe(counterEl);
-    }
-
-    // === Node Detail Popup ===
-    function closeDetail() {
-      document.getElementById('detailPanel').classList.remove('open');
-      document.getElementById('detailOverlay').classList.remove('open');
-    }
-
-    // Node click handling
-    document.querySelectorAll('.node').forEach(function(node) {
-      node.addEventListener('click', function() {
-        var panel = document.getElementById('detailPanel');
-        document.getElementById('detailTitle').textContent = node.dataset.name;
-        document.getElementById('detailDesc').textContent = node.dataset.desc;
-        
-        var meta = document.getElementById('detailMeta');
-        meta.innerHTML = '';
-        
-        // Add status tag
-        var status = node.dataset.status;
-        var statusTag = document.createElement('span');
-        statusTag.className = 'detail-tag';
-        statusTag.style.color = status === 'healthy' ? 'var(--positive)' : status === 'degraded' ? 'var(--warning)' : 'var(--negative)';
-        statusTag.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-        meta.appendChild(statusTag);
-        
-        // Add tech tags
-        (node.dataset.tags || '').split(',').forEach(function(tag) {
-          if (!tag.trim()) return;
-          var tagEl = document.createElement('span');
-          tagEl.className = 'detail-tag';
-          tagEl.textContent = tag.trim();
-          meta.appendChild(tagEl);
-        });
-        
-        panel.classList.add('open');
-        document.getElementById('detailOverlay').classList.add('open');
-      });
-    });
-
-    // === Download PNG ===
     async function downloadImage() {
-      var menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
-      try {
-        var url = await htmlToImage.toPng(document.body, { 
-          quality: 1, 
-          pixelRatio: 2, 
-          filter: function(node) { 
-            return !node.classList || !node.classList.contains('viz-menu'); 
-          } 
-        });
-        var link = document.createElement('a');
-        link.href = url;
-        link.download = 'e-commerce-microservices-architecture.png';
-        link.click();
-      } catch(error) { 
-        console.error('Download failed:', error); 
-      }
-      menu.style.display = '';
-    }
-
-    // === Zoom Controls for Mobile ===
-    var zoomLevel = 1;
-    var diagram = document.querySelector('.diagram');
-    
-    function zoomIn() {
-      zoomLevel = Math.min(zoomLevel + 0.1, 2);
-      diagram.style.transform = 'scale(' + zoomLevel + ')';
-      diagram.style.transformOrigin = 'top left';
-    }
-    
-    function zoomOut() {
-      zoomLevel = Math.max(zoomLevel - 0.1, 0.5);
-      diagram.style.transform = 'scale(' + zoomLevel + ')';
-      diagram.style.transformOrigin = 'top left';
-    }
-    
-    function resetZoom() {
-      zoomLevel = 1;
-      diagram.style.transform = 'scale(1)';
+      var m = document.querySelector('.viz-menu'); m.style.display = 'none';
+      try { var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } }); var a = document.createElement('a'); a.href = url; a.download = 'architecture.png'; a.click(); } catch(e) { console.error(e); }
+      m.style.display = '';
     }
   </script>
-
-  <!-- Mobile Zoom Controls -->
-  <div class="zoom-controls">
-    <button class="zoom-btn" onclick="zoomIn()" aria-label="Zoom in">+</button>
-    <button class="zoom-btn" onclick="zoomOut()" aria-label="Zoom out">−</button>
-    <button class="zoom-btn" onclick="resetZoom()" aria-label="Reset zoom" style="font-size: 12px;">⌂</button>
-  </div>
 </body>
 </html>

@@ -5,1009 +5,243 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SaaS Analytics Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { interpolate-size: allow-keywords; }
 
-    /* ===== THEMES ===== */
-    /* CSS prefers-color-scheme for flash-free theme detection */
     @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #9ca3af;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      }
+      :root { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
     }
     @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      }
+      :root { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
     }
-    /* Manual theme override classes (JS controlled) */
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-      --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #9ca3af;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
-      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-    }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-      --border: rgba(0,0,0,0.08);
-      --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
-      --positive: #059669; --negative: #e11d48; --warning: #d97706;
-    }
+    .theme-dark { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
+    .theme-light { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
 
-    /* Light theme card enhancements */
-    .theme-light .kpi-card,
-    .theme-light .chart-container,
-    .theme-light .card {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; letter-spacing: -0.011em; font-feature-settings: 'cv11', 'ss01'; }
+    h1, h2, h3, h4 { color: var(--text); letter-spacing: -0.03em; line-height: 1.08; font-weight: 700; }
+    h2, h3 { font-weight: 600; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
-      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
-      transition: background 0.3s, color 0.3s;
-    }
-    h1,h2,h3,h4,h5,h6 { 
-      color: var(--text); 
-      letter-spacing: -0.02em; 
-      line-height: 1.1;
-    }
-    h1 { font-weight: 800; }
-    h2 { font-weight: 700; }
-    body, p, li, td, th, span, label { font-weight: 400; }
-    p,li,td,th,span,label { color: var(--text); }
-    .text-secondary { color: var(--text-secondary); }
-
-    /* Skip navigation */
-    .skip-link {
-      position: absolute; top: -40px; left: 16px; padding: 8px 16px;
-      background: var(--accent); color: white; text-decoration: none;
-      border-radius: 8px; z-index: 10000; font-weight: 600;
-    }
+    .skip-link { position: absolute; top: -40px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px; z-index: 10000; }
     .skip-link:focus { top: 16px; }
 
-    /* ===== CARD ===== */
-    .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 24px; min-width: 280px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
+    @media print { body { background: #fff !important; color: #000 !important; } .viz-menu { display: none !important; } * { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 
-    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .animate { animation: fadeInUp 0.6s ease-out both; }
-    .animate.delay-1 { animation-delay: 0.1s; }
-    .animate.delay-2 { animation-delay: 0.2s; }
-    .animate.delay-3 { animation-delay: 0.3s; }
-    .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
-    
-    /* Staggered reveal for dashboard cards */
-    .kpi-card:nth-child(1) { animation-delay: 0.1s; }
-    .kpi-card:nth-child(2) { animation-delay: 0.2s; }
-    .kpi-card:nth-child(3) { animation-delay: 0.3s; }
-    .kpi-card:nth-child(4) { animation-delay: 0.4s; }
-    
-    /* Chart container staggered delays */
-    .chart-container:nth-child(1) .reveal { transition-delay: 0.1s; }
-    .chart-container:nth-child(2) .reveal { transition-delay: 0.2s; }
-
-    /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
-    .reveal { opacity: 0; transform: translateY(24px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .reveal.visible, [data-reveal].revealed { opacity: 1; transform: translateY(0) scale(1); }
-    [data-reveal] { transition-delay: calc(var(--i, 0) * 0.1s); }
-
-    /* Modern CSS scroll-driven animations (Chrome 115+) */
-    @supports (animation-timeline: view()) {
-      .scroll-reveal {
-        animation: fadeInUp 1ms linear;
-        animation-timeline: view();
-        animation-range: entry 0% entry 50%;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
-
-    /* ===== FOCUS INDICATORS ===== */
-    *:focus-visible { 
-      outline: 2px solid var(--accent, #6366f1); 
-      outline-offset: 3px;
-      border-radius: 4px;
-    }
-    a:focus-visible, button:focus-visible {
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
-    }
-
-    /* Chart tooltip */
-    .chart-tooltip { position: fixed; background: var(--surface); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; pointer-events: none; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 100; }
-    .chart-tooltip.visible { opacity: 1; }
-
-    /* ===== PRINT ===== */
-    @media print {
-      body { background: white !important; color: black !important; }
-      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
-      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
-      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    }
-
-    /* ===== VISIBLE THEME TOGGLE ===== */
-    .theme-toggle-btn {
-      position: fixed; top: 16px; right: 72px; z-index: 9999;
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
-    .theme-toggle-btn:hover { background: var(--surface-hover); }
-    .theme-toggle-btn .sun { display: none; }
-    .theme-toggle-btn .moon { display: block; }
-    .theme-light .theme-toggle-btn .sun { display: block; }
-    .theme-light .theme-toggle-btn .moon { display: none; }
-
-    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
-    .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
+    .viz-menu-toggle { width: 40px; height: 40px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown {
-      position: absolute; top: 52px; right: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px;
-      opacity: 0; visibility: hidden; transform: translateY(-8px);
-      transition: all 0.2s; backdrop-filter: blur(16px);
-    }
+    .viz-menu-dropdown { position: absolute; top: 48px; right: 0; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.15s; }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text); font-size: 14px;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
-    }
+    .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== DASHBOARD SPECIFIC ===== */
-    .dashboard-container {
-      max-width: 1400px; margin: 0 auto; padding: 2rem 1rem;
-      container-type: inline-size;
-    }
+    .dashboard { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+    .dash-header { margin-bottom: 32px; }
+    .dash-header h1 { font-size: 1.5rem; margin-bottom: 4px; }
+    .dash-header p { color: var(--text-secondary); font-size: 0.875rem; }
 
-    .dashboard-header {
-      margin-bottom: 2rem;
-    }
+    /* KPI row */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 32px; }
+    .kpi { background: var(--surface); padding: 24px; }
+    .kpi-label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; margin-bottom: 8px; }
+    .kpi-value { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 4px; }
+    .kpi-change { font-size: 0.75rem; font-weight: 500; }
+    .kpi-change.up { color: var(--positive); }
+    .kpi-change.down { color: var(--negative); }
 
-    .dashboard-title {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 800; margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
+    /* Charts */
+    .charts-row { display: grid; grid-template-columns: 3fr 2fr; gap: 16px; margin-bottom: 32px; }
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .chart-card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.01em; }
+    .chart-card .chart-sub { font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 20px; }
+    .chart-wrap { position: relative; height: 300px; }
 
-    .dashboard-subtitle {
-      color: var(--text-secondary);
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-    }
+    /* Bottom row */
+    .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .bottom-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .bottom-card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 16px; letter-spacing: -0.01em; }
 
-    /* KPI Cards */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem; margin-bottom: 3rem;
-    }
+    .activity-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .activity-text { flex: 1; }
+    .activity-text h4 { font-size: 0.8125rem; font-weight: 500; margin-bottom: 2px; }
+    .activity-text p { font-size: 0.75rem; color: var(--text-secondary); }
+    .activity-time { font-size: 0.6875rem; color: var(--text-secondary); white-space: nowrap; }
 
-    .kpi-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 2rem; position: relative;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .kpi-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      border-color: var(--accent);
-    }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 8px 0; font-size: 0.6875rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; border-bottom: 1px solid var(--border); }
+    td { padding: 10px 0; font-size: 0.8125rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    .badge { font-size: 0.6875rem; font-weight: 500; padding: 2px 8px; border-radius: 4px; }
+    .badge.up { background: rgba(12,206,107,0.1); color: var(--positive); }
+    .badge.down { background: rgba(238,0,0,0.1); color: var(--negative); }
 
-    .kpi-value {
-      font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;
-      color: var(--text);
-    }
-
-    .kpi-label {
-      color: var(--text-secondary); font-size: 0.875rem;
-      text-transform: uppercase; letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-    }
-
-    .kpi-change {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.875rem; font-weight: 600;
-    }
-
-    .kpi-change.positive { color: var(--positive); }
-    .kpi-change.negative { color: var(--negative); }
-
-    .kpi-icon {
-      position: absolute; top: 2rem; right: 2rem;
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      background: color-mix(in oklch, var(--accent), transparent 85%);
-      color: var(--accent);
-    }
-
-    /* Chart Grid */
-    .charts-section {
-      display: grid;
-      grid-template-columns: 3fr 2fr;
-      gap: 2rem; margin-bottom: 3rem;
-    }
-
-    @container (width < 1000px) {
-      .charts-section {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .chart-container {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 2rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-    }
-
-    .chart-header {
-      display: flex; justify-content: between; align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .chart-title {
-      font-size: 1.25rem; font-weight: 600; color: var(--text);
-    }
-
-    .chart-period {
-      color: var(--text-secondary); font-size: 0.875rem; margin-left: 0.5rem;
-    }
-
-    .chart-wrapper {
-      position: relative; height: 300px;
-    }
-
-    .small-chart .chart-wrapper {
-      height: 250px;
-    }
-    
-    /* Chart element hover effects */
-    canvas { transition: filter 0.2s ease; }
-    canvas:hover { filter: brightness(1.05); }
-
-    /* Chart grow animation */
-    @keyframes chartGrow {
-      from { opacity: 0; transform: scaleY(0.3); }
-      to { opacity: 1; transform: scaleY(1); }
-    }
-    .chart-wrapper canvas {
-      animation: chartGrow 0.8s ease-out 0.3s both;
-      transform-origin: bottom;
-    }
-
-    /* Enhanced card hover effects with shadow elevation */
-    .kpi-card, .chart-container {
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .kpi-card:hover, .chart-container:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.2);
-    }
-    
-    /* Performance table row hover */
-    .performance-table tbody tr {
-      transition: background-color 0.15s ease;
-    }
-    .performance-table tbody tr:hover {
-      background: var(--surface-hover);
-    }
-    
-    /* Activity item hover */
-    .activity-item {
-      transition: background-color 0.15s ease, transform 0.15s ease;
-      border-radius: 8px;
-      margin: 0 -1rem;
-      padding: 1rem;
-    }
-    .activity-item:hover {
-      background: var(--surface-hover);
-      transform: translateX(4px);
-    }
-
-    /* Recent Activity */
-    .bottom-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-
-    @container (width < 768px) {
-      .bottom-section {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .activity-item {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 1rem 0; border-bottom: 1px solid var(--border);
-    }
-
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-
-    .activity-icon {
-      width: 40px; height: 40px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--bg); color: var(--text-secondary);
-    }
-
-    .activity-content h4 {
-      font-size: 0.875rem; font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .activity-content p {
-      font-size: 0.75rem; color: var(--text-secondary);
-    }
-
-    .activity-time {
-      color: var(--text-secondary); font-size: 0.75rem;
-      margin-left: auto;
-    }
-
-    /* Performance Table */
-    .performance-table {
-      width: 100%; border-collapse: collapse;
-    }
-
-    .performance-table th {
-      text-align: left; padding: 1rem 0.5rem; 
-      color: var(--text-secondary); font-size: 0.875rem;
-      text-transform: uppercase; letter-spacing: 0.05em;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .performance-table td {
-      padding: 1rem 0.5rem; border-bottom: 1px solid var(--border);
-      font-size: 0.875rem;
-    }
-
-    .performance-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .metric-value {
-      font-weight: 600;
-    }
-
-    .metric-change {
-      font-size: 0.75rem; font-weight: 600;
-      padding: 0.25rem 0.5rem; border-radius: 0.5rem;
-    }
-
-    .metric-change.up {
-      background: color-mix(in oklch, var(--positive), transparent 85%);
-      color: var(--positive);
-    }
-
-    .metric-change.down {
-      background: color-mix(in oklch, var(--negative), transparent 85%);
-      color: var(--negative);
-    }
-
-    /* Responsive improvements */
-    @container (width < 600px) {
-      .kpi-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      .kpi-card { padding: 1.5rem; }
-      .chart-container { padding: 1.5rem; }
-      .dashboard-container { padding: 1rem; }
-    }
-
-    /* Media query fallbacks for mobile */
     @media (max-width: 768px) {
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .charts-section { grid-template-columns: 1fr; }
-      .bottom-section { grid-template-columns: 1fr; }
-      .kpi-value { font-size: 2rem; }
-      .kpi-icon { width: 36px; height: 36px; top: 1.5rem; right: 1.5rem; }
-      .chart-wrapper { height: 250px; }
-      .performance-table { font-size: 0.8rem; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-row, .bottom-row { grid-template-columns: 1fr; }
+      .kpi-value { font-size: 1.5rem; }
     }
     @media (max-width: 480px) {
-      .kpi-grid { grid-template-columns: 1fr; gap: 0.75rem; }
-      .kpi-card { padding: 1.25rem; }
-      .dashboard-container { padding: 0.75rem; }
-      .chart-container { padding: 1rem; }
-      .small-chart .chart-wrapper { height: 200px; }
+      .kpi-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="chart-tooltip" id="chartTooltip"></div>
-  <main id="main-content">
-    <a href="#main-content" class="skip-link">Skip to content</a>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <!-- Visible theme toggle -->
-    <button class="theme-toggle-btn" onclick="cycleTheme()" aria-label="Toggle light/dark theme">
-      <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
     </button>
-
-    <!-- MENU -->
-    <div class="viz-menu">
-      <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-        </svg>
-      </button>
-      <div class="viz-menu-dropdown" id="vizMenuDropdown">
-        <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-        <button onclick="downloadImage()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/>
-          </svg>
-          <span>Download PNG</span>
-        </button>
-        <button onclick="window.print()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-          </svg>
-          <span>Print / PDF</span>
-        </button>
-      </div>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><span>📥</span> Download PNG</button>
+      <button onclick="window.print()"><span>🖨️</span> Print / PDF</button>
     </div>
+  </div>
 
-    <div class="dashboard-container">
-      <header class="dashboard-header animate">
-        <h1 class="dashboard-title">SaaS Analytics Dashboard</h1>
-        <p class="dashboard-subtitle">Real-time performance metrics and insights</p>
+  <main id="main-content">
+    <div class="dashboard">
+      <header class="dash-header">
+        <h1>Analytics Dashboard</h1>
+        <p>Real-time performance metrics</p>
       </header>
 
-      <section class="kpi-grid" role="region" aria-label="Key Performance Indicators" data-reveal>
-        <div class="kpi-card animate delay-1" data-reveal style="--i: 1" role="group" aria-label="Active Users: 8,547, up 12.5%">
-          <div class="kpi-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 21-3-3m2-4a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
-            </svg>
-          </div>
-          <div class="kpi-value" data-count="8547">8,547</div>
+      <section class="kpi-grid" role="region" aria-label="Key metrics">
+        <div class="kpi" role="group" aria-label="Active Users: 8,547">
           <div class="kpi-label">Active Users</div>
-          <div class="kpi-change positive">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/>
-            </svg>
-            +12.5% from last month
-          </div>
+          <div class="kpi-value" data-count="8547">8,547</div>
+          <div class="kpi-change up">↑ 12.5% from last month</div>
         </div>
-
-        <div class="kpi-card animate delay-2" data-reveal style="--i: 2" role="group" aria-label="Monthly Revenue: $142K, up 8.2%">
-          <div class="kpi-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </div>
-          <div class="kpi-value" data-count="142" data-prefix="$" data-suffix="K">$142K</div>
+        <div class="kpi" role="group" aria-label="Revenue: $142K">
           <div class="kpi-label">Monthly Revenue</div>
-          <div class="kpi-change positive">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/>
-            </svg>
-            +8.2% from last month
-          </div>
+          <div class="kpi-value" data-count="142" data-prefix="$" data-suffix="K">$142K</div>
+          <div class="kpi-change up">↑ 8.2% from last month</div>
         </div>
-
-        <div class="kpi-card animate delay-3" data-reveal style="--i: 3" role="group" aria-label="Churn Rate: 3.2%, up 0.4%">
-          <div class="kpi-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-            </svg>
-          </div>
-          <div class="kpi-value" data-count="3.2" data-suffix="%">3.2%</div>
+        <div class="kpi" role="group" aria-label="Churn Rate: 3.2%">
           <div class="kpi-label">Churn Rate</div>
-          <div class="kpi-change negative">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23,18 13.5,8.5 8.5,13.5 1,6"/><polyline points="17,18 23,18 23,12"/>
-            </svg>
-            +0.4% from last month
-          </div>
+          <div class="kpi-value" data-count="3.2" data-suffix="%">3.2%</div>
+          <div class="kpi-change down">↑ 0.4% from last month</div>
         </div>
-
-        <div class="kpi-card animate delay-4" data-reveal style="--i: 4" role="group" aria-label="System Uptime: 96.8%, up 0.3%">
-          <div class="kpi-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 12l2 2 4-4"/><path d="M21 12c.552 0 1-.449 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .551.448 1 1 1"/>
-            </svg>
-          </div>
-          <div class="kpi-value" data-count="96.8" data-suffix="%">96.8%</div>
+        <div class="kpi" role="group" aria-label="Uptime: 96.8%">
           <div class="kpi-label">System Uptime</div>
-          <div class="kpi-change positive">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/>
-            </svg>
-            +0.3% from last month
-          </div>
+          <div class="kpi-value" data-count="96.8" data-suffix="%">96.8%</div>
+          <div class="kpi-change up">↑ 0.3% from last month</div>
         </div>
       </section>
 
-      <section class="charts-section" aria-label="Analytics Charts" data-reveal>
-        <div role="img" aria-label="Revenue growth chart showing monthly progression from January to December with $142K current revenue">
-          <div class="chart-container" data-reveal style="--i: 1">
-            <div class="chart-header">
-              <h3 class="chart-title">Revenue Growth</h3>
-              <span class="chart-period">Last 12 months</span>
-            </div>
-            <div class="chart-wrapper">
-              <canvas id="revenueChart"></canvas>
-            </div>
-          </div>
-          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Revenue grew from $98K in January to $142K in December, with steady monthly increases.</div>
+      <section class="charts-row" aria-label="Charts">
+        <div class="chart-card" role="img" aria-label="Revenue growth line chart">
+          <h3>Revenue Growth</h3>
+          <p class="chart-sub">Last 12 months</p>
+          <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
         </div>
-
-        <div role="img" aria-label="User acquisition channels pie chart showing organic search 45%, paid ads 28%, referrals 15%, direct 12%">
-          <div class="chart-container small-chart" data-reveal style="--i: 2">
-            <div class="chart-header">
-              <h3 class="chart-title">User Acquisition</h3>
-              <span class="chart-period">Current month</span>
-            </div>
-            <div class="chart-wrapper">
-              <canvas id="acquisitionChart"></canvas>
-            </div>
-          </div>
-          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Organic Search 45%, Paid Ads 28%, Referrals 15%, Direct 12%.</div>
+        <div class="chart-card" role="img" aria-label="User acquisition doughnut chart">
+          <h3>User Acquisition</h3>
+          <p class="chart-sub">Current month breakdown</p>
+          <div class="chart-wrap"><canvas id="acquisitionChart"></canvas></div>
         </div>
       </section>
 
-      <section class="bottom-section" role="region" aria-label="Activity and Performance Details" data-reveal>
-        <article class="card" data-reveal style="--i: 1">
-          <h3 style="margin-bottom: 1.5rem;">Recent Activity</h3>
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-              </svg>
-            </div>
-            <div class="activity-content">
-              <h4>New user registration</h4>
-              <p>sarah.chen@example.com joined the platform</p>
-            </div>
-            <div class="activity-time">2 min ago</div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-              </svg>
-            </div>
-            <div class="activity-content">
-              <h4>Payment received</h4>
-              <p>$299 annual subscription from Acme Corp</p>
-            </div>
-            <div class="activity-time">15 min ago</div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
-              </svg>
-            </div>
-            <div class="activity-content">
-              <h4>Server maintenance</h4>
-              <p>Scheduled maintenance completed successfully</p>
-            </div>
-            <div class="activity-time">1 hour ago</div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 9V5a3 3 0 0 0-6 0v4"/><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              </svg>
-            </div>
-            <div class="activity-content">
-              <h4>Security alert</h4>
-              <p>Failed login attempts detected from unknown IP</p>
-            </div>
-            <div class="activity-time">3 hours ago</div>
-          </div>
-        </article>
+      <section class="bottom-row" aria-label="Activity and features">
+        <div class="bottom-card">
+          <h3>Recent Activity</h3>
+          <div class="activity-item"><div class="activity-dot"></div><div class="activity-text"><h4>New user registration</h4><p>sarah.chen@example.com</p></div><span class="activity-time">2m ago</span></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--positive)"></div><div class="activity-text"><h4>Payment received</h4><p>$299 annual — Acme Corp</p></div><span class="activity-time">15m ago</span></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--text-secondary)"></div><div class="activity-text"><h4>Maintenance complete</h4><p>Server cluster updated</p></div><span class="activity-time">1h ago</span></div>
+          <div class="activity-item"><div class="activity-dot" style="background:var(--warning)"></div><div class="activity-text"><h4>Security alert</h4><p>Failed logins from unknown IP</p></div><span class="activity-time">3h ago</span></div>
+        </div>
 
-        <article class="card" data-reveal style="--i: 2">
-          <h3 style="margin-bottom: 1.5rem;">Top Performing Features</h3>
-          <table class="performance-table" aria-label="Top performing features with usage and growth metrics">
-            <thead>
-              <tr>
-                <th>Feature</th>
-                <th>Usage</th>
-                <th>Growth</th>
-              </tr>
-            </thead>
+        <div class="bottom-card">
+          <h3>Top Features</h3>
+          <table aria-label="Feature usage and growth">
+            <thead><tr><th>Feature</th><th>Usage</th><th>Growth</th></tr></thead>
             <tbody>
-              <tr>
-                <td>Analytics Dashboard</td>
-                <td class="metric-value">89.2%</td>
-                <td><span class="metric-change up">+5.1%</span></td>
-              </tr>
-              <tr>
-                <td>API Integration</td>
-                <td class="metric-value">76.8%</td>
-                <td><span class="metric-change up">+12.3%</span></td>
-              </tr>
-              <tr>
-                <td>Team Collaboration</td>
-                <td class="metric-value">68.4%</td>
-                <td><span class="metric-change up">+8.7%</span></td>
-              </tr>
-              <tr>
-                <td>Mobile App</td>
-                <td class="metric-value">54.6%</td>
-                <td><span class="metric-change down">-2.1%</span></td>
-              </tr>
-              <tr>
-                <td>Reporting Tools</td>
-                <td class="metric-value">43.2%</td>
-                <td><span class="metric-change up">+15.8%</span></td>
-              </tr>
+              <tr><td>Analytics Dashboard</td><td>89.2%</td><td><span class="badge up">+5.1%</span></td></tr>
+              <tr><td>API Integration</td><td>76.8%</td><td><span class="badge up">+12.3%</span></td></tr>
+              <tr><td>Team Collaboration</td><td>68.4%</td><td><span class="badge up">+8.7%</span></td></tr>
+              <tr><td>Mobile App</td><td>54.6%</td><td><span class="badge down">-2.1%</span></td></tr>
+              <tr><td>Reporting Tools</td><td>43.2%</td><td><span class="badge up">+15.8%</span></td></tr>
             </tbody>
           </table>
-        </article>
+        </div>
       </section>
     </div>
   </main>
 
   <script>
-    // === Chart Variables ===
     var revenueChart, acquisitionChart;
 
-    // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', function(e) { 
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
-    document.addEventListener('keydown', function(e) { 
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
       document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
-      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
+      localStorage.setItem('viz-theme', t); currentTheme = t;
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // === Scroll Reveal ===
-    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { 
-        if (e.isIntersecting) { 
-          e.target.classList.add('visible'); e.target.classList.add('revealed'); 
-          revealObserver.unobserve(e.target); 
-        } 
-      });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
-
-    // Also observe individual data-reveal children
-    document.querySelectorAll('[data-reveal]').forEach(function(el) {
-      if (!el.classList.contains('reveal')) {
-        revealObserver.observe(el);
-      }
-    });
-
-    // Force reveal all elements after 500ms for screenshots
-    setTimeout(function() { 
-      document.querySelectorAll('.reveal, [data-reveal]').forEach(function(el) { 
-        el.classList.add('visible'); 
-        el.classList.add('revealed');
-      }); 
-    }, 500);
-
-    // === Number Counter ===
     function animateCounters() {
       document.querySelectorAll('[data-count]').forEach(function(el) {
-        if (el.dataset.counted) return;
-        el.dataset.counted = '1';
-        var target = parseFloat(el.dataset.count);
-        var prefix = el.dataset.prefix || '';
-        var suffix = el.dataset.suffix || '';
-        var start = performance.now();
-        var duration = 1200;
-        
-        function tick(now) {
-          var progress = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          var current = target * eased;
-          
-          // Handle decimal formatting
-          if (target % 1 !== 0) {
-            current = current.toFixed(1);
-          } else {
-            current = Math.round(current);
-          }
-          
-          el.textContent = prefix + current.toLocaleString() + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        tick(start);
+        if (el.dataset.counted) return; el.dataset.counted = '1';
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), dur = 1000;
+        (function tick(now) { var p = Math.min((now - start) / dur, 1), e = 1 - Math.pow(1 - p, 3), cur = target * e; el.textContent = prefix + (target % 1 !== 0 ? cur.toFixed(1) : Math.round(cur)).toLocaleString() + suffix; if (p < 1) requestAnimationFrame(tick); })(start);
       });
     }
+    setTimeout(animateCounters, 300);
 
-    var counterEl = document.querySelector('[data-count]');
-    if (counterEl) {
-      var counterObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { 
-          if (e.isIntersecting) { 
-            animateCounters(); 
-            counterObserver.disconnect(); 
-          } 
-        });
-      }, { threshold: 0.3 });
-      counterObserver.observe(counterEl);
+    function getColors() {
+      var s = getComputedStyle(document.documentElement);
+      return { text: s.getPropertyValue('--text').trim(), sub: s.getPropertyValue('--text-secondary').trim(), border: s.getPropertyValue('--border').trim(), surface: s.getPropertyValue('--surface').trim(), accent: s.getPropertyValue('--accent').trim(), accent2: s.getPropertyValue('--accent-secondary').trim(), positive: s.getPropertyValue('--positive').trim(), warning: s.getPropertyValue('--warning').trim() };
     }
+    function resetCanvas(id) { var o = document.getElementById(id), p = o.parentNode, c = document.createElement('canvas'); c.id = id; p.replaceChild(c, o); return c; }
 
-    // === Chart Theme Helper ===
-    function getChartColors() {
-      var root = getComputedStyle(document.documentElement);
-      return {
-        text: root.getPropertyValue('--text').trim(),
-        textSecondary: root.getPropertyValue('--text-secondary').trim(),
-        border: root.getPropertyValue('--border').trim(),
-        surface: root.getPropertyValue('--surface').trim(),
-        accent: root.getPropertyValue('--accent').trim(),
-        accentSecondary: root.getPropertyValue('--accent-secondary').trim(),
-        positive: root.getPropertyValue('--positive').trim(),
-        warning: root.getPropertyValue('--warning').trim()
-      };
-    }
-
-    function resetCanvas(id) {
-      var oldCanvas = document.getElementById(id);
-      var parent = oldCanvas.parentNode;
-      var newCanvas = document.createElement('canvas');
-      newCanvas.id = id;
-      parent.replaceChild(newCanvas, oldCanvas);
-      return newCanvas;
-    }
-
-    // === Build Charts ===
     function buildCharts() {
-      var colors = getChartColors();
-      
-      Chart.defaults.color = colors.textSecondary;
-      Chart.defaults.borderColor = colors.border;
+      var c = getColors();
+      Chart.defaults.color = c.sub; Chart.defaults.borderColor = 'transparent';
+      var tt = { backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1, padding: 12, cornerRadius: 8, titleFont: { size: 14 }, bodyFont: { size: 13 } };
 
-      // Destroy existing charts
       try { if (revenueChart) revenueChart.destroy(); } catch(e) {}
       try { if (acquisitionChart) acquisitionChart.destroy(); } catch(e) {}
 
-      // Revenue Chart
-      var revCanvas = resetCanvas('revenueChart');
-      var revCtx = revCanvas.getContext('2d');
-      var revGrad = revCtx.createLinearGradient(0, 0, 0, 300);
-      revGrad.addColorStop(0, colors.accent + '40');
-      revGrad.addColorStop(1, colors.accent + '00');
-      revenueChart = new Chart(revCanvas, {
+      var rc = resetCanvas('revenueChart'), ctx = rc.getContext('2d');
+      var grad = ctx.createLinearGradient(0, 0, 0, 300); grad.addColorStop(0, c.accent + '30'); grad.addColorStop(1, c.accent + '00');
+      revenueChart = new Chart(rc, {
         type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-          datasets: [{
-            label: 'Revenue ($K)',
-            data: [98, 102, 108, 115, 121, 128, 124, 132, 138, 135, 142, 142],
-            borderColor: colors.accent,
-            backgroundColor: revGrad,
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4,
-            pointRadius: 5,
-            pointHoverRadius: 10,
-            pointBackgroundColor: colors.accent,
-            pointBorderColor: colors.surface,
-            pointBorderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1,
-              callbacks: {
-                label: function(context) {
-                  return context.dataset.label + ': $' + context.parsed.y + 'K';
-                }
-              }
-            },
-            legend: { display: false }
-          },
-          scales: {
-            y: {
-              beginAtZero: false,
-              grid: { 
-                color: colors.border,
-                drawBorder: false
-              },
-              ticks: { 
-                color: colors.textSecondary,
-                callback: function(value) {
-                  return '$' + value + 'K';
-                }
-              },
-              border: { display: false }
-            },
-            x: {
-              grid: { 
-                color: colors.border,
-                drawBorder: false
-              },
-              ticks: { color: colors.textSecondary },
-              border: { display: false }
-            }
-          },
-          interaction: {
-            intersect: false,
-            mode: 'index'
-          },
-          elements: {
-            point: {
-              hoverRadius: 8
-            }
-          }
-        }
+        data: { labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+          datasets: [{ label: 'Revenue ($K)', data: [98,102,108,115,121,128,124,132,138,135,142,142], borderColor: c.accent, backgroundColor: grad, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 6, pointBackgroundColor: c.accent }] },
+        options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 10, right: 10, bottom: 0, left: 0 } },
+          plugins: { tooltip: { enabled: true, mode: 'index', intersect: false, ...tt, callbacks: { label: function(ctx) { return '$' + ctx.parsed.y + 'K'; } } }, legend: { display: false } },
+          scales: { y: { beginAtZero: false, grid: { color: c.border }, ticks: { color: c.sub, font: { size: 13 }, callback: function(v) { return '$' + v + 'K'; } }, border: { display: false } }, x: { grid: { display: false }, ticks: { color: c.sub, font: { size: 13 } }, border: { display: false } } },
+          interaction: { intersect: false, mode: 'index' } }
       });
 
-      // Acquisition Chart
       acquisitionChart = new Chart(resetCanvas('acquisitionChart'), {
         type: 'doughnut',
-        data: {
-          labels: ['Organic Search', 'Paid Ads', 'Referrals', 'Direct'],
-          datasets: [{
-            data: [45, 28, 15, 12],
-            backgroundColor: [
-              colors.accent,
-              colors.accentSecondary, 
-              colors.positive,
-              colors.warning
-            ],
-            borderWidth: 0,
-            hoverOffset: 4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1,
-              callbacks: {
-                label: function(context) {
-                  return context.label + ': ' + context.parsed + '%';
-                }
-              }
-            },
-            legend: {
-              position: 'bottom',
-              labels: { 
-                color: colors.text,
-                padding: 10,
-                usePointStyle: true,
-                pointStyle: 'circle',
-                font: { size: 11 },
-                boxWidth: 8
-              }
-            }
-          },
-          cutout: '60%'
-        }
+        data: { labels: ['Organic', 'Paid Ads', 'Referrals', 'Direct'], datasets: [{ data: [45, 28, 15, 12], backgroundColor: [c.accent, c.accent2, c.positive, c.warning], borderWidth: 0, hoverOffset: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, layout: { padding: 10 },
+          plugins: { tooltip: { enabled: true, ...tt, callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.parsed + '%'; } } }, legend: { position: 'bottom', labels: { color: c.text, font: { size: 13 }, usePointStyle: true, padding: 16 } } }, cutout: '65%' }
       });
     }
 
-    // Theme change handler for chart re-rendering
-    function onThemeChange() {
-      setTimeout(buildCharts, 100);
-    }
+    function onThemeChange() { setTimeout(buildCharts, 50); }
+    setTimeout(buildCharts, 300);
 
-    // Initial chart build
-    setTimeout(buildCharts, 1000);
-
-    // === Download PNG ===
     async function downloadImage() {
-      var menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
-      try {
-        var url = await htmlToImage.toPng(document.body, { 
-          quality: 1, 
-          pixelRatio: 2, 
-          filter: function(node) { 
-            return !node.classList || !node.classList.contains('viz-menu'); 
-          } 
-        });
-        var link = document.createElement('a');
-        link.href = url;
-        link.download = 'saas-analytics-dashboard.png';
-        link.click();
-      } catch(error) { 
-        console.error('Download failed:', error); 
-      }
-      menu.style.display = '';
+      var m = document.querySelector('.viz-menu'); m.style.display = 'none';
+      try { var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } }); var a = document.createElement('a'); a.href = url; a.download = 'saas-dashboard.png'; a.click(); } catch(e) { console.error(e); }
+      m.style.display = '';
     }
   </script>
 </body>

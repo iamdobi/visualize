@@ -3,1184 +3,338 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Remote Work vs Office Work - Complete Comparison</title>
+  <title>Remote Work vs Office Work</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { interpolate-size: allow-keywords; }
 
-    /* ===== THEMES ===== */
-    /* CSS prefers-color-scheme for flash-free theme detection */
     @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #9ca3af;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-        --remote: #10b981; --office: #8b5cf6;
-      }
+      :root { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
     }
     @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-        --remote: #059669; --office: #7c3aed;
-      }
+      :root { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
     }
-    /* Manual theme override classes (JS controlled) */
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-      --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #9ca3af;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
-      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      --remote: #10b981; --office: #8b5cf6;
-    }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-      --border: rgba(0,0,0,0.08);
-      --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
-      --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      --remote: #059669; --office: #7c3aed;
-    }
+    .theme-dark { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
+    .theme-light { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; --remote: #0cce6b; --office: #7928ca; }
 
-    /* Light theme overrides for gradient sections */
-    .theme-light .hero {
-      background: linear-gradient(135deg, #bbf7d0 0%, #ddd6fe 100%);
-    }
-    .theme-light .hero h1 { color: #1e293b; text-shadow: none; }
-    .theme-light .hero .subtitle { color: #475569; }
-    .theme-light .conclusion {
-      background: linear-gradient(135deg, #ddd6fe 0%, #bfdbfe 100%);
-    }
-    .theme-light .conclusion h2, .theme-light .conclusion p { color: #1e293b; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; letter-spacing: -0.011em; font-feature-settings: 'cv11', 'ss01'; }
+    h1, h2, h3 { color: var(--text); letter-spacing: -0.03em; line-height: 1.08; font-weight: 700; }
+    h2 { font-weight: 600; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
-    /* Light theme card shadows */
-    .theme-light .stat-card,
-    .theme-light .comparison-section,
-    .theme-light .chart-container,
-    .theme-light .card {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    /* Staggered card entrance */
-    @keyframes cardEntrance {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .stat-card { animation: cardEntrance 0.6s ease-out both; }
-    .stat-card:nth-child(1) { animation-delay: 0s; }
-    .stat-card:nth-child(2) { animation-delay: 0.1s; }
-    .stat-card:nth-child(3) { animation-delay: 0.15s; }
-    .stat-card:nth-child(4) { animation-delay: 0.2s; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
-      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
-      transition: background 0.3s, color 0.3s;
-    }
-    h1,h2,h3,h4,h5,h6 { 
-      color: var(--text); 
-      letter-spacing: -0.02em; 
-      line-height: 1.1;
-    }
-    h1 { font-weight: 800; }
-    h2 { font-weight: 700; }
-    body, p, li, td, th, span, label { font-weight: 400; }
-    p,li,td,th,span,label { color: var(--text); }
-    .text-secondary { color: var(--text-secondary); }
-
-    /* Skip navigation */
-    .skip-link {
-      position: absolute; top: -40px; left: 16px; padding: 8px 16px;
-      background: var(--accent); color: white; text-decoration: none;
-      border-radius: 8px; z-index: 10000; font-weight: 600;
-    }
+    .skip-link { position: absolute; top: -40px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px; z-index: 10000; }
     .skip-link:focus { top: 16px; }
 
-    /* ===== CARD ===== */
-    .card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 24px; min-width: 280px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.5s ease-out both; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .reveal { opacity: 1; transform: none; } }
 
-    /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideInLeft {
-      from { opacity: 0; transform: translateX(-40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .animate { animation: fadeInUp 0.6s ease-out both; }
-    .animate.delay-1 { animation-delay: 0.1s; }
-    .animate.delay-2 { animation-delay: 0.2s; }
-    .animate.delay-3 { animation-delay: 0.3s; }
-    .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
-    
-    /* Staggered reveal for cards within chart sections */
-    .chart-container:nth-child(1) .reveal { transition-delay: 0.1s; }
-    .chart-container:nth-child(2) .reveal { transition-delay: 0.2s; }
-    .chart-container:nth-child(3) .reveal { transition-delay: 0.3s; }
-    .chart-container:nth-child(4) .reveal { transition-delay: 0.4s; }
+    @media print { body { background: #fff !important; color: #000 !important; } .viz-menu { display: none !important; } .reveal { opacity: 1 !important; transform: none !important; } * { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 
-    /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
-    .reveal { opacity: 0; transform: translateY(30px) scale(0.97); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible, [data-reveal].revealed { opacity: 1; transform: translateY(0) scale(1); }
-    [data-reveal] { transition-delay: calc(var(--i, 0) * 0.1s); }
-
-    /* Modern CSS scroll-driven animations (Chrome 115+) */
-    @supports (animation-timeline: view()) {
-      .scroll-reveal {
-        animation: fadeInUp 1ms linear;
-        animation-timeline: view();
-        animation-range: entry 0% entry 50%;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
-
-    /* ===== FOCUS INDICATORS ===== */
-    *:focus-visible { 
-      outline: 2px solid var(--accent, #6366f1); 
-      outline-offset: 3px;
-      border-radius: 4px;
-    }
-    a:focus-visible, button:focus-visible {
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
-    }
-
-    /* Chart tooltip */
-    .chart-tooltip { position: fixed; background: var(--surface); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; pointer-events: none; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 100; }
-    .chart-tooltip.visible { opacity: 1; }
-
-    /* ===== PRINT ===== */
-    @media print {
-      body { background: white !important; color: black !important; }
-      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
-      .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
-      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    }
-
-    /* ===== VISIBLE THEME TOGGLE ===== */
-    .theme-toggle-btn {
-      position: fixed; top: 16px; right: 72px; z-index: 9999;
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
-    .theme-toggle-btn:hover { background: var(--surface-hover); }
-    .theme-toggle-btn .sun { display: none; }
-    .theme-toggle-btn .moon { display: block; }
-    .theme-light .theme-toggle-btn .sun { display: block; }
-    .theme-light .theme-toggle-btn .moon { display: none; }
-
-    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
-    .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
+    .viz-menu-toggle { width: 40px; height: 40px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown {
-      position: absolute; top: 52px; right: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px;
-      opacity: 0; visibility: hidden; transform: translateY(-8px);
-      transition: all 0.2s; backdrop-filter: blur(16px);
-    }
+    .viz-menu-dropdown { position: absolute; top: 48px; right: 0; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.15s; }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text); font-size: 14px;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
-    }
+    .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown button:active { 
-      transform: scale(0.95);
-      transition: transform 0.1s ease;
-    }
-    
-    /* Advanced micro-interactions */
-    .stat-card, .chart-container, .comparison-section {
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .stat-card:hover, .chart-container:hover, .comparison-section:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-    }
 
-    /* ===== COMPARISON SPECIFIC ===== */
-    .container {
-      max-width: 1200px; margin: 0 auto; padding: 2rem 1rem;
-      container-type: inline-size;
-    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
 
-    .hero {
-      text-align: center; padding: 4rem 2rem;
-      background: linear-gradient(135deg, var(--remote) 0%, var(--office) 100%);
-      margin: -2rem -1rem 4rem -1rem; border-radius: 0 0 2rem 2rem;
-      position: relative; overflow: hidden;
-    }
+    /* Hero — infographic style, not dashboard */
+    .hero { padding: 80px 0 48px; text-align: center; }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 3.5rem); margin-bottom: 12px; }
+    .hero p { font-size: 1.0625rem; color: var(--text-secondary); max-width: 480px; margin: 0 auto; }
 
-    .hero::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.1); z-index: 1;
-    }
+    /* Big stat callouts — infographic hero numbers */
+    .hero-stats { display: flex; justify-content: center; gap: 48px; margin: 48px 0; flex-wrap: wrap; }
+    .hero-stat { text-align: center; }
+    .hero-stat-number { font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); display: block; }
+    .hero-stat-label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
-    .hero-content {
-      position: relative; z-index: 2;
-    }
+    /* Section divider */
+    .divider { height: 1px; background: var(--border); margin: 48px 0; }
 
-    .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 800; color: white; margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    }
+    /* Comparison sections — sequential flow, not grid */
+    .section-label { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); margin-bottom: 16px; }
 
-    .hero .subtitle {
-      font-size: clamp(1.125rem, 3vw, 1.5rem);
-      color: rgba(255,255,255,0.9); font-weight: 300;
-    }
+    .comparison-block { margin-bottom: 48px; }
+    .comparison-block h2 { font-size: 1.5rem; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+    .comparison-block h2 svg { width: 24px; height: 24px; color: var(--text-secondary); flex-shrink: 0; }
+    .comparison-block > p { color: var(--text-secondary); margin-bottom: 24px; }
 
-    .stats-overview {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem; margin: 4rem 0;
-    }
+    .pros-cons-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .pros-col h3, .cons-col h3 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+    .pros-col h3 { color: var(--positive); }
+    .cons-col h3 { color: var(--negative); }
+    .pros-col ul, .cons-col ul { list-style: none; padding: 0; }
+    .pros-col li, .cons-col li { font-size: 0.875rem; color: var(--text-secondary); padding: 6px 0; display: flex; gap: 8px; align-items: flex-start; }
+    .pros-col li::before { content: '+'; color: var(--positive); font-weight: 600; flex-shrink: 0; }
+    .cons-col li::before { content: '−'; color: var(--negative); font-weight: 600; flex-shrink: 0; }
 
-    .stat-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 2rem; text-align: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      border-color: var(--accent);
-    }
+    /* Charts */
+    .chart-section { margin-bottom: 48px; }
+    .chart-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.02em; }
+    .chart-section .chart-sub { font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 20px; }
+    .chart-wrapper { position: relative; height: 320px; }
 
-    .stat-number {
-      font-size: 3rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; display: block; margin-bottom: 0.5rem;
-    }
+    /* Verdict / conclusion — infographic style */
+    .verdict { text-align: center; padding: 64px 0; border-top: 1px solid var(--border); }
+    .verdict h2 { font-size: 2rem; margin-bottom: 12px; }
+    .verdict p { color: var(--text-secondary); max-width: 520px; margin: 0 auto; font-size: 1.0625rem; line-height: 1.6; }
+    .verdict-stat { display: inline-block; font-size: 4rem; font-weight: 700; letter-spacing: -0.04em; color: var(--accent); margin-bottom: 8px; }
 
-    .stat-label {
-      color: var(--text-secondary); font-size: 0.875rem;
-      text-transform: uppercase; letter-spacing: 0.05em;
-    }
-
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem; margin: 4rem 0;
-      align-items: start;
-    }
-
-    @container (width < 768px) {
-      .comparison-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-    }
-
-    .comparison-section {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 2.5rem; position: relative;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .comparison-section:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
-
-    .comparison-section.remote {
-      border-left: 4px solid var(--remote);
-    }
-
-    .comparison-section.office {
-      border-left: 4px solid var(--office);
-    }
-
-    .section-title {
-      font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 1rem;
-    }
-
-    .section-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .remote .section-icon {
-      background: color-mix(in oklch, var(--remote), transparent 85%);
-      color: var(--remote);
-    }
-
-    .office .section-icon {
-      background: color-mix(in oklch, var(--office), transparent 85%);
-      color: var(--office);
-    }
-
-    .pros-cons {
-      display: grid; gap: 2rem;
-    }
-
-    .pros, .cons {
-      background: var(--bg); border-radius: 0.75rem; padding: 1.5rem;
-    }
-
-    .pros {
-      border-left: 4px solid var(--positive);
-    }
-
-    .cons {
-      border-left: 4px solid var(--negative);
-    }
-
-    .pros-cons h4 {
-      font-weight: 600; margin-bottom: 1rem;
-      display: flex; align-items: center; gap: 0.5rem;
-    }
-
-    .pros-cons ul {
-      list-style: none; padding: 0;
-    }
-
-    .pros-cons li {
-      padding: 0.5rem 0; color: var(--text-secondary);
-      display: flex; align-items: flex-start; gap: 0.75rem;
-    }
-
-    .check-icon, .x-icon {
-      width: 16px; height: 16px; flex-shrink: 0;
-      margin-top: 0.125rem;
-    }
-
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 3rem; margin: 4rem 0;
-    }
-
-    @container (width < 500px) {
-      .charts-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-    }
-
-    .chart-container {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 1rem; padding: 2rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .chart-container:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      border-color: var(--accent);
-    }
-
-    .chart-title {
-      font-size: 1.25rem; font-weight: 600;
-      margin-bottom: 1.5rem; text-align: center;
-    }
-
-    .chart-wrapper {
-      position: relative; height: 300px;
-    }
-    
-    /* Chart element hover effects */
-    canvas { transition: filter 0.2s ease; }
-    canvas:hover { filter: brightness(1.05); }
-
-    .conclusion {
-      margin-top: 4rem; padding: 3rem;
-      background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent) 100%);
-      border-radius: 2rem; color: white;
-      text-align: center; position: relative; overflow: hidden;
-    }
-
-    .conclusion::before {
-      content: ''; position: absolute;
-      top: -20%; right: -10%; width: 150px; height: 150px;
-      background: rgba(255,255,255,0.1); border-radius: 50%;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-15px) rotate(5deg); }
-    }
-
-    .conclusion h2 {
-      font-size: 2.5rem; font-weight: 700;
-      margin-bottom: 1rem; z-index: 2; position: relative;
-    }
-
-    .conclusion p {
-      font-size: 1.125rem; opacity: 0.9;
-      max-width: 700px; margin: 0 auto;
-      z-index: 2; position: relative;
-    }
-
-    /* Chart grow animation */
-    @keyframes chartGrow {
-      from { opacity: 0; transform: scaleY(0.3); }
-      to { opacity: 1; transform: scaleY(1); }
-    }
-    .chart-wrapper canvas {
-      animation: chartGrow 0.8s ease-out both;
-      transform-origin: bottom;
-    }
-
-    /* Responsive improvements */
-    @container (width < 600px) {
-      .hero { padding: 2rem 1rem; margin-bottom: 2rem; }
-      .comparison-section { padding: 1.5rem; }
-      .chart-container { padding: 1.5rem; }
-      .conclusion { padding: 2rem; }
-      .section-title { font-size: 1.5rem; }
-    }
-
-    /* Media query fallbacks for mobile */
-    @media (max-width: 768px) {
-      .comparison-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .charts-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .stats-overview { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .hero { padding: 2rem 1rem; margin-bottom: 2rem; }
-      .stat-number { font-size: 2.25rem; }
-      .chart-wrapper { height: 250px; }
-    }
-    @media (max-width: 480px) {
-      .stats-overview { grid-template-columns: 1fr; }
-      .comparison-section { padding: 1.25rem; }
-      .section-title { font-size: 1.25rem; }
-      .section-icon { width: 36px; height: 36px; }
-      .conclusion h2 { font-size: 1.75rem; }
+    @media (max-width: 640px) {
+      .hero-stats { gap: 24px; }
+      .hero-stat-number { font-size: 2.25rem; }
+      .pros-cons-row { grid-template-columns: 1fr; }
+      .chart-wrapper { height: 260px; }
     }
   </style>
 </head>
 <body>
-  <div class="chart-tooltip" id="chartTooltip"></div>
-  <main id="main-content">
-    <a href="#main-content" class="skip-link">Skip to content</a>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <!-- Visible theme toggle -->
-    <button class="theme-toggle-btn" onclick="cycleTheme()" aria-label="Toggle light/dark theme">
-      <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
     </button>
-
-    <!-- MENU -->
-    <div class="viz-menu">
-      <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-        </svg>
-      </button>
-      <div class="viz-menu-dropdown" id="vizMenuDropdown">
-        <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-        <button onclick="downloadImage()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/>
-          </svg>
-          <span>Download PNG</span>
-        </button>
-        <button onclick="window.print()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-          </svg>
-          <span>Print / PDF</span>
-        </button>
-      </div>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><span>📥</span> Download PNG</button>
+      <button onclick="window.print()"><span>🖨️</span> Print / PDF</button>
     </div>
+  </div>
 
+  <main id="main-content">
     <div class="container">
+
       <header class="hero animate">
-        <div class="hero-content">
-          <h1>Remote Work vs Office Work</h1>
-          <p class="subtitle">A comprehensive comparison of modern work environments</p>
-        </div>
+        <h1>Remote vs Office Work</h1>
+        <p>A data-driven look at the modern work environment debate</p>
       </header>
 
-      <section class="stats-overview" role="region" aria-label="Work Environment Statistics" data-reveal>
-        <div class="stat-card animate delay-1" data-reveal style="--i: 1">
-          <span class="stat-number" data-count="42" data-suffix="%">42%</span>
-          <span class="stat-label">Remote Workers Globally</span>
+      <section class="hero-stats animate" role="region" aria-label="Key statistics">
+        <div class="hero-stat">
+          <span class="hero-stat-number" data-count="42" data-suffix="%">42%</span>
+          <span class="hero-stat-label">Work Remote</span>
         </div>
-        <div class="stat-card animate delay-2" data-reveal style="--i: 2">
-          <span class="stat-number" data-count="16" data-suffix="%">16%</span>
-          <span class="stat-label">Productivity Increase</span>
+        <div class="hero-stat">
+          <span class="hero-stat-number" data-count="16" data-suffix="%">+16%</span>
+          <span class="hero-stat-label">Productivity Gain</span>
         </div>
-        <div class="stat-card animate delay-3" data-reveal style="--i: 3">
-          <span class="stat-number" data-count="54">54</span>
-          <span class="stat-label">Minutes Saved Daily</span>
+        <div class="hero-stat">
+          <span class="hero-stat-number" data-count="54">54</span>
+          <span class="hero-stat-label">Minutes Saved/Day</span>
         </div>
-        <div class="stat-card animate delay-4" data-reveal style="--i: 4">
-          <span class="stat-number" data-count="73" data-suffix="%">73%</span>
-          <span class="stat-label">Prefer Hybrid Model</span>
+        <div class="hero-stat">
+          <span class="hero-stat-number" data-count="73" data-suffix="%">73%</span>
+          <span class="hero-stat-label">Prefer Hybrid</span>
         </div>
       </section>
 
-      <div class="comparison-grid" role="region" aria-label="Remote vs Office comparison" data-reveal>
-        <article class="comparison-section remote" data-reveal style="--i: 1" role="group" aria-label="Remote Work">
-          <div class="section-title">
-            <div class="section-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/>
-              </svg>
-            </div>
-            Remote Work
-          </div>
-          
-          <div class="pros-cons">
-            <div class="pros">
-              <h4>
-                <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                </svg>
-                Advantages
-              </h4>
-              <ul>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  No daily commute saves 54 minutes on average
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Better work-life balance and flexibility
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  16% increase in productivity reported
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Lower overhead costs for companies
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Access to global talent pool
-                </li>
-              </ul>
-            </div>
-            
-            <div class="cons">
-              <h4>
-                <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                </svg>
-                Challenges
-              </h4>
-              <ul>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Increased feelings of isolation
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Communication barriers and delays
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Home distractions and boundaries
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Technology setup and maintenance
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Reduced career advancement opportunities
-                </li>
-              </ul>
-            </div>
-          </div>
-        </article>
+      <div class="divider"></div>
 
-        <article class="comparison-section office" data-reveal style="--i: 2" role="group" aria-label="Office Work">
-          <div class="section-title">
-            <div class="section-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/>
-              </svg>
-            </div>
-            Office Work
+      <!-- Remote Work section -->
+      <section class="comparison-block" data-reveal>
+        <div class="section-label">Part 1</div>
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Remote Work
+        </h2>
+        <p>The flexibility revolution — working from anywhere with digital-first collaboration.</p>
+        <div class="pros-cons-row">
+          <div class="pros-col">
+            <h3>Advantages</h3>
+            <ul>
+              <li>No commute saves 54 minutes daily</li>
+              <li>Better work-life balance</li>
+              <li>16% productivity increase</li>
+              <li>Lower overhead costs</li>
+              <li>Access to global talent</li>
+            </ul>
           </div>
-          
-          <div class="pros-cons">
-            <div class="pros">
-              <h4>
-                <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                </svg>
-                Advantages
-              </h4>
-              <ul>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Face-to-face collaboration and spontaneous interactions
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Clear work-life boundaries
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Better mentorship and learning opportunities
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Immediate IT support and resources
-                </li>
-                <li>
-                  <svg class="check-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m1.5 8 3.5 3.5L13.5 3"/>
-                  </svg>
-                  Stronger company culture and team bonding
-                </li>
-              </ul>
-            </div>
-            
-            <div class="cons">
-              <h4>
-                <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                </svg>
-                Challenges
-              </h4>
-              <ul>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Daily commute stress and time loss
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Office distractions and interruptions
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Higher overhead costs (rent, utilities, supplies)
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Less flexibility in work hours
-                </li>
-                <li>
-                  <svg class="x-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m11.25 4.75-6.5 6.5m0-6.5 6.5 6.5"/>
-                  </svg>
-                  Limited talent pool to local area
-                </li>
-              </ul>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <section class="charts-grid" aria-label="Work Environment Statistics Charts" data-reveal>
-        <div role="img" aria-label="Productivity comparison chart showing remote workers have 16% higher productivity than office workers">
-          <div class="chart-container" data-reveal style="--i: 1">
-            <h3 class="chart-title">Productivity Comparison</h3>
-            <div class="chart-wrapper">
-              <canvas id="productivityChart"></canvas>
-            </div>
-          </div>
-          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Remote work scores — Task Completion: 116, Quality: 118, Hours Worked: 95, Overall: 116. Office work baseline: 100 for all categories.</div>
-        </div>
-
-        <div role="img" aria-label="Employee satisfaction chart comparing different aspects of remote versus office work">
-          <div class="chart-container" data-reveal style="--i: 2">
-            <h3 class="chart-title">Employee Satisfaction</h3>
-            <div class="chart-wrapper">
-              <canvas id="satisfactionChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <div role="img" aria-label="Work preference pie chart showing 73% prefer hybrid, 19% remote only, 8% office only">
-          <div class="chart-container" data-reveal style="--i: 3">
-            <h3 class="chart-title">Work Preference Distribution</h3>
-            <div class="chart-wrapper">
-              <canvas id="preferenceChart"></canvas>
-            </div>
-          </div>
-          <div class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Data summary: Hybrid 73%, Remote Only 19%, Office Only 8%.</div>
-        </div>
-
-        <div role="img" aria-label="Cost analysis bar chart comparing annual costs of remote versus office work setups">
-          <div class="chart-container" data-reveal style="--i: 4">
-            <h3 class="chart-title">Annual Cost Analysis</h3>
-            <div class="chart-wrapper">
-              <canvas id="costChart"></canvas>
-            </div>
+          <div class="cons-col">
+            <h3>Challenges</h3>
+            <ul>
+              <li>Increased isolation</li>
+              <li>Communication barriers</li>
+              <li>Home distractions</li>
+              <li>Tech setup burden</li>
+              <li>Fewer promotion opportunities</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <section class="conclusion" data-reveal style="--i: 1">
+      <!-- Office Work section -->
+      <section class="comparison-block" data-reveal>
+        <div class="section-label">Part 2</div>
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+          Office Work
+        </h2>
+        <p>The traditional model — structured environments built for in-person collaboration.</p>
+        <div class="pros-cons-row">
+          <div class="pros-col">
+            <h3>Advantages</h3>
+            <ul>
+              <li>Face-to-face collaboration</li>
+              <li>Clear work-life boundaries</li>
+              <li>Better mentorship access</li>
+              <li>Immediate IT support</li>
+              <li>Stronger team culture</li>
+            </ul>
+          </div>
+          <div class="cons-col">
+            <h3>Challenges</h3>
+            <ul>
+              <li>Commute stress and time</li>
+              <li>Office interruptions</li>
+              <li>Higher costs ($20K/yr per seat)</li>
+              <li>Rigid schedules</li>
+              <li>Limited to local talent</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Data section -->
+      <section class="chart-section" data-reveal>
+        <div class="section-label">The Data</div>
+        <h3>Productivity Comparison</h3>
+        <p class="chart-sub">Indexed scores (office baseline = 100)</p>
+        <div role="img" aria-label="Bar chart comparing remote vs office productivity metrics">
+          <div class="chart-wrapper"><canvas id="productivityChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="chart-section" data-reveal>
+        <h3>Employee Satisfaction</h3>
+        <p class="chart-sub">Self-reported satisfaction across six dimensions</p>
+        <div role="img" aria-label="Radar chart of employee satisfaction across six dimensions">
+          <div class="chart-wrapper"><canvas id="satisfactionChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="chart-section" data-reveal>
+        <h3>Work Preference Distribution</h3>
+        <p class="chart-sub">What workers actually want</p>
+        <div role="img" aria-label="Doughnut chart showing 73% prefer hybrid, 19% remote, 8% office">
+          <div class="chart-wrapper" style="height: 280px;"><canvas id="preferenceChart"></canvas></div>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Verdict -->
+      <section class="verdict" data-reveal>
+        <span class="verdict-stat">73%</span>
         <h2>The Future is Hybrid</h2>
-        <p>
-          Research shows that 73% of workers prefer a hybrid model, combining the best of both worlds. 
-          The most successful companies will offer flexibility, allowing employees to choose the work 
-          environment that maximizes their productivity and well-being.
-        </p>
+        <p>The data is clear: most workers prefer flexibility. The most successful companies will offer hybrid models that combine the best of both worlds.</p>
       </section>
+
     </div>
   </main>
 
   <script>
-    // === Chart Variables ===
-    var productivityChart, satisfactionChart, preferenceChart, costChart;
+    var productivityChart, satisfactionChart, preferenceChart;
 
-    // === Menu ===
     function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', function(e) { 
-      if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
-    document.addEventListener('keydown', function(e) { 
-      if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); 
-    });
+    document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme ===
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
       document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
-      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
+      localStorage.setItem('viz-theme', t); currentTheme = t;
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    // === Scroll Reveal ===
     document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { 
-        if (e.isIntersecting) { 
-          e.target.classList.add('visible'); e.target.classList.add('revealed'); 
-          revealObserver.unobserve(e.target); 
-        } 
-      });
-    }, { threshold: 0.15 });
-    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+    var ro = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } }); }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(function(el) { ro.observe(el); });
+    setTimeout(function() { document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); }, 500);
 
-    // Also observe individual data-reveal children
-    document.querySelectorAll('[data-reveal]').forEach(function(el) {
-      if (!el.classList.contains('reveal')) {
-        revealObserver.observe(el);
-      }
-    });
-
-    // Force reveal all elements after 500ms for screenshots
-    setTimeout(function() { 
-      document.querySelectorAll('.reveal, [data-reveal]').forEach(function(el) { 
-        el.classList.add('visible'); 
-        el.classList.add('revealed');
-      }); 
-    }, 500);
-
-    // === Number Counter ===
     function animateCounters() {
       document.querySelectorAll('[data-count]').forEach(function(el) {
-        if (el.dataset.counted) return;
-        el.dataset.counted = '1';
-        var target = parseFloat(el.dataset.count);
-        var prefix = el.dataset.prefix || '';
-        var suffix = el.dataset.suffix || '';
-        var start = performance.now();
-        var duration = 1200;
-        
-        function tick(now) {
-          var progress = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          var current = Math.round(target * eased);
-          el.textContent = prefix + current.toLocaleString() + suffix;
-          if (progress < 1) requestAnimationFrame(tick);
-        }
-        tick(start);
+        if (el.dataset.counted) return; el.dataset.counted = '1';
+        var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
+        var start = performance.now(), dur = 1000;
+        (function tick(now) { var p = Math.min((now - start) / dur, 1), e = 1 - Math.pow(1 - p, 3); el.textContent = prefix + Math.round(target * e).toLocaleString() + suffix; if (p < 1) requestAnimationFrame(tick); })(start);
       });
     }
+    var ce = document.querySelector('[data-count]');
+    if (ce) { var co = new IntersectionObserver(function(es) { es.forEach(function(e) { if (e.isIntersecting) { animateCounters(); co.disconnect(); } }); }, { threshold: 0.3 }); co.observe(ce); }
 
-    var counterEl = document.querySelector('[data-count]');
-    if (counterEl) {
-      var counterObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { 
-          if (e.isIntersecting) { 
-            animateCounters(); 
-            counterObserver.disconnect(); 
-          } 
-        });
-      }, { threshold: 0.3 });
-      counterObserver.observe(counterEl);
+    function getColors() {
+      var s = getComputedStyle(document.documentElement);
+      return { text: s.getPropertyValue('--text').trim(), sub: s.getPropertyValue('--text-secondary').trim(), border: s.getPropertyValue('--border').trim(), surface: s.getPropertyValue('--surface').trim(), remote: s.getPropertyValue('--remote').trim(), office: s.getPropertyValue('--office').trim(), accent: s.getPropertyValue('--accent').trim() };
     }
+    function resetCanvas(id) { var o = document.getElementById(id), p = o.parentNode, c = document.createElement('canvas'); c.id = id; p.replaceChild(c, o); return c; }
 
-    // === Chart Theme Helper ===
-    function getChartColors() {
-      var root = getComputedStyle(document.documentElement);
-      return {
-        text: root.getPropertyValue('--text').trim(),
-        textSecondary: root.getPropertyValue('--text-secondary').trim(),
-        border: root.getPropertyValue('--border').trim(),
-        surface: root.getPropertyValue('--surface').trim(),
-        remote: root.getPropertyValue('--remote').trim(),
-        office: root.getPropertyValue('--office').trim(),
-        accent: root.getPropertyValue('--accent').trim(),
-        accentSecondary: root.getPropertyValue('--accent-secondary').trim()
-      };
-    }
-
-    function resetCanvas(id) {
-      var oldCanvas = document.getElementById(id);
-      var parent = oldCanvas.parentNode;
-      var newCanvas = document.createElement('canvas');
-      newCanvas.id = id;
-      parent.replaceChild(newCanvas, oldCanvas);
-      return newCanvas;
-    }
-
-    // === Build Charts ===
     function buildCharts() {
-      var colors = getChartColors();
-      
-      Chart.defaults.color = colors.textSecondary;
-      Chart.defaults.borderColor = colors.border;
+      var c = getColors();
+      Chart.defaults.color = c.sub;
+      Chart.defaults.borderColor = 'transparent';
 
-      // Destroy existing charts
       try { if (productivityChart) productivityChart.destroy(); } catch(e) {}
       try { if (satisfactionChart) satisfactionChart.destroy(); } catch(e) {}
       try { if (preferenceChart) preferenceChart.destroy(); } catch(e) {}
-      try { if (costChart) costChart.destroy(); } catch(e) {}
 
-      // Productivity Chart
+      var tooltipStyle = { backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1, padding: 12, cornerRadius: 8, titleFont: { size: 14 }, bodyFont: { size: 13 } };
+
       productivityChart = new Chart(resetCanvas('productivityChart'), {
         type: 'bar',
-        data: {
-          labels: ['Task Completion', 'Quality Score', 'Hours Worked', 'Overall Rating'],
-          datasets: [{
-            label: 'Remote Work',
-            data: [116, 118, 95, 116],
-            backgroundColor: colors.remote,
-            borderRadius: 8
-          }, {
-            label: 'Office Work',
-            data: [100, 100, 100, 100],
-            backgroundColor: colors.office,
-            borderRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1
-            },
-            legend: {
-              position: 'top',
-              labels: { color: colors.text }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 120,
-              grid: { color: colors.border },
-              ticks: { color: colors.textSecondary }
-            },
-            x: {
-              grid: { color: colors.border },
-              ticks: { color: colors.textSecondary }
-            }
-          }
-        }
+        data: { labels: ['Task Completion', 'Quality Score', 'Hours Worked', 'Overall Rating'],
+          datasets: [
+            { label: 'Remote', data: [116, 118, 95, 116], backgroundColor: c.remote, borderRadius: 4 },
+            { label: 'Office', data: [100, 100, 100, 100], backgroundColor: c.office, borderRadius: 4 }
+          ] },
+        options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 20, right: 20, bottom: 10, left: 10 } },
+          plugins: { tooltip: { enabled: true, mode: 'index', intersect: false, ...tooltipStyle }, legend: { position: 'top', labels: { color: c.text, font: { size: 13 }, usePointStyle: true, pointStyle: 'circle', padding: 20 } } },
+          scales: { y: { beginAtZero: true, max: 130, grid: { color: c.border }, ticks: { color: c.sub, font: { size: 13 } }, border: { display: false } }, x: { grid: { display: false }, ticks: { color: c.sub, font: { size: 13 }, maxRotation: 0 }, border: { display: false } } } }
       });
 
-      // Satisfaction Chart
       satisfactionChart = new Chart(resetCanvas('satisfactionChart'), {
         type: 'radar',
-        data: {
-          labels: ['Work-Life Balance', 'Stress Level', 'Collaboration', 'Focus Time', 'Career Growth', 'Job Satisfaction'],
-          datasets: [{
-            label: 'Remote Work',
-            data: [90, 75, 65, 85, 70, 80],
-            backgroundColor: colors.remote + '20',
-            borderColor: colors.remote,
-            pointBackgroundColor: colors.remote,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-            borderWidth: 3
-          }, {
-            label: 'Office Work',
-            data: [65, 60, 85, 70, 80, 75],
-            backgroundColor: colors.office + '20',
-            borderColor: colors.office,
-            pointBackgroundColor: colors.office,
-            pointRadius: 6,
-            pointHoverRadius: 8,
-            borderWidth: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1
-            },
-            legend: {
-              position: 'top',
-              labels: { color: colors.text }
-            }
-          },
-          scales: {
-            r: {
-              beginAtZero: true,
-              max: 100,
-              grid: { color: colors.border },
-              angleLines: { color: colors.border },
-              pointLabels: { color: colors.textSecondary, font: { size: 11 } }
-            }
-          }
-        }
+        data: { labels: ['Work-Life Balance', 'Stress Level', 'Collaboration', 'Focus Time', 'Career Growth', 'Satisfaction'],
+          datasets: [
+            { label: 'Remote', data: [90, 75, 65, 85, 70, 80], backgroundColor: c.remote + '18', borderColor: c.remote, pointBackgroundColor: c.remote, pointRadius: 0, pointHoverRadius: 6, borderWidth: 2 },
+            { label: 'Office', data: [65, 60, 85, 70, 80, 75], backgroundColor: c.office + '18', borderColor: c.office, pointBackgroundColor: c.office, pointRadius: 0, pointHoverRadius: 6, borderWidth: 2 }
+          ] },
+        options: { responsive: true, maintainAspectRatio: false, layout: { padding: 20 },
+          plugins: { tooltip: { enabled: true, ...tooltipStyle }, legend: { position: 'top', labels: { color: c.text, font: { size: 13 }, usePointStyle: true, padding: 20 } } },
+          scales: { r: { beginAtZero: true, max: 100, grid: { color: c.border }, angleLines: { color: c.border }, pointLabels: { color: c.sub, font: { size: 13 } }, ticks: { display: false } } } }
       });
 
-      // Preference Chart
       preferenceChart = new Chart(resetCanvas('preferenceChart'), {
         type: 'doughnut',
-        data: {
-          labels: ['Hybrid', 'Remote Only', 'Office Only'],
-          datasets: [{
-            data: [73, 19, 8],
-            backgroundColor: [colors.accent, colors.remote, colors.office],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1,
-              callbacks: {
-                label: function(context) {
-                  return context.label + ': ' + context.parsed + '%';
-                }
-              }
-            },
-            legend: {
-              position: 'bottom',
-              labels: { 
-                color: colors.text,
-                padding: 20,
-                usePointStyle: true
-              }
-            }
-          }
-        }
-      });
-
-      // Cost Chart
-      costChart = new Chart(resetCanvas('costChart'), {
-        type: 'bar',
-        data: {
-          labels: ['Office Space', 'Equipment', 'Utilities', 'Internet/Phone', 'Commute', 'Total'],
-          datasets: [{
-            label: 'Remote Work ($)',
-            data: [0, 800, 200, 600, 0, 1600],
-            backgroundColor: colors.remote,
-            borderRadius: 8
-          }, {
-            label: 'Office Work ($)',
-            data: [12000, 1200, 2400, 800, 3600, 20000],
-            backgroundColor: colors.office,
-            borderRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false,
-              backgroundColor: colors.surface,
-              titleColor: colors.text,
-              bodyColor: colors.text,
-              borderColor: colors.border,
-              borderWidth: 1,
-              callbacks: {
-                label: function(context) {
-                  return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
-                }
-              }
-            },
-            legend: {
-              position: 'top',
-              labels: { color: colors.text }
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: colors.border },
-              ticks: { 
-                color: colors.textSecondary,
-                callback: function(value) {
-                  return '$' + value.toLocaleString();
-                }
-              }
-            },
-            x: {
-              grid: { color: colors.border },
-              ticks: { color: colors.textSecondary }
-            }
-          }
-        }
+        data: { labels: ['Hybrid', 'Remote Only', 'Office Only'], datasets: [{ data: [73, 19, 8], backgroundColor: [c.accent, c.remote, c.office], borderWidth: 0 }] },
+        options: { responsive: true, maintainAspectRatio: false, layout: { padding: 20 },
+          plugins: { tooltip: { enabled: true, ...tooltipStyle, callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.parsed + '%'; } } },
+            legend: { position: 'bottom', labels: { color: c.text, font: { size: 13 }, usePointStyle: true, padding: 20 } } }, cutout: '65%' }
       });
     }
 
-    // Theme change handler for chart re-rendering
-    function onThemeChange() {
-      setTimeout(buildCharts, 100);
-    }
+    function onThemeChange() { setTimeout(buildCharts, 50); }
+    setTimeout(buildCharts, 300);
 
-    // Initial chart build
-    setTimeout(buildCharts, 1000);
-
-    // === Download PNG ===
     async function downloadImage() {
-      var menu = document.querySelector('.viz-menu');
-      menu.style.display = 'none';
-      try {
-        var url = await htmlToImage.toPng(document.body, { 
-          quality: 1, 
-          pixelRatio: 2, 
-          filter: function(node) { 
-            return !node.classList || !node.classList.contains('viz-menu'); 
-          } 
-        });
-        var link = document.createElement('a');
-        link.href = url;
-        link.download = 'remote-vs-office-comparison.png';
-        link.click();
-      } catch(error) { 
-        console.error('Download failed:', error); 
-      }
-      menu.style.display = '';
+      var m = document.querySelector('.viz-menu'); m.style.display = 'none';
+      try { var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } }); var a = document.createElement('a'); a.href = url; a.download = 'remote-vs-office.png'; a.click(); } catch(e) { console.error(e); }
+      m.style.display = '';
     }
   </script>
 </body>

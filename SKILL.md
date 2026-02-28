@@ -57,14 +57,20 @@ Apply these defaults. They are opinionated and tested — override only when use
 
 ### Typography
 - **Primary font:** Inter via Google Fonts CDN — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
-- **Professional letter-spacing:** Apply tight tracking like Apple/Stripe:
-  - **Headings (h1-h3):** `letter-spacing: -0.02em` for tighter feel
-  - **Body text:** `letter-spacing: -0.01em` for refined readability
+- **Professional letter-spacing (Apple/Stripe-inspired):**
+  - **Hero headings (h1):** `letter-spacing: -0.03em` — tight like Apple keynote titles
+  - **Section headings (h2-h3):** `letter-spacing: -0.02em`
+  - **Body text:** `letter-spacing: -0.011em` for refined readability
+  - **Labels/caps:** `letter-spacing: 0.05em` for small uppercase text
   - **Font features:** `font-feature-settings: 'cv11', 'ss01';` for Inter's stylistic alternates
-- **Font-weight contrast:** Clear hierarchy with stronger weight differences:
-  - **h1:** `font-weight: 800` (extrabold)
-  - **h2:** `font-weight: 700` (bold)
+- **Font-weight hierarchy (Stripe-inspired):**
+  - **h1:** `font-weight: 700` (bold, not 800 — optically cleaner at large sizes)
+  - **h2:** `font-weight: 600` (semibold)
+  - **Card titles:** `font-weight: 600`
   - **Body text:** `font-weight: 400` (regular)
+  - **Labels:** `font-weight: 500` (medium)
+- **Text colors (Vercel-inspired):** Never pure white. Use `#ededed` or `var(--text)` which maps to `#f5f5f7` in dark mode. Secondary text at 60% opacity feel (`#888` or `var(--text-secondary)`)
+- **NO gradient text on headings** — use solid colors only. Gradient text looks cheap at scale.
 - **Multilingual support:** When content includes non-Latin text (Korean, Japanese, Chinese, etc.), add the appropriate Google Fonts:
   - **Korean:** Noto Sans KR — `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap`
   - **Japanese:** Noto Sans JP — `https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&display=swap`
@@ -201,19 +207,19 @@ Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f4
 - **Card gaps:** `gap-6` minimum
 
 ### Card Hover Microinteractions
-All cards, stat items, and interactive containers MUST have hover effects:
+All cards should have subtle hover effects — shadow elevation ONLY, no transforms:
 ```css
 .card, .stat-card, .kpi-card, .stat-item, .chart-container {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 .card:hover, .stat-card:hover, .kpi-card:hover, .stat-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
 }
 ```
-- Timeline items: subtle highlight on hover
-- Architecture nodes: `translateY(-4px) scale(1.02)` on hover
-- List items in slide decks: `translateX(4px)` on hover
+- NO `translateY` or `scale` on card hover — it looks cheap
+- Timeline items: subtle background highlight on hover
+- Architecture nodes: subtle shadow elevation on hover
+- List items: subtle background tint on hover, not translateX
 
 ### :focus-visible Standard
 Every file MUST include:
@@ -243,13 +249,25 @@ Always add `<title>` elements inside SVG shapes for native browser tooltips:
 </rect>
 ```
 
-### Visual Polish
-- **Refined rounded corners:** `8-10px` border-radius for cards (more refined than 16px)
-- **Subtle multi-layer shadows:** `box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)` for depth without glow
-- **Clean card borders:** `border: 1px solid var(--border)` instead of gradient top-borders
-- **Glass morphism cards:** `backdrop-blur-md bg-white/5 border border-white/10 rounded-xl` (when appropriate)
-- **Restrained accents:** Use accent colors sparingly, not everywhere
-- **Transitions:** `transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1)` (Material standard)
+### Visual Polish (Stripe/Vercel-level)
+- **Border radius:** `8px` consistently (not 12px, not 16px — Stripe uses 8px)
+- **Shadows (dark mode):** Almost none — `box-shadow: 0 0 0 1px var(--border)` is sufficient. Let borders do the work.
+- **Shadows (light mode):** Subtle layers — `box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05)`
+- **Card hover:** Shadow deepens slightly. NO translateY, NO scale transforms. Just: `box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 8px 16px rgba(0,0,0,0.08)`
+- **Clean card borders:** `border: 1px solid var(--border)` — no gradient borders, no colored left/top borders
+- **Glass morphism:** Use sparingly, only for floating UI elements (menus, tooltips), not cards
+- **Restrained accents:** Use accent color for ONE thing per section (a button, a link, an icon) — not everywhere
+- **Transitions:** `transition: box-shadow 0.2s ease` — only animate what changes
+
+### Visual Restraint Anti-Patterns (NEVER DO)
+- ❌ **Floating gradient orbs** — decorative blurred circles behind content look amateurish
+- ❌ **Rainbow/gradient borders** — colored top-borders or left-borders on cards scream "template"
+- ❌ **Gradient text** on headings — use solid colors. Gradient text is a 2020 trend that aged poorly
+- ❌ **Scale transforms on hover** — `scale(1.02)` on cards feels janky, not premium
+- ❌ **Glow effects** — `box-shadow: 0 0 20px rgba(blue)` never looks good
+- ❌ **Decorative animations** — spinning rings, floating particles, pulsing dots are noise
+- ❌ **Color-coded borders** — left/top colored borders on cards feel like Bootstrap components
+- ❌ **Stat numbers with gradient text** — use a solid accent color or var(--text) instead
 
 ### Accessibility (Mandatory)
 
@@ -585,11 +603,11 @@ Use these when they add value. See [references/css-techniques.md](references/css
     }
     h1,h2,h3,h4,h5,h6 { 
       color: var(--text); 
-      letter-spacing: -0.02em; 
-      line-height: 1.1;
+      letter-spacing: -0.03em; 
+      line-height: 1.08;
     }
-    h1 { font-weight: 800; }
-    h2 { font-weight: 700; }
+    h1 { font-weight: 700; }
+    h2 { font-weight: 600; }
     body, p, li, td, th, span, label { font-weight: 400; }
     p,li,td,th,span,label { color: var(--text); }
     .text-secondary { color: var(--text-secondary); }
@@ -597,13 +615,11 @@ Use these when they add value. See [references/css-techniques.md](references/css
     /* ===== CARD ===== */
     .card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 10px; padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 8px; padding: 24px;
+      transition: box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
     }
 
     /* ===== ANIMATIONS (CSS-first — always reliable) ===== */
@@ -831,8 +847,12 @@ Charts are the second most common failure. Follow these rules:
   }
   ```
 - **Minimum chart height:** 300px on desktop, 250px on mobile
-- **Font size defaults:** Increase readability with labels at 13px, titles at 15px minimum
-- **Chart padding:** Add `layout: { padding: 16 }` for breathing room around charts
+- **Font size defaults:** Axis tick labels at 13px minimum, axis titles at 14px, chart titles at 16px minimum. Legend at 13px.
+- **Chart padding:** Add `layout: { padding: { top: 20, right: 20, bottom: 20, left: 20 } }` for breathing room
+- **Axis tick config:** `maxRotation: 0` to keep labels horizontal. If labels overflow, use `maxTicksLimit` to reduce count
+- **Grid lines:** Very faint — `rgba(255,255,255,0.04)` in dark, `rgba(0,0,0,0.06)` in light
+- **Tooltip styling:** `padding: 12`, `cornerRadius: 8`, `titleFont: { size: 14 }`, `bodyFont: { size: 13 }`
+- **Point radius:** 0 by default, 6 on hover — cleaner line charts
 - **Set `maintainAspectRatio: false`** and control size via CSS container
 - **Use theme-aware colors:** read CSS vars at render time, re-render on theme change
 - **Chart text colors:** set `Chart.defaults.color = getComputedStyle(root).getPropertyValue('--text-secondary').trim()`

@@ -3,688 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern Product Launch - Slide Deck Demo</title>
+  <title>Next-Gen Analytics Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { interpolate-size: allow-keywords; }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #9ca3af;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      }
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      }
-    }
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-      --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #9ca3af;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
-      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-    }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-      --border: rgba(0,0,0,0.08);
-      --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
-      --positive: #059669; --negative: #e11d48; --warning: #d97706;
-    }
+    .theme-dark { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #888; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
+    .theme-light { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #0070f3; --accent-secondary: #7928ca; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
-      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
-      transition: background 0.3s, color 0.3s; overflow: hidden;
-    }
-    h1,h2,h3,h4,h5,h6 { 
-      color: var(--text); 
-      letter-spacing: -0.02em; 
-      line-height: 1.1;
-    }
-    h1 { font-weight: 800; }
-    h2 { font-weight: 700; }
-    body, p, li, td, th, span, label { font-weight: 400; }
-    p,li,td,th,span,label { color: var(--text); }
-    .text-secondary { color: var(--text-secondary); }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; letter-spacing: -0.011em; overflow: hidden; }
+    h1, h2, h3 { color: var(--text); letter-spacing: -0.03em; line-height: 1.08; font-weight: 700; }
+    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
-    .skip-link {
-      position: absolute; top: -40px; left: 16px; padding: 8px 16px;
-      background: var(--accent); color: white; text-decoration: none;
-      border-radius: 8px; z-index: 10000; font-weight: 600;
-    }
+    .skip-link { position: absolute; top: -40px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px; z-index: 10000; }
     .skip-link:focus { top: 16px; }
 
-    /* ===== ANIMATIONS ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes titleReveal {
-      0% { opacity: 0; transform: translateY(40px) scale(0.95); filter: blur(8px); }
-      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-    }
-    @keyframes subtitleReveal {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 0.9; transform: translateY(0); }
-    }
-    @keyframes lineGrow {
-      from { transform: scaleX(0); }
-      to { transform: scaleX(1); }
-    }
-    /* Removed floating orb animations for visual restraint */
-    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    @media print { body { background: #fff !important; color: #000 !important; overflow: visible; } .viz-menu, .slide-nav { display: none !important; } .slide { position: static !important; page-break-after: always; } * { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 
-    .animate { animation: fadeInUp 0.6s ease-out both; }
-    .animate.delay-1 { animation-delay: 0.1s; }
-    .animate.delay-2 { animation-delay: 0.2s; }
-    .animate.delay-3 { animation-delay: 0.3s; }
-    .animate.delay-4 { animation-delay: 0.4s; }
-    .animate.delay-5 { animation-delay: 0.5s; }
-    .animate.delay-6 { animation-delay: 0.6s; }
-    
-    /* Staggered reveal for cards within sections */
-    .stat-item:nth-child(1) { animation-delay: 0.1s; }
-    .stat-item:nth-child(2) { animation-delay: 0.2s; }
-    .stat-item:nth-child(3) { animation-delay: 0.3s; }
-    .stat-item:nth-child(4) { animation-delay: 0.4s; }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-    }
-    *:focus-visible { outline: 2px solid var(--accent, #6366f1); outline-offset: 3px; border-radius: 4px; }
-    a:focus-visible, button:focus-visible { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3); }
-
-    @media print {
-      body { background: white !important; color: black !important; overflow: visible; }
-      .viz-menu, .slide-nav, .theme-toggle-btn { display: none !important; }
-      .slide { transform: none !important; position: static !important; page-break-after: always; }
-      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    }
-
-    /* Slide transition enhancements */
-    .slide { transition: opacity 0.4s ease, transform 0.4s ease; }
-    .slide:not(.active-slide) { opacity: 0.3; }
-    .slide.active-slide { opacity: 1; }
-
-    /* Scroll-reveal stagger for slide elements */
-    [data-reveal] { transition-delay: calc(var(--i, 0) * 0.1s); }
-
-    /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
-    .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
+    .viz-menu-toggle { width: 40px; height: 40px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown {
-      position: absolute; top: 52px; right: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px;
-      opacity: 0; visibility: hidden; transform: translateY(-8px);
-      transition: all 0.2s; backdrop-filter: blur(16px);
-    }
+    .viz-menu-dropdown { position: absolute; top: 48px; right: 0; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.15s; }
     .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text); font-size: 14px;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
-    }
+    .viz-menu-dropdown button { width: 100%; padding: 8px 12px; border: none; border-radius: 6px; background: transparent; color: var(--text); font-size: 13px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 8px; }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
-    /* ===== VISIBLE THEME TOGGLE ===== */
-    .theme-toggle-btn {
-      position: fixed; top: 16px; right: 72px; z-index: 9999;
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-    }
-    .theme-toggle-btn:hover { background: var(--surface-hover); }
-    .theme-toggle-btn .sun { display: none; }
-    .theme-toggle-btn .moon { display: block; }
-    .theme-light .theme-toggle-btn .sun { display: block; }
-    .theme-light .theme-toggle-btn .moon { display: none; }
+    /* Slides */
+    .slides-container { display: flex; height: 100vh; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px; text-align: center; position: relative; }
 
-    /* ===== SLIDE DECK ===== */
-    .slide-deck {
-      width: 100vw; height: 100vh; position: relative; overflow: hidden;
-      container-type: inline-size;
-    }
-    .slides-container {
-      display: flex; height: 100%;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .slide {
-      min-width: 100vw; height: 100vh;
-      display: flex; flex-direction: column; justify-content: center;
-      align-items: center; position: relative; padding: 2rem;
-      text-align: center;
-    }
+    /* Title slide */
+    .slide.title-slide { background: var(--bg); }
+    .slide.title-slide h1 { font-size: clamp(3rem, 8vw, 5rem); margin-bottom: 16px; }
+    .slide.title-slide p { font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; }
+    .slide.title-slide .meta { margin-top: 32px; font-size: 0.875rem; color: var(--text-secondary); }
 
-    @container (width < 768px) {
-      .slide { padding: 1rem; }
-      .slide h1 { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
-      .slide h2 { font-size: clamp(1.25rem, 4vw, 1.75rem) !important; }
-      .slide p { font-size: clamp(0.875rem, 3vw, 1rem) !important; }
-      .slide .stat-number { font-size: clamp(2rem, 8vw, 3rem) !important; }
-    }
-    @container (width < 480px) {
-      .slide { padding: 0.75rem; }
-      .two-column { flex-direction: column !important; gap: 1rem !important; }
-    }
+    /* Section slide */
+    .slide.section-slide { background: var(--accent); }
+    .slide.section-slide h2 { font-size: clamp(2.5rem, 7vw, 4rem); color: #fff; }
+    .slide.section-slide p { color: rgba(255,255,255,0.8); font-size: 1.25rem; max-width: 600px; margin-top: 12px; }
+    .theme-light .slide.section-slide { background: var(--accent); }
 
-    /* ===== TITLE SLIDE — KEYNOTE STYLE ===== */
-    /* Dark theme: deep, saturated gradients */
-    .theme-dark .slide.title-slide {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%);
-      color: white; overflow: hidden;
-    }
-    /* Light theme: soft, pastel gradients */
-    .theme-light .slide.title-slide {
-      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #dbeafe 100%);
-      color: #1e293b; overflow: hidden;
-    }
-    .slide.title-slide .content { position: relative; z-index: 2; }
+    /* Content slide */
+    .slide.content-slide { background: var(--bg); }
+    .slide.content-slide h2 { font-size: clamp(1.75rem, 5vw, 2.5rem); margin-bottom: 32px; }
+    .slide.content-slide p { color: var(--text-secondary); font-size: 1.125rem; max-width: 640px; margin-bottom: 32px; }
 
-    /* Removed floating gradient orbs for professional appearance */
+    /* Stat grid */
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: 8px; overflow: hidden; max-width: 640px; width: 100%; }
+    .stat-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .stat-cell { background: var(--surface); padding: 32px 24px; text-align: center; }
+    .stat-cell .num { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); display: block; margin-bottom: 4px; }
+    .stat-cell .label { font-size: 0.6875rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
 
-    /* Animated title text */
-    .slide.title-slide h1 {
-      animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-    }
-    .slide.title-slide .subtitle {
-      animation: subtitleReveal 0.8s ease-out 0.6s both;
-    }
-    .slide.title-slide .meta {
-      animation: subtitleReveal 0.8s ease-out 0.9s both;
-    }
+    /* Feature list */
+    .feature-list { list-style: none; text-align: left; max-width: 560px; width: 100%; }
+    .feature-list li { display: flex; align-items: center; gap: 12px; padding: 12px 0; font-size: 1.0625rem; border-bottom: 1px solid var(--border); }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
-    /* Decorative accent line */
-    .title-accent-line {
-      width: 80px; height: 3px; background: rgba(255,255,255,0.6);
-      margin: 1.5rem auto; border-radius: 2px;
-      animation: lineGrow 0.6s ease-out 1.1s both;
-      transform-origin: center;
-    }
+    /* Chart */
+    .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; max-width: 560px; width: 100%; }
+    .chart-wrap { height: 280px; position: relative; }
 
-    /* Decorative icon */
-    .title-icon {
-      width: 64px; height: 64px; margin: 0 auto 1.5rem;
-      animation: fadeIn 0.8s ease-out 0.1s both;
-      color: rgba(255,255,255,0.8);
-    }
+    /* Nav */
+    .slide-nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 8px 16px; display: flex; align-items: center; gap: 12px; z-index: 1000; }
+    .nav-btn { width: 32px; height: 32px; border: none; border-radius: 50%; background: transparent; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .nav-btn:hover { background: var(--surface-hover); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .slide-counter { font-size: 0.75rem; color: var(--text-secondary); min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; }
+    .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: var(--border); z-index: 1000; }
+    .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s; }
 
-    /* Subtle grid pattern overlay */
-    .slide.title-slide::before {
-      content: '';
-      position: absolute; inset: 0; z-index: 1;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
-    }
-
-    /* Floating geometric accents */
-    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    .title-ring {
-      position: absolute; border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 50%; z-index: 1;
-    }
-    .title-ring-1 { width: 500px; height: 500px; top: 50%; left: 50%; margin: -250px 0 0 -250px; animation: spinSlow 60s linear infinite; }
-    .title-ring-2 { width: 700px; height: 700px; top: 50%; left: 50%; margin: -350px 0 0 -350px; animation: spinSlow 90s linear infinite reverse; }
-
-    /* Light theme text adjustments */
-    .theme-light .slide.title-slide h1,
-    .theme-light .slide.title-slide h2,
-    .theme-light .slide.section-slide h2 { 
-      color: #1e293b; text-shadow: 0 1px 2px rgba(255,255,255,0.5); 
-    }
-    .theme-light .slide.title-slide .subtitle,
-    .theme-light .slide.title-slide .meta,
-    .theme-light .slide.section-slide p { 
-      color: #334155; 
-    }
-    .theme-light .title-accent-line {
-      background: rgba(30, 41, 59, 0.4);
-    }
-    /* Light theme card shadows */
-    .theme-light .stat-item,
-    .theme-light .chart-container,
-    .theme-light .features-list li,
-    .theme-light .card {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    /* Dark theme: deep, saturated gradients */
-    .theme-dark .slide.section-slide {
-      background: linear-gradient(135deg, #4c1d95 0%, #1e3a8a 50%, #1e40af 100%);
-      color: white; overflow: hidden;
-    }
-    /* Light theme: soft, pastel gradients */
-    .theme-light .slide.section-slide {
-      background: linear-gradient(135deg, #c4b5fd 0%, #a5b4fc 50%, #93c5fd 100%);
-      color: #1e293b; overflow: hidden;
-    }
-    /* Removed section slide orbs for visual restraint */
-
-    .slide.content-slide {
-      background: var(--bg);
-      overflow: hidden;
-    }
-    .slide.content-slide::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 20% 80%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--accent-secondary) 5%, transparent) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    .slide.content-slide::after {
-      content: ''; position: absolute; inset: 0;
-      background-image:
-        radial-gradient(color-mix(in srgb, var(--text) 4%, transparent) 1px, transparent 1px);
-      background-size: 24px 24px;
-      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 70%);
-      pointer-events: none;
-    }
-
-    /* Slide transition animation */
-    @keyframes slideEnter {
-      from { opacity: 0; transform: scale(0.97); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    .slide.active-slide .animate { animation: fadeInUp 0.5s ease-out both; }
-
-    /* Staggered list items */
-    @keyframes itemFadeIn {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .slide.active-slide .stagger-item { animation: itemFadeIn 0.4s ease-out both; }
-    .slide.active-slide .stagger-item:nth-child(1) { animation-delay: 0.15s; }
-    .slide.active-slide .stagger-item:nth-child(2) { animation-delay: 0.25s; }
-    .slide.active-slide .stagger-item:nth-child(3) { animation-delay: 0.35s; }
-    .slide.active-slide .stagger-item:nth-child(4) { animation-delay: 0.45s; }
-    .slide.active-slide .stagger-item:nth-child(5) { animation-delay: 0.55s; }
-
-    .slide > * { position: relative; z-index: 1; }
-    .slide h1 {
-      font-size: clamp(2.5rem, 8vw, 4rem);
-      font-weight: 800; margin-bottom: 0.5rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    .slide h2 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
-    .slide p { font-size: clamp(1.125rem, 3vw, 1.5rem); opacity: 0.9; max-width: 800px; margin: 0 auto; line-height: 1.4; }
-    .slide .subtitle { font-size: clamp(1rem, 2.5vw, 1.25rem); opacity: 0.8; font-weight: 300; }
-
-    .two-column { display: flex; align-items: center; justify-content: center; gap: 4rem; max-width: 1200px; width: 100%; }
-    .two-column > * { flex: 1; }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 800px; width: 100%; }
-    .stat-item {
-      text-align: center; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.5rem 1rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .stat-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
-    .stat-number {
-      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; display: block;
-    }
-    .stat-label { font-size: clamp(0.875rem, 2vw, 1rem); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-
-    .features-list { list-style: none; padding: 0; text-align: left; max-width: 650px; display: flex; flex-direction: column; gap: 0.75rem; }
-    .features-list li {
-      display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem;
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .features-list li:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-    .check-icon { width: 32px; height: 32px; flex-shrink: 0; background: linear-gradient(135deg, var(--positive), var(--accent)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
-
-    .chart-container { 
-      max-width: 600px; width: 100%; background: var(--surface); 
-      border: 1px solid var(--border); border-radius: 1rem; padding: 2rem;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .chart-container:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
-    .chart-wrapper { position: relative; height: 300px; }
-    
-    /* Chart element hover effects */
-    canvas { transition: filter 0.2s ease; }
-    canvas:hover { filter: brightness(1.05); }
-
-    /* Navigation */
-    .slide-nav {
-      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 2rem; padding: 0.75rem 1.5rem;
-      backdrop-filter: blur(12px); z-index: 1000;
-      display: flex; align-items: center; gap: 1rem;
-    }
-    .nav-button {
-      width: 40px; height: 40px; border: none; border-radius: 50%;
-      background: transparent; color: var(--text);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .nav-button:hover { background: var(--surface-hover); }
-    .nav-button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .nav-button:active {
-      transform: scale(0.95);
-      transition: transform 0.1s ease;
-    }
-    .slide-counter { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; min-width: 60px; text-align: center; }
-
-    .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 1000; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-secondary)); transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 0; }
-
-    .slides-container { touch-action: pan-y; }
-
-    @container (width < 600px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .chart-container { padding: 1rem; }
-      .chart-wrapper { height: 250px; }
-    }
-
-    /* Media query fallbacks for mobile */
     @media (max-width: 768px) {
-      .slide { padding: 1rem; }
-      .slide h1 { font-size: clamp(1.75rem, 6vw, 2.5rem) !important; }
-      .slide h2 { font-size: clamp(1.25rem, 4vw, 1.75rem) !important; }
-      .slide p { font-size: clamp(0.875rem, 3vw, 1rem) !important; }
-      .two-column { flex-direction: column !important; gap: 1.5rem !important; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-      .features-list li { font-size: 0.95rem; padding: 0.75rem 1rem; }
-      .slide-nav { padding: 0.5rem 1rem; bottom: 1rem; }
-    }
-    @media (max-width: 480px) {
-      .slide { padding: 0.75rem; }
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-      .chart-wrapper { height: 220px; }
-      .features-list { gap: 0.5rem; }
+      .slide { padding: 32px 24px; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+      .stat-cell .num { font-size: 1.75rem; }
     }
   </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
 
-  <!-- Visible theme toggle button -->
-  <button class="theme-toggle-btn" onclick="cycleTheme()" aria-label="Toggle light/dark theme">
-    <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-  </button>
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <button onclick="downloadImage()"><span>📥</span> Download PNG</button>
+      <button onclick="window.print()"><span>🖨️</span> Print / PDF</button>
+    </div>
+  </div>
 
   <main id="main-content" role="main">
-    <div class="progress-bar" role="progressbar" aria-label="Slide progress"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="slideAnnounce" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);"></div>
 
-    <!-- MENU -->
-    <div class="viz-menu">
-      <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
-        </svg>
-      </button>
-      <div class="viz-menu-dropdown" id="vizMenuDropdown">
-        <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-        <button onclick="downloadImage()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/></svg>
-          <span>Download PNG</span>
-        </button>
-        <button onclick="window.print()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/></svg>
-          <span>Print / PDF</span>
-        </button>
-      </div>
+    <div class="slides-container" id="slidesContainer" role="region" aria-roledescription="slide deck">
+
+      <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Title">
+        <h1>Next-Gen Analytics</h1>
+        <p>Revolutionizing data insights for modern businesses</p>
+        <div class="meta">Product Launch · 2026</div>
+      </section>
+
+      <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="The Challenge">
+        <h2>The Challenge</h2>
+        <p>Businesses struggle with fragmented data, complex tools, and delayed insights</p>
+        <div class="stat-grid">
+          <div class="stat-cell"><span class="num" data-count="73" data-suffix="%">73%</span><span class="label">Overwhelmed by data</span></div>
+          <div class="stat-cell"><span class="num" data-count="48">48</span><span class="label">Hours per report</span></div>
+          <div class="stat-cell"><span class="num" data-count="65" data-suffix="%">65%</span><span class="label">Decide without data</span></div>
+        </div>
+      </section>
+
+      <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Our Solution">
+        <h2>Our Solution</h2>
+        <p>A unified platform that transforms complex data into actionable insights in real-time</p>
+      </section>
+
+      <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Key Features">
+        <h2>Key Features</h2>
+        <ul class="feature-list">
+          <li><span class="dot"></span>Real-time data processing and visualization</li>
+          <li><span class="dot"></span>AI-powered insights and recommendations</li>
+          <li><span class="dot"></span>No-code dashboard builder</li>
+          <li><span class="dot"></span>100+ data source integrations</li>
+        </ul>
+      </section>
+
+      <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Market Opportunity">
+        <h2>Market Opportunity</h2>
+        <p>Global business analytics: unprecedented growth</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 800px; width: 100%; align-items: center;">
+          <div class="stat-grid" style="grid-template-columns: 1fr;">
+            <div class="stat-cell"><span class="num" data-count="420" data-prefix="$" data-suffix="B">$420B</span><span class="label">Market by 2030</span></div>
+            <div class="stat-cell"><span class="num" data-count="15.3" data-suffix="%">15.3%</span><span class="label">CAGR</span></div>
+          </div>
+          <div class="chart-card" role="img" aria-label="Market growth chart">
+            <div class="chart-wrap"><canvas id="marketChart"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Traction">
+        <h2>Our Traction</h2>
+        <p>Rapid growth across all key metrics in year one</p>
+        <div class="stat-grid cols-4">
+          <div class="stat-cell"><span class="num" data-count="150" data-suffix="+">150+</span><span class="label">Customers</span></div>
+          <div class="stat-cell"><span class="num" data-count="2.4" data-prefix="$" data-suffix="M">$2.4M</span><span class="label">ARR</span></div>
+          <div class="stat-cell"><span class="num" data-count="98" data-suffix="%">98%</span><span class="label">Satisfaction</span></div>
+          <div class="stat-cell"><span class="num" data-count="45" data-suffix="%">45%</span><span class="label">MoM Growth</span></div>
+        </div>
+      </section>
+
+      <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="What's Next">
+        <h2>What's Next</h2>
+        <p>Global expansion, AI v2, and mobile launch in Q2 2026</p>
+      </section>
+
+      <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Thank You">
+        <h1 style="font-size: clamp(2.5rem, 6vw, 4rem);">Thank You</h1>
+        <p>Ready to transform your data into insights?</p>
+        <div class="meta">hello@analyticsplatform.com</div>
+      </section>
     </div>
 
-    <!-- Aria-live region for slide announcements -->
-    <div id="slideAnnounce" aria-live="polite" aria-atomic="true" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);"></div>
-
-    <div class="slide-deck" role="region" aria-roledescription="slide deck" aria-label="Next-Gen Analytics Platform Presentation">
-      <div class="slides-container" id="slidesContainer">
-
-        <!-- Slide 1: Title -->
-        <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Slide 1 of 8: Title">
-          <div class="title-ring title-ring-1"></div>
-          <div class="title-ring title-ring-2"></div>
-          <div class="content">
-            <div class="title-icon">
-              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="4" y="4" width="56" height="56" rx="12"/>
-                <polyline points="16,44 24,28 32,36 40,20 48,24"/>
-                <circle cx="16" cy="44" r="2.5" fill="currentColor"/>
-                <circle cx="24" cy="28" r="2.5" fill="currentColor"/>
-                <circle cx="32" cy="36" r="2.5" fill="currentColor"/>
-                <circle cx="40" cy="20" r="2.5" fill="currentColor"/>
-                <circle cx="48" cy="24" r="2.5" fill="currentColor"/>
-              </svg>
-            </div>
-            <h1 style="font-size: clamp(3rem, 10vw, 5.5rem); letter-spacing: -0.02em;">Next-Gen Analytics Platform</h1>
-            <div class="title-accent-line" style="width: 120px;"></div>
-            <p class="subtitle" style="font-size: clamp(1.25rem, 3vw, 1.75rem); max-width: 700px; margin: 0 auto;">Revolutionizing data insights for modern businesses</p>
-            <p class="meta" style="margin-top: 2.5rem; font-size: 1.125rem; opacity: 0.7;">
-              Product Launch Presentation • 2026
-            </p>
-            <svg width="600" height="2" style="margin-top: 2rem; opacity: 0.15;" aria-hidden="true"><line x1="0" y1="1" x2="600" y2="1" stroke="currentColor" stroke-width="1"/></svg>
-          </div>
-        </section>
-
-        <!-- Slide 2: Problem -->
-        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 2 of 8: The Challenge">
-          <h2 class="animate">The Challenge</h2>
-          <p class="animate delay-1" style="margin-bottom: 3rem;">
-            Businesses struggle with fragmented data, complex analytics tools, and delayed insights
-          </p>
-          <div class="stats-grid animate delay-2">
-            <div class="stat-item">
-              <span class="stat-number" data-count="73" data-suffix="%">73%</span>
-              <span class="stat-label">Feel overwhelmed by data</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number" data-count="48">48</span>
-              <span class="stat-label">Hours to generate reports</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number" data-count="65" data-suffix="%">65%</span>
-              <span class="stat-label">Make decisions without data</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 3: Solution -->
-        <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Slide 3 of 8: Our Solution">
-          <div class="content">
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1.5rem; display: block; opacity: 0.85;" aria-hidden="true">
-              <circle cx="32" cy="32" r="28"/>
-              <path d="M20 32l8 8 16-16"/>
-            </svg>
-            <h2 class="animate">Our Solution</h2>
-            <p class="animate delay-1">
-              A unified platform that transforms complex data into actionable insights in real-time
-            </p>
-            <div style="display: flex; gap: 3rem; margin-top: 2.5rem; justify-content: center; flex-wrap: wrap;">
-              <div class="animate delay-2" style="text-align: center;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.75rem; display: block; opacity: 0.9;" aria-hidden="true"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
-                <span style="font-size: 1rem; font-weight: 600;">Real-time</span>
-                <span style="display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Sub-second latency</span>
-              </div>
-              <div class="animate delay-3" style="text-align: center;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.75rem; display: block; opacity: 0.9;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h4a2 2 0 012 2v1"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
-                <span style="font-size: 1rem; font-weight: 600;">AI-Powered</span>
-                <span style="display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Smart predictions</span>
-              </div>
-              <div class="animate delay-4" style="text-align: center;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.75rem; display: block; opacity: 0.9;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                <span style="font-size: 1rem; font-weight: 600;">No-Code</span>
-                <span style="display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Drag & drop builder</span>
-              </div>
-            </div>
-            <div class="animate delay-5" style="display: flex; gap: 1rem; margin-top: 2.5rem; justify-content: center; flex-wrap: wrap;">
-              <span style="font-size: 0.875rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 2rem;">⚡ 10x faster insights</span>
-              <span style="font-size: 0.875rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 2rem;">🎯 99.9% accuracy</span>
-              <span style="font-size: 0.875rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 2rem;">🔒 Enterprise-grade security</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 4: Key Features -->
-        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 4 of 8: Key Features">
-          <h2 class="animate">Key Features</h2>
-          <ul class="features-list">
-            <li class="stagger-item">
-              <span class="check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg></span>
-              Real-time data processing and visualization
-            </li>
-            <li class="stagger-item">
-              <span class="check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h3a2 2 0 0 1 2 2v1"/><path d="M8 21h8"/><path d="M12 17v4"/><circle cx="12" cy="12" r="3"/></svg></span>
-              AI-powered insights and recommendations
-            </li>
-            <li class="stagger-item">
-              <span class="check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></span>
-              No-code dashboard builder
-            </li>
-            <li class="stagger-item">
-              <span class="check-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
-              Seamless integration with 100+ data sources
-            </li>
-          </ul>
-        </section>
-
-        <!-- Slide 5: Market Opportunity -->
-        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 5 of 8: Market Opportunity">
-          <div class="two-column">
-            <div>
-              <h2 class="animate" style="text-align: left;">Market Opportunity</h2>
-              <p class="animate delay-1" style="text-align: left; margin-bottom: 2rem;">
-                The global business analytics market is experiencing unprecedented growth
-              </p>
-              <div class="stats-grid animate delay-2" style="grid-template-columns: 1fr;">
-                <div class="stat-item" style="text-align: left;">
-                  <span class="stat-number" data-count="420" data-prefix="$" data-suffix="B">$420B</span>
-                  <span class="stat-label">Market Size by 2030</span>
-                </div>
-                <div class="stat-item" style="text-align: left;">
-                  <span class="stat-number" data-count="15.3" data-suffix="%">15.3%</span>
-                  <span class="stat-label">Annual Growth Rate</span>
-                </div>
-                <div class="stat-item" style="text-align: left;">
-                  <span class="stat-number" data-count="89" data-suffix="%">89%</span>
-                  <span class="stat-label">Enterprise Adoption by 2028</span>
-                </div>
-              </div>
-              <div class="animate delay-3" style="text-align: left; margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); border-radius: 2rem; font-weight: 600;">📊 Data-driven decisions</span>
-                <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: color-mix(in srgb, var(--accent-secondary) 15%, transparent); color: var(--accent-secondary); border-radius: 2rem; font-weight: 600;">🏢 Fortune 500 demand</span>
-              </div>
-            </div>
-            <div role="img" aria-label="Market growth chart showing steady increase from 2020 to 2030">
-              <div class="chart-container animate delay-3">
-                <div class="chart-wrapper"><canvas id="marketChart"></canvas></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 6: Traction -->
-        <section class="slide content-slide" role="group" aria-roledescription="slide" aria-label="Slide 6 of 8: Our Traction">
-          <h2 class="animate">Our Traction</h2>
-          <p class="animate delay-1" style="margin-bottom: 3rem;">Rapid growth across all key metrics in our first year</p>
-          <div class="stats-grid animate delay-2">
-            <div class="stat-item">
-              <span class="stat-number" data-count="150" data-suffix="+">150+</span>
-              <span class="stat-label">Enterprise Customers</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number" data-count="2.4" data-prefix="$" data-suffix="M">$2.4M</span>
-              <span class="stat-label">Annual Recurring Revenue</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number" data-count="98" data-suffix="%">98%</span>
-              <span class="stat-label">Customer Satisfaction</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-number" data-count="45" data-suffix="%">45%</span>
-              <span class="stat-label">Month-over-month Growth</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 7: What's Next -->
-        <section class="slide section-slide" role="group" aria-roledescription="slide" aria-label="Slide 7 of 8: What's Next">
-          <div class="content">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 1.5rem; display: block; opacity: 0.7;" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            <h2 class="animate" style="font-size: clamp(2.5rem, 7vw, 4rem);">What's Next</h2>
-            <p class="animate delay-1" style="font-size: clamp(1.25rem, 3vw, 1.5rem); max-width: 700px;">Expanding globally while continuing to innovate and deliver exceptional value</p>
-            <div class="animate delay-2" style="display: flex; gap: 2rem; margin-top: 3rem; justify-content: center; flex-wrap: wrap;">
-              <span style="font-size: 1rem; opacity: 0.7; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2rem;">🌍 Global Launch Q2</span>
-              <span style="font-size: 1rem; opacity: 0.7; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2rem;">🤖 AI Features v2</span>
-              <span style="font-size: 1rem; opacity: 0.7; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2rem;">📱 Mobile App</span>
-            </div>
-          </div>
-        </section>
-
-        <!-- Slide 8: Thank You -->
-        <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Slide 8 of 8: Thank You">
-          <div class="title-ring title-ring-1"></div>
-          <div class="title-ring title-ring-2"></div>
-          <div class="content">
-            <h2 style="animation: titleReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;">Thank You</h2>
-            <div class="title-accent-line"></div>
-            <p style="animation: subtitleReveal 0.8s ease-out 0.6s both; margin: 1rem 0;">
-              Ready to transform your data into insights?
-            </p>
-            <p style="animation: subtitleReveal 0.8s ease-out 0.9s both; font-size: 1rem; opacity: 0.8;">
-              Contact us: hello@analyticsplatform.com
-            </p>
-          </div>
-        </section>
-
-      </div>
-    </div>
-
-    <!-- Navigation -->
     <nav class="slide-nav" aria-label="Slide navigation">
-      <button class="nav-button" id="prevBtn" onclick="prevSlide()" aria-label="Previous slide">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
-      </button>
+      <button class="nav-btn" id="prevBtn" onclick="prevSlide()" aria-label="Previous"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg></button>
       <span class="slide-counter" id="slideCounter">1 / 8</span>
-      <button class="nav-button" id="nextBtn" onclick="nextSlide()" aria-label="Next slide">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
-      </button>
+      <button class="nav-btn" id="nextBtn" onclick="nextSlide()" aria-label="Next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></button>
     </nav>
   </main>
 
@@ -700,117 +194,70 @@
       document.documentElement.className = 'theme-' + t;
       document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
-      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
+      localStorage.setItem('viz-theme', t); currentTheme = t;
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
 
-    function updateSlidePosition() {
+    function updateSlide() {
       document.getElementById('slidesContainer').style.transform = 'translateX(-' + (currentSlide * 100) + 'vw)';
       document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
       document.getElementById('progressFill').style.width = ((currentSlide + 1) / totalSlides * 100) + '%';
       document.getElementById('prevBtn').disabled = currentSlide === 0;
       document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
-      // Mark active slide for stagger animations
-      var allSlides = document.querySelectorAll('.slide');
-      allSlides.forEach(function(s, i) { s.classList.toggle('active-slide', i === currentSlide); });
-      // Announce slide change
       var slides = document.querySelectorAll('.slide');
       var label = slides[currentSlide].getAttribute('aria-label') || ('Slide ' + (currentSlide + 1));
       document.getElementById('slideAnnounce').textContent = label;
-      setTimeout(function() { animateCounters(slides[currentSlide]); }, 300);
+      setTimeout(function() { animateCounters(slides[currentSlide]); }, 200);
     }
-
-    function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateSlidePosition(); } }
-    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlidePosition(); } }
-    function goToSlide(i) { currentSlide = Math.max(0, Math.min(i, totalSlides - 1)); updateSlidePosition(); }
+    function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; updateSlide(); } }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlide(); } }
 
     document.addEventListener('keydown', function(e) {
       if (document.getElementById('vizMenuDropdown').classList.contains('open')) return;
-      switch(e.key) {
-        case 'ArrowLeft': case 'ArrowUp': e.preventDefault(); prevSlide(); break;
-        case 'ArrowRight': case 'ArrowDown': case ' ': case 'Enter': e.preventDefault(); nextSlide(); break;
-        case 'Home': e.preventDefault(); goToSlide(0); break;
-        case 'End': e.preventDefault(); goToSlide(totalSlides - 1); break;
-      }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'Enter') { e.preventDefault(); nextSlide(); }
     });
-
-    var touchStartX = 0;
-    document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
-    document.addEventListener('touchend', function(e) {
-      var diff = touchStartX - e.changedTouches[0].screenX;
-      if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('.viz-menu,.slide-nav,.theme-toggle-btn,button,canvas')) return;
-      e.clientX < window.innerWidth / 3 ? prevSlide() : nextSlide();
-    });
+    var touchX = 0;
+    document.addEventListener('touchstart', function(e) { touchX = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', function(e) { var d = touchX - e.changedTouches[0].screenX; if (Math.abs(d) > 50) { d > 0 ? nextSlide() : prevSlide(); } });
+    document.addEventListener('click', function(e) { if (e.target.closest('.viz-menu,.slide-nav,button,canvas')) return; e.clientX < window.innerWidth / 3 ? prevSlide() : nextSlide(); });
 
     function animateCounters(container) {
       (container || document).querySelectorAll('[data-count]').forEach(function(el) {
-        if (el.dataset.counted) return;
-        el.dataset.counted = '1';
+        if (el.dataset.counted) return; el.dataset.counted = '1';
         var target = parseFloat(el.dataset.count), prefix = el.dataset.prefix || '', suffix = el.dataset.suffix || '';
-        var start = performance.now(), duration = 1200;
-        function tick(now) {
-          var p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 3), cur = target * eased;
-          el.textContent = prefix + (target % 1 !== 0 ? cur.toFixed(1) : Math.round(cur)).toLocaleString() + suffix;
-          if (p < 1) requestAnimationFrame(tick);
-        }
-        tick(start);
+        var start = performance.now(), dur = 1000;
+        (function tick(now) { var p = Math.min((now - start) / dur, 1), e = 1 - Math.pow(1 - p, 3), cur = target * e; el.textContent = prefix + (target % 1 !== 0 ? cur.toFixed(1) : Math.round(cur)).toLocaleString() + suffix; if (p < 1) requestAnimationFrame(tick); })(start);
       });
     }
 
-    function getChartColors() {
-      var r = getComputedStyle(document.documentElement);
-      return { text: r.getPropertyValue('--text').trim(), textSecondary: r.getPropertyValue('--text-secondary').trim(),
-        border: r.getPropertyValue('--border').trim(), surface: r.getPropertyValue('--surface').trim(),
-        accent: r.getPropertyValue('--accent').trim(), accentSecondary: r.getPropertyValue('--accent-secondary').trim() };
-    }
-    function resetCanvas(id) {
-      var old = document.getElementById(id); if (!old) return null;
-      var c = document.createElement('canvas'); c.id = id; old.parentNode.replaceChild(c, old); return c;
-    }
+    function getColors() { var s = getComputedStyle(document.documentElement); return { text: s.getPropertyValue('--text').trim(), sub: s.getPropertyValue('--text-secondary').trim(), border: s.getPropertyValue('--border').trim(), surface: s.getPropertyValue('--surface').trim(), accent: s.getPropertyValue('--accent').trim() }; }
+    function resetCanvas(id) { var o = document.getElementById(id); if (!o) return null; var c = document.createElement('canvas'); c.id = id; o.parentNode.replaceChild(c, o); return c; }
 
     function buildChart() {
-      var c = getChartColors();
-      Chart.defaults.color = c.textSecondary; Chart.defaults.borderColor = c.border;
+      var c = getColors();
+      Chart.defaults.color = c.sub;
       try { if (marketChart) marketChart.destroy(); } catch(e) {}
-      var canvas = resetCanvas('marketChart'); if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      var grad = ctx.createLinearGradient(0, 0, 0, 300);
-      grad.addColorStop(0, c.accent + '40');
-      grad.addColorStop(1, c.accent + '00');
-      marketChart = new Chart(canvas, {
+      var cv = resetCanvas('marketChart'); if (!cv) return;
+      var ctx = cv.getContext('2d'), g = ctx.createLinearGradient(0,0,0,280); g.addColorStop(0, c.accent + '30'); g.addColorStop(1, c.accent + '00');
+      marketChart = new Chart(cv, {
         type: 'line',
-        data: { labels: ['2020','2022','2024','2026','2028','2030'],
-          datasets: [{ label: 'Market Size ($B)', data: [195,245,305,340,380,420],
-            borderColor: c.accent, backgroundColor: grad, borderWidth: 3,
-            fill: true, tension: 0.4, pointRadius: 4, pointHoverRadius: 8,
-            pointBackgroundColor: c.accent, pointBorderColor: '#ffffff', pointBorderWidth: 2 }] },
-        options: { responsive: true, maintainAspectRatio: false,
-          plugins: { tooltip: { enabled: true, mode: 'index', intersect: false, backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1,
-              callbacks: { label: function(ctx) { return 'Market Size: $' + ctx.parsed.y + 'B'; } } }, legend: { display: false } },
-          scales: { y: { beginAtZero: false, grid: { color: c.border, drawBorder: false }, ticks: { color: c.textSecondary, callback: function(v) { return '$'+v+'B'; } }, border: { display: false } },
-            x: { grid: { color: c.border, drawBorder: false }, ticks: { color: c.textSecondary }, border: { display: false } } },
+        data: { labels: ['2020','2022','2024','2026','2028','2030'], datasets: [{ data: [195,245,305,340,380,420], borderColor: c.accent, backgroundColor: g, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 6, pointBackgroundColor: c.accent }] },
+        options: { responsive: true, maintainAspectRatio: false, layout: { padding: { top: 10, right: 10 } },
+          plugins: { tooltip: { enabled: true, mode: 'index', intersect: false, backgroundColor: c.surface, titleColor: c.text, bodyColor: c.text, borderColor: c.border, borderWidth: 1, padding: 12, cornerRadius: 8, callbacks: { label: function(ctx) { return '$' + ctx.parsed.y + 'B'; } } }, legend: { display: false } },
+          scales: { y: { grid: { color: c.border }, ticks: { color: c.sub, font: { size: 13 }, callback: function(v) { return '$'+v+'B'; } }, border: { display: false } }, x: { grid: { display: false }, ticks: { color: c.sub, font: { size: 13 } }, border: { display: false } } },
           interaction: { intersect: false, mode: 'index' } }
       });
     }
-    function onThemeChange() { setTimeout(buildChart, 100); }
-
-    updateSlidePosition();
-    setTimeout(buildChart, 1000);
+    function onThemeChange() { setTimeout(buildChart, 50); }
+    updateSlide(); setTimeout(buildChart, 300);
 
     async function downloadImage() {
-      var els = ['.viz-menu','.slide-nav','.theme-toggle-btn'].map(function(s){return document.querySelector(s);});
+      var els = ['.viz-menu','.slide-nav'].map(function(s){return document.querySelector(s);});
       els.forEach(function(el){if(el)el.style.display='none';});
-      try {
-        var url = await htmlToImage.toPng(document.querySelectorAll('.slide')[currentSlide], { quality: 1, pixelRatio: 2, width: 1920, height: 1080 });
-        var a = document.createElement('a'); a.href = url; a.download = 'slide-'+(currentSlide+1)+'-presentation.png'; a.click();
-      } catch(e) { console.error('Download failed:', e); }
+      try { var url = await htmlToImage.toPng(document.querySelectorAll('.slide')[currentSlide], { quality: 1, pixelRatio: 2, width: 1920, height: 1080 }); var a = document.createElement('a'); a.href = url; a.download = 'slide-'+(currentSlide+1)+'.png'; a.click(); } catch(e) { console.error(e); }
       els.forEach(function(el){if(el)el.style.display='';});
     }
   </script>
