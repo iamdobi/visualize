@@ -197,26 +197,15 @@
       background: var(--surface); border: 1px solid var(--border);
       color: var(--text); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s; z-index: 10;
+      backdrop-filter: blur(12px); transition: box-shadow 0.2s ease; z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
-    .carousel-nav:hover { background: var(--surface-hover); transform: translateY(-50%) scale(1.1); }
+    .carousel-nav:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
     .carousel-nav:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     .carousel-nav.prev { left: -24px; }
     .carousel-nav.next { right: -24px; }
     .carousel-nav:disabled { opacity: 0.3; cursor: default; }
-    .carousel-nav:disabled:hover { transform: translateY(-50%); }
-
-    .carousel-dots {
-      display: flex; gap: 8px; justify-content: center;
-      margin-top: 20px;
-    }
-    .carousel-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--border); border: none; cursor: pointer;
-      transition: all 0.2s; padding: 0;
-    }
-    .carousel-dot.active { background: var(--accent); transform: scale(1.3); }
-    .carousel-dot:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .carousel-nav:disabled:hover { box-shadow: none; }
 
     .card-counter {
       position: absolute; bottom: 24px; right: 32px;
@@ -263,6 +252,16 @@
 
         <!-- Card 1: Title -->
         <div class="carousel-card" role="group" aria-roledescription="slide" aria-label="Slide 1 of 8: Title">
+          <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+            <svg viewBox="0 0 900 640" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.05;">
+              <circle cx="450" cy="320" r="250" stroke="var(--accent)" stroke-width="0.5" stroke-dasharray="6 10"/>
+              <circle cx="450" cy="320" r="180" stroke="var(--accent-secondary)" stroke-width="0.5" stroke-dasharray="4 8"/>
+              <circle cx="450" cy="320" r="110" stroke="var(--accent)" stroke-width="0.5"/>
+              <rect x="200" y="120" width="500" height="400" rx="12" stroke="var(--accent-secondary)" stroke-width="0.3" stroke-dasharray="8 12"/>
+              <line x1="150" y1="320" x2="750" y2="320" stroke="var(--accent)" stroke-width="0.2" stroke-dasharray="4 8"/>
+              <line x1="450" y1="50" x2="450" y2="590" stroke="var(--accent)" stroke-width="0.2" stroke-dasharray="4 8"/>
+            </svg>
+          </div>
           <div class="card-subtitle animate">A CAROUSEL GUIDE</div>
           <h1 class="card-title-main animate delay-1">7 Habits of Highly Effective Engineers</h1>
           <p class="card-description animate delay-2">Swipe through to level up your engineering career →</p>
@@ -328,7 +327,7 @@
       </div>
     </div>
 
-    <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Slide navigation"></div>
+    <!-- counter is on each card -->
   </div>
 
   </main>
@@ -363,27 +362,10 @@
     var currentSlide = 0;
     var totalSlides = document.querySelectorAll('.carousel-card').length;
     var track = document.getElementById('carouselTrack');
-    var dotsContainer = document.getElementById('carouselDots');
-    var counterEl = document.getElementById('cardCounter');
-
-    // Build dots
-    for (var i = 0; i < totalSlides; i++) {
-      var dot = document.createElement('button');
-      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('role', 'tab');
-      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-      dot.dataset.index = i;
-      dot.onclick = function() { goTo(parseInt(this.dataset.index)); };
-      dotsContainer.appendChild(dot);
-    }
-
     function goTo(index) {
       if (index < 0 || index >= totalSlides) return;
       currentSlide = index;
       track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-      counterEl.textContent = (currentSlide + 1) + ' / ' + totalSlides;
-      var dots = dotsContainer.querySelectorAll('.carousel-dot');
-      dots.forEach(function(d, i) { d.classList.toggle('active', i === currentSlide); });
       document.querySelector('.carousel-nav.prev').disabled = currentSlide === 0;
       document.querySelector('.carousel-nav.next').disabled = currentSlide === totalSlides - 1;
     }

@@ -11,8 +11,8 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .theme-dark { --bg: #0a0a0a; --surface: #141414; --surface-hover: #1a1a1a; --border: rgba(255,255,255,0.06); --text: #ededed; --text-secondary: #d1d5db; --accent: #0cce6b; --accent-secondary: #06b6d4; --positive: #0cce6b; --negative: #ee0000; --warning: #f5a623; }
-    .theme-light { --bg: #fafafa; --surface: #fff; --surface-hover: #f5f5f5; --border: rgba(0,0,0,0.06); --text: #171717; --text-secondary: #666; --accent: #059669; --accent-secondary: #0891b2; --positive: #059669; --negative: #ee0000; --warning: #f5a623; }
+    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #10b981; --accent-secondary: #06b6d4; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; }
+    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #059669; --accent-secondary: #0891b2; --positive: #059669; --negative: #e11d48; --warning: #d97706; }
 
     body { 
       font-family: 'Inter', -apple-system, sans-serif; 
@@ -282,7 +282,7 @@
     .nav-btn { width: 32px; height: 32px; border: none; border-radius: 50%; background: transparent; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .nav-btn:hover { background: var(--surface-hover); }
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .slide-counter { font-size: 0.75rem; color: var(--text-secondary); min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; }
+    .slide-counter { font-size: 0.875rem; color: var(--text); min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; }
     .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: var(--border); z-index: 1000; }
     .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s; }
 
@@ -319,6 +319,19 @@
     <div class="slides-container" id="slidesContainer" role="region" aria-roledescription="slide deck">
 
       <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="EcoFlow">
+        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+          <svg viewBox="0 0 800 600" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07;">
+            <circle cx="400" cy="300" r="220" stroke="var(--accent)" stroke-width="0.5" stroke-dasharray="4 8"/>
+            <circle cx="400" cy="300" r="160" stroke="var(--accent-secondary)" stroke-width="0.5" stroke-dasharray="6 10"/>
+            <circle cx="400" cy="300" r="100" stroke="var(--accent)" stroke-width="0.5"/>
+            <path d="M250 420 Q400 200 550 420" stroke="var(--accent)" stroke-width="1" fill="none"/>
+            <path d="M200 380 Q400 180 600 380" stroke="var(--accent-secondary)" stroke-width="0.5" fill="none" stroke-dasharray="4 6"/>
+            <circle cx="320" cy="350" r="3" fill="var(--accent)" opacity="0.5"/>
+            <circle cx="400" cy="240" r="3" fill="var(--accent)" opacity="0.5"/>
+            <circle cx="480" cy="310" r="3" fill="var(--accent)" opacity="0.5"/>
+            <path d="M100 500 L200 400 L350 450 L500 350 L650 400 L700 350" stroke="var(--accent)" stroke-width="1.5" fill="none" opacity="0.6"/>
+          </svg>
+        </div>
         <h1>EcoFlow</h1>
         <p>AI-powered sustainability platform for enterprise</p>
         <div class="meta">Seed Round · $2M Raising · 2026</div>

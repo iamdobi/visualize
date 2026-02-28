@@ -254,7 +254,7 @@
     .nav-btn { width: 32px; height: 32px; border: none; border-radius: 50%; background: transparent; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .nav-btn:hover { background: var(--surface-hover); }
     .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-    .slide-counter { font-size: 0.75rem; color: var(--text-secondary); min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; }
+    .slide-counter { font-size: 0.875rem; color: var(--text); min-width: 48px; text-align: center; font-variant-numeric: tabular-nums; font-weight: 600; }
     .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: var(--border); z-index: 1000; }
     .progress-fill { height: 100%; background: var(--accent); transition: width 0.4s; }
 
@@ -288,6 +288,21 @@
     <div class="slides-container" id="slidesContainer" role="region" aria-roledescription="slide deck">
 
       <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Title">
+        <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
+          <svg viewBox="0 0 800 600" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.06;">
+            <circle cx="400" cy="300" r="200" stroke="var(--accent)" stroke-width="0.5" stroke-dasharray="6 10"/>
+            <circle cx="400" cy="300" r="150" stroke="var(--accent-secondary)" stroke-width="0.5" stroke-dasharray="4 8"/>
+            <circle cx="400" cy="300" r="100" stroke="var(--accent)" stroke-width="0.5"/>
+            <line x1="100" y1="300" x2="700" y2="300" stroke="var(--accent)" stroke-width="0.3" stroke-dasharray="8 12"/>
+            <line x1="400" y1="50" x2="400" y2="550" stroke="var(--accent)" stroke-width="0.3" stroke-dasharray="8 12"/>
+            <rect x="250" y="150" width="300" height="300" rx="8" stroke="var(--accent-secondary)" stroke-width="0.4" stroke-dasharray="4 6"/>
+            <path d="M200 400 L300 250 L400 320 L500 180 L600 280" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+            <circle cx="300" cy="250" r="4" fill="var(--accent)"/>
+            <circle cx="400" cy="320" r="4" fill="var(--accent)"/>
+            <circle cx="500" cy="180" r="4" fill="var(--accent)"/>
+            <circle cx="600" cy="280" r="4" fill="var(--accent)"/>
+          </svg>
+        </div>
         <h1>Next-Gen Analytics</h1>
         <p>Revolutionizing data insights for modern businesses</p>
         <div class="meta">Product Launch · 2026</div>
