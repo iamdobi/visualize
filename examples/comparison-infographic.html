@@ -425,6 +425,23 @@
       .conclusion { padding: 2rem; }
       .section-title { font-size: 1.5rem; }
     }
+
+    /* Media query fallbacks for mobile */
+    @media (max-width: 768px) {
+      .comparison-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .charts-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .stats-overview { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .hero { padding: 2rem 1rem; margin-bottom: 2rem; }
+      .stat-number { font-size: 2.25rem; }
+      .chart-wrapper { height: 250px; }
+    }
+    @media (max-width: 480px) {
+      .stats-overview { grid-template-columns: 1fr; }
+      .comparison-section { padding: 1.25rem; }
+      .section-title { font-size: 1.25rem; }
+      .section-icon { width: 36px; height: 36px; }
+      .conclusion h2 { font-size: 1.75rem; }
+    }
   </style>
 </head>
 <body>

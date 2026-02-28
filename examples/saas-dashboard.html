@@ -431,6 +431,24 @@
       .chart-container { padding: 1.5rem; }
       .dashboard-container { padding: 1rem; }
     }
+
+    /* Media query fallbacks for mobile */
+    @media (max-width: 768px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .charts-section { grid-template-columns: 1fr; }
+      .bottom-section { grid-template-columns: 1fr; }
+      .kpi-value { font-size: 2rem; }
+      .kpi-icon { width: 36px; height: 36px; top: 1.5rem; right: 1.5rem; }
+      .chart-wrapper { height: 250px; }
+      .performance-table { font-size: 0.8rem; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+      .kpi-card { padding: 1.25rem; }
+      .dashboard-container { padding: 0.75rem; }
+      .chart-container { padding: 1rem; }
+      .small-chart .chart-wrapper { height: 200px; }
+    }
   </style>
 </head>
 <body>
@@ -473,9 +491,9 @@
         <p class="dashboard-subtitle">Real-time performance metrics and insights</p>
       </header>
 
-      <section class="kpi-grid" aria-label="Key Performance Indicators">
-        <div class="kpi-card animate delay-1">
-          <div class="kpi-icon">
+      <section class="kpi-grid" role="region" aria-label="Key Performance Indicators">
+        <div class="kpi-card animate delay-1" role="group" aria-label="Active Users: 8,547, up 12.5%">
+          <div class="kpi-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 21-3-3m2-4a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
             </svg>
@@ -490,8 +508,8 @@
           </div>
         </div>
 
-        <div class="kpi-card animate delay-2">
-          <div class="kpi-icon">
+        <div class="kpi-card animate delay-2" role="group" aria-label="Monthly Revenue: $142K, up 8.2%">
+          <div class="kpi-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
             </svg>
@@ -506,8 +524,8 @@
           </div>
         </div>
 
-        <div class="kpi-card animate delay-3">
-          <div class="kpi-icon">
+        <div class="kpi-card animate delay-3" role="group" aria-label="Churn Rate: 3.2%, up 0.4%">
+          <div class="kpi-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
             </svg>
@@ -522,8 +540,8 @@
           </div>
         </div>
 
-        <div class="kpi-card animate delay-4">
-          <div class="kpi-icon">
+        <div class="kpi-card animate delay-4" role="group" aria-label="System Uptime: 96.8%, up 0.3%">
+          <div class="kpi-icon" aria-hidden="true">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M9 12l2 2 4-4"/><path d="M21 12c.552 0 1-.449 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .551.448 1 1 1"/>
             </svg>
@@ -565,7 +583,7 @@
         </div>
       </section>
 
-      <section class="bottom-section" data-reveal>
+      <section class="bottom-section" role="region" aria-label="Activity and Performance Details" data-reveal>
         <article class="card">
           <h3 style="margin-bottom: 1.5rem;">Recent Activity</h3>
           <div class="activity-item">
@@ -623,7 +641,7 @@
 
         <article class="card">
           <h3 style="margin-bottom: 1.5rem;">Top Performing Features</h3>
-          <table class="performance-table">
+          <table class="performance-table" aria-label="Top performing features with usage and growth metrics">
             <thead>
               <tr>
                 <th>Feature</th>
