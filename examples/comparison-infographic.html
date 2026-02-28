@@ -40,8 +40,19 @@
     .skip-link { position: absolute; top: -40px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px; z-index: 10000; }
     .skip-link:focus { top: 16px; }
 
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
     @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .animate { animation: fadeInUp 0.5s ease-out both; }
+
+    .comparison-block, .chart-section, .verdict {
+      animation: fadeInUp 0.5s ease both;
+    }
+    .comparison-block:nth-of-type(1) { animation-delay: 0s; }
+    .comparison-block:nth-of-type(2) { animation-delay: 0.08s; }
+    .chart-section:nth-of-type(1) { animation-delay: 0.16s; }
+    .chart-section:nth-of-type(2) { animation-delay: 0.24s; }
+    .chart-section:nth-of-type(3) { animation-delay: 0.32s; }
     .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .reveal { opacity: 1; transform: none; } }
@@ -315,6 +326,7 @@
         <h3>Productivity Comparison</h3>
         <p class="chart-sub">Indexed scores (office baseline = 100)</p>
         <div role="img" aria-label="Bar chart comparing remote vs office productivity metrics">
+          <div class="sr-only">Task Completion: Remote 116, Office 100. Quality Score: Remote 118, Office 100. Hours Worked: Remote 95, Office 100. Overall Rating: Remote 116, Office 100.</div>
           <div class="chart-wrapper"><canvas id="productivityChart"></canvas></div>
         </div>
       </section>
@@ -323,6 +335,7 @@
         <h3>Employee Satisfaction</h3>
         <p class="chart-sub">Self-reported satisfaction across six dimensions</p>
         <div role="img" aria-label="Radar chart of employee satisfaction across six dimensions">
+          <div class="sr-only">Work-Life Balance: Remote 90, Office 65. Stress Level: Remote 75, Office 60. Collaboration: Remote 65, Office 85. Focus Time: Remote 85, Office 70. Career Growth: Remote 70, Office 80. Satisfaction: Remote 80, Office 75.</div>
           <div class="chart-wrapper"><canvas id="satisfactionChart"></canvas></div>
         </div>
       </section>
@@ -331,6 +344,7 @@
         <h3>Work Preference Distribution</h3>
         <p class="chart-sub">What workers actually want</p>
         <div role="img" aria-label="Doughnut chart showing 73% prefer hybrid, 19% remote, 8% office">
+          <div class="sr-only">Hybrid: 73%. Remote Only: 19%. Office Only: 8%.</div>
           <div class="chart-wrapper" style="height: 280px;"><canvas id="preferenceChart"></canvas></div>
         </div>
       </section>

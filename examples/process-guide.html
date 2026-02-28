@@ -14,7 +14,7 @@
       :root {
         --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
         --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #9ca3af;
+        --text: #f9fafb; --text-secondary: #d1d5db;
         --accent: #3b82f6; --accent-secondary: #8b5cf6;
         --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
       }
@@ -31,7 +31,7 @@
     .theme-dark {
       --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #9ca3af;
+      --text: #f9fafb; --text-secondary: #d1d5db;
       --accent: #3b82f6; --accent-secondary: #8b5cf6;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
@@ -50,14 +50,34 @@
       transition: background 0.3s, color 0.3s;
     }
 
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 16px; padding: 24px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: box-shadow 0.2s ease;
     }
     .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
+    }
+
+    .step-row {
+      animation: fadeInUp 0.5s ease both;
+    }
+    .step-row:nth-child(1) { animation-delay: 0s; }
+    .step-row:nth-child(2) { animation-delay: 0.08s; }
+    .step-row:nth-child(3) { animation-delay: 0.16s; }
+    .step-row:nth-child(4) { animation-delay: 0.24s; }
+    .step-row:nth-child(5) { animation-delay: 0.32s; }
+    .step-row:nth-child(6) { animation-delay: 0.4s; }
+    .step-row:nth-child(7) { animation-delay: 0.48s; }
+    .step-row:nth-child(8) { animation-delay: 0.56s; }
+    .step-content {
+      transition: background 0.2s ease;
+      border-radius: 8px; padding: 12px;
+    }
+    .step-row:hover .step-content {
+      background: var(--surface-hover);
     }
 
     @keyframes fadeInUp {

@@ -189,7 +189,7 @@ Default dark palette — all derived from CSS custom properties with CSS `prefer
 .theme-dark {
   --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
   --border: rgba(255,255,255,0.08);
-  --text: #f9fafb; --text-secondary: #9ca3af;
+  --text: #f9fafb; --text-secondary: #d1d5db;
   --accent: #3b82f6; --accent-secondary: #8b5cf6;
   --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
 }
@@ -316,6 +316,58 @@ The settings/export dropdown MUST look polished:
   to { opacity: 1; transform: translateY(0); }
 }
 ```
+
+### Entrance Animations (Mandatory for All Files)
+Every file MUST have subtle entrance animations. Static-feeling pages score low on interactivity. Use CSS-only `@keyframes` on page load:
+```css
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card, .step, .quote-card, section > * {
+  animation: fadeInUp 0.5s ease both;
+}
+/* Stagger children */
+.card:nth-child(1) { animation-delay: 0s; }
+.card:nth-child(2) { animation-delay: 0.08s; }
+.card:nth-child(3) { animation-delay: 0.16s; }
+.card:nth-child(4) { animation-delay: 0.24s; }
+```
+Also add hover states on ALL cards/items — even "static" content like cheatsheets and quote cards:
+```css
+.card:hover, .command-group:hover, blockquote:hover {
+  background: var(--surface-hover);
+  box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
+}
+```
+
+### Theme-Adaptive Content (Carousels, Posters)
+When cards use decorative gradients (e.g., Instagram-style pastel slides), the gradients MUST adapt to the theme. Don't use fixed pastel colors that look identical in dark/light mode:
+```css
+/* BAD — same gradient in both themes */
+.card { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+
+/* GOOD — theme-adaptive gradients */
+.theme-dark .card-1 { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+.theme-light .card-1 { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+```
+
+### Slide Deck Light Mode
+Slide decks are designed dark-first, but light mode must NOT feel like an afterthought. For presentations in light mode:
+- Use a subtle warm gray background (`#f5f5f0`) not pure white
+- Add a faint top-down gradient for depth
+- Ensure headings use dark text with sufficient weight
+- Grid/glow backgrounds should switch to subtle dot patterns or soft gradients in light mode
+
+### Chart Accessibility (Mandatory)
+All CSS-only charts (bars, radar, donut) and Chart.js charts MUST expose data to screen readers:
+```html
+<div role="img" aria-label="Bar chart showing React at 85%, Vue at 72%, Angular at 58%">
+  <!-- visual chart here -->
+  <div class="sr-only">React: 85%. Vue: 72%. Angular: 58%.</div>
+</div>
+```
+Add `.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }` to every file.
 
 ### Visual Restraint Anti-Patterns (NEVER DO)
 - ❌ **Floating gradient orbs** — decorative blurred circles behind content look amateurish

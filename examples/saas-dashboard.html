@@ -40,6 +40,17 @@
     h4 { font-weight: 600; }
     *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .kpi:nth-child(1) { animation: fadeInUp 0.5s ease both 0s; }
+    .kpi:nth-child(2) { animation: fadeInUp 0.5s ease both 0.08s; }
+    .kpi:nth-child(3) { animation: fadeInUp 0.5s ease both 0.16s; }
+    .kpi:nth-child(4) { animation: fadeInUp 0.5s ease both 0.24s; }
+    .chart-card { animation: fadeInUp 0.5s ease both 0.32s; }
+    .bottom-card:nth-child(1) { animation: fadeInUp 0.5s ease both 0.4s; }
+    .bottom-card:nth-child(2) { animation: fadeInUp 0.5s ease both 0.48s; }
+
     .skip-link { position: absolute; top: -40px; left: 16px; padding: 8px 16px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 8px; z-index: 10000; }
     .skip-link:focus { top: 16px; }
 
@@ -240,11 +251,13 @@
         <div class="chart-card" role="img" aria-label="Revenue growth line chart">
           <h3>Revenue Growth</h3>
           <p class="chart-sub">Last 12 months</p>
+          <div class="sr-only">Revenue by month: Jan $98K, Feb $102K, Mar $108K, Apr $115K, May $121K, Jun $128K, Jul $124K, Aug $132K, Sep $138K, Oct $135K, Nov $142K, Dec $142K.</div>
           <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
         </div>
         <div class="chart-card" role="img" aria-label="User acquisition doughnut chart">
           <h3>User Acquisition</h3>
           <p class="chart-sub">Current month breakdown</p>
+          <div class="sr-only">Organic: 45%. Paid Ads: 28%. Referrals: 15%. Direct: 12%.</div>
           <div class="chart-wrap"><canvas id="acquisitionChart"></canvas></div>
         </div>
       </section>
