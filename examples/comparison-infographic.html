@@ -144,7 +144,8 @@
 
     /* Scroll-triggered: JS adds .reveal, then .visible on scroll */
     .reveal { opacity: 0; transform: translateY(30px) scale(0.97); transition: opacity 0.7s ease, transform 0.7s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+    .reveal.visible, [data-reveal].revealed { opacity: 1; transform: translateY(0) scale(1); }
+    [data-reveal] { transition-delay: calc(var(--i, 0) * 0.1s); }
 
     /* Modern CSS scroll-driven animations (Chrome 115+) */
     @supports (animation-timeline: view()) {
@@ -162,10 +163,17 @@
 
     /* ===== FOCUS INDICATORS ===== */
     *:focus-visible { 
-      outline: 2px solid var(--accent); 
-      outline-offset: 2px;
+      outline: 2px solid var(--accent, #6366f1); 
+      outline-offset: 3px;
       border-radius: 4px;
     }
+    a:focus-visible, button:focus-visible {
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Chart tooltip */
+    .chart-tooltip { position: fixed; background: var(--surface); color: var(--text); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; pointer-events: none; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 100; }
+    .chart-tooltip.visible { opacity: 1; }
 
     /* ===== PRINT ===== */
     @media print {
@@ -483,6 +491,7 @@
   </style>
 </head>
 <body>
+  <div class="chart-tooltip" id="chartTooltip"></div>
   <main id="main-content">
     <a href="#main-content" class="skip-link">Skip to content</a>
 
@@ -525,26 +534,26 @@
       </header>
 
       <section class="stats-overview" role="region" aria-label="Work Environment Statistics" data-reveal>
-        <div class="stat-card animate delay-1">
+        <div class="stat-card animate delay-1" data-reveal style="--i: 1">
           <span class="stat-number" data-count="42" data-suffix="%">42%</span>
           <span class="stat-label">Remote Workers Globally</span>
         </div>
-        <div class="stat-card animate delay-2">
+        <div class="stat-card animate delay-2" data-reveal style="--i: 2">
           <span class="stat-number" data-count="16" data-suffix="%">16%</span>
           <span class="stat-label">Productivity Increase</span>
         </div>
-        <div class="stat-card animate delay-3">
+        <div class="stat-card animate delay-3" data-reveal style="--i: 3">
           <span class="stat-number" data-count="54">54</span>
           <span class="stat-label">Minutes Saved Daily</span>
         </div>
-        <div class="stat-card animate delay-4">
+        <div class="stat-card animate delay-4" data-reveal style="--i: 4">
           <span class="stat-number" data-count="73" data-suffix="%">73%</span>
           <span class="stat-label">Prefer Hybrid Model</span>
         </div>
       </section>
 
       <div class="comparison-grid" role="region" aria-label="Remote vs Office comparison" data-reveal>
-        <article class="comparison-section remote" role="group" aria-label="Remote Work">
+        <article class="comparison-section remote" data-reveal style="--i: 1" role="group" aria-label="Remote Work">
           <div class="section-title">
             <div class="section-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -639,7 +648,7 @@
           </div>
         </article>
 
-        <article class="comparison-section office" role="group" aria-label="Office Work">
+        <article class="comparison-section office" data-reveal style="--i: 2" role="group" aria-label="Office Work">
           <div class="section-title">
             <div class="section-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -737,7 +746,7 @@
 
       <section class="charts-grid" aria-label="Work Environment Statistics Charts" data-reveal>
         <div role="img" aria-label="Productivity comparison chart showing remote workers have 16% higher productivity than office workers">
-          <div class="chart-container">
+          <div class="chart-container" data-reveal style="--i: 1">
             <h3 class="chart-title">Productivity Comparison</h3>
             <div class="chart-wrapper">
               <canvas id="productivityChart"></canvas>
@@ -747,7 +756,7 @@
         </div>
 
         <div role="img" aria-label="Employee satisfaction chart comparing different aspects of remote versus office work">
-          <div class="chart-container">
+          <div class="chart-container" data-reveal style="--i: 2">
             <h3 class="chart-title">Employee Satisfaction</h3>
             <div class="chart-wrapper">
               <canvas id="satisfactionChart"></canvas>
@@ -756,7 +765,7 @@
         </div>
 
         <div role="img" aria-label="Work preference pie chart showing 73% prefer hybrid, 19% remote only, 8% office only">
-          <div class="chart-container">
+          <div class="chart-container" data-reveal style="--i: 3">
             <h3 class="chart-title">Work Preference Distribution</h3>
             <div class="chart-wrapper">
               <canvas id="preferenceChart"></canvas>
@@ -766,7 +775,7 @@
         </div>
 
         <div role="img" aria-label="Cost analysis bar chart comparing annual costs of remote versus office work setups">
-          <div class="chart-container">
+          <div class="chart-container" data-reveal style="--i: 4">
             <h3 class="chart-title">Annual Cost Analysis</h3>
             <div class="chart-wrapper">
               <canvas id="costChart"></canvas>
@@ -775,7 +784,7 @@
         </div>
       </section>
 
-      <section class="conclusion" data-reveal>
+      <section class="conclusion" data-reveal style="--i: 1">
         <h2>The Future is Hybrid</h2>
         <p>
           Research shows that 73% of workers prefer a hybrid model, combining the best of both worlds. 
@@ -817,16 +826,26 @@
     var revealObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { 
         if (e.isIntersecting) { 
-          e.target.classList.add('visible'); 
+          e.target.classList.add('visible'); e.target.classList.add('revealed'); 
           revealObserver.unobserve(e.target); 
         } 
       });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
 
+    // Also observe individual data-reveal children
+    document.querySelectorAll('[data-reveal]').forEach(function(el) {
+      if (!el.classList.contains('reveal')) {
+        revealObserver.observe(el);
+      }
+    });
+
     // Force reveal all elements after 500ms for screenshots
     setTimeout(function() { 
-      document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); }); 
+      document.querySelectorAll('.reveal, [data-reveal]').forEach(function(el) { 
+        el.classList.add('visible'); 
+        el.classList.add('revealed');
+      }); 
     }, 500);
 
     // === Number Counter ===

@@ -112,7 +112,8 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
-    *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    *:focus-visible { outline: 2px solid var(--accent, #6366f1); outline-offset: 3px; border-radius: 4px; }
+    a:focus-visible, button:focus-visible { box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3); }
 
     @media print {
       body { background: white !important; color: black !important; overflow: visible; }
@@ -120,6 +121,14 @@
       .slide { transform: none !important; position: static !important; page-break-after: always; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
+
+    /* Slide transition enhancements */
+    .slide { transition: opacity 0.4s ease, transform 0.4s ease; }
+    .slide:not(.active-slide) { opacity: 0.3; }
+    .slide.active-slide { opacity: 1; }
+
+    /* Scroll-reveal stagger for slide elements */
+    [data-reveal] { transition-delay: calc(var(--i, 0) * 0.1s); }
 
     /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
@@ -559,17 +568,25 @@
             </p>
             <div style="display: flex; gap: 3rem; margin-top: 2.5rem; justify-content: center; flex-wrap: wrap;">
               <div class="animate delay-2" style="text-align: center;">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; display: block; opacity: 0.8;" aria-hidden="true"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
-                <span style="font-size: 0.875rem; opacity: 0.8;">Real-time</span>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.75rem; display: block; opacity: 0.9;" aria-hidden="true"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                <span style="font-size: 1rem; font-weight: 600;">Real-time</span>
+                <span style="display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Sub-second latency</span>
               </div>
               <div class="animate delay-3" style="text-align: center;">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; display: block; opacity: 0.8;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h4a2 2 0 012 2v1"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
-                <span style="font-size: 0.875rem; opacity: 0.8;">AI-Powered</span>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.75rem; display: block; opacity: 0.9;" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h4a2 2 0 012 2v1"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+                <span style="font-size: 1rem; font-weight: 600;">AI-Powered</span>
+                <span style="display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Smart predictions</span>
               </div>
               <div class="animate delay-4" style="text-align: center;">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.5rem; display: block; opacity: 0.8;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                <span style="font-size: 0.875rem; opacity: 0.8;">No-Code</span>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin: 0 auto 0.75rem; display: block; opacity: 0.9;" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span style="font-size: 1rem; font-weight: 600;">No-Code</span>
+                <span style="display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem;">Drag & drop builder</span>
               </div>
+            </div>
+            <div class="animate delay-5" style="display: flex; gap: 1rem; margin-top: 2.5rem; justify-content: center; flex-wrap: wrap;">
+              <span style="font-size: 0.875rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 2rem;">⚡ 10x faster insights</span>
+              <span style="font-size: 0.875rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 2rem;">🎯 99.9% accuracy</span>
+              <span style="font-size: 0.875rem; padding: 0.5rem 1rem; background: rgba(255,255,255,0.1); border-radius: 2rem;">🔒 Enterprise-grade security</span>
             </div>
           </div>
         </section>
@@ -614,6 +631,14 @@
                   <span class="stat-number" data-count="15.3" data-suffix="%">15.3%</span>
                   <span class="stat-label">Annual Growth Rate</span>
                 </div>
+                <div class="stat-item" style="text-align: left;">
+                  <span class="stat-number" data-count="89" data-suffix="%">89%</span>
+                  <span class="stat-label">Enterprise Adoption by 2028</span>
+                </div>
+              </div>
+              <div class="animate delay-3" style="text-align: left; margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); border-radius: 2rem; font-weight: 600;">📊 Data-driven decisions</span>
+                <span style="font-size: 0.8rem; padding: 0.4rem 0.8rem; background: color-mix(in srgb, var(--accent-secondary) 15%, transparent); color: var(--accent-secondary); border-radius: 2rem; font-weight: 600;">🏢 Fortune 500 demand</span>
               </div>
             </div>
             <div role="img" aria-label="Market growth chart showing steady increase from 2020 to 2030">
