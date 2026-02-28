@@ -395,10 +395,7 @@
         </svg>
       </button>
       <div class="viz-menu-dropdown" id="vizMenuDropdown">
-        <button onclick="cycleTheme()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="m12 1v6m0 6v6m11-7h-6m-6 0H1"/></svg>
-          <span id="themeLabel">Dark</span>
-        </button>
+        <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
         <button onclick="downloadImage()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/></svg>
           <span>Download PNG</span>
@@ -604,11 +601,13 @@
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
     var currentTheme = localStorage.getItem('viz-theme') || 'dark';
-    function applyTheme(theme) {
-      document.documentElement.className = 'theme-' + theme;
-      document.getElementById('themeLabel').textContent = theme === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', theme); currentTheme = theme;
-      if (typeof onThemeChange === 'function') onThemeChange();
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
