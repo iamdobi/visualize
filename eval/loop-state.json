@@ -1,7 +1,7 @@
 {
-  "currentRound": 17,
-  "loopsSinceResearch": 0,
-  "lastAverage": null,
+  "currentRound": 18,
+  "loopsSinceResearch": 1,
+  "lastAverage": 8.15,
   "gate": "ACCEPTABLE",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -20,6 +20,7 @@
     { "round": 14, "avg": 7.60, "gate": "NEEDS WORK", "notes": "R14: Fairer evaluator (actually interacted with files). 0 console errors. Added: card hover microinteractions (translateY + shadow), :focus-visible with border-radius, ARIA roles/labels to ai-timeline/comparison/system-architecture, enriched sparse slide 3 on both decks with SVG icons. Updated SKILL.md with hover patterns, focus-visible standard, a11y checklist. Top: saas-dashboard + startup-pitch-deck (8.00). Weakest: ai-timeline + comparison (7.25). loopsSinceResearch=5 → next round should be RESEARCH." },
     { "round": 15, "avg": 8.62, "gate": "ACCEPTABLE", "notes": "R15: Major jump +1.02. 0 console errors. Scores: ai-timeline 8.0, comparison 8.5, saas-dashboard 8.9, slide-deck-demo 8.8, startup-pitch-deck 8.9, system-architecture 8.6. FIXED: ai-timeline light theme completely broken. Top: saas-dashboard & startup-pitch-deck (8.9)." },
     { "round": 16, "avg": 7.88, "gate": "NEEDS WORK", "notes": "R16: Stricter evaluator dropped scores. 0 console errors. Scores: ai-timeline 7.63, comparison 8.00, saas-dashboard 8.00, slide-deck-demo 7.75, startup-pitch-deck 7.88, system-architecture 8.00. FIXED: slide deck light themes (pastel gradients), animation scale transforms, card hover border-color transitions. Theme Support was 6→expected 8+ post-fix. loopsSinceResearch=7 → research due next round." },
-    { "round": 17, "avg": null, "gate": "ACCEPTABLE", "notes": "R17 RESEARCH ROUND: Researched interpolate-size, CSS anchor positioning, ::details-content, styleable details. Core fix: slide deck theme-aware gradients (dark=deep saturated, light=soft pastel). Added interpolate-size: allow-keywords to all files. Enhanced chart hover micro-interactions, SVG icon hover effects, staggered scroll-reveal animations. Updated SKILL.md with Theme-Aware Slide Gradients section. 0 console errors all 6 files. Reset loopsSinceResearch." }
+    { "round": 17, "avg": null, "gate": "ACCEPTABLE", "notes": "R17 RESEARCH ROUND: Researched interpolate-size, CSS anchor positioning, ::details-content, styleable details. Core fix: slide deck theme-aware gradients (dark=deep saturated, light=soft pastel). Added interpolate-size: allow-keywords to all files. Enhanced chart hover micro-interactions, SVG icon hover effects, staggered scroll-reveal animations. Updated SKILL.md with Theme-Aware Slide Gradients section. 0 console errors all 6 files. Reset loopsSinceResearch." },
+    { "round": 18, "avg": 8.15, "gate": "ACCEPTABLE", "notes": "R18: 0 console errors. Scores: ai-timeline 8.0, comparison 8.0, saas-dashboard 8.3, slide-deck-demo 8.4, startup-pitch-deck 8.1, system-architecture 8.1. Fixed: chart interactivity (tooltips, hover highlights), a11y (ARIA labels, focus-visible), system-architecture mobile responsiveness, micro-interactions across all files. Weakest dimension: comparison interactivity (6→fixed). Top: slide-deck-demo 8.4." }
   ]
 }
