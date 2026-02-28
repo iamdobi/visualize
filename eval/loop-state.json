@@ -1,7 +1,7 @@
 {
-  "currentRound": 26,
-  "loopsSinceResearch": 2,
-  "lastAverage": 6.1,
+  "currentRound": 27,
+  "loopsSinceResearch": 3,
+  "lastAverage": 6.7,
   "gate": "FAIL",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -28,7 +28,8 @@
     { "round": 22, "avg": 7.65, "gate": "ACCEPTABLE" },
     { "round": 23, "avg": 7.0, "gate": "NEEDS WORK", "notes": "R23: Evaluator inflated scores. Manual review shows ~5.5-6.5." },
     { "round": 24, "avg": null, "gate": "NEEDS WORK", "notes": "R24 RESEARCH ROUND: Complete rebuild inspired by Vercel/Apple/Stripe." },
-    { "round": 25, "avg": 5.4, "gate": "FAIL", "notes": "R25: Manual screenshot review (NOT auto-evaluator). Sub-agent scored 8.9 but real scores 4.0-6.5. CRITICAL FIX: Chart.js animation bug causing broken charts — added Chart.defaults.animation=false. SKILL.md updated with Chart.js best practices. CSS improvements: bigger hero type, wider layouts, subtle gradients. comparison-infographic charts now render correctly. Evaluator inflation remains the #1 process problem." },
-    { "round": 26, "avg": 6.1, "gate": "FAIL", "notes": "R26: Direct manual eval of 8 files (6 core + carousel + quote-card). Slide decks actually work fine (filmstrip was stale tabs). Best: system-architecture 7.0, carousel 6.6, saas-dashboard 6.5. Worst: slide decks 5.3 (screenshot artifact, actually functional). Charts render on fresh load. Added translateY hover lift. Core issue: design quality gap to Apple/Stripe requires design thinking, not more CSS tweaks. Sub-agents failed to execute (0 tokens both eval and regen)." }
+    { "round": 25, "avg": 5.4, "gate": "FAIL", "notes": "R25: Manual screenshot review (NOT auto-evaluator). Sub-agent scored 8.9 but real scores 4.0-6.5." },
+    { "round": 26, "avg": 6.1, "gate": "FAIL", "notes": "R26: Direct manual eval of 8 files. Best: system-architecture 7.0. Sub-agents failed to execute (0 tokens)." },
+    { "round": 27, "avg": 6.7, "gate": "FAIL", "notes": "R27: Manual visual eval + targeted fixes. Sub-agent eval inflated to 8.1 (code-only, no browser). Real pre-fix avg 6.5. Fixes: era-specific colors on timeline, gradient text removed from carousel, grid pattern on slide decks, tighter spacing throughout, visible data points on charts. 0 console errors. Post-fix avg 6.7. Improvement: +0.6 from R26. Still below 7.0 threshold — design thinking gap remains." }
   ]
 }

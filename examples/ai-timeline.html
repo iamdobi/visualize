@@ -117,7 +117,7 @@
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
     /* Hero */
-    .hero { padding: 80px 0 64px; text-align: center; }
+    .hero { padding: 48px 0 32px; text-align: center; }
     .hero h1 { 
       font-size: clamp(3rem, 8vw, 4.5rem); 
       margin-bottom: 16px; 
@@ -185,10 +185,11 @@
     /* Timeline */
     .timeline { position: relative; padding-left: 40px; }
     .timeline::before {
-      content: ''; position: absolute; left: 11px; top: 0; bottom: 0;
-      width: 2px; 
+      content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
+      width: 4px; 
       background: linear-gradient(180deg, var(--accent) 0%, var(--accent-secondary) 100%);
-      border-radius: 1px;
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(59,130,246,0.3);
     }
 
     .era-label {
@@ -214,9 +215,9 @@
       position: relative; 
       background: var(--surface);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 32px;
-      margin-bottom: 24px;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
       margin-left: 24px;
       transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
@@ -276,14 +277,24 @@
       font-weight: 600; 
     }
 
+    /* Era color variations */
+    .timeline-item.era-foundations { border-left: 3px solid #0070f3; }
+    .timeline-item.era-strategic { border-left: 3px solid #0cce6b; }
+    .timeline-item.era-deep { border-left: 3px solid #7928ca; }
+    .timeline-item.era-generative { border-left: 3px solid #f5a623; }
+    
+    /* Width variations */
+    .timeline-item.width-compact { width: 85%; }
+    .timeline-item.width-wide { width: 110%; margin-left: 8px; }
+
     /* Future */
     .future { 
       text-align: center; 
-      padding: 80px 32px; 
-      margin: 64px 0 0; 
+      padding: 48px 32px; 
+      margin: 48px 0 0; 
       border-top: 1px solid var(--border);
       background: var(--surface);
-      border-radius: 12px;
+      border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.08);
     }
     .theme-light .future { border: 1px solid rgba(0,0,0,0.08); }
@@ -292,10 +303,7 @@
       margin-bottom: 16px; 
       letter-spacing: -0.03em;
       line-height: 1.05;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
+      color: var(--accent);
     }
     .future p { 
       color: var(--text-secondary); 
@@ -313,7 +321,7 @@
       .hero { padding: 60px 0 48px; }
       .timeline { padding-left: 24px; }
       .timeline-item { 
-        padding: 24px; 
+        padding: 20px; 
         margin-left: 12px;
       }
       .timeline-item:hover {
@@ -383,28 +391,28 @@
 
         <div class="era-label" id="era-foundations">Early Foundations</div>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-foundations width-compact" role="listitem" data-reveal>
           <div class="timeline-year">1950</div>
           <h3 class="timeline-title">The Turing Test</h3>
           <p class="timeline-desc">Alan Turing publishes "Computing Machinery and Intelligence," proposing the fundamental question: can machines think?</p>
           <div class="timeline-impact"><strong>Impact:</strong> Established the philosophical foundation for AI research and the first benchmark for machine intelligence.</div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-foundations width-wide" role="listitem" data-reveal>
           <div class="timeline-year">1956</div>
           <h3 class="timeline-title">Birth of AI</h3>
           <p class="timeline-desc">The Dartmouth Summer Research Project coins "Artificial Intelligence." McCarthy, Minsky, and others formally launch AI as a field of study.</p>
           <div class="timeline-impact"><strong>Impact:</strong> Created AI as a discipline and attracted the first wave of research funding.</div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-foundations" role="listitem" data-reveal>
           <div class="timeline-year">1966</div>
           <h3 class="timeline-title">ELIZA Chatbot</h3>
           <p class="timeline-desc">Joseph Weizenbaum creates ELIZA, the first chatbot that engaged in conversation through pattern matching and substitution.</p>
           <div class="timeline-impact"><strong>Impact:</strong> Demonstrated that simple algorithms could create convincing human-like interactions.</div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-foundations width-compact" role="listitem" data-reveal>
           <div class="timeline-year">1980s</div>
           <h3 class="timeline-title">Expert Systems Boom</h3>
           <p class="timeline-desc">Systems like MYCIN and XCON demonstrate AI's commercial potential, generating billions in revenue across specialized domains.</p>
@@ -413,7 +421,7 @@
 
         <div class="era-label" id="era-strategic">Strategic AI</div>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-strategic width-wide" role="listitem" data-reveal>
           <div class="timeline-year">1997</div>
           <h3 class="timeline-title">Deep Blue Defeats Kasparov</h3>
           <p class="timeline-desc">IBM's Deep Blue becomes the first computer to defeat a world chess champion, beating Garry Kasparov 3.5–2.5.</p>
@@ -422,21 +430,21 @@
 
         <div class="era-label" id="era-deep">Deep Learning Era</div>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-deep" role="listitem" data-reveal>
           <div class="timeline-year">2006</div>
           <h3 class="timeline-title">Deep Learning Renaissance</h3>
           <p class="timeline-desc">Geoffrey Hinton's breakthroughs in deep neural networks, combined with GPU computing, make training large networks feasible.</p>
           <div class="timeline-impact"><strong>Impact:</strong> Launched the modern AI era — vision, speech, and language understanding all advanced rapidly.</div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-deep width-compact" role="listitem" data-reveal>
           <div class="timeline-year">2012</div>
           <h3 class="timeline-title">ImageNet Breakthrough</h3>
           <p class="timeline-desc">AlexNet wins ImageNet with 15.3% error rate, dramatically outperforming traditional approaches at 26.2%.</p>
           <div class="timeline-impact"><strong>Impact:</strong> Proved deep learning's superiority in computer vision, triggering massive AI investment.</div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-deep width-wide" role="listitem" data-reveal>
           <div class="timeline-year">2016</div>
           <h3 class="timeline-title">AlphaGo Masters Go</h3>
           <p class="timeline-desc">DeepMind's AlphaGo defeats world champion Lee Sedol 4–1 in Go, previously thought impossible for computers.</p>
@@ -445,14 +453,14 @@
 
         <div class="era-label" id="era-generative">Generative AI</div>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-generative width-compact" role="listitem" data-reveal>
           <div class="timeline-year">2020</div>
           <h3 class="timeline-title">GPT-3</h3>
           <p class="timeline-desc">OpenAI releases GPT-3 with 175B parameters, demonstrating unprecedented language understanding and generation.</p>
           <div class="timeline-impact"><strong>Impact:</strong> Sparked the generative AI boom, leading to ChatGPT and widespread AI adoption.</div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item era-generative width-wide" role="listitem" data-reveal>
           <div class="timeline-year">2022</div>
           <h3 class="timeline-title">ChatGPT Goes Mainstream</h3>
           <p class="timeline-desc">ChatGPT reaches 100M users in 2 months — the fastest-growing consumer application in history.</p>

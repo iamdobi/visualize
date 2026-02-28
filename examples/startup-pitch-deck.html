@@ -48,7 +48,7 @@
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
     .slides-container { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
-    .slide { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 64px; text-align: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0.4s; }
+    .slide { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px; text-align: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.4s ease, visibility 0.4s; }
     .slide.active { opacity: 1; visibility: visible; pointer-events: auto; }
 
     .slide.title-slide { 
@@ -62,15 +62,22 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0);
-      background-size: 32px 32px;
+      background-image: 
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 32px 32px, 64px 64px, 64px 64px;
       pointer-events: none;
     }
     .theme-light .slide.title-slide { 
       background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #f8fafc 100%);
     }
     .theme-light .slide.title-slide::before {
-      background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0);
+      background-image: 
+        radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0),
+        linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+      background-size: 32px 32px, 64px 64px, 64px 64px;
     }
     .slide.title-slide h1 { 
       font-size: clamp(4rem, 12vw, 8rem); 
@@ -81,11 +88,22 @@
       text-shadow: 0 0 60px rgba(12,206,107,0.3);
     }
     .slide.title-slide p { 
-      font-size: 1.5rem; 
+      font-size: 1.75rem; 
       color: var(--text-secondary); 
       max-width: 700px; 
       line-height: 1.4;
-      margin-bottom: 16px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .slide.title-slide p::after {
+      content: '';
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
     }
     .slide.title-slide .meta { 
       margin-top: 40px; 
@@ -168,7 +186,7 @@
       grid-template-columns: repeat(3, 1fr); 
       gap: 1px; 
       background: var(--border); 
-      border-radius: 12px; 
+      border-radius: 8px; 
       overflow: hidden; 
       max-width: 800px; 
       width: 100%; 
@@ -178,7 +196,7 @@
     .stat-grid.cols-4 { grid-template-columns: repeat(4, 1fr); max-width: 1000px; }
     .stat-cell { 
       background: var(--surface); 
-      padding: 48px 32px; 
+      padding: 32px 24px; 
       text-align: center; 
       transition: transform 0.2s ease;
     }
@@ -245,8 +263,8 @@
     .chart-card { 
       background: var(--surface); 
       border: 1px solid rgba(255,255,255,0.08); 
-      border-radius: 12px; 
-      padding: 32px; 
+      border-radius: 8px; 
+      padding: 24px; 
       max-width: 520px; 
       width: 100%; 
       transition: box-shadow 0.2s ease;
@@ -269,11 +287,11 @@
     .comparison-block:hover, .card:hover, [data-reveal]:hover { border-color: rgba(255,255,255,0.12); }
 
     @media (max-width: 768px) {
-      .slide { padding: 32px 24px; }
+      .slide { padding: 24px; }
       .stat-grid, .stat-grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
       .solution-grid, .pricing-grid { grid-template-columns: 1fr; }
       .team-grid { grid-template-columns: repeat(2, 1fr); }
-      .stat-cell { padding: 32px 20px; }
+      .stat-cell { padding: 24px 16px; }
       .stat-cell .num { font-size: 3rem; }
     }
   </style>

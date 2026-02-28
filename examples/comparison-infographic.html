@@ -57,7 +57,7 @@
     .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
 
     /* Hero — infographic style, not dashboard */
-    .hero { padding: 80px 0 48px; text-align: center; }
+    .hero { padding: 48px 0 32px; text-align: center; }
     .hero h1 { 
       font-size: clamp(3rem, 8vw, 4.5rem); 
       margin-bottom: 16px; 
@@ -102,12 +102,18 @@
     }
 
     .comparison-block { 
-      margin-bottom: 64px; 
-      padding: 32px;
+      margin-bottom: 48px; 
+      padding: 24px;
       background: var(--surface);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
+      border-radius: 8px;
       transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .comparison-block.remote-section {
+      background: color-mix(in srgb, var(--surface) 85%, var(--remote) 15%);
+    }
+    .comparison-block.office-section {
+      background: color-mix(in srgb, var(--surface) 85%, var(--office) 15%);
     }
     .comparison-block:hover {
       transform: translateY(-2px);
@@ -135,11 +141,11 @@
 
     /* Charts */
     .chart-section { 
-      margin-bottom: 56px; 
-      padding: 32px;
+      margin-bottom: 40px; 
+      padding: 24px;
       background: var(--surface);
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
+      border-radius: 8px;
       transition: box-shadow 0.2s ease;
     }
     .chart-section:hover {
@@ -149,16 +155,16 @@
     .theme-light .chart-section:hover { box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.08); }
     .chart-section h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.02em; }
     .chart-section .chart-sub { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
-    .chart-wrapper { position: relative; height: 360px; width: 100%; }
+    .chart-wrapper { position: relative; height: 420px; width: 100%; }
     .chart-wrapper canvas { display: block; }
 
     /* Verdict / conclusion — infographic style */
     .verdict { 
       text-align: center; 
-      padding: 80px 32px; 
+      padding: 48px 32px; 
       border-top: 1px solid var(--border);
       background: var(--surface);
-      border-radius: 12px;
+      border-radius: 8px;
       margin-top: 32px;
       border: 1px solid rgba(255,255,255,0.08);
     }
@@ -181,10 +187,10 @@
       .hero { padding: 60px 0 40px; }
       .hero-stats { gap: 24px; }
       .hero-stat-number { font-size: 2.5rem; }
-      .comparison-block { padding: 24px; margin-bottom: 48px; }
+      .comparison-block { padding: 20px; margin-bottom: 36px; }
       .comparison-block h2 { font-size: 1.5rem; }
-      .pros-cons-row { grid-template-columns: 1fr; gap: 24px; }
-      .chart-section { padding: 24px; }
+      .pros-cons-row { grid-template-columns: 1fr; gap: 20px; }
+      .chart-section { padding: 20px; }
       .chart-wrapper { height: 300px; }
       .verdict { padding: 60px 24px; }
       .verdict-stat { font-size: 4rem; }
@@ -236,7 +242,7 @@
       <div class="divider"></div>
 
       <!-- Remote Work section -->
-      <section class="comparison-block" data-reveal>
+      <section class="comparison-block remote-section" data-reveal>
         <div class="section-label">Part 1</div>
         <h2>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
@@ -268,7 +274,7 @@
       </section>
 
       <!-- Office Work section -->
-      <section class="comparison-block" data-reveal>
+      <section class="comparison-block office-section" data-reveal>
         <div class="section-label">Part 2</div>
         <h2>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
