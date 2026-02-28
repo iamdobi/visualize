@@ -465,13 +465,94 @@
       color: var(--text-secondary); line-height: 1.6;
     }
 
-    /* Responsive */
+    /* Mobile responsiveness with pinch-zoom */
+    .architecture-diagram {
+      position: relative;
+      overflow: auto;
+      /* Enable pinch-zoom on mobile */
+      touch-action: pan-x pan-y pinch-zoom;
+      scroll-behavior: smooth;
+    }
+    
+    /* Mobile layout optimizations */
     @container (width < 768px) {
       .hero { padding: 2rem 1rem; margin-bottom: 2rem; }
-      .nodes { grid-template-columns: 1fr; }
-      .connector { height: 40px; }
-      .node-detail { padding: 1.5rem; }
       .container { padding: 1rem; }
+      .node-detail { padding: 1.5rem; max-width: 95%; }
+      
+      /* Simplified mobile view */
+      .nodes { 
+        grid-template-columns: 1fr; 
+        gap: 1.5rem;
+        min-width: 100%;
+        padding: 1rem 0;
+      }
+      .connector { 
+        height: 30px;
+        margin: 0.5rem 0;
+      }
+      .conn-line {
+        height: 2px;
+      }
+      
+      /* Mobile node stacking */
+      .node {
+        max-width: none;
+        margin: 0 auto;
+      }
+    }
+    
+    /* Extra small screens - very compact layout */
+    @container (width < 480px) {
+      .architecture-diagram {
+        /* Enable horizontal scroll for very small screens */
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .nodes {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        white-space: normal;
+      }
+    }
+    
+    /* Zoom controls for mobile */
+    .zoom-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 1000;
+    }
+    @media (max-width: 768px) {
+      .zoom-controls {
+        display: flex;
+      }
+    }
+    .zoom-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      transition: background 0.2s ease;
+      backdrop-filter: blur(12px);
+    }
+    .zoom-btn:hover {
+      background: var(--surface-hover);
+    }
+    .zoom-btn:active {
+      transform: scale(0.95);
     }
   </style>
 </head>
@@ -542,7 +623,7 @@
             Client Applications
           </div>
           <div class="nodes">
-            <div class="node" data-name="Web Application" data-desc="React-based single-page application with server-side rendering for SEO. Hosted on Cloudflare CDN with edge caching. Handles 8K+ concurrent users during peak hours." data-tags="React,SSR,CDN,TypeScript,WebSockets" data-status="healthy">
+            <div class="node" data-name="Web Application" data-desc="React-based single-page application with server-side rendering for SEO. Hosted on Cloudflare CDN with edge caching. Handles 8K+ concurrent users during peak hours." data-tags="React,SSR,CDN,TypeScript,WebSockets" data-status="healthy" aria-label="Web Application: React SPA with SSR and edge caching, handles 8K concurrent users"
               <div class="node-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
@@ -612,7 +693,7 @@
             API Gateway Layer
           </div>
           <div class="nodes">
-            <div class="node" data-name="Authentication Gateway" data-desc="JWT-based authentication with OAuth2 and OpenID Connect support. Rate limiting at 1,000 requests/min per client. Implements circuit breaker pattern for downstream service protection." data-tags="JWT,OAuth2,OIDC,Rate Limiting,Circuit Breaker" data-status="healthy">
+            <div class="node" data-name="Authentication Gateway" data-desc="JWT-based authentication with OAuth2 and OpenID Connect support. Rate limiting at 1,000 requests/min per client. Implements circuit breaker pattern for downstream service protection." data-tags="JWT,OAuth2,OIDC,Rate Limiting,Circuit Breaker" data-status="healthy" aria-label="Authentication Gateway: JWT-based auth with OAuth2 and rate limiting at 1000 requests per minute"
               <div class="node-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -1115,6 +1196,34 @@
       }
       menu.style.display = '';
     }
+
+    // === Zoom Controls for Mobile ===
+    var zoomLevel = 1;
+    var diagram = document.querySelector('.diagram');
+    
+    function zoomIn() {
+      zoomLevel = Math.min(zoomLevel + 0.1, 2);
+      diagram.style.transform = 'scale(' + zoomLevel + ')';
+      diagram.style.transformOrigin = 'top left';
+    }
+    
+    function zoomOut() {
+      zoomLevel = Math.max(zoomLevel - 0.1, 0.5);
+      diagram.style.transform = 'scale(' + zoomLevel + ')';
+      diagram.style.transformOrigin = 'top left';
+    }
+    
+    function resetZoom() {
+      zoomLevel = 1;
+      diagram.style.transform = 'scale(1)';
+    }
   </script>
+
+  <!-- Mobile Zoom Controls -->
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="zoomIn()" aria-label="Zoom in">+</button>
+    <button class="zoom-btn" onclick="zoomOut()" aria-label="Zoom out">−</button>
+    <button class="zoom-btn" onclick="resetZoom()" aria-label="Reset zoom" style="font-size: 12px;">⌂</button>
+  </div>
 </body>
 </html>

@@ -310,6 +310,35 @@
     canvas { transition: filter 0.2s ease; }
     canvas:hover { filter: brightness(1.05); }
 
+    /* Enhanced card hover effects with shadow elevation */
+    .kpi-card, .chart-container {
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .kpi-card:hover, .chart-container:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+    }
+    
+    /* Performance table row hover */
+    .performance-table tbody tr {
+      transition: background-color 0.15s ease;
+    }
+    .performance-table tbody tr:hover {
+      background: var(--surface-hover);
+    }
+    
+    /* Activity item hover */
+    .activity-item {
+      transition: background-color 0.15s ease, transform 0.15s ease;
+      border-radius: 8px;
+      margin: 0 -1rem;
+      padding: 1rem;
+    }
+    .activity-item:hover {
+      background: var(--surface-hover);
+      transform: translateX(4px);
+    }
+
     /* Recent Activity */
     .bottom-section {
       display: grid;
@@ -784,6 +813,10 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
           plugins: {
             tooltip: {
               enabled: true,
@@ -858,6 +891,10 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false
+          },
           plugins: {
             tooltip: {
               enabled: true,

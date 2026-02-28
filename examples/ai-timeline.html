@@ -339,6 +339,41 @@
       font-size: 0.875rem; color: var(--text);
     }
 
+    /* Click-to-expand functionality */
+    .timeline-card {
+      cursor: pointer;
+      position: relative;
+    }
+    .timeline-card::after {
+      content: '+'; position: absolute; top: 1rem; right: 1rem;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--accent); color: white; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    .timeline-card.expanded::after {
+      content: '−'; transform: rotate(180deg);
+    }
+    .timeline-details {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      padding: 0 1rem;
+    }
+    .timeline-details.expanded {
+      max-height: 200px; padding: 1rem;
+      border-top: 1px solid var(--border);
+      margin-top: 1rem;
+    }
+    .timeline-details h4 {
+      color: var(--accent); font-size: 0.875rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .timeline-details p {
+      font-size: 0.875rem; color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
     .era-label {
       position: absolute; left: 50%; transform: translateX(-50%);
       background: var(--accent-secondary); color: white;
@@ -433,7 +468,7 @@
 
       <section class="timeline" role="list" aria-label="AI Development Timeline">
         <div class="era-label" style="top: 2rem;">Early Foundations</div>
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="1950: Alan Turing proposes the Turing Test as a measure of machine intelligence">
           <div class="timeline-year">1950</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -445,11 +480,15 @@
               <div class="timeline-impact">
                 <strong>Impact:</strong> Established the philosophical foundation for AI research and created the first benchmark for machine intelligence.
               </div>
+              <div class="timeline-details">
+                <h4>Technical Details</h4>
+                <p>The test involves a human evaluator engaging in conversations with both a human and a machine. If the evaluator cannot reliably distinguish between the two, the machine passes the test.</p>
+              </div>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="1956: Dartmouth Summer Research Project coins the term Artificial Intelligence">
           <div class="timeline-year">1956</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -465,7 +504,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="1966: Joseph Weizenbaum creates ELIZA, the first chatbot">
           <div class="timeline-year">1966</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -481,7 +520,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="1980s: Expert Systems like MYCIN demonstrate AI's commercial potential">
           <div class="timeline-year">1980s</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -498,7 +537,7 @@
         </article>
 
         <div class="era-label" style="top: 32rem;">Strategic AI</div>
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="1997: IBM's Deep Blue defeats world chess champion Garry Kasparov">
           <div class="timeline-year">1997</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -515,7 +554,7 @@
         </article>
 
         <div class="era-label" style="top: 50rem;">Deep Learning Era</div>
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="2006: Geoffrey Hinton's breakthroughs spark the Deep Learning Renaissance">
           <div class="timeline-year">2006</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -531,7 +570,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="2012: AlexNet wins ImageNet competition, proving deep learning superiority">
           <div class="timeline-year">2012</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -543,11 +582,15 @@
               <div class="timeline-impact">
                 <strong>Impact:</strong> Proved deep learning's superiority in computer vision, triggering massive investment in AI research.
               </div>
+              <div class="timeline-details">
+                <h4>Key Innovation</h4>
+                <p>AlexNet used convolutional neural networks with GPU acceleration, dropout regularization, and ReLU activation functions to achieve breakthrough performance on the ImageNet dataset.</p>
+              </div>
             </div>
           </div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="2016: DeepMind's AlphaGo defeats world Go champion Lee Sedol">
           <div class="timeline-year">2016</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -564,7 +607,7 @@
         </article>
 
         <div class="era-label" style="top: 78rem;">Generative AI Boom</div>
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="2020: OpenAI releases GPT-3 with 175 billion parameters, sparking generative AI boom">
           <div class="timeline-year">2020</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -580,7 +623,7 @@
           </div>
         </article>
 
-        <article class="timeline-item" role="listitem" data-reveal>
+        <article class="timeline-item" role="listitem" data-reveal aria-label="2022: ChatGPT launches, reaching 100 million users in 2 months">
           <div class="timeline-year">2022</div>
           <div class="timeline-content">
             <div class="timeline-card">
@@ -703,6 +746,20 @@
       }
       menu.style.display = '';
     }
+
+    // === Timeline Click-to-Expand ===
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.timeline-card').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+          var details = card.querySelector('.timeline-details');
+          if (details) {
+            card.classList.toggle('expanded');
+            details.classList.toggle('expanded');
+          }
+        });
+      });
+    });
   </script>
 </body>
 </html>

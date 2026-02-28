@@ -412,6 +412,10 @@
     }
     .nav-button:hover { background: var(--surface-hover); }
     .nav-button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .nav-button:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
     .slide-counter { color: var(--text-secondary); font-size: 0.875rem; font-weight: 500; min-width: 60px; text-align: center; }
 
     .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--border); z-index: 1000; }
