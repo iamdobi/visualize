@@ -105,6 +105,53 @@ Apply these defaults. They are opinionated and tested — override only when use
 
 Use these cutting-edge CSS features where supported for better UX:
 
+**Popover API** (Chrome 114+) — Zero-JS tooltips, info panels, and modals:
+```html
+<button popovertarget="info-panel">ℹ Details</button>
+<div id="info-panel" popover>
+  <h3>More Information</h3>
+  <p>Details shown on click, no JS needed.</p>
+</div>
+```
+```css
+[popover] {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px; max-width: 320px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+[popover]::backdrop { background: rgba(0,0,0,0.3); }
+```
+Use for: dashboard metric details, architecture node info, chart annotations.
+
+**Exclusive `<details>` Accordion** (Chrome 120+) — Collapsible sections, no JS:
+```html
+<details name="faq" open><summary>Section 1</summary><p>Content</p></details>
+<details name="faq"><summary>Section 2</summary><p>Content</p></details>
+```
+Same `name` attribute = only one open at a time. Use for: cheatsheets, process guides, FAQs, any content with collapsible groups.
+
+**`::details-content` Styling** (Chrome 131+) — Animate accordion open/close:
+```css
+details { overflow: hidden; }
+::details-content {
+  transition: block-size 0.3s ease, opacity 0.3s ease;
+  block-size: 0; opacity: 0;
+}
+details[open]::details-content {
+  block-size: auto; opacity: 1;
+}
+```
+
+**CSS Anchor Positioning** (Chrome 125+) — Position tooltips relative to elements:
+```css
+.node { anchor-name: --node-tooltip; }
+.tooltip {
+  position: fixed; position-anchor: --node-tooltip;
+  position-area: block-start; margin-bottom: 8px;
+}
+```
+Use for: architecture diagrams, org charts, any element needing positioned annotations.
+
 **Container Queries** — Size elements based on their container, not viewport:
 ```css
 .card-container {
@@ -619,6 +666,26 @@ This skill is used mid-conversation. Leverage everything:
 
 Always use real content. Never generate placeholder data when real context exists.
 
+## Type-Specific Interactivity (Mandatory)
+
+Every file MUST have at least ONE meaningful interaction beyond theme toggle + menu. Static-feeling pages score low on interactivity.
+
+| Type | Required Interaction |
+|------|---------------------|
+| **Cheatsheet** | Search/filter input + copy-to-clipboard on code blocks. Use `<details name="...">` for collapsible groups. |
+| **Dashboard** | Filter toolbar or metric drill-down. At minimum: date range or category filter. |
+| **Status Report** | Collapsible detail sections (use `<details>`). Progress bars animate on scroll. |
+| **Quote Card** | Auto-cycling quotes OR swipeable carousel. Share/copy button. |
+| **Event Poster** | Animated countdown timer (days/hours/min/sec). RSVP/register button. |
+| **Process Guide** | Steps as exclusive accordion (`<details name="steps">`). Or interactive progress tracker. |
+| **Architecture** | Clickable nodes with popover details (use Popover API). Hover highlights connections. |
+| **Timeline** | Filter by era/category. Or click to expand event details. |
+| **Comparison** | Toggle categories on/off. Or highlight winner per row. |
+| **Carousel** | Touch swipe + keyboard + auto-advance option. Card counter always visible. |
+| **Slide Deck** | Already interactive (nav). Add: presenter timer, slide overview grid. |
+
+If a type isn't listed, add at minimum: a filter, search, sort, or expand/collapse interaction.
+
 ## Anti-Patterns
 
 - ❌ Walls of text — if it reads like a document, it's not a visualization
@@ -667,6 +734,7 @@ Use these when they add value. See [references/css-techniques.md](references/css
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; } /* Enable smooth height:auto transitions (Chrome 129+) */
 
     /* ===== THEMES ===== */
     /* CSS prefers-color-scheme for flash-free theme detection */
@@ -773,6 +841,7 @@ Use these when they add value. See [references/css-techniques.md](references/css
       .card { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
+    @page { margin: 1in; @bottom-center { content: "Page " counter(page); font-size: 9pt; color: #666; } }
 
     /* ===== MENU ===== */
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
