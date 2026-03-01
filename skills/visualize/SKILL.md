@@ -23,7 +23,7 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 ## Core Principles
 
 1. **Single-file HTML** — one `.html` file with inline CSS/JS. Opens in any browser, works offline, emails easily.
-2. **Dark theme by default** — modern, premium feel. Light theme always available via toggle.
+2. **Light theme optimized** — modern designs prioritize light mode quality. Dark theme available via toggle.
 3. **Beautiful by default** — the first output should look professional with zero iteration.
 4. **Content-first** — the visualization serves the message. Never sacrifice clarity for aesthetics.
 5. **Responsive** — works on desktop, tablet, and mobile unless explicitly fixed-dimension (e.g., 16:9 slides).
@@ -83,7 +83,7 @@ Key highlights (consult reference for full details):
 - **Accessibility:** Skip-to-content, aria-labels, landmark roles, :focus-visible, sr-only for chart data. See reference for full checklist.
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
 - **Chart.js:** DISABLE default animation (`Chart.defaults.animation = false`), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label. Use a `chartsBuilt` guard flag — `onThemeChange` must NOT call `buildCharts()` until the initial build completes (prevents "Canvas already in use" errors during page-load theme detection).
-- **Chart.js customization:** Apply professional styling beyond defaults — custom padding, remove excessive gridlines, use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Avoid library defaults that look auto-generated.
+- **Chart.js customization:** Apply professional styling beyond defaults — custom padding (`layout: { padding: 30 }`), remove excessive gridlines (opacity ≤ 0.04), use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Chart containers need 12px border radius, 40px internal padding, and 360px minimum height for substantial presence. Avoid library defaults that look auto-generated.
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
 - **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
 - **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.

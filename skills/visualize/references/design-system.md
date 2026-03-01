@@ -40,6 +40,10 @@ Apply these defaults. They are opinionated and tested — override only when use
   - **Handwritten:** Caveat, Patrick Hand
   - Always load via Google Fonts CDN: `https://fonts.googleapis.com/css2?family=FONTNAME:wght@WEIGHTS&display=swap`
   - Update the `--font-primary` CSS var and `body { font-family: ... }` accordingly
+- **Light mode text optimization:** Use softer text colors, not harsh black:
+  - Primary text: `#1a1a1a` (not #000000) for better readability
+  - Secondary text: `#666666` for proper hierarchy
+  - Never pure black text on white backgrounds - it's too harsh
 - **Font detection:** Infer the right font from context:
   - Korean/Japanese/Chinese content → auto-add Noto Sans KR/JP/SC
   - Code-heavy content (cheat sheets) → add JetBrains Mono for code blocks
@@ -164,19 +168,23 @@ html.theme-dark {
   --positive: #10b981;
   --negative: #f43f5e;
   --warning: #f59e0b;
+  --info: #06b6d4;             /* semantic info color */
+  --muted: #0f0f0f;            /* subtle backgrounds */
 }
 html.theme-light {
   --bg: #FAFAF9;               /* warm off-white */
   --surface: #FFFFFF;
   --surface-hover: #F5F5F4;
-  --border: rgba(0,0,0,0.06);
-  --text: #0f172a;
-  --text-secondary: #64748b;
+  --border: #e5e5e5;           /* more visible than 0.06 opacity */
+  --text: #1a1a1a;             /* softer than pure black */
+  --text-secondary: #666666;   /* better contrast than #64748b */
   --accent: #2563eb;
   --accent-secondary: #7c3aed;
   --positive: #059669;
   --negative: #e11d48;
   --warning: #d97706;
+  --info: #0ea5e9;             /* semantic info color */
+  --muted: #f8fafc;            /* subtle backgrounds */
 }
 ```
 
@@ -188,6 +196,98 @@ applyTheme(initial);
 ```
 
 Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f43f5e`
+
+### Semantic Color Usage (Professional Standards)
+
+Use colors with semantic meaning, not decoration:
+
+**Success/Positive Metrics** — `var(--positive)` (green):
+- Revenue growth, user acquisition, completion rates
+- Up arrows, positive percentages, "good" status indicators
+
+**Warning/Caution** — `var(--warning)` (amber):
+- Metrics approaching thresholds, pending statuses
+- Neutral alerts, "attention needed" indicators
+
+**Error/Negative Metrics** — `var(--negative)` (red):
+- Declining metrics, failures, critical alerts
+- Down arrows, negative percentages, error states
+
+**Info/Primary Actions** — `var(--info)` (blue):
+- Primary CTAs, informational highlights, process steps
+
+**Accent Restraint Rules**:
+- **KPI grids with 4+ cards:** Use at most 2 accent colors — `var(--accent)` for the single most important metric, `var(--text)` for others
+- **Never colorize numbers randomly** — color must indicate semantic meaning
+- **Delta indicators only:** Use `var(--positive)`/`var(--negative)` for arrows and percentages, not main values
+
+### Professional Card System
+
+Modern card styling beyond basic borders:
+
+```css
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;                    /* Larger than 8px for premium feel */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Subtle depth in light mode */
+  padding: 24px;                          /* Generous internal spacing */
+  transition: all 0.15s ease;
+}
+
+/* Light mode: visible shadows */
+.theme-light .card {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.03);
+}
+
+/* Dark mode: border emphasis */
+.theme-dark .card {
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.card:hover {
+  /* Light mode: deeper shadow */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03);
+}
+
+.theme-dark .card:hover {
+  /* Dark mode: brighter border */
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+}
+```
+
+**Key principles:**
+- 12px border radius for premium feel (not 8px)
+- Light mode emphasizes shadows, dark mode emphasizes borders
+- Consistent 24px internal padding
+- Hover states enhance the existing visual style
+
+### Chart.js Professional Styling
+
+Beyond library defaults — apply these to every chart:
+
+```css
+.chart-container {
+  padding: 40px;          /* Breathing room around chart */
+  min-height: 360px;      /* Substantial presence on dashboard */
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Remove excessive grid lines */
+.chart-canvas {
+  border-radius: 8px;     /* Inner chart gets smaller radius */
+}
+```
+
+**Chart configuration enhancements:**
+- Custom padding: `layout: { padding: { top: 30, right: 30, bottom: 30, left: 30 } }`
+- Rounded corners on bars: `borderRadius: 4`
+- Professional grid opacity: Light mode `rgba(0,0,0,0.04)`, Dark mode `rgba(255,255,255,0.02)`
+- Thoughtful color palettes matching theme accent
+- Axis label sizing: minimum 13px for readability
+- Remove default animations: `Chart.defaults.animation = false`
 
 ### Spacing
 - **8px grid** — all spacing in multiples: 4, 8, 12, 16, 24, 32, 48, 64, 96px
