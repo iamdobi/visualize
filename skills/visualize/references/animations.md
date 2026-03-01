@@ -57,12 +57,12 @@ Motion.js is available for advanced spring physics but is NOT required:
 
 ### Hover Effects (Pure CSS)
 ```css
+/* Shadow-only hover — no translateY or scale transforms */
 .card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 .card:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
 }
 ```
 

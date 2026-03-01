@@ -16,5 +16,13 @@ Thumbs.db
 # Eval results (local only)
 eval/eval-results.md
 
+# Pipeline dependencies
+eval/pipeline/node_modules/
+eval/pipeline/package-lock.json
+
+# Round generated outputs and screenshots (large binary files)
+eval/rounds/*/generated/
+eval/rounds/*/screenshots/
+
 # Research (internal)
 research/

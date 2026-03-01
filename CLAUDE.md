@@ -21,12 +21,22 @@ visualize/
 │           ├── animations.md
 │           └── eval.md
 ├── examples/                  # 15 example HTML files
-├── eval/                      # Eval loop infrastructure
+├── eval/                      # Eval infrastructure
+│   ├── EVAL.md               # 3-layer scoring specification
+│   ├── LOOP.md               # Self-improvement loop methodology (v4)
 │   ├── SKILL.md              # Evaluator skill
-│   ├── LOOP.md               # Loop methodology
 │   ├── loop-state.json       # Current round + score history
-│   └── stress-tests.md       # 40 test cases
-├── research/                  # Design research notes
+│   ├── stress-tests.md       # 40 test cases
+│   ├── pipeline/             # Automated eval pipeline (Node.js)
+│   │   ├── run.js            # Orchestrator: node run.js --dir examples/ --vision
+│   │   ├── format-detect.js  # Layer 1: auto-detect visualization format
+│   │   ├── vision-eval.js    # Layer 3: Claude vision API scoring
+│   │   ├── checks/           # Layer 2: 45 deterministic DOM checks
+│   │   ├── calibration/      # Anchor screenshots for vision eval
+│   │   └── LOOP-PROMPT.md    # Self-improvement loop agent prompt
+│   ├── rounds/               # Per-round results
+│   └── archive/              # Rounds 1-38 (historical)
+├── docs/plans/               # Design & implementation docs
 ├── CLAUDE.md                  # This file
 ├── README.md                  # GitHub-facing docs
 └── LICENSE                    # MIT
@@ -68,6 +78,11 @@ When editing examples:
 When running eval:
 - `eval/loop-state.json` tracks round number and score history
 - Quality gates: SHIP ≥9.0, ACCEPTABLE ≥8.0, NEEDS WORK ≥7.0
+- **Automated pipeline:** `cd eval/pipeline && node run.js --dir ../../examples/`
+  - Runs Layer 1 (format detection) + Layer 2 (45 DOM checks) + captures screenshots
+  - Layer 3 (visual/IA quality) is done by the AI agent reviewing the screenshots
+- **Self-improvement loop:** pass `eval/pipeline/LOOP-PROMPT.md` to any Claude Code / OpenClaw agent
+- See `eval/EVAL.md` for the 3-layer scoring specification
 
 ## Common Pitfalls
 
