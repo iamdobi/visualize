@@ -1,0 +1,14 @@
+{
+  "name": "visualize",
+  "owner": {
+    "name": "careerhackeralex",
+    "email": "careerhackeralex@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "visualize",
+      "source": "./",
+      "description": "Create beautiful HTML visualizations — slides, dashboards, infographics, and more"
+    }
+  ]
+}
