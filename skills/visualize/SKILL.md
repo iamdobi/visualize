@@ -62,13 +62,28 @@ Apply these defaults. They are opinionated and tested — override only when use
 Key highlights (consult reference for full details):
 
 ### Design Notes
-- **Typography:** Inter font (Google Fonts CDN), -0.03em tracking on headings, 700/600/400 weight hierarchy. Noto Sans KR/JP/SC for CJK. See reference for full type scale.
-- **Colors:** Class-based theming only (NO @media prefers-color-scheme). Dark: #0A0A0A bg, #EDEDED text. Light: #FAFAF9 bg, #0f172a text. See reference for full palette.
+
+**Theming System (CRITICAL):**
+- Use **class-based theming ONLY** — `<html class="theme-dark">` or `<html class="theme-light">`
+- Theme toggle changes html class: `document.documentElement.className = 'theme-' + newTheme`
+- **Never use `data-theme` attributes** — the evaluation system expects class-based themes
+- **Required CSS custom properties:** `--bg, --surface, --text, --accent, --border` (minimum set for evaluation compatibility)
+
+**Typography:**
+- **Inter font mandatory** — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
+- -0.03em tracking on headings, 700/600/400 weight hierarchy
+- Noto Sans KR/JP/SC for CJK. See reference for full type scale.
+
+**Colors:**
+- Class-based theming only (NO @media prefers-color-scheme)
+- Dark: #0A0A0A bg, #EDEDED text. Light: #FAFAF9 bg, #0f172a text
+- See reference for full palette.
 - **Cards:** 8px radius, shadow-only hover (no translateY/scale), 1px solid var(--border).
 - **Animations:** CSS @keyframes for page-load (.animate + .delay-N), data-reveal + IntersectionObserver for scroll, data-count for counters. Content visible by default. **Above-fold content must NEVER use data-reveal** — use `.animate` classes instead. Use `data-reveal` sparingly (max 3-4 sections) for below-fold content only.
 - **Accessibility:** Skip-to-content, aria-labels, landmark roles, :focus-visible, sr-only for chart data. See reference for full checklist.
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
-- **Chart.js:** DISABLE default animation (Chart.defaults.animation = false), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label. Use a `chartsBuilt` guard flag — `onThemeChange` must NOT call `buildCharts()` until the initial build completes (prevents "Canvas already in use" errors during page-load theme detection).
+- **Chart.js:** DISABLE default animation (`Chart.defaults.animation = false`), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label. Use a `chartsBuilt` guard flag — `onThemeChange` must NOT call `buildCharts()` until the initial build completes (prevents "Canvas already in use" errors during page-load theme detection).
+- **Chart.js customization:** Apply professional styling beyond defaults — custom padding, remove excessive gridlines, use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Avoid library defaults that look auto-generated.
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
 - **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
 - **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.
@@ -76,18 +91,41 @@ Key highlights (consult reference for full details):
 - **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
 
 
-## Hamburger Menu (Required)
+## Utility Menu (Required)
 
-Every visualization MUST include a hamburger menu (☰) fixed top-right with:
+Every visualization MUST include these structural elements for evaluation compatibility:
+
+**Required Elements:**
+- `.viz-menu` element in DOM
+- `.viz-menu-toggle` button (hamburger ☰ fixed top-right)
+- Download PNG button inside menu
+- Print/PDF button inside menu
+- `html-to-image` CDN script loaded: `https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js`
+
+**Menu Functionality:**
 1. **Theme toggle** — cycle Dark / Light / Auto, persisted to localStorage
 2. **Download as PNG** — via `html-to-image` CDN at 2x retina quality
 3. **Print / Save PDF** — `window.print()` with optimized `@media print` styles
 
 See [references/menu.md](references/menu.md) for the complete copy-paste implementation.
 
-Required CDN: `https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js`
-
 Key: frosted glass style, smooth open/close, close on outside click + Escape, hide UI during capture, `print-color-adjust: exact`, slide decks export current slide only.
+
+## Semantic HTML Requirements
+
+All visualizations must include these semantic elements:
+
+**Required Structure:**
+- `<main>` element containing primary content
+- `<section>` elements for major content blocks
+- Landmark roles (`role="banner"`, `role="main"`, `role="complementary"`) OR skip-to-content link
+- Chart accessibility: `role="img"` and `aria-label` on chart containers
+
+**Additional Requirements:**
+- `@media print` styles defined
+- `@media (prefers-reduced-motion)` styles for accessibility
+- Adequate spacing between sections (≥48px)
+- Hover states for interactive elements
 
 ## Visualization Types
 
@@ -354,6 +392,7 @@ The skeleton provides:
 Elements must be large enough to read and feel substantial:
 
 - **Timeline cards:** minimum width 280px, minimum padding 20px
+- **Timeline layout:** Distribute timeline items evenly to prevent large gaps. If you have 5 items but only fill 60% of the vertical space, add more content sections (like investment breakdown or impact metrics) to fill the remaining 40%. Never leave massive empty spaces below the last timeline item.
 - **Chart containers:** minimum 60% of parent width, minimum height 300px (360px+ for dashboards). In grid layouts, charts should use `flex-grow: 1` to fill available space — 300px is a floor, not a target.
 - **Stat numbers:** minimum font-size 2rem (32px), bold/extrabold weight
 - **Card content area:** minimum padding 24px
