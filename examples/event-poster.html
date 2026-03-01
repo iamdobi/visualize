@@ -62,7 +62,7 @@
     }
 
     .poster-eyebrow { font-size: 0.85rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; position: relative; z-index: 1; background: color-mix(in srgb, var(--accent), transparent 85%); padding: 8px 16px; border-radius: 8px; display: inline-block; border: 4px solid var(--accent); }
-    .poster-title { font-size: clamp(3.5rem, 9vw, 6rem); font-weight: 900; line-height: 0.9; margin-bottom: 8px; color: var(--text); position: relative; z-index: 1; letter-spacing: -0.04em; text-shadow: 0 4px 8px rgba(0,0,0,0.3); }
+    .poster-title { font-size: clamp(3.5rem, 9vw, 6rem); font-weight: 900; line-height: 0.9; margin-bottom: 8px; color: var(--text); position: relative; z-index: 1; letter-spacing: -0.04em; text-shadow: 0 4px 8px rgba(0,0,0,0.3); text-wrap: balance; }
     .poster-location-line { font-size: 1.1rem; color: var(--text-secondary); font-weight: 500; position: relative; z-index: 1; }
 
     /* Countdown */
@@ -215,28 +215,8 @@
           <!-- Conference podium -->
           <rect x="170" y="140" width="60" height="40" rx="8" fill="var(--accent)" opacity="0.6"/>
           <rect x="175" y="145" width="50" height="6" rx="3" fill="var(--surface)" opacity="0.9"/>
-          <!-- Audience visualization -->
-          <circle cx="120" cy="220" r="12" fill="var(--accent)" opacity="0.7"/>
-          <circle cx="150" cy="230" r="12" fill="var(--accent-secondary)" opacity="0.7"/>
-          <circle cx="180" cy="220" r="12" fill="var(--positive)" opacity="0.7"/>
-          <circle cx="220" cy="220" r="12" fill="var(--warning)" opacity="0.7"/>
-          <circle cx="250" cy="230" r="12" fill="var(--accent-secondary)" opacity="0.7"/>
-          <circle cx="280" cy="220" r="12" fill="var(--accent)" opacity="0.7"/>
-          <!-- Additional row -->
-          <circle cx="105" cy="250" r="10" fill="var(--accent)" opacity="0.6"/>
-          <circle cx="135" cy="255" r="10" fill="var(--accent-secondary)" opacity="0.6"/>
-          <circle cx="165" cy="250" r="10" fill="var(--positive)" opacity="0.6"/>
-          <circle cx="195" cy="255" r="10" fill="var(--warning)" opacity="0.6"/>
-          <circle cx="225" cy="250" r="10" fill="var(--accent-secondary)" opacity="0.6"/>
-          <circle cx="255" cy="255" r="10" fill="var(--positive)" opacity="0.6"/>
-          <circle cx="285" cy="250" r="10" fill="var(--accent)" opacity="0.6"/>
           <!-- Year 2026 in large text -->
           <text x="200" y="85" text-anchor="middle" font-family="Inter" font-size="72" font-weight="900" fill="var(--accent)" opacity="0.4">2026</text>
-          <!-- Top corner accents -->
-          <circle cx="50" cy="50" r="8" fill="var(--accent)" opacity="0.5"/>
-          <circle cx="350" cy="50" r="8" fill="var(--accent-secondary)" opacity="0.5"/>
-          <circle cx="50" cy="270" r="8" fill="var(--positive)" opacity="0.5"/>
-          <circle cx="350" cy="270" r="8" fill="var(--warning)" opacity="0.5"/>
         </svg>
       </div>
       <div class="poster-eyebrow animate delay-1">The Premier AI Conference</div>
