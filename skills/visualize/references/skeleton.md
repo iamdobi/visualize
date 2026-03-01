@@ -158,7 +158,8 @@
   </style>
 </head>
 <body>
-  <main>
+  <a href="#main-content" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:10000;padding:8px 16px;background:var(--accent);color:white;text-decoration:none;border-radius:4px;" onfocus="this.style.cssText='position:fixed;left:16px;top:16px;z-index:10000;padding:8px 16px;background:var(--accent);color:white;text-decoration:none;border-radius:4px;'" onblur="this.style.cssText='position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;'">Skip to content</a>
+  <main id="main-content">
 
   <!-- MENU -->
   <div class="viz-menu">
@@ -258,6 +259,12 @@
       } catch(e) { console.error('Download failed:', e); }
       menu.style.display = '';
     }
+
+    // === Chart Guard Pattern (use when file has Chart.js) ===
+    // var chartsBuilt = false;
+    // function buildCharts() { /* ... build all charts ... */ chartsBuilt = true; }
+    // function onThemeChange() { if (chartsBuilt) buildCharts(); }
+    // window.addEventListener('load', function() { setTimeout(buildCharts, 200); });
 
     // === YOUR SCRIPTS BELOW (use var for top-level variables, define onThemeChange for chart re-renders) ===
   </script>

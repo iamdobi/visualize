@@ -47,7 +47,7 @@ Users invoke this **mid-conversation** with Claude Code. Use the full conversati
   - **Mermaid** — `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` (flowcharts, sequence diagrams)
   - **Three.js** — 3D when appropriate
   - **Reveal.js** — full-featured slide engine when needed
-  - **Leaflet** — maps and geospatial data
+  - **Leaflet** — maps and geospatial data (`https://unpkg.com/leaflet@1.9/dist/leaflet.js` + CSS). **Required for geographic data** — never hand-draw SVG continent shapes. Use OpenStreetMap tiles or a minimal tile provider.
 - SVG for icons and simple graphics — never use external image URLs unless user provides them
 - Prefer CSS animations over JS when possible
 
@@ -65,11 +65,12 @@ Key highlights (consult reference for full details):
 - **Typography:** Inter font (Google Fonts CDN), -0.03em tracking on headings, 700/600/400 weight hierarchy. Noto Sans KR/JP/SC for CJK. See reference for full type scale.
 - **Colors:** Class-based theming only (NO @media prefers-color-scheme). Dark: #0A0A0A bg, #EDEDED text. Light: #FAFAF9 bg, #0f172a text. See reference for full palette.
 - **Cards:** 8px radius, shadow-only hover (no translateY/scale), 1px solid var(--border).
-- **Animations:** CSS @keyframes for page-load (.animate + .delay-N), data-reveal + IntersectionObserver for scroll, data-count for counters. Content visible by default.
+- **Animations:** CSS @keyframes for page-load (.animate + .delay-N), data-reveal + IntersectionObserver for scroll, data-count for counters. Content visible by default. **Above-fold content must NEVER use data-reveal** — use `.animate` classes instead. Use `data-reveal` sparingly (max 3-4 sections) for below-fold content only.
 - **Accessibility:** Skip-to-content, aria-labels, landmark roles, :focus-visible, sr-only for chart data. See reference for full checklist.
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
-- **Chart.js:** DISABLE default animation (Chart.defaults.animation = false), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label.
+- **Chart.js:** DISABLE default animation (Chart.defaults.animation = false), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label. Use a `chartsBuilt` guard flag — `onThemeChange` must NOT call `buildCharts()` until the initial build completes (prevents "Canvas already in use" errors during page-load theme detection).
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
+- **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values.
 - **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid).
 - **Entrance animations mandatory:** fadeInUp + stagger on all cards/sections.
 - **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
