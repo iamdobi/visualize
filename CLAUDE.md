@@ -23,14 +23,14 @@ visualize/
 ├── examples/                  # 15 example HTML files
 ├── eval/                      # Eval infrastructure
 │   ├── EVAL.md               # 3-layer scoring specification
-│   ├── LOOP.md               # Self-improvement loop methodology (v4)
+│   ├── LOOP.md               # Self-improvement loop methodology (v6)
 │   ├── SKILL.md              # Evaluator skill
 │   ├── loop-state.json       # Current round + score history
 │   ├── stress-tests.md       # 40 test cases
 │   ├── pipeline/             # Automated eval pipeline (Node.js)
-│   │   ├── run.js            # Orchestrator: node run.js --dir examples/ --vision
+│   │   ├── run.js            # Orchestrator: node run.js --dir examples/
 │   │   ├── format-detect.js  # Layer 1: auto-detect visualization format
-│   │   ├── vision-eval.js    # Layer 3: Claude vision API scoring
+│   │   ├── vision-eval.js    # Layer 3: vision eval helper (agent scores, not API)
 │   │   ├── checks/           # Layer 2: 45 deterministic DOM checks
 │   │   ├── calibration/      # Anchor screenshots for vision eval
 │   │   └── LOOP-PROMPT.md    # Self-improvement loop agent prompt

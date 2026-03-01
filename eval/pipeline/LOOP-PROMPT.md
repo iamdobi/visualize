@@ -1,7 +1,8 @@
 # Visualize Self-Improvement Loop — Agent Prompt
 
-> Pass this entire file as a prompt to any Claude agent to run one complete improvement round.
-> The agent needs: shell access, file system access, and an ANTHROPIC_API_KEY for vision eval.
+> Pass this entire file as a prompt to any Claude agent (Claude Code, OpenClaw, etc.)
+> to run one complete improvement round.
+> The agent needs: shell access, file system access, and git push access to the repo.
 
 ---
 
@@ -51,14 +52,15 @@ From this persona, generate **3 natural-language prompts** they would realistica
 **Generate each output:**
 ```bash
 mkdir -p eval/rounds/round-{N}/generated
+cd eval/rounds/round-{N}/generated
 
 # For each of the 3 prompts:
 claude -p --dangerously-skip-permissions --model sonnet \
-  "PROMPT_TEXT_HERE" \
-  --output-dir eval/rounds/round-{N}/generated/
+  "PROMPT_TEXT_HERE. Save as descriptive-name.html"
 ```
 
-Move the generated HTML files to `eval/rounds/round-{N}/generated/` with descriptive names.
+Each prompt should instruct Claude to save the file with a descriptive kebab-case name.
+The generated HTML files end up in `eval/rounds/round-{N}/generated/`.
 
 ## Step 2: Evaluate — 3-Layer Pipeline
 
@@ -188,7 +190,7 @@ claude -p --dangerously-skip-permissions --model sonnet \
 2. Re-evaluate with the pipeline:
 ```bash
 cd eval/pipeline
-node run.js --file path/to/regenerated.html --round {N}-retest --vision
+node run.js --file path/to/regenerated.html --round {N}-retest
 ```
 
 3. Compare before/after scores
