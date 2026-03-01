@@ -1,7 +1,7 @@
 {
-  "currentRound": 33,
-  "loopsSinceResearch": 2,
-  "lastAverage": 5.93,
+  "currentRound": 34,
+  "loopsSinceResearch": 3,
+  "lastAverage": 6.10,
   "gate": "FAIL",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -12,7 +12,7 @@
     { "round": 6, "avg": 6.75, "gate": "NEEDS WORK", "notes": "R6 eval: Stricter scoring exposed a11y gaps (all files scored 5). Rebuilt all 6 files: added skip-links, aria-labels, landmark roles, focus indicators, SVG icons replacing emojis, Chart.js destroy/rebuild on theme toggle, mobile breakpoints, scroll-reveal fix (visible by default). Updated SKILL.md with a11y section." },
     { "round": 7, "avg": 8.33, "gate": "ACCEPTABLE", "notes": "R7: 0 console errors. Responsive clamp() padding on slide decks, filter toolbar on comparison chart, animated connection lines + hover dimming on architecture, prefers-color-scheme detection on all 6 files. Best: ai-timeline 8.50. All scores ≥7." },
     { "round": 8, "avg": 8.25, "gate": "ACCEPTABLE", "notes": "R8: 0 console errors. Enhanced progress bars (4px + glow), added floating gradient orbs to slide deck backgrounds, confirmed count-up animations + hover states already present. Slide decks still weakest at 7.88. Need bigger changes to push past 9.0." },
-    { "round": 9, "avg": null, "gate": "ACCEPTABLE", "notes": "R9 RESEARCH ROUND: Researched CSS scroll-driven animations, @starting-style, container queries, :has(), color-mix(). Rebuilt all 6 files with: CSS prefers-color-scheme media query, enhanced entrance animations, better responsive breakpoints, Chart.js with hover tooltips, improved a11y. Reset loopsSinceResearch." },
+    { "round": 9, "avg": null, "gate": "ACCEPTABLE", "notes": "R9 RESEARCH ROUND" },
     { "round": 10, "avg": 8.04, "gate": "ACCEPTABLE" },
     { "round": 11, "avg": 7.86, "gate": "NEEDS WORK" },
     { "round": 12, "avg": 7.62, "gate": "NEEDS WORK" },
@@ -31,11 +31,12 @@
     { "round": 25, "avg": 5.4, "gate": "FAIL" },
     { "round": 26, "avg": 6.1, "gate": "FAIL" },
     { "round": 27, "avg": 6.7, "gate": "FAIL" },
-    { "round": 28, "avg": 7.1, "gate": "NEEDS WORK", "notes": "R28: Systemic SKILL.md fixes — bumped --text-secondary contrast, added background atmosphere guidance, polished dropdown menu styling, removed translateY hover anti-patterns." },
-    { "round": 29, "avg": 7.73, "gate": "NEEDS WORK", "notes": "R29: Pre-fix avg 7.73 (15 files, 0 console errors). Best: status-report 8.50, cheatsheet-claude-code 8.13. Lowest: carousel-threads 7.13. SKILL.md fixes: entrance animations (mandatory), theme-adaptive gradients, slide deck light mode, chart accessibility sr-only, --text-secondary consistency. Rebuilt 8 files. Trend: +0.63 from R28. loopsSinceResearch=5, next round triggers RESEARCH." },
-    { "round": 30, "avg": 7.85, "gate": "NEEDS WORK", "notes": "R30: Calibrated avg 7.85 (evaluator reported 8.75 but inflated ~1pt). 0 console errors across all 15 files. Fixed: carousel-threads sparse cover (added subtitle + SVG icons + animated arrow), quote-card gradient orbs removed (violated SKILL.md), saas-dashboard stray skip-link dot, event-poster QR placeholder replaced with SVG QR pattern. 4 files modified. Trend: +0.12 from R29. loopsSinceResearch=6, next round should trigger RESEARCH." },
-    { "round": 31, "avg": null, "gate": "NEEDS WORK", "notes": "R31 RESEARCH ROUND: Identified interactivity depth as primary plateau cause. Added to SKILL.md: Popover API (zero-JS info panels), Exclusive <details> Accordion (collapsible groups), CSS Anchor Positioning (tooltips), ::details-content styling, interpolate-size:allow-keywords in skeleton, @page margin boxes for print, Type-Specific Interactivity Requirements table (every file type now has mandatory interaction beyond theme toggle). Key insight: plateau isn't visual quality — it's that all 15 files feel identical with shallow interaction. Next round should rebuild weakest files (status-report, quote-card, event-poster, cheatsheets) with type-specific interactions." },
-    { "round": 32, "avg": 6.44, "gate": "FAIL", "notes": "R32: Pre-fix eval avg 6.44 (strict vision-model scoring). 0/15 files used R31 research patterns (popover, details, anchor positioning). Rebuilt 7 files: carousel-threads (new cover design, SVG icons, subtle gradients), event-poster (countdown timer, wider layout), cheatsheet-claude-code (details accordion, search/filter, SVG icons, solid borders), cheatsheet-git (same treatment), quote-card (hover states, better depth), system-architecture (a11y: skip link, aria-labels, landmark roles), comparison-infographic (a11y fix). SKILL.md skeleton updated with details accordion + popover patterns. Trend: -1.41 from R30 (stricter eval calibration via vision model)." },
-    { "round": 33, "avg": 5.93, "gate": "FAIL", "notes": "R33: Vision-model eval avg 5.93 (15 files, 0 console errors). Best: status-report 7.25, system-architecture 6.94. Worst: carousel-korean 4.94, slide-deck-demo 5.00, saas-dashboard 5.19. Rebuilt 7 worst files: carousel-korean (SVG mesh, fixed orphan, step-dots), slide-deck-demo (SVG hero illustration), saas-dashboard (smaller title, cohesive blue palette), startup-pitch-deck (SVG hero), carousel-infographic (SVG decoration, visible arrows), process-guide (timeline spine, circular badges), comparison-infographic (replaced radar with grouped bars, blue/indigo palette). Post-fix visual check shows modest improvement (~0.5-1pt per file). Core issue: files still feel template-like, lack visual richness and distinctive identity. Trend: -0.51 from R32." }
+    { "round": 28, "avg": 7.1, "gate": "NEEDS WORK" },
+    { "round": 29, "avg": 7.73, "gate": "NEEDS WORK" },
+    { "round": 30, "avg": 7.85, "gate": "NEEDS WORK" },
+    { "round": 31, "avg": null, "gate": "NEEDS WORK", "notes": "R31 RESEARCH ROUND" },
+    { "round": 32, "avg": 6.44, "gate": "FAIL" },
+    { "round": 33, "avg": 5.93, "gate": "FAIL" },
+    { "round": 34, "avg": 6.10, "gate": "FAIL", "notes": "R34: Pre-fix avg 6.10 (15 files, 0 console errors). Added visible theme toggle (sun/moon button) to ALL 15 files — previously buried in hamburger menu. Added dot navigation to carousel-infographic. Added habit preview pills to carousel-infographic cover. Carousel covers remain the weakest point — sparse and template-like. Status-report best at 7.13. Core issue: files share identical dark template DNA. Trend: +0.17 from R33." }
   ]
 }

@@ -39,6 +39,11 @@
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
     @media print { body { background: #fff !important; color: #000 !important; overflow: visible; } .viz-menu, .slide-nav { display: none !important; } .slide { position: static !important; page-break-after: always; } * { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 
+    .theme-toggle { position: fixed; top: 16px; right: 68px; z-index: 9999; width: 44px; height: 44px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.2s; }
+    .theme-toggle:hover { background: var(--surface-hover); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .theme-dark .theme-toggle .sun-icon { display: none; }
+    .theme-light .theme-toggle .moon-icon { display: none; }
     .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
     .viz-menu-toggle { width: 40px; height: 40px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .viz-menu-toggle:hover { background: var(--surface-hover); }
@@ -270,6 +275,10 @@
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
 
+  <button class="theme-toggle" onclick="cycleTheme()" aria-label="Toggle theme">
+    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+  </button>
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
