@@ -1,64 +1,99 @@
-# Visualize Improvement Loop (Ralph Loop v2)
+# Visualize Improvement Loop (v2 — Git-First)
 
-## The Cycle
+The git repo (`https://github.com/careerhackeralex/visualize`) is the **source of truth**.
+Every loop iteration clones fresh from git, works in a temp directory, and pushes results back.
 
-Every iteration runs these 4 phases in order:
+## Loop Steps
 
-### Phase 1: Evaluate
-- Spawn fresh evaluator (zero prior context)
-- Score all examples against 8 dimensions
-- Benchmark: Apple keynotes, Stripe, NYT interactive, Vercel
-- Standards increase each round (scores that passed last round may not pass this round)
-- **Capture screenshots** of every file (dark theme default + light theme) and save to `eval/screenshots/round{N}/`
-  - Filename format: `{example-name}-dark.png`, `{example-name}-light.png`
-  - For slide decks: also capture slides 1, 3, and 5
+### 0. Setup — Clone Fresh
+```bash
+# Clone repo to temp working directory
+WORK_DIR=$(mktemp -d)
+cd "$WORK_DIR"
+git clone https://github.com/careerhackeralex/visualize.git
+cd visualize
+```
+- NEVER work directly in the workspace copy
+- Always start from the latest git state
+- This ensures the loop tests what users would actually get
+
+### 1. Check State
+- Read `eval/loop-state.json` for current round, scores, gate
+- If gate is SHIP or VIRAL → skip (report status, exit)
+- If `loopsSinceResearch >= 5` AND avg improved < 0.3 last round → do research phase instead
+
+### 2. Install & Verify
+- Verify the plugin structure is correct:
+  - `.claude-plugin/plugin.json` exists and is valid JSON
+  - `skills/visualize/SKILL.md` exists with valid YAML frontmatter
+  - `skills/visualize/references/` has all expected files
+- Open each example in browser, check for console errors
+- This catches structural issues before scoring
+
+### 3. Evaluate
+- Spawn evaluator sub-agent (label: `eval-round-{N}`)
+- Open each file in `examples/` in browser (profile=openclaw)
+- Screenshot EVERY file in dark AND light theme
+- Save screenshots to `eval/screenshots/round{N}/`
+- Score all 8 dimensions per file
 - Write results to `eval/eval-round{N}-raw.md`
-- **Embed screenshots in the eval report** using relative markdown image links
 
-### Phase 2: Plan
-- Read eval results, identify top issues (bugs > visual > interactivity > polish)
-- Categorize: CRITICAL (broken), HIGH (visible quality gap), MEDIUM (polish), LOW (nice-to-have)
-- Fix the SKILL.md / references, not just individual files
-- Plan should simplify code, not add complexity
+### 4. Plan
+- Read eval results, identify top 5 issues
+- Categorize: systemic (fix SKILL.md/references) vs local (fix specific examples)
+- Always fix systemic issues first — they prevent the same bug across all outputs
 
-### Phase 3: Build
-- Fix SKILL.md skeleton/references first (systemic fixes)
-- Regenerate all examples from updated skeleton
-- Simplify: fewer lines of JS, more CSS, fewer libraries
-- Every fix must make code simpler OR the same complexity, never more complex
+### 5. Build
+- Apply fixes to `skills/visualize/SKILL.md` and `skills/visualize/references/`
+- Regenerate affected examples from the updated skill
+- Simplify code — fewer lines, more CSS, less JS
+- Spawn sub-agent (label: `regen-round-{N}`) if needed
 
-### Phase 4: Validate
-- Open each file in browser, screenshot, check console for errors
-- Verify: both themes work, menu works, print CSS present, animations fire
-- Quick smoke test before next eval round
+### 6. Validate
+- Open each modified file in browser
+- Screenshot post-fix state
+- Check console for errors
+- Compare before/after scores if possible
 
-### Research Gate (every ~5 loops)
-When scores plateau (avg improvement < 0.3 between rounds), run deep research:
-- Study latest CSS/animation techniques
-- Analyze top-rated data viz sites
-- Look for new CDN libraries or patterns
-- Update references/ with findings
-- Then resume the loop
+### 7. Commit & Push
+```bash
+git add -A
+git commit -m "eval: round {N} — avg {score}, gate {GATE}
+
+- {summary of changes}
+- {key fixes applied}"
+git push origin main
+```
+- ALL changes go through git — screenshots, eval results, skill fixes, example updates
+- Clean atomic commits with descriptive messages
+
+### 8. Update State
+- Update `eval/loop-state.json` with new round, scores, gate
+- Increment `loopsSinceResearch`
+- This is part of the commit in step 7
+
+### 9. Report
+- Send Alex a WhatsApp summary: round number, scores, gate, key changes, trend
+- Reference the git commit hash
+
+## Research Phase (when triggered)
+1. Web search for latest CSS/HTML/visualization techniques
+2. Study award-winning data visualizations, design systems
+3. Save findings to `research/` directory
+4. Update `skills/visualize/SKILL.md` and references with new techniques
+5. Reset `loopsSinceResearch = 0`
+6. Commit & push research findings
 
 ## Quality Gates
-- 🚀 VIRAL: ≥9.5 overall, all ≥9 → STOP: ship and promote
-- ✅ SHIP: ≥9.0 overall, all ≥8 → STOP: push to GitHub, announce
-- ⚠️ ACCEPTABLE: ≥8.0 overall, all ≥7 → CONTINUE looping
-- 🔧 NEEDS WORK: ≥7.0 or any <7 → CONTINUE looping (prioritize failures)
-- ❌ FAIL: <7.0 or any <5 → CONTINUE looping (fix critical bugs first)
+- **SHIP** ≥9.0 avg (all ≥8) — ready for public use
+- **VIRAL** ≥9.5 avg (all ≥9) — screenshot-worthy
+- **ACCEPTABLE** ≥8.0 avg (all ≥7) — functional, decent
+- **NEEDS WORK** ≥7.0 avg or any <7 — keep iterating
+- **FAIL** <7.0 avg or any <5 — significant issues
 
-## State Tracking
-Track loop state in `eval/loop-state.json`:
-```json
-{
-  "currentRound": 4,
-  "loopsSinceResearch": 1,
-  "lastAverage": 7.54,
-  "gate": "NEEDS WORK",
-  "history": [
-    { "round": 1, "avg": 6.40, "gate": "FAIL" },
-    { "round": 2, "avg": 7.41, "gate": "NEEDS WORK" },
-    { "round": 3, "avg": 7.54, "gate": "NEEDS WORK" }
-  ]
-}
-```
+## Rules
+- Fix the SKILL, not just the output — every fix goes into SKILL.md/references
+- The git repo is what users clone — it must always be in a working state
+- Don't commit broken examples
+- Simplify: fewer lines, more CSS, less JS
+- Content visible by default (no hidden-by-CSS)
