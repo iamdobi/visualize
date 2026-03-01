@@ -295,6 +295,45 @@ Beyond library defaults — apply these to every chart:
 - **Container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
 - **Card gaps:** `gap-6` minimum
 
+### Mobile Responsiveness (Critical)
+**All visualizations must work flawlessly on mobile. No horizontal overflow allowed.**
+
+```css
+/* Required mobile breakpoints */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr; /* Single column on tablet */
+    gap: 1rem; /* Reduced gap */
+  }
+  .chart-section {
+    grid-template-columns: 1fr; /* Stack chart sections */
+  }
+  .container {
+    padding: 1rem; /* Reduced container padding */
+  }
+}
+
+@media (max-width: 375px) {
+  .container {
+    padding: 0.75rem; /* Minimal padding on small phones */
+  }
+  .kpi-card, .chart-card {
+    padding: 1rem; /* Reduced card padding */
+  }
+  .filter-toolbar {
+    flex-direction: column; /* Stack filters vertically */
+    align-items: stretch;
+  }
+}
+```
+
+**Testing checklist:**
+- ✅ No horizontal scrolling at 768px viewport
+- ✅ No horizontal scrolling at 375px viewport  
+- ✅ All text remains readable (min 16px)
+- ✅ Touch targets are ≥44px
+- ✅ Charts resize appropriately
+
 ### Card Hover Microinteractions
 All cards should have subtle hover effects — shadow elevation ONLY, no transforms:
 ```css

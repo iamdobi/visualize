@@ -136,6 +136,15 @@
     }
     .viz-menu-dropdown button:hover { background: var(--surface-hover); }
 
+    /* ===== SKIP TO CONTENT (accessibility) ===== */
+    .skip-to-content {
+      position: absolute; top: -40px; left: 6px; background: var(--accent);
+      color: white; padding: 8px 12px; text-decoration: none;
+      border-radius: 4px; opacity: 0; pointer-events: none;
+      transition: all 0.2s; z-index: 10000;
+    }
+    .skip-to-content:focus { top: 6px; opacity: 1; pointer-events: auto; }
+
     /* ===== DETAILS ACCORDION (Chrome 120+ exclusive, 131+ animated) ===== */
     details { overflow: hidden; }
     details summary { cursor: pointer; list-style: none; }
@@ -175,7 +184,12 @@
     </div>
   </div>
 
-  <!-- YOUR CONTENT HERE (use <section>, <header>, <article> for semantics) -->
+  <!-- SKIP TO CONTENT (accessibility) -->
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
+
+  <main id="main-content" role="main">
+    <!-- YOUR CONTENT HERE (use <section>, <header>, <article> for semantics) -->
+  </main>
 
   <!-- EXAMPLE: Exclusive accordion (only one open at a time, no JS needed) -->
   <!--
@@ -201,9 +215,22 @@
   </main>
   <script>
     // === Menu ===
-    function toggleMenu() { document.getElementById('vizMenuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', e => { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
+    function toggleMenu() { 
+      var dropdown = document.getElementById('vizMenuDropdown') || document.getElementById('vizMenu');
+      if (dropdown) dropdown.classList.toggle('open'); 
+    }
+    document.addEventListener('click', e => { 
+      if (!e.target.closest('.viz-menu')) {
+        var dropdown = document.getElementById('vizMenuDropdown') || document.getElementById('vizMenu');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', e => { 
+      if (e.key === 'Escape') {
+        var dropdown = document.getElementById('vizMenuDropdown') || document.getElementById('vizMenu');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
 
     // === Theme (class-based, OS detection on first visit) ===
     var savedTheme = localStorage.getItem('viz-theme');

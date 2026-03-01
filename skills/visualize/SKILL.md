@@ -331,7 +331,7 @@ If a type isn't listed, add at minimum: a filter, search, sort, or expand/collap
 ## Layout Variation (CRITICAL)
 
 Every file must feel like a UNIQUE design, not a template with different text. Vary these per file type:
-- **Grid structure**: Mix 1-col, 2-col, 3-col. Use CSS Grid `span 2` for featured cards.
+- **Grid structure**: Mix 1-col, 2-col, 3-col. Use CSS Grid `span 2` for featured cards. **Always test at 768px and 375px - no horizontal overflow allowed.**
 - **Section rhythm**: Alternate between full-width sections, card grids, and single-focus sections.
 - **Content density**: More content at smaller sizes looks more professional than sparse content at large sizes. A dashboard with 8 KPI cards + 4 charts feels real; 4 KPI cards + 2 charts feels like a demo.
 - **Visual focal point**: Every file needs ONE visually dominant element (hero stat, key chart, primary message) — not everything at equal weight.
@@ -418,12 +418,14 @@ Elements must be large enough to read and feel substantial:
 Charts are the second most common failure. Follow these rules:
 
 - **Always wrap in a container div** with explicit `width` and `height` or `aspect-ratio`
-- **MANDATORY: Add accessibility container** with `role="img"` and descriptive `aria-label`:
+- **MANDATORY: Add accessibility container** with `role="img"` and descriptive `aria-label` — THIS IS REQUIRED FOR ALL CHARTS:
   ```html
+  <!-- REQUIRED FOR EVERY CHART -->
   <div role="img" aria-label="Bar chart showing Q4 revenue increased 23% to $2.4M across 4 product lines">
     <div class="chart-container"><canvas id="myChart"></canvas></div>
   </div>
   ```
+  **The aria-label must describe what the chart shows, not just the chart type. Include key data insights.**
 - **MANDATORY: Hover tooltips enabled** — never disable Chart.js tooltips:
   ```javascript
   options: {
