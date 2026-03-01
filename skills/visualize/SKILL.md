@@ -70,8 +70,8 @@ Key highlights (consult reference for full details):
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
 - **Chart.js:** DISABLE default animation (Chart.defaults.animation = false), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label. Use a `chartsBuilt` guard flag — `onThemeChange` must NOT call `buildCharts()` until the initial build completes (prevents "Canvas already in use" errors during page-load theme detection).
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
-- **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values.
-- **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid).
+- **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
+- **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.
 - **Entrance animations mandatory:** fadeInUp + stagger on all cards/sections.
 - **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
 
@@ -233,7 +233,7 @@ Slide decks MUST look visually distinct in dark vs light themes. Gradient backgr
 ```
 
 Rules:
-- Title/section slides: use theme-specific gradient pairs (dark=deep+saturated, light=soft+pastel)
+- Title/section slides: use theme-specific gradient pairs (dark=deep+saturated, light=soft+pastel). **Choose gradient colors that evoke the content's subject matter** — a tech pitch uses cool blues, a game pitch uses vibrant purples/cyans, a healthcare deck uses calming greens/teals.
 - Content slides: use `var(--bg)` or `var(--surface)` — NOT hardcoded dark backgrounds
 - Data cards on slides: use `var(--surface)` with `var(--border)` — they auto-adapt
 - Never hardcode `#1a1a2e` or similar dark colors on slide content — use CSS variables
@@ -297,6 +297,7 @@ Every file must feel like a UNIQUE design, not a template with different text. V
 - **Section rhythm**: Alternate between full-width sections, card grids, and single-focus sections.
 - **Content density**: More content at smaller sizes looks more professional than sparse content at large sizes. A dashboard with 8 KPI cards + 4 charts feels real; 4 KPI cards + 2 charts feels like a demo.
 - **Visual focal point**: Every file needs ONE visually dominant element (hero stat, key chart, primary message) — not everything at equal weight.
+- **No orphaned grid items**: When a grid has an odd number of items where the last row isn't full, use `grid-column: span 2` on the last item or adjust `grid-template-columns` to avoid a single card stranded alone on a row.
 
 ## Anti-Patterns
 
@@ -353,7 +354,7 @@ The skeleton provides:
 Elements must be large enough to read and feel substantial:
 
 - **Timeline cards:** minimum width 280px, minimum padding 20px
-- **Chart containers:** minimum 60% of parent width, minimum height 300px
+- **Chart containers:** minimum 60% of parent width, minimum height 300px (360px+ for dashboards). In grid layouts, charts should use `flex-grow: 1` to fill available space — 300px is a floor, not a target.
 - **Stat numbers:** minimum font-size 2rem (32px), bold/extrabold weight
 - **Card content area:** minimum padding 24px
 - **Section spacing:** minimum 48px between major sections
