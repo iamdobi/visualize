@@ -1,285 +1,29 @@
 {
   "round": 42,
-  "timestamp": "2026-03-01T21:14:13.429Z",
-  "filesEvaluated": 3,
-  "average": 5.13,
-  "minScore": 4.9,
-  "gate": "FAIL",
+  "timestamp": "2026-03-01T21:19:25.543Z",
+  "filesEvaluated": 1,
+  "average": 9.3,
+  "minScore": 9.3,
+  "gate": "SHIP",
   "results": [
     {
-      "file": "expansion-plan-infographic.html",
+      "file": "expansion-plan-infographic-v2.html",
       "format": "timeline",
-      "layer2Score": 55,
+      "layer2Score": 93,
       "layer3Score": null,
-      "overall": 5.5,
+      "overall": 9.3,
       "failedChecks": [
-        {
-          "name": "theme-class-applied",
-          "message": "html element has a theme class (theme-dark or theme-light)"
-        },
-        {
-          "name": "theme-light-defined",
-          "message": ".theme-light class defined in stylesheet"
-        },
-        {
-          "name": "css-custom-properties",
-          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
-        },
         {
           "name": "theme-toggle-works",
           "message": "Theme toggle changes html class"
-        },
-        {
-          "name": "inter-font-loaded",
-          "message": "Inter font is referenced in stylesheets"
-        },
-        {
-          "name": "menu-element-exists",
-          "message": ".viz-menu element exists in DOM"
-        },
-        {
-          "name": "menu-toggle-exists",
-          "message": ".viz-menu-toggle button exists"
-        },
-        {
-          "name": "download-button-present",
-          "message": "Download PNG button present in menu"
-        },
-        {
-          "name": "print-button-present",
-          "message": "Print/PDF button present in menu"
-        },
-        {
-          "name": "html-to-image-loaded",
-          "message": "html-to-image CDN script loaded"
         },
         {
           "name": "menu-opens-on-click",
           "message": "Menu dropdown opens when toggle is clicked"
         },
         {
-          "name": "inter-font-in-use",
-          "message": "Inter font family is applied to body"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "semantic-main",
-          "message": "Semantic HTML: <main> element exists"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        },
-        {
-          "name": "print-styles",
-          "message": "@media print styles defined in stylesheet"
-        },
-        {
-          "name": "reduced-motion",
-          "message": "@media (prefers-reduced-motion) styles defined"
-        },
-        {
-          "name": "landmarks-present",
-          "message": "Landmark roles or skip-to-content link present"
-        },
-        {
-          "name": "hover-states",
-          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "route-optimization-roi.html",
-      "format": "dashboard",
-      "layer2Score": 49,
-      "layer3Score": null,
-      "overall": 4.9,
-      "failedChecks": [
-        {
-          "name": "theme-class-applied",
-          "message": "html element has a theme class (theme-dark or theme-light)"
-        },
-        {
-          "name": "theme-light-defined",
-          "message": ".theme-light class defined in stylesheet"
-        },
-        {
-          "name": "css-custom-properties",
-          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
-        },
-        {
-          "name": "theme-toggle-works",
-          "message": "Theme toggle changes html class"
-        },
-        {
-          "name": "inter-font-loaded",
-          "message": "Inter font is referenced in stylesheets"
-        },
-        {
-          "name": "menu-element-exists",
-          "message": ".viz-menu element exists in DOM"
-        },
-        {
-          "name": "menu-toggle-exists",
-          "message": ".viz-menu-toggle button exists"
-        },
-        {
-          "name": "download-button-present",
-          "message": "Download PNG button present in menu"
-        },
-        {
-          "name": "print-button-present",
-          "message": "Print/PDF button present in menu"
-        },
-        {
-          "name": "html-to-image-loaded",
-          "message": "html-to-image CDN script loaded"
-        },
-        {
-          "name": "menu-opens-on-click",
-          "message": "Menu dropdown opens when toggle is clicked"
-        },
-        {
-          "name": "inter-font-in-use",
-          "message": "Inter font family is applied to body"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "semantic-main",
-          "message": "Semantic HTML: <main> element exists"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        },
-        {
-          "name": "print-styles",
-          "message": "@media print styles defined in stylesheet"
-        },
-        {
-          "name": "reduced-motion",
-          "message": "@media (prefers-reduced-motion) styles defined"
-        },
-        {
-          "name": "chart-accessibility",
-          "message": "Charts have role=\"img\" and aria-label"
-        },
-        {
-          "name": "landmarks-present",
-          "message": "Landmark roles or skip-to-content link present"
-        },
-        {
-          "name": "chart-animation-disabled",
-          "message": "Chart.defaults.animation is false"
-        },
-        {
-          "name": "entrance-animations",
-          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
-        },
-        {
-          "name": "hover-states",
-          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "warehouse-efficiency-dashboard.html",
-      "format": "dashboard",
-      "layer2Score": 50,
-      "layer3Score": null,
-      "overall": 5,
-      "failedChecks": [
-        {
-          "name": "theme-class-applied",
-          "message": "html element has a theme class (theme-dark or theme-light)"
-        },
-        {
-          "name": "theme-light-defined",
-          "message": ".theme-light class defined in stylesheet"
-        },
-        {
-          "name": "css-custom-properties",
-          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
-        },
-        {
-          "name": "theme-toggle-works",
-          "message": "Theme toggle changes html class"
-        },
-        {
-          "name": "inter-font-loaded",
-          "message": "Inter font is referenced in stylesheets"
-        },
-        {
-          "name": "menu-element-exists",
-          "message": ".viz-menu element exists in DOM"
-        },
-        {
-          "name": "menu-toggle-exists",
-          "message": ".viz-menu-toggle button exists"
-        },
-        {
-          "name": "download-button-present",
-          "message": "Download PNG button present in menu"
-        },
-        {
-          "name": "print-button-present",
-          "message": "Print/PDF button present in menu"
-        },
-        {
-          "name": "html-to-image-loaded",
-          "message": "html-to-image CDN script loaded"
-        },
-        {
-          "name": "menu-opens-on-click",
-          "message": "Menu dropdown opens when toggle is clicked"
-        },
-        {
-          "name": "inter-font-in-use",
-          "message": "Inter font family is applied to body"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "semantic-main",
-          "message": "Semantic HTML: <main> element exists"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        },
-        {
-          "name": "print-styles",
-          "message": "@media print styles defined in stylesheet"
-        },
-        {
-          "name": "reduced-motion",
-          "message": "@media (prefers-reduced-motion) styles defined"
-        },
-        {
-          "name": "chart-accessibility",
-          "message": "Charts have role=\"img\" and aria-label"
-        },
-        {
-          "name": "landmarks-present",
-          "message": "Landmark roles or skip-to-content link present"
-        },
-        {
-          "name": "chart-animation-disabled",
-          "message": "Chart.defaults.animation is false"
-        },
-        {
-          "name": "entrance-animations",
-          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
         }
       ],
       "consoleErrors": []
