@@ -12,14 +12,14 @@
 
     
     
-    htmlhtml.theme-dark {
+    html.theme-dark {
       --bg: #0A0A0A; --surface: #141414; --surface-hover: #1C1C1C;
       --border: rgba(255,255,255,0.04);
       --text: #EDEDED; --text-secondary: #888888;
       --accent: #14b8a6; --accent-secondary: #0d9488;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
-    htmlhtml.theme-light {
+    html.theme-light {
       --bg: #FAFAF9; --surface: #FFFFFF; --surface-hover: #F5F5F4;
       --border: rgba(0,0,0,0.06);
       --text: #0f172a; --text-secondary: #64748b;
@@ -162,7 +162,7 @@
     }
     .stat-number { 
       font-size: 2.5rem; 
-      font-weight: 800; 
+      font-weight: 700; 
       letter-spacing: -0.04em; 
       color: var(--accent); 
       display: block; 
@@ -278,7 +278,7 @@
       background: rgba(20,184,166,0.05); 
       border-radius: 10px;
       border: 1px solid rgba(20,184,166,0.15);
-      border-left: 4px solid var(--accent);
+      border-left: 3px solid transparent;
     }
     .timeline-impact strong { 
       color: var(--accent); 
@@ -286,10 +286,10 @@
     }
 
     /* Era color variations */
-    .timeline-item.era-foundations { border-left: 3px solid #0070f3; }
-    .timeline-item.era-strategic { border-left: 3px solid #0cce6b; }
-    .timeline-item.era-deep { border-left: 3px solid #7928ca; }
-    .timeline-item.era-generative { border-left: 3px solid #f5a623; }
+    .timeline-item.era-foundations { border-left: 3px solid transparent; }
+    .timeline-item.era-strategic { border-left: 3px solid transparent; }
+    .timeline-item.era-deep { border-left: 3px solid transparent; }
+    .timeline-item.era-generative { border-left: 3px solid transparent; }
     
     /* Width variations */
     .timeline-item.width-compact { width: 85%; }

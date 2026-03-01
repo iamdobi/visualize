@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ship Your First Open Source Project</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +30,8 @@
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
+      line-height: 1.6; letter-spacing: -0.011em; -webkit-font-smoothing: antialiased;
+      font-feature-settings: 'cv11', 'ss01';
       scrollbar-gutter: stable;
       transition: background 0.3s, color 0.3s;
     }
@@ -202,7 +203,7 @@
       background: var(--surface);
       border: 4px solid var(--accent);
       color: var(--accent); display: flex; align-items: center; justify-content: center;
-      font-size: 1.25rem; font-weight: 800;
+      font-size: 1.25rem; font-weight: 700;
       box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px color-mix(in srgb, var(--accent), transparent 80%);
     }
     .step-row:nth-child(odd) .step-number { border-color: var(--accent); color: var(--accent); }

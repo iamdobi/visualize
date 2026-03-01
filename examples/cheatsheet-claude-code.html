@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Claude Code Cheat Sheet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
@@ -21,6 +21,7 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
       line-height: 1.5; -webkit-font-smoothing: antialiased;
+      font-feature-settings: 'cv11', 'ss01';
       scrollbar-gutter: stable;
       transition: background 0.3s, color 0.3s;
     }
@@ -86,7 +87,7 @@
 
     details.section-card summary {
       padding: 14px 16px; cursor: pointer; list-style: none;
-      font-size: 0.82rem; font-weight: 800; text-transform: uppercase;
+      font-size: 0.82rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.05em; color: var(--section-color, var(--accent));
       display: flex; align-items: center; gap: 8px;
       border-bottom: 4px solid var(--section-color, var(--accent));

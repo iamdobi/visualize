@@ -27,7 +27,8 @@
     body { 
       font-family: 'Inter', -apple-system, sans-serif; 
       background: var(--bg); color: var(--text); 
-      line-height: 1.6; -webkit-font-smoothing: antialiased; 
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
+      font-feature-settings: 'cv11', 'ss01'; 
       scrollbar-gutter: stable;
       letter-spacing: -0.011em; overflow: hidden; font-weight: 400;
     }
@@ -134,7 +135,7 @@
     }
     .slide.title-slide h1 { 
       font-size: clamp(3.5rem, 10vw, 6rem); margin-bottom: 24px; 
-      letter-spacing: -0.04em; line-height: 1; font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1; font-weight: 700;
       text-shadow: 0 0 60px rgba(59,130,246,0.3);
     }
     .slide.title-slide p { 
@@ -178,7 +179,7 @@
     }
     .slide.section-slide h2 { 
       font-size: clamp(3.5rem, 10vw, 6rem); color: #fff; 
-      letter-spacing: -0.04em; line-height: 1; font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1; font-weight: 700;
       text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .theme-light .slide.section-slide h2 {
@@ -240,7 +241,7 @@
     }
     .stat-cell:hover { background: var(--surface-hover); }
     .stat-cell .num { 
-      font-size: 5rem; font-weight: 800; letter-spacing: -0.05em; 
+      font-size: 5rem; font-weight: 700; letter-spacing: -0.05em; 
       color: var(--text); display: block; margin-bottom: 12px; 
       line-height: 1; text-shadow: 0 0 60px rgba(59,130,246,0.4);
     }
@@ -468,7 +469,7 @@
       </section>
 
       <section class="slide title-slide" role="group" aria-roledescription="slide" aria-label="Thank You">
-        <h1 style="font-size: clamp(3.5rem, 10vw, 6rem); font-weight: 800; letter-spacing: -0.04em;">Thank You</h1>
+        <h1 style="font-size: clamp(3.5rem, 10vw, 6rem); font-weight: 700; letter-spacing: -0.04em;">Thank You</h1>
         <p style="font-size: 1.5rem; margin-bottom: 24px;">Ready to transform your data into insights?</p>
         <div class="meta" style="font-size: 1.125rem; font-weight: 500;">hello@analyticsplatform.com</div>
       </section>

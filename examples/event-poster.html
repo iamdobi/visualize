@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AI Summit 2026 — San Francisco</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +19,8 @@
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
+      line-height: 1.6; letter-spacing: -0.011em; -webkit-font-smoothing: antialiased;
+      font-feature-settings: 'cv11', 'ss01';
       scrollbar-gutter: stable;
       transition: background 0.3s, color 0.3s;
       display: flex; align-items: flex-start; justify-content: center;
@@ -61,7 +62,7 @@
       background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    .poster-eyebrow { font-size: 0.85rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; position: relative; z-index: 1; background: color-mix(in srgb, var(--accent), transparent 85%); padding: 8px 16px; border-radius: 8px; display: inline-block; border: 4px solid var(--accent); }
+    .poster-eyebrow { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; position: relative; z-index: 1; background: color-mix(in srgb, var(--accent), transparent 85%); padding: 8px 16px; border-radius: 8px; display: inline-block; border: 4px solid var(--accent); }
     .poster-title { font-size: clamp(3.5rem, 9vw, 6rem); font-weight: 900; line-height: 0.9; margin-bottom: 8px; color: var(--text); position: relative; z-index: 1; letter-spacing: -0.04em; text-shadow: 0 4px 8px rgba(0,0,0,0.3); text-wrap: balance; }
     .poster-location-line { font-size: 1.1rem; color: var(--text-secondary); font-weight: 500; position: relative; z-index: 1; }
 
@@ -74,7 +75,7 @@
       box-shadow: 0 4px 24px rgba(0,0,0,0.12);
     }
     .countdown-unit { display: flex; flex-direction: column; gap: 4px; }
-    .countdown-value { font-size: 2rem; font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -0.02em; }
+    .countdown-value { font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -0.02em; }
     .countdown-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); }
 
     .poster-body { padding: 32px 48px 48px; }
@@ -103,7 +104,7 @@
       width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
       display: flex; align-items: center; justify-content: center;
-      font-weight: 800; color: #fff; font-size: 0.8rem;
+      font-weight: 700; color: #fff; font-size: 0.8rem;
     }
     .speaker-name { font-weight: 700; font-size: 0.9rem; }
     .speaker-topic { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
@@ -139,7 +140,7 @@
     .cta-button {
       display: inline-block; padding: 16px 40px; border-radius: 16px;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      color: #fff; font-weight: 800; font-size: 1.1rem;
+      color: #fff; font-weight: 700; font-size: 1.1rem;
       text-decoration: none; border: none; cursor: pointer;
       transition: all 0.2s; box-shadow: 0 4px 16px rgba(59,130,246,0.2);
     }
@@ -287,7 +288,7 @@
       </section>
 
       <section class="cta-section animate delay-5" role="region" aria-label="Registration">
-        <div style="font-weight: 800; font-size: 1.25rem; margin-bottom: 4px;">Early Bird Tickets Available</div>
+        <div style="font-weight: 700; font-size: 1.25rem; margin-bottom: 4px;">Early Bird Tickets Available</div>
         <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">$499 until June 30 · $799 after</div>
         <button class="cta-button" aria-label="Register for AI Summit 2026">Register Now
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:middle;margin-left:4px;"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
