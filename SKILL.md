@@ -577,6 +577,53 @@ Carousel cards are huge for social media. Get these right:
 - **Square or portrait** — optimized for social sharing
 - **Minimal design** — quote is the hero, everything else is subtle
 
+### Single-Screen / Mobile-Fit Rules (Posters, Cards, One-Pagers)
+
+When the user asks for something that fits "one screen," "phone screen," "9:16," or "mobile-fit," create a **fixed-dimension single-viewport** visualization — NOT a scrolling page.
+
+**Dimensions:**
+- **9:16 portrait (phone):** `width: 1080px; height: 1920px;` — standard Instagram Story / phone screen
+- **1:1 square:** `width: 1080px; height: 1080px;` — Instagram post
+- **4:5 portrait:** `width: 1080px; height: 1350px;` — Instagram portrait post
+- **16:9 landscape:** `width: 1920px; height: 1080px;` — presentation slide
+
+**Critical CSS pattern:**
+```css
+body {
+  width: 1080px; height: 1920px; /* or chosen ratio */
+  overflow: hidden; /* MUST — prevents scroll, enforces single screen */
+  position: relative;
+}
+.poster {
+  height: 100%;
+  display: flex; flex-direction: column;
+  justify-content: space-between; /* Even vertical distribution — no dead space */
+  padding: 64px; /* Generous but not wasteful */
+}
+```
+
+**Layout rules:**
+- `overflow: hidden` on body — this is what makes it "one screen." Non-negotiable.
+- `justify-content: space-between` on the main container — distributes sections evenly with NO dead gaps.
+- Wrap each logical section in a `<div>` so flexbox distributes them as blocks.
+- **Test mentally:** count your sections, divide 1920px among them. Each section gets ~200-300px. If content is sparse, make elements bigger (larger fonts, more padding, bigger icons).
+- **No hamburger menu** for fixed-dimension posters — it wastes space and the poster is meant for screenshot/export, not interaction.
+
+**Content density for 9:16:**
+- Hero (title + subtitle): ~25% of height
+- 2-3 content sections: ~55% of height
+- Footer/CTA: ~10% of height
+- Breathing room (gaps): ~10% of height
+- **If it looks empty, your content is too small.** Scale up fonts, add more grid items, use larger icons.
+
+**Font sizing for 1080px-wide posters:**
+- Hero h1: `68-80px` (bigger than web — this is a poster)
+- Section labels: `15-18px` uppercase, letter-spacing `0.06em`
+- Card text: `16-20px`
+- Body: `20-24px`
+
+**Common mistake:** Making a scrolling page and screenshotting it. That's NOT a poster — it's a webpage screenshot. A poster is a fixed canvas where every pixel is intentional.
+
 ## Slide Deck Rules
 
 Slides are the most common request. Get these right:
