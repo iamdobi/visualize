@@ -11,14 +11,10 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @media (prefers-color-scheme: dark) {
-      :root { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; }
-    }
-    @media (prefers-color-scheme: light) {
-      :root { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; }
-    }
-    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; }
-    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; }
+    
+    
+    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #10b981; --accent-secondary: #059669; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; }
+    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #10b981; --accent-secondary: #059669; --positive: #059669; --negative: #e11d48; --warning: #d97706; }
 
     body { 
       font-family: 'Inter', -apple-system, sans-serif; 
@@ -212,6 +208,9 @@
     @media (max-width: 480px) {
       .kpi-grid { grid-template-columns: 1fr; }
     }
+  
+    .stat-card, .metric-card, .kpi-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .stat-card:hover, .metric-card:hover, .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); } /* hover-lift */
   </style>
 </head>
 <body>

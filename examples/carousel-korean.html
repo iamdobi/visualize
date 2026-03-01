@@ -11,36 +11,20 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #d1d5db;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      }
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      }
-    }
+    
+    
     .theme-dark {
       --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
       --text: #f9fafb; --text-secondary: #d1d5db;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --accent: #8b5cf6; --accent-secondary: #7c3aed;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
     .theme-light {
       --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
       --border: rgba(0,0,0,0.08);
       --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --accent: #8b5cf6; --accent-secondary: #7c3aed;
       --positive: #059669; --negative: #e11d48; --warning: #d97706;
     }
 
@@ -159,21 +143,21 @@
     .carousel-card::before {
       content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse 60% 50% at 50% 30%, var(--card-accent) 0%, transparent 70%);
-      opacity: 0.08; pointer-events: none;
+      opacity: 0.7; pointer-events: none;
     }
 
     /* Enhanced cover decoration */
     .cover-decoration {
       position: absolute; inset: 0; pointer-events: none; overflow: hidden;
     }
-    .cover-decoration svg { position: absolute; opacity: 0.12; }
+    .cover-decoration svg { position: absolute; opacity: 0.75; }
     .cover-decoration .mesh-tl { top: -10%; left: -10%; width: 60%; height: 60%; }
     .cover-decoration .mesh-br { bottom: -10%; right: -10%; width: 50%; height: 50%; }
-    .cover-decoration .mesh-ring { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; opacity: 0.08; }
+    .cover-decoration .mesh-ring { top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; opacity:  0.5; }
 
     .card-number {
       font-size: clamp(4rem, 12vmin, 8rem); font-weight: 900;
-      color: var(--card-accent); opacity: 0.25;
+      color: var(--card-accent); opacity: 0.4;
       position: absolute; top: 32px; left: 48px; line-height: 1;
       font-family: 'Inter', sans-serif;
       text-shadow: 0 0 32px color-mix(in srgb, var(--card-accent), transparent 50%);
@@ -188,7 +172,7 @@
       max-width: 28ch; line-height: 1.7;
     }
     .card-title-main {
-      font-size: clamp(2.2rem, 7vmin, 4rem); font-weight: 900;
+      font-size: clamp(2.8rem, 9vmin, 5rem); font-weight: 900;
       line-height: 1.15; margin-bottom: 20px;
       color: var(--text);
       letter-spacing: -0.03em;
@@ -298,7 +282,7 @@
       box-shadow: 0 8px 24px color-mix(in srgb, var(--preview-accent), transparent 70%);
       color: var(--preview-accent);
     }
-    .hero-preview:hover::before { opacity: 0.1; }
+    .hero-preview:hover::before { opacity:  0.5; }
     .hero-preview:nth-child(1) { --preview-accent: #8b5cf6; }
     .hero-preview:nth-child(2) { --preview-accent: #ec4899; }
     .hero-preview:nth-child(3) { --preview-accent: #10b981; }

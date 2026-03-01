@@ -10,36 +10,19 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #d1d5db;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      }
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      }
-    }
+    /* Auto color scheme detection removed - force dark theme default */
     .theme-dark {
       --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
       --border: rgba(255,255,255,0.08);
       --text: #f9fafb; --text-secondary: #d1d5db;
-      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --accent: #8b5cf6; --accent-secondary: #7c3aed;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
     .theme-light {
       --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
       --border: rgba(0,0,0,0.08);
       --text: #0f172a; --text-secondary: #64748b;
-      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --accent: #8b5cf6; --accent-secondary: #7c3aed;
       --positive: #059669; --negative: #e11d48; --warning: #d97706;
     }
 
@@ -73,6 +56,14 @@
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+    @keyframes slideInFromRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInFromLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
     }
     .animate { animation: fadeInUp 0.6s ease-out both; }
     .animate.delay-1 { animation-delay: 0.1s; }
@@ -154,23 +145,29 @@
     }
     .carousel-track {
       display: flex; height: 100%;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .carousel-card {
       min-width: 100%; height: 100%;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 48px 56px; text-align: center; position: relative;
       background: var(--surface); overflow: hidden;
+      border-left: 4px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    .carousel-card.active {
+      border-left: 4px solid var(--accent);
+      animation: slideInFromRight 0.6s ease-out;
     }
     .carousel-card::before {
       content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse at 30% 20%, var(--card-accent, var(--accent)) 0%, transparent 60%);
-      opacity: 0.08; pointer-events: none;
+      opacity: 0.7; pointer-events: none;
     }
 
     .card-number {
       font-size: clamp(4rem, 12vmin, 8rem); font-weight: 900;
-      color: var(--card-accent, var(--accent)); opacity: 0.25;
+      color: var(--card-accent, var(--accent)); opacity: 0.4;
       position: absolute; top: 32px; left: 48px; line-height: 1;
       text-shadow: 0 0 32px color-mix(in srgb, var(--card-accent, var(--accent)), transparent 50%);
     }
@@ -183,7 +180,7 @@
       max-width: 28ch; line-height: 1.6;
     }
     .card-title-main {
-      font-size: clamp(2.5rem, 8vmin, 4.5rem); font-weight: 900;
+      font-size: clamp(3rem, 10vmin, 5.5rem); font-weight: 900;
       line-height: 1.05; margin-bottom: 16px;
       color: var(--text);
     }
@@ -222,7 +219,7 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 24px color-mix(in srgb, var(--thumb-accent), transparent 70%);
     }
-    .preview-thumb:hover::before { opacity: 0.1; }
+    .preview-thumb:hover::before { opacity:  0.5; }
     .preview-thumb svg { 
       width: 20px; height: 20px; 
       color: var(--thumb-accent);
@@ -348,7 +345,7 @@
           </div>
           <!-- Bold hero visual element -->
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1;">
-            <svg viewBox="0 0 400 400" fill="none" style="width:320px;height:320px;opacity:0.15;">
+            <svg viewBox="0 0 400 400" fill="none" style="width:320px;height:320px;opacity: 0.75;">
               <!-- Central gear/cog representing engineering -->
               <circle cx="200" cy="200" r="100" fill="var(--accent)"/>
               <circle cx="200" cy="200" r="60" fill="var(--surface)"/>
@@ -543,6 +540,12 @@
       document.querySelector('.carousel-nav.prev').disabled = currentSlide === 0;
       document.querySelector('.carousel-nav.next').disabled = currentSlide === totalSlides - 1;
       document.getElementById('cardCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+      
+      // Update active slide animation
+      document.querySelectorAll('.carousel-card').forEach(function(card, i) {
+        card.classList.toggle('active', i === currentSlide);
+      });
+      
       updateDots();
     }
     goTo(0);

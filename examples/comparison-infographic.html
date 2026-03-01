@@ -11,14 +11,10 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @media (prefers-color-scheme: dark) {
-      :root { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #3b82f6; --office: #8b5cf6; }
-    }
-    @media (prefers-color-scheme: light) {
-      :root { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #2563eb; --office: #7c3aed; }
-    }
-    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #3b82f6; --accent-secondary: #8b5cf6; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #3b82f6; --office: #8b5cf6; }
-    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #2563eb; --accent-secondary: #7c3aed; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #2563eb; --office: #7c3aed; }
+    
+    
+    .theme-dark { --bg: #030712; --surface: #111827; --surface-hover: #1f2937; --border: rgba(255,255,255,0.08); --text: #f9fafb; --text-secondary: #d1d5db; --accent: #6366f1; --accent-secondary: #4f46e5; --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b; --remote: #3b82f6; --office: #8b5cf6; }
+    .theme-light { --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9; --border: rgba(0,0,0,0.08); --text: #0f172a; --text-secondary: #64748b; --accent: #6366f1; --accent-secondary: #4f46e5; --positive: #059669; --negative: #e11d48; --warning: #d97706; --remote: #2563eb; --office: #7c3aed; }
 
     body { 
       font-family: 'Inter', -apple-system, sans-serif; 
@@ -214,6 +210,9 @@
       .verdict-stat { font-size: 4rem; }
       .verdict h2 { font-size: 1.875rem; }
     }
+  
+    .stat-card, .metric-card, .kpi-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .stat-card:hover, .metric-card:hover, .kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); } /* hover-lift */
   </style>
 </head>
 <body>
