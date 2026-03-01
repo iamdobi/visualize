@@ -12,15 +12,15 @@
 
     
     
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
+    html.theme-dark {
+      --bg: #0A0A0A; --surface: #141414; --surface-hover: #1C1C1C;
       --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #d1d5db;
+      --text: #EDEDED; --text-secondary: #888;
       --accent: #3b82f6; --accent-secondary: #2563eb;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
+    html.theme-light {
+      --bg: #FAFAF9; --surface: #ffffff; --surface-hover: #F5F5F4;
       --border: rgba(0,0,0,0.08);
       --text: #0f172a; --text-secondary: #64748b;
       --accent: #3b82f6; --accent-secondary: #2563eb;
@@ -31,6 +31,7 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg); color: var(--text);
       line-height: 1.6; -webkit-font-smoothing: antialiased;
+      scrollbar-gutter: stable;
       transition: background 0.3s, color 0.3s;
       padding: 32px 16px;
     }
@@ -435,7 +436,7 @@
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
     // === Theme ===
-    var currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    var savedTheme = localStorage.getItem('viz-theme'); var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
       document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';

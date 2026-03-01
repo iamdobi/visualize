@@ -195,58 +195,45 @@ color: light-dark(#333, #fff);
 }
 ```
 
-### Color System (Dark-First with CSS Detection)
+### Color System (Class-Based Theming — NO @media prefers-color-scheme)
 
-Default dark palette — all derived from CSS custom properties with CSS `prefers-color-scheme` detection to prevent flash:
+**CRITICAL: Do NOT use `@media (prefers-color-scheme)` for theme variables.** It fights with class-based `.theme-dark`/`.theme-light` and causes themes to break when OS mode differs from selected theme. Use ONLY class-based selectors on `html`:
+
 ```css
-/* CSS prefers-color-scheme for flash-free theme switching */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #030712;           /* gray-950 */
-    --surface: #111827;       /* gray-900 */
-    --surface-hover: #1f2937; /* gray-800 */
-    --border: rgba(255,255,255,0.1);
-    --text: #f9fafb;          /* gray-50 */
-    --text-secondary: #d1d5db; /* gray-300 — bumped from gray-400 for WCAG AA contrast */
-    --accent: #3b82f6;        /* blue-500 */
-    --accent-secondary: #8b5cf6; /* violet-500 */
-    --positive: #10b981;      /* emerald-500 */
-    --negative: #f43f5e;      /* rose-500 */
-    --warning: #f59e0b;       /* amber-500 */
-  }
+/* Theme via class on <html> — JS detects prefers-color-scheme on first load */
+html.theme-dark {
+  --bg: #0A0A0A;              /* near-black (Linear-inspired) */
+  --surface: #141414;          /* barely lighter than bg */
+  --surface-hover: #1C1C1C;
+  --border: rgba(255,255,255,0.04);  /* nearly invisible borders */
+  --text: #EDEDED;             /* not pure white */
+  --text-secondary: #888888;
+  --accent: #3b82f6;
+  --accent-secondary: #8b5cf6;
+  --positive: #10b981;
+  --negative: #f43f5e;
+  --warning: #f59e0b;
 }
+html.theme-light {
+  --bg: #FAFAF9;               /* warm off-white */
+  --surface: #FFFFFF;
+  --surface-hover: #F5F5F4;
+  --border: rgba(0,0,0,0.06);
+  --text: #0f172a;
+  --text-secondary: #64748b;
+  --accent: #2563eb;
+  --accent-secondary: #7c3aed;
+  --positive: #059669;
+  --negative: #e11d48;
+  --warning: #d97706;
+}
+```
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #f8fafc;
-    --surface: #ffffff;
-    --surface-hover: #f1f5f9;
-    --border: rgba(0,0,0,0.08);
-    --text: #0f172a;
-    --text-secondary: #64748b;
-    --accent: #2563eb;
-    --accent-secondary: #7c3aed;
-    --positive: #059669;
-    --negative: #e11d48;
-    --warning: #d97706;
-  }
-}
-
-/* Manual theme override classes (JS controlled) */
-.theme-dark {
-  --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-  --border: rgba(255,255,255,0.08);
-  --text: #f9fafb; --text-secondary: #d1d5db;
-  --accent: #3b82f6; --accent-secondary: #8b5cf6;
-  --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-}
-.theme-light {
-  --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-  --border: rgba(0,0,0,0.08);
-  --text: #0f172a; --text-secondary: #64748b;
-  --accent: #2563eb; --accent-secondary: #7c3aed;
-  --positive: #059669; --negative: #e11d48; --warning: #d97706;
-}
+**JS theme init** detects OS preference on first visit, then uses localStorage override:
+```javascript
+var saved = localStorage.getItem('viz-theme');
+var initial = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+applyTheme(initial);
 ```
 
 Chart color sequence: `#3b82f6, #8b5cf6, #ec4899, #f59e0b, #10b981, #06b6d4, #f43f5e`
@@ -686,6 +673,14 @@ Every file MUST have at least ONE meaningful interaction beyond theme toggle + m
 
 If a type isn't listed, add at minimum: a filter, search, sort, or expand/collapse interaction.
 
+## Layout Variation (CRITICAL)
+
+Every file must feel like a UNIQUE design, not a template with different text. Vary these per file type:
+- **Grid structure**: Mix 1-col, 2-col, 3-col. Use CSS Grid `span 2` for featured cards.
+- **Section rhythm**: Alternate between full-width sections, card grids, and single-focus sections.
+- **Content density**: More content at smaller sizes looks more professional than sparse content at large sizes. A dashboard with 8 KPI cards + 4 charts feels real; 4 KPI cards + 2 charts feels like a demo.
+- **Visual focal point**: Every file needs ONE visually dominant element (hero stat, key chart, primary message) — not everything at equal weight.
+
 ## Anti-Patterns
 
 - ❌ Walls of text — if it reads like a document, it's not a visualization
@@ -736,37 +731,17 @@ Use these when they add value. See [references/css-techniques.md](references/css
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { interpolate-size: allow-keywords; } /* Enable smooth height:auto transitions (Chrome 129+) */
 
-    /* ===== THEMES ===== */
-    /* CSS prefers-color-scheme for flash-free theme detection */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-        --border: rgba(255,255,255,0.08);
-        --text: #f9fafb; --text-secondary: #9ca3af;
-        --accent: #3b82f6; --accent-secondary: #8b5cf6;
-        --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
-      }
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-        --border: rgba(0,0,0,0.08);
-        --text: #0f172a; --text-secondary: #64748b;
-        --accent: #2563eb; --accent-secondary: #7c3aed;
-        --positive: #059669; --negative: #e11d48; --warning: #d97706;
-      }
-    }
-    /* Manual theme override classes (JS controlled) */
-    .theme-dark {
-      --bg: #030712; --surface: #111827; --surface-hover: #1f2937;
-      --border: rgba(255,255,255,0.08);
-      --text: #f9fafb; --text-secondary: #9ca3af;
+    /* ===== THEMES (class-based ONLY — no @media prefers-color-scheme) ===== */
+    html.theme-dark {
+      --bg: #0A0A0A; --surface: #141414; --surface-hover: #1C1C1C;
+      --border: rgba(255,255,255,0.04);
+      --text: #EDEDED; --text-secondary: #888;
       --accent: #3b82f6; --accent-secondary: #8b5cf6;
       --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
     }
-    .theme-light {
-      --bg: #f8fafc; --surface: #ffffff; --surface-hover: #f1f5f9;
-      --border: rgba(0,0,0,0.08);
+    html.theme-light {
+      --bg: #FAFAF9; --surface: #FFFFFF; --surface-hover: #F5F5F4;
+      --border: rgba(0,0,0,0.06);
       --text: #0f172a; --text-secondary: #64748b;
       --accent: #2563eb; --accent-secondary: #7c3aed;
       --positive: #059669; --negative: #e11d48; --warning: #d97706;
@@ -778,11 +753,13 @@ Use these when they add value. See [references/css-techniques.md](references/css
       line-height: 1.6; -webkit-font-smoothing: antialiased;
       letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
       transition: background 0.3s, color 0.3s;
+      scrollbar-gutter: stable;
     }
     h1,h2,h3,h4,h5,h6 { 
       color: var(--text); 
       letter-spacing: -0.03em; 
       line-height: 1.08;
+      text-wrap: balance;
     }
     h1 { font-weight: 700; }
     h2 { font-weight: 600; }
@@ -937,15 +914,16 @@ Use these when they add value. See [references/css-techniques.md](references/css
     document.addEventListener('click', e => { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme ===
-    var currentTheme = localStorage.getItem('viz-theme') || 'dark';
+    // === Theme (class-based, OS detection on first visit) ===
+    var savedTheme = localStorage.getItem('viz-theme');
+    var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     function applyTheme(t) {
       document.documentElement.className = 'theme-' + t;
       document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
       document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
       localStorage.setItem('viz-theme', t);
       currentTheme = t;
-      if (typeof onThemeChange === 'function') onThemeChange(); // hook for chart re-render
+      if (typeof onThemeChange === 'function') onThemeChange();
     }
     function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
     applyTheme(currentTheme);
@@ -1116,8 +1094,8 @@ function resetCanvas(id) {
 3. **Structure** — outline content/sections BEFORE filling in the skeleton
 4. **Build** — add content, charts, styles. Keep all colors as CSS vars.
 5. **Verify checklist:**
-   - [ ] CSS `@media (prefers-color-scheme)` for flash-free theme detection?
-   - [ ] Both `.theme-dark` and `.theme-light` manual override classes defined?
+   - [ ] `html.theme-dark` and `html.theme-light` class-based theme selectors (NO @media prefers-color-scheme)?
+   - [ ] JS detects OS preference on first visit, stores in localStorage?
    - [ ] All text uses `var(--text)` or `var(--text-secondary)`?
    - [ ] `@media print` hides menu, shows all content?
    - [ ] `@media (prefers-reduced-motion: reduce)` present?
