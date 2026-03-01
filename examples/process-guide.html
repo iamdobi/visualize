@@ -39,13 +39,15 @@
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
 
     .card {
-      background: var(--surface); border: 4px solid var(--border);
-      border-radius: 16px; padding: 24px;
-      transition: box-shadow 0.2s ease, transform 0.2s ease;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.08);
     }
     .card:hover {
-      box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
-      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      transform: translateY(-4px);
+      border-color: var(--accent);
     }
 
     .step-row {
@@ -60,15 +62,19 @@
     .step-row:nth-child(7) { animation-delay: 0.48s; }
     .step-row:nth-child(8) { animation-delay: 0.56s; }
     .step-content {
-      transition: box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
-      border-radius: 8px; padding: 20px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px; padding: 24px;
       background: var(--surface);
-      border: 4px solid var(--border);
+      border: 1px solid var(--border);
       flex: 1;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      cursor: pointer;
     }
     .step-row:hover .step-content {
-      box-shadow: 0 0 0 1px var(--border), 0 8px 16px rgba(0,0,0,0.08);
-      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      background: var(--surface-hover);
     }
 
     @keyframes fadeInUp {
@@ -104,38 +110,94 @@
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
-    /* ===== MENU ===== */
-    .theme-toggle { position: fixed; top: 16px; right: 68px; z-index: 9999; width: 44px; height: 44px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.2s; }
-    .theme-toggle:hover { background: var(--surface-hover); }
-    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-    .theme-dark .theme-toggle .sun-icon { display: none; }
-    .theme-light .theme-toggle .moon-icon { display: none; }
-    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    /* === Hamburger Menu === */
+    .viz-menu {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 9999;
+      font-family: var(--font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+    }
+
     .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 12px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .viz-menu-toggle:hover {
+      background: var(--surface-hover);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
     .viz-menu-dropdown {
-      position: absolute; top: 52px; right: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 8px;
-      opacity: 0; visibility: hidden; transform: translateY(-8px);
-      transition: all 0.2s; backdrop-filter: blur(16px);
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 200px;
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.96);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
-    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    .viz-menu-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
     .viz-menu-dropdown button {
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text); font-size: 14px;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.15s;
+      text-align: left;
+      white-space: nowrap;
     }
-    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .viz-menu-dropdown button:hover {
+      background: var(--surface-hover);
+    }
+
+    .viz-menu-dropdown button:focus-visible { 
+      outline: 2px solid var(--accent); 
+      outline-offset: 2px; 
+    }
+
+    .viz-menu-icon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
     /* ===== SCROLL PROGRESS ===== */
     .scroll-progress {
@@ -201,10 +263,17 @@
     .step-number {
       width: 56px; height: 56px; border-radius: 50%;
       background: var(--surface);
-      border: 4px solid var(--accent);
+      border: 3px solid var(--accent);
       color: var(--accent); display: flex; align-items: center; justify-content: center;
       font-size: 1.25rem; font-weight: 700;
-      box-shadow: 0 0 0 4px var(--bg), 0 0 0 6px color-mix(in srgb, var(--accent), transparent 80%);
+      box-shadow: 0 0 0 4px var(--bg), 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .step-row:hover .step-number {
+      background: var(--accent);
+      color: var(--surface);
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px var(--bg), 0 8px 24px color-mix(in srgb, var(--accent), transparent 50%);
     }
     .step-row:nth-child(odd) .step-number { border-color: var(--accent); color: var(--accent); }
     .step-row:nth-child(even) .step-number { border-color: var(--accent-secondary); color: var(--accent-secondary); }
@@ -249,20 +318,28 @@
   <div class="scroll-progress" id="scrollProgress" role="progressbar" aria-label="Reading progress"></div>
   <main id="main-content">
 
-  <button class="theme-toggle" onclick="cycleTheme()" aria-label="Toggle theme">
-    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-  </button>
+  <!-- Hamburger Menu -->
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+        <line x1="3" y1="5" x2="17" y2="5"/>
+        <line x1="3" y1="10" x2="17" y2="10"/>
+        <line x1="3" y1="15" x2="17" y2="15"/>
       </svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="cycleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
-      <button onclick="downloadImage()"><span>📥</span><span>Download PNG</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>Print / PDF</span></button>
+      <button onclick="cycleTheme()">
+        <span class="viz-menu-icon">◐</span>
+        <span>Theme: <span id="themeLabel">Dark</span></span>
+      </button>
+      <button onclick="downloadImage()">
+        <span class="viz-menu-icon">⤓</span>
+        <span>Download PNG</span>
+      </button>
+      <button onclick="printPDF()">
+        <span class="viz-menu-icon">⎙</span>
+        <span>Print / PDF</span>
+      </button>
     </div>
   </div>
 
@@ -401,18 +478,40 @@
     document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    // === Theme ===
-    var savedTheme = localStorage.getItem('viz-theme'); var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    function applyTheme(t) {
-      document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
-      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
+    // === Theme system ===
+    const themes = [
+      { name: 'Dark', class: 'theme-dark' },
+      { name: 'Light', class: 'theme-light' },
+      { name: 'Auto', class: 'theme-auto' },
+    ];
+    let currentTheme = 0;
+
+    function cycleTheme() {
+      // Remove all theme classes
+      themes.forEach(t => document.documentElement.classList.remove(t.class));
+      // Advance to next
+      currentTheme = (currentTheme + 1) % themes.length;
+      document.documentElement.classList.add(themes[currentTheme].class);
+      document.getElementById('themeLabel').textContent = themes[currentTheme].name;
+      // Persist
+      localStorage.setItem('viz-theme', currentTheme);
       if (typeof onThemeChange === 'function') onThemeChange();
     }
-    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
-    applyTheme(currentTheme);
+
+    // Restore saved theme on load
+    (function() {
+      const saved = localStorage.getItem('viz-theme');
+      if (saved !== null) {
+        currentTheme = parseInt(saved);
+        document.documentElement.classList.add(themes[currentTheme].class);
+        document.getElementById('themeLabel').textContent = themes[currentTheme].name;
+      }
+    })();
+
+    // === Print as PDF ===
+    function printPDF() {
+      window.print();
+    }
 
     // === Scroll Reveal ===
     document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });

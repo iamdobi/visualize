@@ -73,45 +73,89 @@
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
-    /* ===== VISIBLE THEME TOGGLE ===== */
-    .theme-toggle {
-      position: fixed; top: 16px; right: 16px; z-index: 9999;
-      width: 44px; height: 44px; border-radius: 8px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-      font-size: 20px;
+    /* === Hamburger Menu === */
+    .viz-menu {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 9999;
+      font-family: var(--font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
     }
-    .theme-toggle:hover { background: var(--surface-hover); }
-    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* ===== MENU ===== */
-    .viz-menu { position: fixed; top: 16px; left: 16px; z-index: 9999; }
     .viz-menu-toggle {
-      width: 44px; height: 44px; border-radius: 8px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .viz-menu-toggle:hover { background: var(--surface-hover); }
+
+    .viz-menu-toggle:hover {
+      background: var(--surface-hover);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
     .viz-menu-dropdown {
-      position: absolute; top: 52px; left: 0; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; padding: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
-      opacity: 0; visibility: hidden; transform: translateY(-4px);
-      transition: all 0.15s;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 200px;
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.96);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
-    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    .viz-menu-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
     .viz-menu-dropdown button {
-      width: 100%; padding: 8px 12px; border: none; border-radius: 8px;
-      background: transparent; color: var(--text-secondary); font-size: 0.875rem;
-      font-family: inherit; cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 8px; transition: background 0.15s, color 0.15s;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.15s;
+      text-align: left;
+      white-space: nowrap;
     }
-    .viz-menu-dropdown button:hover { background: var(--surface-hover); color: var(--text); }
+
+    .viz-menu-dropdown button:hover {
+      background: var(--surface-hover);
+    }
+
+    .viz-menu-icon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
     /* ===== CAROUSEL ===== */
     .carousel-wrapper {
@@ -228,13 +272,33 @@
       background: var(--surface); border: 1px solid var(--border);
       color: var(--text); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: box-shadow 0.2s ease; z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      backdrop-filter: blur(12px); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
-    .carousel-nav:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+    .carousel-nav:hover { 
+      background: var(--surface-hover); 
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25); 
+      transform: translateY(-50%) scale(1.05);
+    }
     .carousel-nav.prev { left: -24px; }
     .carousel-nav.next { right: -24px; }
-    .carousel-nav:disabled { opacity: 0.3; cursor: default; }
+    .carousel-nav:disabled { 
+      opacity: 0.3; 
+      cursor: default; 
+      transform: translateY(-50%) scale(1);
+    }
+    
+    /* Mobile responsiveness for navigation */
+    @media (max-width: 768px) {
+      .carousel-nav.prev { left: 16px; }
+      .carousel-nav.next { right: 16px; }
+      .carousel-nav {
+        width: 40px; height: 40px;
+        bottom: 16px; top: auto; transform: none;
+      }
+      .carousel-nav.prev { bottom: 16px; left: 16px; }
+      .carousel-nav.next { bottom: 16px; right: 16px; }
+    }
 
     .card-counter {
       position: absolute; bottom: 24px; right: 32px;
@@ -251,9 +315,12 @@
     }
     .cta-list li { 
       display: flex; align-items: center; gap: 12px; 
-      padding: 8px 0; transition: all 0.2s ease;
+      padding: 8px 12px; margin: 4px 0; border-radius: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
     }
     .cta-list li:hover {
+      background: var(--surface-hover);
       color: var(--text);
       transform: translateX(4px);
     }
@@ -276,26 +343,27 @@
       gap: 18px; margin-top: 40px; max-width: 450px;
     }
     .hero-preview {
-      aspect-ratio: 1; background: color-mix(in srgb, var(--preview-accent), transparent 85%);
-      border: 2px solid var(--preview-accent); border-radius: 12px;
+      aspect-ratio: 1; background: color-mix(in srgb, var(--preview-accent), transparent 88%);
+      border: 1px solid color-mix(in srgb, var(--preview-accent), transparent 30%); border-radius: 12px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       font-size: 0.8rem; color: var(--preview-accent); text-align: center;
-      transition: all 0.2s ease; cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
       position: relative; overflow: hidden;
       padding: 16px 12px; font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
     .hero-preview::before {
       content: ''; position: absolute; inset: 0;
       background: var(--preview-accent); opacity: 0; pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.25s ease;
     }
     .hero-preview:hover {
-      background: color-mix(in srgb, var(--preview-accent), transparent 75%);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px color-mix(in srgb, var(--preview-accent), transparent 70%);
-      color: var(--preview-accent);
+      background: color-mix(in srgb, var(--preview-accent), transparent 80%);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--preview-accent), transparent 65%);
+      border-color: var(--preview-accent);
     }
-    .hero-preview:hover::before { opacity:  0.5; }
+    .hero-preview:hover::before { opacity: 0.1; }
     .hero-preview:nth-child(1) { --preview-accent: #8b5cf6; }
     .hero-preview:nth-child(2) { --preview-accent: #ec4899; }
     .hero-preview:nth-child(3) { --preview-accent: #10b981; }
@@ -312,20 +380,28 @@
   <a href="#main-content" class="skip-link">콘텐츠로 건너뛰기</a>
   <main id="main-content">
 
-  <!-- VISIBLE THEME TOGGLE -->
-  <button class="theme-toggle" onclick="cycleTheme()" aria-label="테마 전환">
-    <span id="themeIcon">🌙</span>
-  </button>
-
+  <!-- Hamburger Menu -->
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴">
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+        <line x1="3" y1="5" x2="17" y2="5"/>
+        <line x1="3" y1="10" x2="17" y2="10"/>
+        <line x1="3" y1="15" x2="17" y2="15"/>
       </svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="downloadCurrentCard()"><span>📥</span><span>카드 PNG 다운로드</span></button>
-      <button onclick="window.print()"><span>🖨️</span><span>인쇄 / PDF</span></button>
+      <button onclick="cycleTheme()">
+        <span class="viz-menu-icon">◐</span>
+        <span>테마: <span id="themeLabel">Dark</span></span>
+      </button>
+      <button onclick="downloadCurrentCard()">
+        <span class="viz-menu-icon">⤓</span>
+        <span>카드 PNG 다운로드</span>
+      </button>
+      <button onclick="printPDF()">
+        <span class="viz-menu-icon">⎙</span>
+        <span>인쇄 / PDF</span>
+      </button>
     </div>
   </div>
 
@@ -497,15 +573,39 @@
     document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('vizMenuDropdown').classList.remove('open'); });
 
-    var savedTheme = localStorage.getItem('viz-theme'); var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    function applyTheme(t) {
-      document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
-      localStorage.setItem('viz-theme', t);
-      currentTheme = t;
+    // === Theme system ===
+    const themes = [
+      { name: 'Dark', class: 'theme-dark' },
+      { name: 'Light', class: 'theme-light' },
+      { name: 'Auto', class: 'theme-auto' },
+    ];
+    let currentTheme = 0;
+
+    function cycleTheme() {
+      // Remove all theme classes
+      themes.forEach(t => document.documentElement.classList.remove(t.class));
+      // Advance to next
+      currentTheme = (currentTheme + 1) % themes.length;
+      document.documentElement.classList.add(themes[currentTheme].class);
+      document.getElementById('themeLabel').textContent = themes[currentTheme].name;
+      // Persist
+      localStorage.setItem('viz-theme', currentTheme);
     }
-    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
-    applyTheme(currentTheme);
+
+    // Restore saved theme on load
+    (function() {
+      const saved = localStorage.getItem('viz-theme');
+      if (saved !== null) {
+        currentTheme = parseInt(saved);
+        document.documentElement.classList.add(themes[currentTheme].class);
+        document.getElementById('themeLabel').textContent = themes[currentTheme].name;
+      }
+    })();
+
+    // === Print as PDF ===
+    function printPDF() {
+      window.print();
+    }
 
     var currentSlide = 0;
     var totalSlides = document.querySelectorAll('.carousel-card').length;
@@ -541,19 +641,27 @@
 
     async function downloadCurrentCard() {
       var menu = document.querySelector('.viz-menu');
-      var themeToggle = document.querySelector('.theme-toggle');
       var navs = document.querySelectorAll('.carousel-nav');
       menu.style.display = 'none';
-      themeToggle.style.display = 'none';
       navs.forEach(function(n) { n.style.display = 'none'; });
       try {
         var card = document.querySelectorAll('.carousel-card')[currentSlide];
-        var url = await htmlToImage.toPng(card, { quality: 1, pixelRatio: 2, width: 1080, height: 1080 });
+        var url = await htmlToImage.toPng(card, { 
+          quality: 1, 
+          pixelRatio: 2, 
+          width: 1080, 
+          height: 1080,
+          filter: function(n) { 
+            return !n.classList || (!n.classList.contains('viz-menu') && !n.classList.contains('carousel-nav')); 
+          } 
+        });
         var a = document.createElement('a'); a.href = url;
         a.download = 'ai-시대-카드-' + (currentSlide + 1) + '.png'; a.click();
-      } catch(e) { console.error('다운로드 실패:', e); }
+      } catch(e) { 
+        console.error('다운로드 실패:', e); 
+        alert('카드 다운로드에 실패했습니다. 인쇄 기능을 사용해 보세요.');
+      }
       menu.style.display = '';
-      themeToggle.style.display = '';
       navs.forEach(function(n) { n.style.display = ''; });
     }
   </script>

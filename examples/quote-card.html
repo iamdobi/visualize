@@ -55,13 +55,24 @@
       justify-content: center; align-items: center;
     }
     .category-filter {
-      padding: 6px 12px; border: 4px solid var(--border); border-radius: 8px;
-      background: transparent; color: var(--text-secondary); cursor: pointer;
-      font-size: 0.875rem; font-family: inherit; transition: all 0.2s;
+      padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px;
+      background: var(--surface); color: var(--text-secondary); cursor: pointer;
+      font-size: 0.875rem; font-family: inherit; font-weight: 500;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
-    .category-filter:hover { background: var(--surface-hover); color: var(--text); }
+    .category-filter:hover { 
+      background: var(--surface-hover); 
+      color: var(--text); 
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
     .category-filter.active { 
-      background: var(--accent); color: #fff; border-color: var(--accent);
+      background: var(--accent); 
+      color: #fff; 
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--accent), transparent 70%);
+      transform: translateY(-1px);
     }
     .category-filter:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -75,22 +86,29 @@
     .quote-card {
       break-inside: avoid; margin-bottom: 20px;
       background: var(--surface);
-      border: 4px solid var(--border); border-radius: 16px;
+      border: 1px solid var(--border); border-radius: 12px;
       padding: 32px; position: relative; overflow: hidden;
-      cursor: pointer; transition: all 0.3s ease;
-      border-left: 6px solid var(--q-accent, var(--accent));
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border-left: 4px solid var(--q-accent, var(--accent));
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .quote-card::before {
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, color-mix(in srgb, var(--q-accent, var(--accent)), transparent 96%), transparent);
       pointer-events: none;
+      opacity: 0; transition: opacity 0.25s ease;
     }
     .quote-card:hover {
-      box-shadow: 0 0 0 1px var(--q-accent, var(--accent)), 0 16px 40px rgba(0,0,0,0.2);
-      border-left-color: var(--q-accent, var(--accent));
-      border-left-width: 8px;
-      transform: translateY(-4px);
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.1);
+      border-left-width: 6px;
+    }
+    .quote-card:hover::before {
+      opacity: 1;
+    }
+    .quote-card:focus-visible {
+      outline: 2px solid var(--q-accent, var(--accent));
+      outline-offset: 2px;
     }
 
     /* Hero quote - larger featured quote */
@@ -110,10 +128,12 @@
     }
 
     /* Staggered animation */
-    .quote-card:nth-child(1) { animation: fadeInUp 0.5s ease both 0s; }
-    .quote-card:nth-child(2) { animation: fadeInUp 0.5s ease both 0.1s; }
-    .quote-card:nth-child(3) { animation: fadeInUp 0.5s ease both 0.2s; }
-    .quote-card:nth-child(4) { animation: fadeInUp 0.5s ease both 0.3s; }
+    .quote-card:nth-child(1) { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both 0s; }
+    .quote-card:nth-child(2) { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both 0.1s; }
+    .quote-card:nth-child(3) { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both 0.15s; }
+    .quote-card:nth-child(4) { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both 0.2s; }
+    .quote-card:nth-child(5) { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both 0.25s; }
+    .quote-card:nth-child(6) { animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both 0.3s; }
 
     /* Muted theme accent colors */
     .quote-card:nth-child(1) { --q-accent: #3b82f6; }
@@ -123,10 +143,11 @@
 
     .quote-mark {
       font-size: 4rem; line-height: 1; font-weight: 900;
-      color: var(--q-accent, var(--accent)); opacity: 0.4;
-      position: absolute; top: 20px; left: 32px;
+      color: var(--q-accent, var(--accent)); opacity: 0.3;
+      position: absolute; top: 16px; left: 24px;
       font-family: 'Lora', Georgia, serif;
-      text-shadow: 0 0 16px color-mix(in srgb, var(--q-accent, var(--accent)), transparent 70%);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      transform: scale(1);
     }
     .quote-text {
       font-family: 'Lora', Georgia, serif;
@@ -144,16 +165,22 @@
     .copy-btn {
       position: absolute; bottom: 16px; right: 16px;
       width: 36px; height: 36px; border-radius: 8px;
-      border: 4px solid var(--border); background: var(--surface);
+      border: 1px solid var(--border); background: var(--surface);
       color: var(--text-secondary); cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      opacity: 0; transition: all 0.2s ease;
+      opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(8px);
     }
-    .quote-card:hover .copy-btn { opacity: 1; }
+    .quote-card:hover .copy-btn { 
+      opacity: 1; 
+      transform: translateY(-2px);
+    }
     .copy-btn:hover { 
-      box-shadow: 0 0 0 1px var(--q-accent, var(--accent)), 0 2px 8px rgba(0,0,0,0.1); 
-      color: var(--text); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      color: var(--q-accent, var(--accent)); 
       background: var(--surface-hover);
+      border-color: var(--q-accent, var(--accent));
+      transform: translateY(-2px) scale(1.05);
     }
 
     /* Expandable quote functionality */
@@ -203,44 +230,89 @@
       * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
 
-    /* ===== VISIBLE THEME TOGGLE ===== */
-    .theme-toggle {
-      position: fixed; top: 16px; right: 16px; z-index: 9999;
-      width: 44px; height: 44px; border-radius: 8px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(12px); transition: all 0.2s;
-      font-size: 20px;
+    /* === Hamburger Menu === */
+    .viz-menu {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 9999;
+      font-family: var(--font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
     }
-    .theme-toggle:hover { background: var(--surface-hover); }
-    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    /* ===== MENU ===== */
-    .viz-menu { position: fixed; top: 16px; left: 16px; z-index: 9999; }
-    .viz-menu-toggle { 
-      width: 44px; height: 44px; border-radius: 8px; 
-      background: var(--surface); border: 1px solid var(--border); 
-      color: var(--text); cursor: pointer; display: flex; 
-      align-items: center; justify-content: center; 
-      backdrop-filter: blur(12px); transition: all 0.2s; 
+    .viz-menu-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .viz-menu-toggle:hover { background: var(--surface-hover); }
-    .viz-menu-dropdown { 
-      position: absolute; top: 52px; left: 0; min-width: 200px; 
-      background: var(--surface); border: 1px solid var(--border); 
-      border-radius: 8px; padding: 8px; opacity: 0; visibility: hidden; 
-      transform: translateY(-8px); transition: all 0.2s; 
-      backdrop-filter: blur(16px); 
+
+    .viz-menu-toggle:hover {
+      background: var(--surface-hover);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-    .viz-menu-dropdown button { 
-      width: 100%; padding: 10px 14px; border: none; border-radius: 8px; 
-      background: transparent; color: var(--text); font-size: 14px; 
-      font-family: inherit; cursor: pointer; text-align: left; 
-      display: flex; align-items: center; gap: 10px; transition: background 0.15s; 
+
+    .viz-menu-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 200px;
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(0.96);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
-    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+
+    .viz-menu-dropdown.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .viz-menu-dropdown button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.15s;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .viz-menu-dropdown button:hover {
+      background: var(--surface-hover);
+    }
+
+    .viz-menu-icon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
     .skip-link { 
       position: absolute; top: -100px; left: 16px; padding: 8px 16px; 
@@ -257,31 +329,27 @@
   <a href="#main-content" class="skip-link">Skip to content</a>
   <main id="main-content">
 
-  <!-- VISIBLE THEME TOGGLE -->
-  <button class="theme-toggle" onclick="cycleTheme()" aria-label="Toggle theme">
-    <span id="themeIcon">🌙</span>
-  </button>
-
+  <!-- Hamburger Menu -->
   <div class="viz-menu">
     <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Menu">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/></svg>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/>
+        <line x1="3" y1="10" x2="17" y2="10"/>
+        <line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
     </button>
     <div class="viz-menu-dropdown" id="vizMenuDropdown">
-      <button onclick="downloadImage()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-          <polyline points="7,10 12,15 17,10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        <span>Download PNG</span>
+      <button onclick="cycleTheme()">
+        <span class="viz-menu-icon">◐</span>
+        <span>Theme: <span id="themeLabel">Dark</span></span>
       </button>
-      <button onclick="window.print()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <polyline points="6,9 6,2 18,2 18,9"/>
-          <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
-          <rect x="6" y="14" width="12" height="8"/>
-        </svg>
-        <span>Print / PDF</span>
+      <button onclick="downloadImage()">
+        <span class="viz-menu-icon">⤓</span>
+        <span>Download as PNG</span>
+      </button>
+      <button onclick="printPDF()">
+        <span class="viz-menu-icon">⎙</span>
+        <span>Print / Save PDF</span>
       </button>
     </div>
   </div>
@@ -394,14 +462,39 @@
     document.addEventListener('click', function(e) { if (!e.target.closest('.viz-menu')) document.getElementById('vizMenuDropdown').classList.remove('open'); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.getElementById('vizMenuDropdown').classList.remove('open'); closeFullscreen(e); } });
 
-    var savedTheme = localStorage.getItem('viz-theme'); var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-    function applyTheme(t) {
-      document.documentElement.className = 'theme-' + t;
-      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
-      localStorage.setItem('viz-theme', t); currentTheme = t;
+    // === Theme system ===
+    const themes = [
+      { name: 'Dark', class: 'theme-dark' },
+      { name: 'Light', class: 'theme-light' },
+      { name: 'Auto', class: 'theme-auto' },
+    ];
+    let currentTheme = 0;
+
+    function cycleTheme() {
+      // Remove all theme classes
+      themes.forEach(t => document.documentElement.classList.remove(t.class));
+      // Advance to next
+      currentTheme = (currentTheme + 1) % themes.length;
+      document.documentElement.classList.add(themes[currentTheme].class);
+      document.getElementById('themeLabel').textContent = themes[currentTheme].name;
+      // Persist
+      localStorage.setItem('viz-theme', currentTheme);
     }
-    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
-    applyTheme(currentTheme);
+
+    // Restore saved theme on load
+    (function() {
+      const saved = localStorage.getItem('viz-theme');
+      if (saved !== null) {
+        currentTheme = parseInt(saved);
+        document.documentElement.classList.add(themes[currentTheme].class);
+        document.getElementById('themeLabel').textContent = themes[currentTheme].name;
+      }
+    })();
+
+    // === Print as PDF ===
+    function printPDF() {
+      window.print();
+    }
 
     var quoteCards = document.querySelectorAll('.quotes-grid .quote-card');
     var quoteTexts = [];
@@ -480,13 +573,20 @@
       themeToggle.style.display = '';
     }
 
-    // Enhanced hover interactions
+    // Smooth quote mark animations on hover
     quoteCards.forEach(function(card) {
+      const quoteMark = card.querySelector('.quote-mark');
       card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px)';
+        if (quoteMark) {
+          quoteMark.style.opacity = '0.5';
+          quoteMark.style.transform = 'scale(1.05)';
+        }
       });
       card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
+        if (quoteMark) {
+          quoteMark.style.opacity = '0.3';
+          quoteMark.style.transform = 'scale(1)';
+        }
       });
     });
   </script>
