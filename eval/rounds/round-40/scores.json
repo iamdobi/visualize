@@ -1,39 +1,13 @@
 {
   "round": 40,
-  "timestamp": "2026-03-01T11:21:25.557Z",
-  "filesEvaluated": 3,
-  "average": 9.33,
-  "minScore": 9.1,
+  "timestamp": "2026-03-01T11:25:19.676Z",
+  "filesEvaluated": 1,
+  "average": 9.2,
+  "minScore": 9.2,
   "gate": "SHIP",
   "results": [
     {
-      "file": "clinical-timeline.html",
-      "format": "timeline",
-      "layer2Score": 91,
-      "layer3Score": null,
-      "overall": 9.1,
-      "failedChecks": [
-        {
-          "name": "font-size-hierarchy",
-          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "card-padding",
-          "message": "Card elements have sufficient padding (>= 24px)"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "executive-summary.html",
+      "file": "executive-summary-retest.html",
       "format": "dashboard",
       "layer2Score": 92,
       "layer3Score": null,
@@ -50,20 +24,6 @@
         {
           "name": "card-padding",
           "message": "Card elements have sufficient padding (>= 24px)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "pipeline-dashboard.html",
-      "format": "dashboard",
-      "layer2Score": 97,
-      "layer3Score": null,
-      "overall": 9.7,
-      "failedChecks": [
-        {
-          "name": "no-overflow-375",
-          "message": "No horizontal overflow at 375px viewport width (mobile)"
         }
       ],
       "consoleErrors": []
