@@ -1,35 +1,17 @@
 {
   "round": 41,
-  "timestamp": "2026-03-01T14:20:41.584Z",
-  "filesEvaluated": 3,
-  "average": 9.3,
-  "minScore": 8.9,
-  "gate": "SHIP",
+  "timestamp": "2026-03-01T14:25:10.374Z",
+  "filesEvaluated": 1,
+  "average": 8.8,
+  "minScore": 8.8,
+  "gate": "ACCEPTABLE",
   "results": [
     {
-      "file": "gdc-pitch-deck.html",
-      "format": "slide-deck",
-      "layer2Score": 95,
-      "layer3Score": null,
-      "overall": 9.5,
-      "failedChecks": [
-        {
-          "name": "font-size-hierarchy",
-          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
-        },
-        {
-          "name": "chart-container-dimensions",
-          "message": "Chart container has explicit dimensions (height >= 300px)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "player-engagement-dashboard.html",
+      "file": "player-engagement-dashboard-v2.html",
       "format": "dashboard",
-      "layer2Score": 89,
+      "layer2Score": 88,
       "layer3Score": null,
-      "overall": 8.9,
+      "overall": 8.8,
       "failedChecks": [
         {
           "name": "font-size-hierarchy",
@@ -46,24 +28,10 @@
         {
           "name": "card-padding",
           "message": "Card elements have sufficient padding (>= 24px)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "team-org-chart.html",
-      "format": "dashboard",
-      "layer2Score": 95,
-      "layer3Score": null,
-      "overall": 9.5,
-      "failedChecks": [
-        {
-          "name": "font-size-hierarchy",
-          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
         },
         {
-          "name": "card-padding",
-          "message": "Card elements have sufficient padding (>= 24px)"
+          "name": "chart-container-dimensions",
+          "message": "Chart container has explicit dimensions (height >= 300px)"
         }
       ],
       "consoleErrors": []
