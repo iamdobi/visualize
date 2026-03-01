@@ -85,18 +85,24 @@
     .kpi-grid { 
       display: grid; 
       grid-template-columns: repeat(4, 1fr); 
-      gap: 1px; 
+      gap: 2px; 
       background: var(--border); 
-      border-radius: 8px; 
+      border-radius: 12px; 
       overflow: hidden; 
       margin-bottom: 32px; 
       border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     }
     .theme-light .kpi-grid { border: 1px solid rgba(0,0,0,0.08); }
     .kpi { 
       background: var(--surface); 
-      padding: 24px; 
-      transition: box-shadow 0.2s ease;
+      padding: 28px; 
+      transition: all 0.2s ease; 
+      position: relative;
+    }
+    .kpi:hover {
+      box-shadow: inset 0 0 0 1px var(--accent);
+      background: color-mix(in srgb, var(--accent), transparent 96%);
     }
     .kpi:hover {
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);

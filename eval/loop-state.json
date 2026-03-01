@@ -1,7 +1,7 @@
 {
-  "currentRound": 34,
-  "loopsSinceResearch": 3,
-  "lastAverage": 6.10,
+  "currentRound": 35,
+  "loopsSinceResearch": 4,
+  "lastAverage": 6.50,
   "gate": "FAIL",
   "history": [
     { "round": 1, "avg": 6.40, "gate": "FAIL" },
@@ -37,6 +37,7 @@
     { "round": 31, "avg": null, "gate": "NEEDS WORK", "notes": "R31 RESEARCH ROUND" },
     { "round": 32, "avg": 6.44, "gate": "FAIL" },
     { "round": 33, "avg": 5.93, "gate": "FAIL" },
-    { "round": 34, "avg": 6.10, "gate": "FAIL", "notes": "R34: Pre-fix avg 6.10 (15 files, 0 console errors). Added visible theme toggle (sun/moon button) to ALL 15 files — previously buried in hamburger menu. Added dot navigation to carousel-infographic. Added habit preview pills to carousel-infographic cover. Carousel covers remain the weakest point — sparse and template-like. Status-report best at 7.13. Core issue: files share identical dark template DNA. Trend: +0.17 from R33." }
+    { "round": 34, "avg": 6.10, "gate": "FAIL", "notes": "R34: Pre-fix avg 6.10 (15 files, 0 console errors). Added visible theme toggle (sun/moon button) to ALL 15 files — previously buried in hamburger menu. Added dot navigation to carousel-infographic. Added habit preview pills to carousel-infographic cover. Carousel covers remain the weakest point — sparse and template-like. Status-report best at 7.13. Core issue: files share identical dark template DNA. Trend: +0.17 from R33." },
+    { "round": 35, "avg": 6.50, "gate": "FAIL", "notes": "R35: Eval covered 4/15 files (avg 7.95 on those 4 — likely generous). Fixes: enhanced carousel covers with SVG hero visuals + colored icon borders, added thicker accent borders to quote cards, subtle identity differentiation per file type (card radius/shadow variations), stronger color accents (2-3x more prominent). 0 console errors. Carousel covers still sparse despite SVG additions (very faint). Conservative avg estimate 6.50 given incomplete eval. loopsSinceResearch=4, approaching research threshold." }
   ]
 }

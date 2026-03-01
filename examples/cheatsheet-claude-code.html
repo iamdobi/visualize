@@ -70,12 +70,22 @@
     .sections-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 
     details.section-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; overflow: hidden;
-      transition: box-shadow 0.2s;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      transition: all 0.2s; position: relative;
     }
-    details.section-card:hover { box-shadow: 0 0 0 1px var(--border), 0 4px 16px rgba(0,0,0,0.08); }
-    details.section-card[open] { box-shadow: 0 0 0 1px var(--border), 0 4px 16px rgba(0,0,0,0.08); }
+    details.section-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--section-color, var(--accent)), color-mix(in srgb, var(--section-color, var(--accent)), var(--accent-secondary) 50%));
+    }
+    details.section-card:hover { 
+      box-shadow: 0 0 0 1px var(--section-color, var(--accent)), 0 8px 24px rgba(0,0,0,0.12);
+      transform: translateY(-1px);
+    }
+    details.section-card[open] { 
+      box-shadow: 0 0 0 1px var(--section-color, var(--accent)), 0 8px 24px rgba(0,0,0,0.12);
+      border-color: var(--section-color, var(--accent));
+    }
 
     details.section-card summary {
       padding: 14px 16px; cursor: pointer; list-style: none;

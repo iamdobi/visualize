@@ -148,8 +148,9 @@
       position: relative;
     }
     .carousel-viewport {
-      width: 100%; height: 100%; overflow: hidden; border-radius: 8px;
-      border: 1px solid var(--border);
+      width: 100%; height: 100%; overflow: hidden; border-radius: 12px;
+      border: 1px solid var(--border); 
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(255,255,255,0.05);
     }
     .carousel-track {
       display: flex; height: 100%;
@@ -169,8 +170,9 @@
 
     .card-number {
       font-size: clamp(4rem, 12vmin, 8rem); font-weight: 900;
-      color: var(--card-accent, var(--accent)); opacity: 0.15;
+      color: var(--card-accent, var(--accent)); opacity: 0.25;
       position: absolute; top: 32px; left: 48px; line-height: 1;
+      text-shadow: 0 0 32px color-mix(in srgb, var(--card-accent, var(--accent)), transparent 50%);
     }
     .card-habit-name {
       font-size: clamp(2rem, 6vmin, 3.5rem); font-weight: 800;
@@ -186,8 +188,11 @@
       color: var(--text);
     }
     .card-subtitle {
-      font-size: clamp(1rem, 2.5vmin, 1.25rem); color: var(--text-secondary);
-      font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+      font-size: clamp(1rem, 2.5vmin, 1.25rem); color: var(--accent);
+      font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+      background: color-mix(in srgb, var(--accent), transparent 90%);
+      padding: 8px 16px; border-radius: 6px; display: inline-block;
+      border: 1px solid color-mix(in srgb, var(--accent), transparent 70%);
     }
     .card-icon {
       width: 56px; height: 56px; margin-bottom: 24px;
@@ -197,23 +202,31 @@
     /* Hero card preview thumbnails */
     .preview-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 12px; margin-top: 32px; max-width: 360px;
+      gap: 16px; margin-top: 40px; max-width: 420px;
     }
     .preview-thumb {
-      aspect-ratio: 1; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 8px;
+      aspect-ratio: 1; background: color-mix(in srgb, var(--thumb-accent), transparent 85%);
+      border: 2px solid var(--thumb-accent); border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; color: var(--text-secondary);
+      font-size: 0.75rem; color: var(--thumb-accent);
       transition: all 0.2s ease; cursor: pointer;
-      position: relative; overflow: hidden;
+      position: relative; overflow: hidden; padding: 12px;
     }
     .preview-thumb::before {
       content: ''; position: absolute; inset: 0;
-      background: var(--thumb-accent); opacity: 0.1; pointer-events: none;
+      background: var(--thumb-accent); opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
     }
     .preview-thumb:hover {
-      box-shadow: 0 0 0 1px var(--border), 0 4px 8px rgba(0,0,0,0.1);
-      border-color: var(--thumb-accent);
+      background: color-mix(in srgb, var(--thumb-accent), transparent 75%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px color-mix(in srgb, var(--thumb-accent), transparent 70%);
+    }
+    .preview-thumb:hover::before { opacity: 0.1; }
+    .preview-thumb svg { 
+      width: 20px; height: 20px; 
+      color: var(--thumb-accent);
+      filter: brightness(1.1);
     }
     .preview-thumb:nth-child(1) { --thumb-accent: #8b5cf6; }
     .preview-thumb:nth-child(2) { --thumb-accent: #ec4899; }
@@ -329,21 +342,35 @@
 
         <!-- Card 1: Title -->
         <div class="carousel-card" role="group" aria-roledescription="slide" aria-label="Slide 1 of 8: Title">
-          <!-- Hero SVG decoration -->
+          <!-- Enhanced hero section with gradient background -->
           <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;">
-            <svg viewBox="0 0 1000 700" fill="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.08;">
-              <circle cx="500" cy="350" r="280" stroke="var(--accent)" stroke-width="0.5" stroke-dasharray="8 12"/>
-              <circle cx="500" cy="350" r="200" stroke="var(--accent-secondary)" stroke-width="0.5" stroke-dasharray="6 10"/>
-              <circle cx="500" cy="350" r="120" stroke="var(--accent)" stroke-width="0.5"/>
-              <rect x="250" y="150" width="500" height="400" rx="12" stroke="var(--accent-secondary)" stroke-width="0.4" stroke-dasharray="10 15"/>
-              <line x1="100" y1="350" x2="900" y2="350" stroke="var(--accent)" stroke-width="0.3" stroke-dasharray="8 12"/>
-              <line x1="500" y1="50" x2="500" y2="650" stroke="var(--accent)" stroke-width="0.3" stroke-dasharray="8 12"/>
-              <!-- Code editor mockup -->
-              <rect x="200" y="100" width="600" height="350" rx="8" stroke="var(--accent)" stroke-width="0.4" stroke-dasharray="4 6" opacity="0.6"/>
-              <rect x="215" y="115" width="570" height="15" rx="2" fill="var(--accent)" opacity="0.3"/>
-              <rect x="225" y="140" width="200" height="8" rx="2" fill="var(--accent)" opacity="0.4"/>
-              <rect x="225" y="160" width="150" height="8" rx="2" fill="var(--accent-secondary)" opacity="0.4"/>
-              <rect x="225" y="180" width="300" height="8" rx="2" fill="var(--accent)" opacity="0.4"/>
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg, color-mix(in srgb, var(--accent), transparent 88%) 0%, color-mix(in srgb, var(--accent-secondary), transparent 92%) 50%, transparent 100%);"></div>
+          </div>
+          <!-- Bold hero visual element -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1;">
+            <svg viewBox="0 0 400 400" fill="none" style="width:320px;height:320px;opacity:0.15;">
+              <!-- Central gear/cog representing engineering -->
+              <circle cx="200" cy="200" r="100" fill="var(--accent)"/>
+              <circle cx="200" cy="200" r="60" fill="var(--surface)"/>
+              <!-- Gear teeth -->
+              <path d="M200 80 L220 100 L180 100 Z" fill="var(--accent)"/>
+              <path d="M320 200 L300 220 L300 180 Z" fill="var(--accent)"/>
+              <path d="M200 320 L180 300 L220 300 Z" fill="var(--accent)"/>
+              <path d="M80 200 L100 180 L100 220 Z" fill="var(--accent)"/>
+              <!-- Diagonal teeth -->
+              <path d="M271 129 L285 143 L257 157 Z" fill="var(--accent)"/>
+              <path d="M271 271 L257 243 L285 257 Z" fill="var(--accent)"/>
+              <path d="M129 271 L143 257 L157 285 Z" fill="var(--accent)"/>
+              <path d="M129 129 L157 115 L143 143 Z" fill="var(--accent)"/>
+              <!-- Central number 7 -->
+              <text x="200" y="220" text-anchor="middle" font-family="Inter" font-size="48" font-weight="900" fill="var(--accent)">7</text>
+              <!-- Surrounding smaller elements representing habits -->
+              <circle cx="320" cy="120" r="24" fill="var(--accent-secondary)" opacity="0.8"/>
+              <circle cx="360" cy="280" r="20" fill="var(--warning)" opacity="0.8"/>
+              <circle cx="120" cy="80" r="20" fill="var(--positive)" opacity="0.8"/>
+              <circle cx="80" cy="320" r="24" fill="var(--negative)" opacity="0.8"/>
+              <circle cx="280" cy="40" r="16" fill="var(--accent)" opacity="0.6"/>
+              <circle cx="40" cy="160" r="18" fill="var(--accent-secondary)" opacity="0.6"/>
             </svg>
           </div>
           <div class="keyboard-hint">
@@ -354,6 +381,8 @@
           <div class="card-subtitle animate">A CAROUSEL GUIDE</div>
           <h1 class="card-title-main animate delay-1">7 Habits of Highly Effective Engineers</h1>
           <p class="card-description animate delay-2">Swipe through to level up your engineering career →</p>
+          <!-- Colored section divider -->
+          <div style="width:80px;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-secondary));border-radius:2px;margin:24px auto;" class="animate delay-3"></div>
           
           <!-- Preview thumbnails -->
           <div class="preview-grid animate delay-3">

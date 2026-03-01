@@ -50,22 +50,22 @@
     /* ===== POSTER ===== */
     .poster {
       width: 100%; max-width: 720px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 24px; overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+      background: var(--surface); border: 2px solid var(--border);
+      border-radius: 32px; overflow: hidden;
+      box-shadow: 0 32px 96px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.05);
     }
 
     .poster-hero {
       padding: 56px 48px 40px; text-align: center; position: relative;
-      background: linear-gradient(135deg, color-mix(in srgb, var(--accent), var(--bg) 70%), color-mix(in srgb, var(--accent-secondary), var(--bg) 70%));
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent), var(--bg) 60%), color-mix(in srgb, var(--accent-secondary), var(--bg) 60%));
     }
     .poster-hero::after {
       content: ''; position: absolute; inset: 0; opacity: 0.04;
       background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    .poster-eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; position: relative; z-index: 1; }
-    .poster-title { font-size: clamp(3rem, 8vw, 5rem); font-weight: 900; line-height: 1.0; margin-bottom: 8px; color: var(--text); position: relative; z-index: 1; letter-spacing: -0.03em; }
+    .poster-eyebrow { font-size: 0.85rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; position: relative; z-index: 1; background: color-mix(in srgb, var(--accent), transparent 85%); padding: 8px 16px; border-radius: 8px; display: inline-block; border: 1px solid var(--accent); }
+    .poster-title { font-size: clamp(3.5rem, 9vw, 6rem); font-weight: 900; line-height: 0.9; margin-bottom: 8px; color: var(--text); position: relative; z-index: 1; letter-spacing: -0.04em; text-shadow: 0 4px 8px rgba(0,0,0,0.3); }
     .poster-location-line { font-size: 1.1rem; color: var(--text-secondary); font-weight: 500; position: relative; z-index: 1; }
 
     /* Countdown */
@@ -134,13 +134,16 @@
       border-radius: 16px; border: 1px solid var(--border);
     }
     .cta-button {
-      display: inline-block; padding: 14px 32px; border-radius: 12px;
+      display: inline-block; padding: 16px 40px; border-radius: 16px;
       background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
-      color: #fff; font-weight: 700; font-size: 1rem;
+      color: #fff; font-weight: 800; font-size: 1.1rem;
       text-decoration: none; border: none; cursor: pointer;
-      transition: box-shadow 0.2s;
+      transition: all 0.2s; box-shadow: 0 4px 16px rgba(59,130,246,0.2);
     }
-    .cta-button:hover { box-shadow: 0 8px 24px rgba(59,130,246,0.3); }
+    .cta-button:hover { 
+      box-shadow: 0 12px 32px rgba(59,130,246,0.4); 
+      transform: translateY(-2px);
+    }
 
     .qr-placeholder {
       width: 96px; height: 96px; margin: 16px auto 0;
@@ -200,6 +203,39 @@
 
   <article class="poster animate" role="region" aria-label="AI Summit 2026 event poster">
     <header class="poster-hero">
+      <!-- Bold hero visual element -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1;">
+        <svg viewBox="0 0 400 320" fill="none" style="width:350px;height:280px;opacity:0.15;">
+          <!-- Central conference symbol -->
+          <circle cx="200" cy="160" r="100" fill="var(--accent)" opacity="0.3"/>
+          <circle cx="200" cy="160" r="60" fill="var(--surface)" opacity="0.8"/>
+          <!-- Conference podium -->
+          <rect x="170" y="140" width="60" height="40" rx="8" fill="var(--accent)" opacity="0.6"/>
+          <rect x="175" y="145" width="50" height="6" rx="3" fill="var(--surface)" opacity="0.9"/>
+          <!-- Audience visualization -->
+          <circle cx="120" cy="220" r="12" fill="var(--accent)" opacity="0.7"/>
+          <circle cx="150" cy="230" r="12" fill="var(--accent-secondary)" opacity="0.7"/>
+          <circle cx="180" cy="220" r="12" fill="var(--positive)" opacity="0.7"/>
+          <circle cx="220" cy="220" r="12" fill="var(--warning)" opacity="0.7"/>
+          <circle cx="250" cy="230" r="12" fill="var(--accent-secondary)" opacity="0.7"/>
+          <circle cx="280" cy="220" r="12" fill="var(--accent)" opacity="0.7"/>
+          <!-- Additional row -->
+          <circle cx="105" cy="250" r="10" fill="var(--accent)" opacity="0.6"/>
+          <circle cx="135" cy="255" r="10" fill="var(--accent-secondary)" opacity="0.6"/>
+          <circle cx="165" cy="250" r="10" fill="var(--positive)" opacity="0.6"/>
+          <circle cx="195" cy="255" r="10" fill="var(--warning)" opacity="0.6"/>
+          <circle cx="225" cy="250" r="10" fill="var(--accent-secondary)" opacity="0.6"/>
+          <circle cx="255" cy="255" r="10" fill="var(--positive)" opacity="0.6"/>
+          <circle cx="285" cy="250" r="10" fill="var(--accent)" opacity="0.6"/>
+          <!-- Year 2026 in large text -->
+          <text x="200" y="85" text-anchor="middle" font-family="Inter" font-size="72" font-weight="900" fill="var(--accent)" opacity="0.4">2026</text>
+          <!-- Top corner accents -->
+          <circle cx="50" cy="50" r="8" fill="var(--accent)" opacity="0.5"/>
+          <circle cx="350" cy="50" r="8" fill="var(--accent-secondary)" opacity="0.5"/>
+          <circle cx="50" cy="270" r="8" fill="var(--positive)" opacity="0.5"/>
+          <circle cx="350" cy="270" r="8" fill="var(--warning)" opacity="0.5"/>
+        </svg>
+      </div>
       <div class="poster-eyebrow animate delay-1">The Premier AI Conference</div>
       <h1 class="poster-title animate delay-1">AI Summit 2026</h1>
       <div class="poster-location-line animate delay-2">San Francisco, California</div>
