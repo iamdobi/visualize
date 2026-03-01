@@ -31,7 +31,7 @@ The agent running each job needs:
 - **Shell access** — to run git, node, and claude CLI commands
 - **File system access** — to read/write files in the cloned repo
 - **Git push access** — to push commits to https://github.com/careerhackeralex/visualize.git (configure SSH key or token)
-- **Claude Code CLI** — `claude` must be in PATH with a valid ANTHROPIC_API_KEY
+- **Claude Code CLI** — `claude` must be in PATH (the harness handles authentication)
 - **Node.js** — `node` and `npm` must be available (for the eval pipeline)
 - **Playwright** — installed via `cd eval/pipeline && npm install` on first run
 
@@ -58,7 +58,6 @@ Stop scheduling new runs when:
 
 ## Environment Variables Needed
 
-- `ANTHROPIC_API_KEY` — for Claude Code CLI
 - Git credentials (SSH key or GitHub token) with push access to careerhackeralex/visualize
 ```
 
