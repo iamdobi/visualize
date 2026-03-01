@@ -2,7 +2,7 @@
 
 **Turn any idea into a beautiful HTML visualization — with one prompt.**
 
-A [Claude Code](https://code.claude.com) skill that creates stunning, self-contained HTML visualizations from natural language. Slide decks, dashboards, infographics, flowcharts, timelines, and more — all as single HTML files you can open anywhere.
+A [Claude Code](https://code.claude.com) plugin that creates stunning, self-contained HTML visualizations from natural language. Slide decks, dashboards, infographics, flowcharts, timelines, and more — all as single HTML files you can open anywhere.
 
 > HTML is not a "website." It's a visualization tool. Code is cheap. Everyone should feel empowered to visualize anything.
 
@@ -73,20 +73,32 @@ Every visualization includes:
 
 ## Installation
 
-### Claude Code (skill)
+### Claude Code Plugin (recommended)
 
 ```bash
-# From the Claude Code plugin marketplace
-/skill install visualize
-
-# Or manually — clone and add to your skills directory
-git clone https://github.com/careerhackeralex/visualize.git
-cp -r visualize ~/.claude/skills/visualize
+# Install directly from GitHub
+/plugin install careerhackeralex/visualize
 ```
 
-### As a standalone CLAUDE.md reference
+### Manual Installation
 
-Copy `SKILL.md` into your project's `.claude/skills/visualize/` directory. Claude Code will automatically discover it.
+```bash
+# Clone the repo
+git clone https://github.com/careerhackeralex/visualize.git
+
+# Option A: Add as a plugin
+# Claude Code auto-discovers plugins with .claude-plugin/plugin.json
+
+# Option B: Copy just the skill
+cp -r visualize/skills/visualize ~/.claude/skills/visualize
+```
+
+### OpenClaw
+
+```bash
+# Symlink the skill into OpenClaw skills directory
+ln -s /path/to/visualize/skills/visualize ~/.openclaw/skills/visualize
+```
 
 ## Usage
 
@@ -100,11 +112,7 @@ Once installed, just ask Claude Code to visualize anything:
 "Create a timeline of AI milestones"
 ```
 
-The skill triggers automatically on visualization-related requests. You can also invoke it directly:
-
-```
-/visualize Create a pitch deck for an AI recipe app
-```
+The skill triggers automatically on visualization-related requests.
 
 ## Examples
 
@@ -114,22 +122,18 @@ See the [`examples/`](examples/) directory for sample outputs.
 
 ```
 visualize/
-├── SKILL.md                    # Core skill instructions
-├── references/
-│   ├── types.md                # Patterns for 10 visualization types
-│   ├── libraries.md            # CDN library reference & patterns
-│   ├── menu.md                 # Hamburger menu component (required)
-│   └── eval.md                 # Quality evaluation rubric
-├── assets/
-│   └── templates/              # Starter HTML templates
-│       ├── slide-deck.html
-│       ├── dashboard.html
-│       └── infographic.html
-└── eval/                       # Quality assurance
-    ├── SKILL.md                # Evaluation skill
-    ├── stress-tests.md         # 40 test cases
-    ├── LOOP.md                 # Improvement methodology
-    └── eval-results.md         # Score tracking
+├── .claude-plugin/
+│   └── plugin.json             # Plugin manifest
+├── skills/
+│   └── visualize/
+│       ├── SKILL.md            # Core skill instructions
+│       └── references/         # Design system, skeleton, patterns
+├── examples/                   # 15 sample HTML outputs
+├── eval/                       # Quality assurance & eval loop
+├── research/                   # Design research notes
+├── CLAUDE.md                   # Claude Code context file
+├── README.md                   # This file
+└── LICENSE                     # MIT
 ```
 
 ## How It Works
@@ -146,10 +150,10 @@ The skill encodes professional design knowledge (typography scales, color theory
 We use a systematic evaluation loop to improve quality:
 
 1. **Generate** — run test cases from `eval/stress-tests.md`
-2. **Evaluate** — score outputs using the 5-dimension rubric in `references/eval.md`
+2. **Evaluate** — score outputs using the 8-dimension rubric
 3. **Fix the skill** — update `SKILL.md` or references (not individual outputs)
 4. **Re-evaluate** — verify the fix works across test cases
-5. **Ship** when overall score ≥ 8.5 with no dimension below 7
+5. **Ship** when overall score ≥ 9.0 with no dimension below 8
 
 See [`eval/LOOP.md`](eval/LOOP.md) for the full methodology.
 
