@@ -265,9 +265,17 @@ Slides are the most common request. Get these right:
 - **Click nav** — left third = prev, right two-thirds = next
 - **Progress bar** — thin gradient bar at top showing position
 - **Slide counter** — "3 / 12" in bottom nav
+- **Mobile navigation prominence** — Ensure navigation controls are clearly visible on mobile. Use larger touch targets (min 44px), contrasting colors, and backdrop-blur for floating nav
 - **Smooth transitions** — `transform: translateX()` with 500ms cubic-bezier
 - **Entrance animations** — elements within slides animate in with staggered delays
 - **Speaker notes** — `data-notes` attribute, visible in print only
+
+### High-Impact Presentation Slides (Business Context)
+For investor presentations, startup pitches, and executive briefings:
+- **Hero slide visual weight** — Use stronger gradients, larger typography (4-6rem), and compelling statistics prominently displayed
+- **Value proposition clarity** — Hero should communicate core value in under 5 seconds
+- **Professional credibility** — Ensure typography, spacing, and color choices match enterprise/investment-grade expectations
+- **Data storytelling** — Each chart slide should have clear insight callouts, not just raw data visualization
 
 ### Theme-Aware Slide Gradients (CRITICAL)
 
@@ -295,10 +303,24 @@ Rules:
 2. **Content** — heading + bullets OR heading + visual. Never text-heavy.
 3. **Section divider** — full-bleed accent color, section title only.
 4. **Stat** — one big number, one label, one insight sentence.
-5. **Chart** — Chart.js visualization with title and key takeaway.
+5. **Chart** — Chart.js visualization with title and key takeaway. MUST use chart-container wrapper class.
 6. **Two-column** — split layout for comparisons, text+visual.
 7. **Quote** — large pull quote with attribution.
 8. **Closing** — CTA, contact info, or summary + social links.
+
+### Slide Deck Chart Requirements (CRITICAL)
+Chart slides in presentations MUST follow the same container standards as dashboards:
+```html
+<div class="chart-slide-container">
+  <h2>Chart Title</h2>
+  <div class="chart-container" style="height: 400px; padding: 40px; border-radius: 12px; background: var(--surface);">
+    <canvas id="slideChart" role="img" aria-label="Description"></canvas>
+  </div>
+</div>
+```
+- **Use chart-container class** — maintains evaluation consistency across formats
+- **Minimum height 400px** for slide charts — larger than dashboard charts for presentation readability
+- **maintainAspectRatio: false** — required for proper sizing in slide layouts
 
 ## Data Ingestion
 

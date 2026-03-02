@@ -1,0 +1,50 @@
+{
+  "round": 47,
+  "timestamp": "2026-03-02T20:10:17.173Z",
+  "filesEvaluated": 3,
+  "average": 9.8,
+  "minScore": 9.4,
+  "gate": "VIRAL",
+  "results": [
+    {
+      "file": "customer-funnel-infographic.html",
+      "format": "infographic",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "ecommerce-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "investor-presentation-slides.html",
+      "format": "dashboard",
+      "layer2Score": 94,
+      "layer3Score": null,
+      "overall": 9.4,
+      "failedChecks": [
+        {
+          "name": "chart-container-dimensions",
+          "message": "Chart container has explicit dimensions (height >= 300px)"
+        },
+        {
+          "name": "chart-maintain-aspect-ratio",
+          "message": "maintainAspectRatio is false on chart instances"
+        },
+        {
+          "name": "chart-theme-colors",
+          "message": "Charts use theme-aware colors"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}
