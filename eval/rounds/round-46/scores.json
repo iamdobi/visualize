@@ -1,0 +1,92 @@
+{
+  "round": 46,
+  "timestamp": "2026-03-02T14:07:18.162Z",
+  "filesEvaluated": 3,
+  "average": 9.07,
+  "minScore": 8.9,
+  "gate": "SHIP",
+  "results": [
+    {
+      "file": "ai-diagnosis-progress.html",
+      "format": "timeline",
+      "layer2Score": 92,
+      "layer3Score": null,
+      "overall": 9.2,
+      "failedChecks": [
+        {
+          "name": "theme-toggle-works",
+          "message": "Theme toggle changes html class"
+        },
+        {
+          "name": "menu-closes-outside-click",
+          "message": "Menu closes when clicking outside"
+        },
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        },
+        {
+          "name": "has-interactions",
+          "message": "At least 1 type-specific interaction beyond the menu"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "hospital-diagnosis-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 89,
+      "layer3Score": null,
+      "overall": 8.9,
+      "failedChecks": [
+        {
+          "name": "theme-toggle-works",
+          "message": "Theme toggle changes html class"
+        },
+        {
+          "name": "menu-closes-outside-click",
+          "message": "Menu closes when clicking outside"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        },
+        {
+          "name": "has-interactions",
+          "message": "At least 1 type-specific interaction beyond the menu"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "patient-flow-optimization.html",
+      "format": "dashboard",
+      "layer2Score": 91,
+      "layer3Score": null,
+      "overall": 9.1,
+      "failedChecks": [
+        {
+          "name": "theme-toggle-works",
+          "message": "Theme toggle changes html class"
+        },
+        {
+          "name": "menu-closes-outside-click",
+          "message": "Menu closes when clicking outside"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "top-level-var-only",
+          "message": "Top-level JS uses var (no let/const at top scope)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}

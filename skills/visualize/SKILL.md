@@ -104,46 +104,25 @@ Key highlights (consult reference for full details):
 - **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
 
 
-## Utility Menu (MANDATORY FOR ALL FILES)
+## Critical Implementation Requirements
 
-**EVERY visualization must include this exact HTML structure or evaluation will fail:**
+**MANDATORY: Use the skeleton template** — see [references/skeleton.md](references/skeleton.md) for complete copy-paste HTML with all requirements built-in.
 
-```html
-<!-- REQUIRED: Utility menu structure -->
-<div class="viz-menu" style="display: none;">
-  <button onclick="toggleTheme()">🌓 Toggle Theme</button>
-  <button onclick="downloadPNG()">📷 Download PNG</button>
-  <button onclick="window.print()">🖨️ Print/PDF</button>
-</div>
-<button class="viz-menu-toggle" onclick="toggleMenu()" style="position: fixed; top: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; padding: 12px; cursor: pointer; z-index: 1000;">☰</button>
+**JavaScript Implementation Rules:**
+- **All top-level variables MUST use `var`** (not `let`/`const`) to avoid TDZ errors with function hoisting
+- **Theme toggle MUST use `cycleTheme()` function** — this is built into the skeleton with proper `applyTheme()` implementation
+- **Menu MUST use `toggleMenu()` with outside-click handling** — skeleton includes automatic dropdown closure on outside clicks and escape key
+- **Chart rebuilding:** Define `function onThemeChange() {}` for chart re-rendering on theme changes
+- **Mobile responsive:** Test all layouts at 375px viewport width — use CSS Grid `minmax(320px, 1fr)` for card grids
 
-<!-- REQUIRED: html-to-image CDN script -->
-<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
-```
+**Evaluation Checkers Expect:**
+- `cycleTheme()` function exists and works (changes html class)
+- `toggleMenu()` function exists and closes on outside clicks  
+- Top-level JS variables are declared with `var`
+- No horizontal overflow at 375px width
+- Interactive elements beyond basic menu (hover states, chart interactions, etc.)
 
-**REQUIRED JavaScript functions (copy exactly):**
-```javascript
-// MANDATORY: Menu toggle functionality
-function toggleMenu() {
-  var menu = document.querySelector('.viz-menu');
-  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
-
-// MANDATORY: Download PNG function
-function downloadPNG() {
-  htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2 })
-    .then(function(dataUrl) {
-      var link = document.createElement('a');
-      link.download = document.title.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.png';
-      link.href = dataUrl;
-      link.click();
-    });
-}
-```
-
-**The menu system is automatically included in the skeleton template. Use the skeleton to avoid manual implementation errors.**
-
-See [references/menu.md](references/menu.md) for the complete styling and functionality.
+**The skeleton template automatically provides all required functionality. ALWAYS start from skeleton.md to avoid implementation errors.**
 
 ## Semantic HTML Requirements
 
@@ -365,7 +344,24 @@ If a type isn't listed, add at minimum: a filter, search, sort, or expand/collap
 ## Layout Variation (CRITICAL)
 
 Every file must feel like a UNIQUE design, not a template with different text. Vary these per file type:
-- **Grid structure**: Mix 1-col, 2-col, 3-col. Use CSS Grid `span 2` for featured cards. **Always test at 768px and 375px - no horizontal overflow allowed.**
+- **Grid structure**: Mix 1-col, 2-col, 3-col. Use CSS Grid `span 2` for featured cards. **CRITICAL: Always test at 768px and 375px - no horizontal overflow allowed.**
+
+**Mobile-First Responsive Pattern (MANDATORY):**
+```css
+.grid { 
+  display: grid; 
+  gap: 24px; 
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+}
+@media (max-width: 768px) { 
+  .grid { grid-template-columns: 1fr; gap: 16px; }
+  .container { padding: 24px 16px; }
+}
+@media (max-width: 375px) {
+  .card { padding: 16px; }  
+  .stat-value { font-size: 2rem; }
+}
+```
 - **Section rhythm**: Alternate between full-width sections, card grids, and single-focus sections.
 - **Content density**: More content at smaller sizes looks more professional than sparse content at large sizes. A dashboard with 8 KPI cards + 4 charts feels real; 4 KPI cards + 2 charts feels like a demo.
 - **Visual focal point**: Every file needs ONE visually dominant element (hero stat, key chart, primary message) — not everything at equal weight.
