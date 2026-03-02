@@ -1,89 +1,21 @@
 {
   "round": 46,
-  "timestamp": "2026-03-02T14:07:18.162Z",
-  "filesEvaluated": 3,
-  "average": 9.07,
-  "minScore": 8.9,
-  "gate": "SHIP",
+  "timestamp": "2026-03-02T14:11:51.082Z",
+  "filesEvaluated": 1,
+  "average": 9.7,
+  "minScore": 9.7,
+  "gate": "VIRAL",
   "results": [
     {
-      "file": "ai-diagnosis-progress.html",
-      "format": "timeline",
-      "layer2Score": 92,
-      "layer3Score": null,
-      "overall": 9.2,
-      "failedChecks": [
-        {
-          "name": "theme-toggle-works",
-          "message": "Theme toggle changes html class"
-        },
-        {
-          "name": "menu-closes-outside-click",
-          "message": "Menu closes when clicking outside"
-        },
-        {
-          "name": "top-level-var-only",
-          "message": "Top-level JS uses var (no let/const at top scope)"
-        },
-        {
-          "name": "has-interactions",
-          "message": "At least 1 type-specific interaction beyond the menu"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "hospital-diagnosis-dashboard.html",
+      "file": "hospital-diagnosis-dashboard-v2.html",
       "format": "dashboard",
-      "layer2Score": 89,
+      "layer2Score": 97,
       "layer3Score": null,
-      "overall": 8.9,
+      "overall": 9.7,
       "failedChecks": [
-        {
-          "name": "theme-toggle-works",
-          "message": "Theme toggle changes html class"
-        },
-        {
-          "name": "menu-closes-outside-click",
-          "message": "Menu closes when clicking outside"
-        },
         {
           "name": "no-overflow-375",
           "message": "No horizontal overflow at 375px viewport width (mobile)"
-        },
-        {
-          "name": "top-level-var-only",
-          "message": "Top-level JS uses var (no let/const at top scope)"
-        },
-        {
-          "name": "has-interactions",
-          "message": "At least 1 type-specific interaction beyond the menu"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "patient-flow-optimization.html",
-      "format": "dashboard",
-      "layer2Score": 91,
-      "layer3Score": null,
-      "overall": 9.1,
-      "failedChecks": [
-        {
-          "name": "theme-toggle-works",
-          "message": "Theme toggle changes html class"
-        },
-        {
-          "name": "menu-closes-outside-click",
-          "message": "Menu closes when clicking outside"
-        },
-        {
-          "name": "no-overflow-375",
-          "message": "No horizontal overflow at 375px viewport width (mobile)"
-        },
-        {
-          "name": "top-level-var-only",
-          "message": "Top-level JS uses var (no let/const at top scope)"
         }
       ],
       "consoleErrors": []
