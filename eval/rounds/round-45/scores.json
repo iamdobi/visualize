@@ -1,0 +1,51 @@
+{
+  "round": 45,
+  "timestamp": "2026-03-02T08:08:29.642Z",
+  "filesEvaluated": 3,
+  "average": 8.97,
+  "minScore": 8.55,
+  "gate": "ACCEPTABLE",
+  "results": [
+    {
+      "file": "developer-salary-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 96,
+      "layer3Score": 8.1,
+      "overall": 8.55,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "chart-animation-disabled",
+          "message": "Chart.defaults.animation is false"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "korean-career-tips-slides.html",
+      "format": "infographic",
+      "layer2Score": 98,
+      "layer3Score": 9.0,
+      "overall": 9.24,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "korean-learning-roadmap.html",
+      "format": "infographic",
+      "layer2Score": 100,
+      "layer3Score": 8.75,
+      "overall": 9.13,
+      "failedChecks": [],
+      "consoleErrors": []
+    }
+  ]
+}

@@ -430,7 +430,7 @@ Elements must be large enough to read and feel substantial:
 - **Chart containers:** minimum 60% of parent width, minimum height 300px (360px+ for dashboards). In grid layouts, charts should use `flex-grow: 1` to fill available space — 300px is a floor, not a target.
 - **Stat numbers:** minimum font-size 2rem (32px), bold/extrabold weight
 - **Card content area:** minimum padding 24px
-- **Section spacing:** minimum 48px between major sections
+- **Section spacing:** **MANDATORY minimum 48px between major sections** — use `margin-bottom: 48px` or larger on section elements
 - **Slide headings:** minimum 2rem (32px), maximum 6 words
 - **Body text:** minimum 1rem (16px), never smaller
 
@@ -495,7 +495,7 @@ function buildCharts() {
       options: {
         responsive: true,
         maintainAspectRatio: false, // REQUIRED
-        animation: false, // REQUIRED: Chart.defaults.animation must be false
+        animation: false, // MANDATORY: Plus set Chart.defaults.animation = false globally
         plugins: {
           tooltip: {
             enabled: true, // NEVER disable tooltips
@@ -511,8 +511,8 @@ function buildCharts() {
   chartsBuilt = true; // Mark as built
 }
 
-// REQUIRED: Disable Chart.js default animations
-Chart.defaults.animation = false;
+// CRITICAL: Disable Chart.js default animations IMMEDIATELY after Chart.js loads
+Chart.defaults.animation = false; // MUST be set before any chart creation
 
 // REQUIRED: Build charts after DOM loads
 document.addEventListener('DOMContentLoaded', buildCharts);
