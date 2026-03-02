@@ -20,6 +20,19 @@ metadata:
 
 Turn any idea, data, or content into a stunning single-file HTML visualization.
 
+## Critical Requirements (NON-NEGOTIABLE)
+
+**These 6 elements MUST be present in every generated file or it will fail evaluation:**
+
+1. **CSS Custom Properties:** Define `--bg, --surface, --text, --accent, --border` minimum set
+2. **Utility Menu:** `.viz-menu` element with `.viz-menu-toggle` button, download/print buttons
+3. **Semantic HTML:** `<main>` element and `<section>` elements for major content blocks
+4. **Chart.js Validation:** If charts exist, use `resetCanvas()` pattern and `chartsBuilt` guard flag
+5. **Theme System:** Class-based `theme-light`/`theme-dark` on html element, no @media queries
+6. **Accessibility:** Charts with `role="img"` and `aria-label`, hover states for interactive elements
+
+**Template reminder: ALWAYS start from [references/skeleton.md](references/skeleton.md) — it includes all 6 requirements.**
+
 ## Core Principles
 
 1. **Single-file HTML** — one `.html` file with inline CSS/JS. Opens in any browser, works offline, emails easily.
@@ -91,25 +104,46 @@ Key highlights (consult reference for full details):
 - **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
 
 
-## Utility Menu (Required)
+## Utility Menu (MANDATORY FOR ALL FILES)
 
-Every visualization MUST include these structural elements for evaluation compatibility:
+**EVERY visualization must include this exact HTML structure or evaluation will fail:**
 
-**Required Elements:**
-- `.viz-menu` element in DOM
-- `.viz-menu-toggle` button (hamburger ☰ fixed top-right)
-- Download PNG button inside menu
-- Print/PDF button inside menu
-- `html-to-image` CDN script loaded: `https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js`
+```html
+<!-- REQUIRED: Utility menu structure -->
+<div class="viz-menu" style="display: none;">
+  <button onclick="toggleTheme()">🌓 Toggle Theme</button>
+  <button onclick="downloadPNG()">📷 Download PNG</button>
+  <button onclick="window.print()">🖨️ Print/PDF</button>
+</div>
+<button class="viz-menu-toggle" onclick="toggleMenu()" style="position: fixed; top: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 50%; padding: 12px; cursor: pointer; z-index: 1000;">☰</button>
 
-**Menu Functionality:**
-1. **Theme toggle** — cycle Dark / Light / Auto, persisted to localStorage
-2. **Download as PNG** — via `html-to-image` CDN at 2x retina quality
-3. **Print / Save PDF** — `window.print()` with optimized `@media print` styles
+<!-- REQUIRED: html-to-image CDN script -->
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+```
 
-See [references/menu.md](references/menu.md) for the complete copy-paste implementation.
+**REQUIRED JavaScript functions (copy exactly):**
+```javascript
+// MANDATORY: Menu toggle functionality
+function toggleMenu() {
+  var menu = document.querySelector('.viz-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
 
-Key: frosted glass style, smooth open/close, close on outside click + Escape, hide UI during capture, `print-color-adjust: exact`, slide decks export current slide only.
+// MANDATORY: Download PNG function
+function downloadPNG() {
+  htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2 })
+    .then(function(dataUrl) {
+      var link = document.createElement('a');
+      link.download = document.title.replace(/[^a-z0-9]/gi, '-').toLowerCase() + '.png';
+      link.href = dataUrl;
+      link.click();
+    });
+}
+```
+
+**The menu system is automatically included in the skeleton template. Use the skeleton to avoid manual implementation errors.**
+
+See [references/menu.md](references/menu.md) for the complete styling and functionality.
 
 ## Semantic HTML Requirements
 
@@ -413,19 +447,82 @@ Elements must be large enough to read and feel substantial:
 - NEVER set text color to a value close to the background color
 - Test mentally: "would this text be visible on BOTH dark (#030712) and light (#f8fafc) backgrounds?"
 
-## Chart.js Integration Rules
+## Chart.js Integration Rules (CRITICAL — MOST COMMON FAILURE)
 
-Charts are the second most common failure. Follow these rules:
+Charts are the second most common failure. These rules are MANDATORY for every chart:
 
-- **Always wrap in a container div** with explicit `width` and `height` or `aspect-ratio`
-- **MANDATORY: Add accessibility container** with `role="img"` and descriptive `aria-label` — THIS IS REQUIRED FOR ALL CHARTS:
-  ```html
-  <!-- REQUIRED FOR EVERY CHART -->
-  <div role="img" aria-label="Bar chart showing Q4 revenue increased 23% to $2.4M across 4 product lines">
-    <div class="chart-container"><canvas id="myChart"></canvas></div>
+### 1. Container Structure (REQUIRED)
+```html
+<!-- MANDATORY PATTERN FOR EVERY CHART -->
+<div role="img" aria-label="Detailed description of chart data and insights">
+  <div class="chart-container" style="height: 360px; padding: 40px; border-radius: 12px; background: var(--surface);">
+    <canvas id="uniqueChartId"></canvas>
   </div>
-  ```
-  **The aria-label must describe what the chart shows, not just the chart type. Include key data insights.**
+</div>
+```
+
+### 2. Canvas Dimensions (REQUIRED)
+- **Container must have explicit height:** minimum 360px for dashboards, 300px for other types
+- **Canvas element needs no sizing** — Chart.js handles this when `maintainAspectRatio: false`
+- **Container padding:** 40px internal padding for professional spacing
+- **Container border-radius:** 12px for modern card appearance
+
+### 3. Chart.js Initialization (MANDATORY PATTERN)
+```javascript
+// REQUIRED: Chart destruction and canvas reset to prevent "Canvas already in use" errors
+var chartsBuilt = false; // Guard flag
+
+function buildCharts() {
+  if (chartsBuilt) return; // Prevent double-initialization during theme detection
+  
+  // REQUIRED: Reset canvas before building
+  function resetCanvas(id) {
+    var old = document.getElementById(id);
+    if (!old) return null;
+    var parent = old.parentNode;
+    var canvas = document.createElement('canvas');
+    canvas.id = id;
+    parent.replaceChild(canvas, old);
+    return canvas;
+  }
+  
+  // Example chart with required settings
+  var ctx = resetCanvas('myChart');
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'bar',
+      data: { /* your data */ },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // REQUIRED
+        animation: false, // REQUIRED: Chart.defaults.animation must be false
+        plugins: {
+          tooltip: {
+            enabled: true, // NEVER disable tooltips
+            padding: 12,
+            cornerRadius: 8
+          }
+        },
+        layout: { padding: 20 } // REQUIRED: breathing room
+      }
+    });
+  }
+  
+  chartsBuilt = true; // Mark as built
+}
+
+// REQUIRED: Disable Chart.js default animations
+Chart.defaults.animation = false;
+
+// REQUIRED: Build charts after DOM loads
+document.addEventListener('DOMContentLoaded', buildCharts);
+
+// REQUIRED: Rebuild charts on theme change
+function onThemeChange() {
+  chartsBuilt = false; // Reset flag
+  setTimeout(buildCharts, 100); // Slight delay for CSS variable updates
+}
+```
 - **MANDATORY: Hover tooltips enabled** — never disable Chart.js tooltips:
   ```javascript
   options: {
