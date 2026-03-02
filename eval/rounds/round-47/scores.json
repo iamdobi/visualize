@@ -1,31 +1,13 @@
 {
   "round": 47,
-  "timestamp": "2026-03-02T20:10:17.173Z",
-  "filesEvaluated": 3,
-  "average": 9.8,
+  "timestamp": "2026-03-02T20:15:02.277Z",
+  "filesEvaluated": 1,
+  "average": 9.4,
   "minScore": 9.4,
-  "gate": "VIRAL",
+  "gate": "SHIP",
   "results": [
     {
-      "file": "customer-funnel-infographic.html",
-      "format": "infographic",
-      "layer2Score": 100,
-      "layer3Score": null,
-      "overall": 10,
-      "failedChecks": [],
-      "consoleErrors": []
-    },
-    {
-      "file": "ecommerce-dashboard.html",
-      "format": "dashboard",
-      "layer2Score": 100,
-      "layer3Score": null,
-      "overall": 10,
-      "failedChecks": [],
-      "consoleErrors": []
-    },
-    {
-      "file": "investor-presentation-slides.html",
+      "file": "investor-presentation-slides-v2.html",
       "format": "dashboard",
       "layer2Score": 94,
       "layer3Score": null,
