@@ -1,297 +1,33 @@
 {
   "round": 44,
-  "timestamp": "2026-03-02T02:07:13.906Z",
-  "filesEvaluated": 3,
-  "average": 5.4,
-  "minScore": 5.2,
-  "gate": "FAIL",
+  "timestamp": "2026-03-02T02:12:00.467Z",
+  "filesEvaluated": 1,
+  "average": 8.9,
+  "minScore": 8.9,
+  "gate": "ACCEPTABLE",
   "results": [
     {
-      "file": "galaxy-s26-campaign-results.html",
+      "file": "samsung-brand-analysis-dashboard-v2.html",
       "format": "dashboard",
-      "layer2Score": 54,
+      "layer2Score": 89,
       "layer3Score": null,
-      "overall": 5.4,
+      "overall": 8.9,
       "failedChecks": [
         {
           "name": "theme-light-defined",
           "message": ".theme-light class defined in stylesheet"
         },
         {
-          "name": "css-custom-properties",
-          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
-        },
-        {
-          "name": "menu-element-exists",
-          "message": ".viz-menu element exists in DOM"
-        },
-        {
-          "name": "menu-toggle-exists",
-          "message": ".viz-menu-toggle button exists"
-        },
-        {
-          "name": "download-button-present",
-          "message": "Download PNG button present in menu"
-        },
-        {
-          "name": "print-button-present",
-          "message": "Print/PDF button present in menu"
-        },
-        {
-          "name": "html-to-image-loaded",
-          "message": "html-to-image CDN script loaded"
+          "name": "theme-toggle-works",
+          "message": "Theme toggle changes html class"
         },
         {
           "name": "menu-opens-on-click",
           "message": "Menu dropdown opens when toggle is clicked"
-        },
-        {
-          "name": "heading-negative-tracking",
-          "message": "Headings use negative letter-spacing (tight tracking)"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "semantic-main",
-          "message": "Semantic HTML: <main> element exists"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        },
-        {
-          "name": "print-styles",
-          "message": "@media print styles defined in stylesheet"
-        },
-        {
-          "name": "reduced-motion",
-          "message": "@media (prefers-reduced-motion) styles defined"
-        },
-        {
-          "name": "chart-accessibility",
-          "message": "Charts have role=\"img\" and aria-label"
-        },
-        {
-          "name": "landmarks-present",
-          "message": "Landmark roles or skip-to-content link present"
-        },
-        {
-          "name": "chart-animation-disabled",
-          "message": "Chart.defaults.animation is false"
-        },
-        {
-          "name": "chart-container-dimensions",
-          "message": "Chart container has explicit dimensions (height >= 300px)"
-        },
-        {
-          "name": "chart-maintain-aspect-ratio",
-          "message": "maintainAspectRatio is false on chart instances"
-        },
-        {
-          "name": "top-level-var-only",
-          "message": "Top-level JS uses var (no let/const at top scope)"
-        },
-        {
-          "name": "entrance-animations",
-          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
-        },
-        {
-          "name": "hover-states",
-          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "korea-smartphone-market-share.html",
-      "format": "dashboard",
-      "layer2Score": 56,
-      "layer3Score": null,
-      "overall": 5.6,
-      "failedChecks": [
-        {
-          "name": "theme-light-defined",
-          "message": ".theme-light class defined in stylesheet"
-        },
-        {
-          "name": "css-custom-properties",
-          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
-        },
-        {
-          "name": "menu-element-exists",
-          "message": ".viz-menu element exists in DOM"
-        },
-        {
-          "name": "menu-toggle-exists",
-          "message": ".viz-menu-toggle button exists"
-        },
-        {
-          "name": "download-button-present",
-          "message": "Download PNG button present in menu"
-        },
-        {
-          "name": "print-button-present",
-          "message": "Print/PDF button present in menu"
-        },
-        {
-          "name": "html-to-image-loaded",
-          "message": "html-to-image CDN script loaded"
-        },
-        {
-          "name": "menu-opens-on-click",
-          "message": "Menu dropdown opens when toggle is clicked"
-        },
-        {
-          "name": "heading-negative-tracking",
-          "message": "Headings use negative letter-spacing (tight tracking)"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "semantic-main",
-          "message": "Semantic HTML: <main> element exists"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        },
-        {
-          "name": "print-styles",
-          "message": "@media print styles defined in stylesheet"
-        },
-        {
-          "name": "reduced-motion",
-          "message": "@media (prefers-reduced-motion) styles defined"
-        },
-        {
-          "name": "chart-accessibility",
-          "message": "Charts have role=\"img\" and aria-label"
-        },
-        {
-          "name": "landmarks-present",
-          "message": "Landmark roles or skip-to-content link present"
-        },
-        {
-          "name": "chart-animation-disabled",
-          "message": "Chart.defaults.animation is false"
-        },
-        {
-          "name": "chart-container-dimensions",
-          "message": "Chart container has explicit dimensions (height >= 300px)"
-        },
-        {
-          "name": "chart-maintain-aspect-ratio",
-          "message": "maintainAspectRatio is false on chart instances"
-        },
-        {
-          "name": "entrance-animations",
-          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
-        },
-        {
-          "name": "hover-states",
-          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
-      "file": "samsung-brand-analysis-dashboard.html",
-      "format": "dashboard",
-      "layer2Score": 52,
-      "layer3Score": null,
-      "overall": 5.2,
-      "failedChecks": [
-        {
-          "name": "theme-light-defined",
-          "message": ".theme-light class defined in stylesheet"
-        },
-        {
-          "name": "css-custom-properties",
-          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
-        },
-        {
-          "name": "menu-element-exists",
-          "message": ".viz-menu element exists in DOM"
-        },
-        {
-          "name": "menu-toggle-exists",
-          "message": ".viz-menu-toggle button exists"
-        },
-        {
-          "name": "download-button-present",
-          "message": "Download PNG button present in menu"
-        },
-        {
-          "name": "print-button-present",
-          "message": "Print/PDF button present in menu"
-        },
-        {
-          "name": "html-to-image-loaded",
-          "message": "html-to-image CDN script loaded"
-        },
-        {
-          "name": "menu-opens-on-click",
-          "message": "Menu dropdown opens when toggle is clicked"
-        },
-        {
-          "name": "heading-negative-tracking",
-          "message": "Headings use negative letter-spacing (tight tracking)"
-        },
-        {
-          "name": "no-overflow-768",
-          "message": "No horizontal overflow at 768px viewport width (tablet)"
         },
         {
           "name": "no-overflow-375",
           "message": "No horizontal overflow at 375px viewport width (mobile)"
-        },
-        {
-          "name": "section-spacing",
-          "message": "Adequate spacing between major sections (>= 48px)"
-        },
-        {
-          "name": "semantic-main",
-          "message": "Semantic HTML: <main> element exists"
-        },
-        {
-          "name": "semantic-sections",
-          "message": "Semantic HTML: <section> elements are used"
-        },
-        {
-          "name": "print-styles",
-          "message": "@media print styles defined in stylesheet"
-        },
-        {
-          "name": "reduced-motion",
-          "message": "@media (prefers-reduced-motion) styles defined"
-        },
-        {
-          "name": "chart-accessibility",
-          "message": "Charts have role=\"img\" and aria-label"
-        },
-        {
-          "name": "landmarks-present",
-          "message": "Landmark roles or skip-to-content link present"
-        },
-        {
-          "name": "chart-animation-disabled",
-          "message": "Chart.defaults.animation is false"
-        },
-        {
-          "name": "chart-maintain-aspect-ratio",
-          "message": "maintainAspectRatio is false on chart instances"
-        },
-        {
-          "name": "entrance-animations",
-          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
-        },
-        {
-          "name": "hover-states",
-          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
         }
       ],
       "consoleErrors": []
