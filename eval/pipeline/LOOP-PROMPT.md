@@ -23,7 +23,7 @@ cd visualize
 cat eval/loop-state.json
 ```
 
-**Check gate:** If `gate` is `SHIP` or `VIRAL`, report the status and STOP — no improvement needed.
+**Check gate:** If `gate` is `VIRAL`, report the status and STOP — no improvement needed. If `gate` is `SHIP`, continue running — the goal is now VIRAL (≥9.5, all ≥9).
 
 **Check plateau:** If `loopsSinceResearch >= 5` AND the last 3 rounds improved less than 0.3 total, switch to **Research Mode** (see bottom of this prompt).
 

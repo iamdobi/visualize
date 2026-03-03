@@ -213,20 +213,19 @@ When the user asks for something that fits "one screen," "phone screen," "9:16,"
 body {
   width: 1080px; height: 1920px; /* or chosen ratio */
   overflow: hidden; /* MUST — prevents scroll, enforces single screen */
-  position: relative;
+  display: flex; flex-direction: column; /* Flex column fills canvas completely */
 }
-.poster {
-  height: 100%;
-  display: flex; flex-direction: column;
-  justify-content: space-between; /* Even vertical distribution — no dead space */
-  padding: 64px; /* Generous but not wasteful */
-}
+.poster-header { padding: 44px 48px 0; }
+.poster-grid { flex: 1; padding: 24px 48px 0; } /* flex:1 expands to fill remaining space */
+.poster-footer { padding: 16px 48px 36px; }
 ```
 
 **Layout rules:**
 - `overflow: hidden` on body — this is what makes it "one screen." Non-negotiable.
 - `justify-content: space-between` on the main container — distributes sections evenly with NO dead gaps.
+- **Use `flex: 1` on the main content area** (grid, body, etc.) so it expands to fill ALL remaining space between header and footer. Never use fixed `height` values that leave dead space.
 - Wrap each logical section in a `<div>` so flexbox distributes them as blocks.
+- **Zero dead space rule:** The poster canvas should be 100% utilized. No large empty margins at bottom or sides. If there's visible empty space, either expand content to fill it or reduce padding. Content should feel like it "fits" the frame perfectly.
 - **Test mentally:** count your sections, divide 1920px among them. Each section gets ~200-300px. If content is sparse, make elements bigger (larger fonts, more padding, bigger icons).
 - **No hamburger menu** for fixed-dimension posters — it wastes space and the poster is meant for screenshot/export, not interaction.
 
