@@ -30,9 +30,9 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
 3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
 4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
-5. **Chart.js Requirements:** `Chart.defaults.animation = false`, `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers
-6. **Responsive Design:** Section spacing ≥48px, no horizontal overflow at 375px/768px, font-size hierarchy
-7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion)` support
+5. **Chart.js Requirements:** `Chart.defaults.animation = false`, `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 300px
+6. **Responsive Design:** Section spacing ≥48px, NO horizontal overflow at 375px (use `overflow-x: hidden` if needed), font-size hierarchy
+7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
 8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
 
 **🔥 CRITICAL: Copy skeleton.md exactly → Replace "YOUR CONTENT HERE" with visualization content → Save file**
@@ -440,7 +440,7 @@ The skeleton provides:
 
 ### Skeleton Rules
 - Use `var` for all top-level JS variables (prevents TDZ errors)
-- Use `data-reveal` for scroll animation, `.animate.delay-N` for page-load entrance
+- MANDATORY: Use `data-reveal` for scroll animation OR `.animate.delay-N` for page-load entrance. Add JavaScript scroll observer for `.reveal` classes.
 - Define `function onThemeChange() {}` to re-render charts on theme toggle
 - Use semantic HTML: `<main>`, `<section>`, `<header>`, `<article>`
 - Don't use `let`/`const` at script top level

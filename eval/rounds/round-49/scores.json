@@ -1,0 +1,84 @@
+{
+  "round": 49,
+  "timestamp": "2026-03-03T20:07:18.849Z",
+  "filesEvaluated": 3,
+  "average": 8.75,
+  "minScore": 8.3,
+  "gate": "ACCEPTABLE",
+  "results": [
+    {
+      "file": "executive-presentation.html",
+      "format": "dashboard",
+      "layer2Score": 8.9,
+      "layer3Score": 7.7,
+      "overall": 8.3,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "chart-container-dimensions",
+          "message": "Chart container has explicit dimensions (height >= 300px)"
+        },
+        {
+          "name": "entrance-animations",
+          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "training-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 9.2,
+      "layer3Score": 8.4,
+      "overall": 8.8,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "entrance-animations",
+          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "training-effectiveness-infographic.html",
+      "format": "dashboard",
+      "layer2Score": 9.4,
+      "layer3Score": 8.9,
+      "overall": 9.15,
+      "failedChecks": [
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "entrance-animations",
+          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+        },
+        {
+          "name": "hover-states",
+          "message": "Hover states defined for interactive elements (:hover rules in CSS)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}
