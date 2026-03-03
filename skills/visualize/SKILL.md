@@ -22,16 +22,20 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 
 ## Critical Requirements (NON-NEGOTIABLE)
 
-**These 6 elements MUST be present in every generated file or it will fail evaluation:**
+⚠️ **EVALUATION FAILURE GUARANTEED WITHOUT THESE 8 ELEMENTS** ⚠️
 
-1. **CSS Custom Properties:** Define `--bg, --surface, --text, --accent, --border` minimum set
-2. **Utility Menu:** `.viz-menu` element with `.viz-menu-toggle` button, download/print buttons
-3. **Semantic HTML:** `<main>` element and `<section>` elements for major content blocks
-4. **Chart.js Validation:** If charts exist, use `resetCanvas()` pattern and `chartsBuilt` guard flag
-5. **Theme System:** Class-based `theme-light`/`theme-dark` on html element, no @media queries
-6. **Accessibility:** Charts with `role="img"` and `aria-label`, hover states for interactive elements
+**EVERY file MUST start from the skeleton template in [references/skeleton.md](references/skeleton.md) — copy the ENTIRE template, then add your content.**
 
-**Template reminder: ALWAYS start from [references/skeleton.md](references/skeleton.md) — it includes all 6 requirements.**
+1. **CSS Custom Properties:** Exact names required: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — NO other names (not --bg-primary, not --text-primary)
+2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
+3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
+4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
+5. **Chart.js Requirements:** `Chart.defaults.animation = false`, `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers
+6. **Responsive Design:** Section spacing ≥48px, no horizontal overflow at 375px/768px, font-size hierarchy
+7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion)` support
+8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
+
+**🔥 CRITICAL: Copy skeleton.md exactly → Replace "YOUR CONTENT HERE" with visualization content → Save file**
 
 ## Core Principles
 
@@ -50,9 +54,12 @@ Users invoke this **mid-conversation** with Claude Code. Use the full conversati
 
 ## Output Rules
 
-- Write ONE `.html` file to the working directory (or user-specified path)
+**MANDATORY FIRST STEP: Copy the complete skeleton from [references/skeleton.md](references/skeleton.md) — this includes all required elements (menu, theme system, CSS properties, semantic HTML, accessibility features). Never write HTML from scratch.**
+
+- Write ONE `.html` file to the working directory (or user-specified path)  
 - Filename: descriptive kebab-case, e.g., `q4-revenue-dashboard.html`, `team-roadmap-deck.html`
-- All custom styles in `<style>` after CDN imports
+- Start with skeleton.md template, add your content to the `<!-- YOUR CONTENT HERE -->` section
+- All custom styles in `<style>` after the skeleton's base styles
 - **CDN libraries are encouraged** — use the best tool for the job:
   - **Tailwind CSS** — `https://cdn.tailwindcss.com` (utility-first styling, use freely)
   - **Chart.js** — `https://cdn.jsdelivr.net/npm/chart.js` (bar, line, pie, radar, doughnut)
@@ -95,7 +102,7 @@ Key highlights (consult reference for full details):
 - **Animations:** CSS @keyframes for page-load (.animate + .delay-N), data-reveal + IntersectionObserver for scroll, data-count for counters. Content visible by default. **Above-fold content must NEVER use data-reveal** — use `.animate` classes instead. Use `data-reveal` sparingly (max 3-4 sections) for below-fold content only.
 - **Accessibility:** Skip-to-content, aria-labels, landmark roles, :focus-visible, sr-only for chart data. See reference for full checklist.
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
-- **Chart.js:** DISABLE default animation (`Chart.defaults.animation = false`), destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, wrap in role="img" with aria-label. Use a `chartsBuilt` guard flag — `onThemeChange` must NOT call `buildCharts()` until the initial build completes (prevents "Canvas already in use" errors during page-load theme detection).
+- **Chart.js (MANDATORY PATTERNS):** `Chart.defaults.animation = false;` at top of script, destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, `maintainAspectRatio: false` on all chart options. **Accessibility: Wrap canvas in div with `role="img"` and descriptive `aria-label`**. **Guard pattern:** Use `chartsBuilt` flag — `onThemeChange()` must check `if (chartsBuilt)` before rebuilding. **Chart containers need min-height: 360px for substantial presence.**
 - **Chart.js customization:** Apply professional styling beyond defaults — custom padding (`layout: { padding: 30 }`), remove excessive gridlines (opacity ≤ 0.04), use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Chart containers need 12px border radius, 40px internal padding, and 360px minimum height for substantial presence. Avoid library defaults that look auto-generated.
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
 - **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.

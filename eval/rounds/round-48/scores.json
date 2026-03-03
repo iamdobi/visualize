@@ -1,0 +1,224 @@
+{
+  "round": 48,
+  "timestamp": "2026-03-03T08:08:17.930Z",
+  "filesEvaluated": 3,
+  "average": 6.57,
+  "minScore": 5.9,
+  "gate": "FAIL",
+  "results": [
+    {
+      "file": "customer-acquisition-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 63,
+      "layer3Score": null,
+      "overall": 6.3,
+      "failedChecks": [
+        {
+          "name": "theme-light-defined",
+          "message": ".theme-light class defined in stylesheet"
+        },
+        {
+          "name": "css-custom-properties",
+          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
+        },
+        {
+          "name": "menu-element-exists",
+          "message": ".viz-menu element exists in DOM"
+        },
+        {
+          "name": "menu-toggle-exists",
+          "message": ".viz-menu-toggle button exists"
+        },
+        {
+          "name": "download-button-present",
+          "message": "Download PNG button present in menu"
+        },
+        {
+          "name": "print-button-present",
+          "message": "Print/PDF button present in menu"
+        },
+        {
+          "name": "html-to-image-loaded",
+          "message": "html-to-image CDN script loaded"
+        },
+        {
+          "name": "menu-opens-on-click",
+          "message": "Menu dropdown opens when toggle is clicked"
+        },
+        {
+          "name": "font-size-hierarchy",
+          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
+        },
+        {
+          "name": "no-overflow-768",
+          "message": "No horizontal overflow at 768px viewport width (tablet)"
+        },
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "print-styles",
+          "message": "@media print styles defined in stylesheet"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "chart-accessibility",
+          "message": "Charts have role=\"img\" and aria-label"
+        },
+        {
+          "name": "chart-animation-disabled",
+          "message": "Chart.defaults.animation is false"
+        },
+        {
+          "name": "entrance-animations",
+          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "sales-performance-slides.html",
+      "format": "dashboard",
+      "layer2Score": 59,
+      "layer3Score": null,
+      "overall": 5.9,
+      "failedChecks": [
+        {
+          "name": "theme-light-defined",
+          "message": ".theme-light class defined in stylesheet"
+        },
+        {
+          "name": "css-custom-properties",
+          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
+        },
+        {
+          "name": "menu-element-exists",
+          "message": ".viz-menu element exists in DOM"
+        },
+        {
+          "name": "menu-toggle-exists",
+          "message": ".viz-menu-toggle button exists"
+        },
+        {
+          "name": "download-button-present",
+          "message": "Download PNG button present in menu"
+        },
+        {
+          "name": "print-button-present",
+          "message": "Print/PDF button present in menu"
+        },
+        {
+          "name": "html-to-image-loaded",
+          "message": "html-to-image CDN script loaded"
+        },
+        {
+          "name": "menu-opens-on-click",
+          "message": "Menu dropdown opens when toggle is clicked"
+        },
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "semantic-main",
+          "message": "Semantic HTML: <main> element exists"
+        },
+        {
+          "name": "semantic-sections",
+          "message": "Semantic HTML: <section> elements are used"
+        },
+        {
+          "name": "print-styles",
+          "message": "@media print styles defined in stylesheet"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "chart-accessibility",
+          "message": "Charts have role=\"img\" and aria-label"
+        },
+        {
+          "name": "landmarks-present",
+          "message": "Landmark roles or skip-to-content link present"
+        },
+        {
+          "name": "chart-animation-disabled",
+          "message": "Chart.defaults.animation is false"
+        },
+        {
+          "name": "chart-container-dimensions",
+          "message": "Chart container has explicit dimensions (height >= 300px)"
+        },
+        {
+          "name": "chart-maintain-aspect-ratio",
+          "message": "maintainAspectRatio is false on chart instances"
+        },
+        {
+          "name": "chart-theme-colors",
+          "message": "Charts use theme-aware colors"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "sea-expansion-infographic.html",
+      "format": "timeline",
+      "layer2Score": 75,
+      "layer3Score": null,
+      "overall": 7.5,
+      "failedChecks": [
+        {
+          "name": "theme-light-defined",
+          "message": ".theme-light class defined in stylesheet"
+        },
+        {
+          "name": "css-custom-properties",
+          "message": "CSS custom properties defined (--bg, --surface, --text, --accent, --border)"
+        },
+        {
+          "name": "menu-element-exists",
+          "message": ".viz-menu element exists in DOM"
+        },
+        {
+          "name": "menu-toggle-exists",
+          "message": ".viz-menu-toggle button exists"
+        },
+        {
+          "name": "download-button-present",
+          "message": "Download PNG button present in menu"
+        },
+        {
+          "name": "print-button-present",
+          "message": "Print/PDF button present in menu"
+        },
+        {
+          "name": "html-to-image-loaded",
+          "message": "html-to-image CDN script loaded"
+        },
+        {
+          "name": "menu-opens-on-click",
+          "message": "Menu dropdown opens when toggle is clicked"
+        },
+        {
+          "name": "print-styles",
+          "message": "@media print styles defined in stylesheet"
+        },
+        {
+          "name": "reduced-motion",
+          "message": "@media (prefers-reduced-motion) styles defined"
+        },
+        {
+          "name": "entrance-animations",
+          "message": "Entrance animations present (.animate classes, data-reveal, or @keyframes)"
+        }
+      ],
+      "consoleErrors": []
+    }
+  ]
+}
