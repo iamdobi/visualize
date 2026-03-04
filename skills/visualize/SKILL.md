@@ -30,8 +30,8 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
 3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
 4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
-5. **Chart.js Requirements:** `Chart.defaults.animation = false`, `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 300px
-6. **Responsive Design:** Section spacing ≥48px, NO horizontal overflow at 375px (use `overflow-x: hidden` if needed), font-size hierarchy (h1 > h2 > h3 > body text)
+5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. Set `Chart.defaults.animation = false` IMMEDIATELY after Chart.js loads. Use `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 300px, `maintainAspectRatio: false`
+6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (always add `@media (max-width: 375px) { body { overflow-x: hidden; } }` if any layout issues), font-size hierarchy (h1 > h2 > h3 > body text)
 7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
 8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
 
@@ -91,7 +91,8 @@ Key highlights (consult reference for full details):
 
 **Typography:**
 - **Inter font mandatory** — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
-- -0.03em tracking on headings, 700/600/400 weight hierarchy
+- **MANDATORY font weight hierarchy:** h1 ≥ 700, h2 ≥ 600, h3 ≥ 500, body = 400 (critical evaluation requirement)
+- -0.03em tracking on headings
 - Noto Sans KR/JP/SC for CJK. See reference for full type scale.
 
 **Colors:**
@@ -623,6 +624,71 @@ function buildCharts() {
     }
   });
 }
+```
+
+## Critical Debugging Patterns
+
+### Counter Animation Debug Pattern
+If KPI values show "0%" instead of animating, add this debug pattern:
+```javascript
+// DEBUG: Add after counter observer setup to verify intersection
+var counterEl = document.querySelector('[data-count]');
+if (counterEl) {
+  console.log('Counter element found:', counterEl); // DEBUG
+  var cObs = new IntersectionObserver(function(entries) {
+    console.log('Counter intersection triggered:', entries); // DEBUG
+    entries.forEach(function(e) { 
+      if (e.isIntersecting) { 
+        console.log('Starting counter animation'); // DEBUG
+        animateCounters(); 
+        cObs.disconnect(); 
+      } 
+    });
+  }, { threshold: 0.3 });
+  cObs.observe(counterEl);
+} else {
+  console.warn('No [data-count] elements found'); // DEBUG
+}
+```
+
+### Chart.js Integration Safety Pattern
+MANDATORY for all Chart.js usage to prevent console errors:
+```javascript
+// STEP 1: Verify Chart.js loaded
+if (typeof Chart === 'undefined') {
+  console.error('Chart.js not loaded - check CDN link in <head>');
+  return;
+}
+
+// STEP 2: Set global defaults IMMEDIATELY
+Chart.defaults.animation = false;
+
+// STEP 3: Safe chart building with try-catch
+function buildCharts() {
+  try {
+    // Your chart building code here
+    var ctx = document.getElementById('myChart');
+    if (!ctx) {
+      console.error('Chart canvas #myChart not found');
+      return;
+    }
+    // ... build chart
+  } catch (error) {
+    console.error('Chart building failed:', error);
+  }
+}
+```
+
+### Menu Outside-Click Fix
+Ensure menu closes when clicking outside by strengthening the event handler:
+```javascript
+document.addEventListener('click', function(e) { 
+  var menu = document.querySelector('.viz-menu');
+  var dropdown = document.getElementById('vizMenuDropdown');
+  if (!e.target.closest('.viz-menu') && dropdown) {
+    dropdown.classList.remove('open');
+  }
+});
 ```
 
 ## Process
