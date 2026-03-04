@@ -1,49 +1,14 @@
 {
   "round": 50,
-  "timestamp": "2026-03-04T02:07:42.013Z",
-  "filesEvaluated": 3,
-  "average": 9.77,
-  "minScore": 9.6,
+  "timestamp": "2026-03-04T02:11:02.021Z",
+  "filesEvaluated": 1,
+  "average": 10,
+  "minScore": 10,
   "gate": "VIRAL",
   "results": [
     {
-      "file": "ai-personalization-journey.html",
-      "format": "infographic",
-      "layer2Score": 97,
-      "layer3Score": null,
-      "overall": 9.7,
-      "failedChecks": [
-        {
-          "name": "font-size-hierarchy",
-          "message": "Clear font-size hierarchy: h1 > h2 > h3 > body"
-        }
-      ],
-      "consoleErrors": []
-    },
-    {
       "file": "game-metrics-dashboard.html",
       "format": "dashboard",
-      "layer2Score": 96,
-      "layer3Score": null,
-      "overall": 9.6,
-      "failedChecks": [
-        {
-          "name": "chart-maintain-aspect-ratio",
-          "message": "maintainAspectRatio is false on chart instances"
-        },
-        {
-          "name": "chart-theme-colors",
-          "message": "Charts use theme-aware colors"
-        }
-      ],
-      "consoleErrors": [
-        "window.revenueChart.destroy is not a function",
-        "window.revenueChart.destroy is not a function"
-      ]
-    },
-    {
-      "file": "series-a-pitch-deck.html",
-      "format": "infographic",
       "layer2Score": 100,
       "layer3Score": null,
       "overall": 10,
