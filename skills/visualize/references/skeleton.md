@@ -287,11 +287,18 @@
       menu.style.display = '';
     }
 
-    // === Chart Guard Pattern (use when file has Chart.js) ===
+    // === Chart.js Pattern (use when file has Chart.js) ===
     // var chartsBuilt = false;
-    // function buildCharts() { /* ... build all charts ... */ chartsBuilt = true; }
-    // function onThemeChange() { if (chartsBuilt) buildCharts(); }
-    // window.addEventListener('load', function() { setTimeout(buildCharts, 200); });
+    // function buildCharts() {
+    //   if (chartsBuilt || typeof Chart === 'undefined') return;
+    //   var isDark = document.documentElement.classList.contains('theme-dark');
+    //   var textColor = isDark ? '#EDEDED' : '#0f172a';
+    //   var borderColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+    //   // Create charts with theme-aware colors
+    //   chartsBuilt = true;
+    // }
+    // function onThemeChange() { chartsBuilt = false; buildCharts(); }
+    // window.addEventListener('load', buildCharts);
 
     // === YOUR SCRIPTS BELOW (use var for top-level variables, define onThemeChange for chart re-renders) ===
   </script>
