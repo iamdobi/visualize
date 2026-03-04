@@ -30,8 +30,8 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
 3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
 4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
-5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add another script tag with `Chart.defaults.animation = false;` (prevents animation glitches). Use `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 360px, `maintainAspectRatio: false`. **CRITICAL:** Validate Chart.js loaded with `if (chartsBuilt || typeof Chart === 'undefined') return;` before creating charts. Rebuild charts on theme change by setting `chartsBuilt = false` then calling buildCharts(). Use theme-aware colors: `isDark ? '#EDEDED' : '#0f172a'` not static hex colors.
-6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (always add `@media (max-width: 375px) { body { overflow-x: hidden; } }` if any layout issues), font-size hierarchy (h1 > h2 > h3 > body text)
+5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). Use `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 360px, `maintainAspectRatio: false`. **CRITICAL:** Always validate Chart.js loaded with `if (chartsBuilt || typeof Chart === 'undefined') return;` at the start of buildCharts(). Rebuild charts on theme change by setting `chartsBuilt = false` then calling buildCharts(). Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
+6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), font-size hierarchy (h1 > h2 > h3 > body text). **Test all layouts at 375px width — dashboards especially prone to chart container overflow.**
 7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
 8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
 
@@ -654,19 +654,64 @@ if (counterEl) {
 ### Chart.js Integration Safety Pattern
 MANDATORY for all Chart.js usage to prevent console errors:
 ```javascript
-// STEP 1: Verify Chart.js loaded
-if (typeof Chart === 'undefined') {
-  console.error('Chart.js not loaded - check CDN link in <head>');
-  return;
+// STEP 1: Global variables - MUST use var, never let/const
+var chartsBuilt = false;
+
+// STEP 2: Chart building function with validation
+function buildCharts() {
+  // CRITICAL: Always validate Chart.js loaded first
+  if (chartsBuilt || typeof Chart === 'undefined') return;
+  
+  // STEP 3: Destroy existing charts to prevent "Canvas already in use"
+  if (window.myChart) window.myChart.destroy();
+  
+  // STEP 4: Reset canvas elements
+  var canvas = document.getElementById('chartId');
+  if (!canvas) return;
+  
+  // STEP 5: Get theme colors from CSS variables
+  var isDark = document.documentElement.className.includes('theme-dark');
+  var textColor = isDark ? '#EDEDED' : '#0f172a';
+  var gridColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+  
+  // STEP 6: Create chart with proper options
+  try {
+    window.myChart = new Chart(canvas.getContext('2d'), {
+      // Your chart configuration here
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // REQUIRED
+        plugins: {
+          tooltip: { enabled: true }, // REQUIRED - never disable
+          legend: { 
+            labels: { color: textColor, font: { family: 'Inter' } }
+          }
+        },
+        scales: {
+          x: { 
+            ticks: { color: textColor },
+            grid: { color: gridColor }
+          },
+          y: { 
+            ticks: { color: textColor },
+            grid: { color: gridColor }
+          }
+        }
+      }
+    });
+    
+    chartsBuilt = true;
+  } catch (error) {
+    console.error('Chart creation failed:', error);
+  }
 }
 
-// STEP 2: Set global defaults IMMEDIATELY
-Chart.defaults.animation = false;
-
-// STEP 3: Safe chart building with try-catch
-function buildCharts() {
-  try {
-    // Your chart building code here
+// STEP 7: Theme change handler
+function onThemeChange() {
+  if (chartsBuilt) {
+    chartsBuilt = false;
+    buildCharts();
+  }
     var ctx = document.getElementById('myChart');
     if (!ctx) {
       console.error('Chart canvas #myChart not found');

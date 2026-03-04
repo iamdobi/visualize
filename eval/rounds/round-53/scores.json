@@ -1,0 +1,68 @@
+{
+  "round": 53,
+  "timestamp": "2026-03-04T20:08:02.218Z",
+  "filesEvaluated": 3,
+  "average": 7.91,
+  "minScore": 5.98,
+  "gate": "NEEDS WORK",
+  "results": [
+    {
+      "file": "admission-policy-presentation.html",
+      "format": "slide-deck",
+      "layer2Score": 98,
+      "layer3Score": 81.0,
+      "overall": 8.68,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        }
+      ],
+      "consoleErrors": []
+    },
+    {
+      "file": "student-demographics-infographic.html",
+      "format": "dashboard",
+      "layer2Score": 100,
+      "layer3Score": 86.5,
+      "overall": 9.06,
+      "failedChecks": [],
+      "consoleErrors": []
+    },
+    {
+      "file": "university-admissions-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 89,
+      "layer3Score": 50.5,
+      "overall": 5.98,
+      "failedChecks": [
+        {
+          "name": "no-overflow-375",
+          "message": "No horizontal overflow at 375px viewport width (mobile)"
+        },
+        {
+          "name": "chart-animation-disabled",
+          "message": "Chart.defaults.animation is false"
+        },
+        {
+          "name": "chart-tooltips-enabled",
+          "message": "Chart tooltips are not disabled"
+        },
+        {
+          "name": "chart-maintain-aspect-ratio",
+          "message": "maintainAspectRatio is false on chart instances"
+        },
+        {
+          "name": "chart-theme-colors",
+          "message": "Charts use theme-aware colors"
+        }
+      ],
+      "consoleErrors": [
+        "Cannot use import statement outside a module",
+        "Chart is not defined",
+        "Cannot use import statement outside a module",
+        "Chart is not defined"
+      ]
+    }
+  ]
+}
