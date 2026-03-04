@@ -31,7 +31,7 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
 4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
 5. **Chart.js Requirements:** `Chart.defaults.animation = false`, `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 300px
-6. **Responsive Design:** Section spacing ≥48px, NO horizontal overflow at 375px (use `overflow-x: hidden` if needed), font-size hierarchy
+6. **Responsive Design:** Section spacing ≥48px, NO horizontal overflow at 375px (use `overflow-x: hidden` if needed), font-size hierarchy (h1 > h2 > h3 > body text)
 7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
 8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
 
@@ -104,6 +104,7 @@ Key highlights (consult reference for full details):
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
 - **Chart.js (MANDATORY PATTERNS):** `Chart.defaults.animation = false;` at top of script, destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, `maintainAspectRatio: false` on all chart options. **Accessibility: Wrap canvas in div with `role="img"` and descriptive `aria-label`**. **Guard pattern:** Use `chartsBuilt` flag — `onThemeChange()` must check `if (chartsBuilt)` before rebuilding. **Chart containers need min-height: 360px for substantial presence.**
 - **Chart.js customization:** Apply professional styling beyond defaults — custom padding (`layout: { padding: 30 }`), remove excessive gridlines (opacity ≤ 0.04), use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Chart containers need 12px border radius, 40px internal padding, and 360px minimum height for substantial presence. Avoid library defaults that look auto-generated.
+- **Typography hierarchy:** MANDATORY descending font-size scale: h1 > h2 > h3 > body text. Example: h1: 3rem (48px), h2: 2rem (32px), h3: 1.5rem (24px), body: 1rem (16px). Each heading level must be visibly smaller than the previous level.
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
 - **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
 - **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.
@@ -600,8 +601,28 @@ function resetCanvas(id) {
 }
 
 // Usage in buildCharts():
-//   try { if (myChart) myChart.destroy(); } catch(e) {}
-//   myChart = new Chart(resetCanvas('myChart'), { ... });
+//   try { if (window.myChart) window.myChart.destroy(); } catch(e) {}
+//   window.myChart = new Chart(resetCanvas('myChart'), { ... });
+
+// CRITICAL: Always check chart existence before destroy() to prevent console errors
+function buildCharts() {
+  var isDark = document.documentElement.classList.contains('theme-dark');
+  var colors = getChartColors();
+  
+  // Safe chart destruction and rebuild pattern
+  if (window.myChart) {
+    try { window.myChart.destroy(); } catch(e) { /* ignore */ }
+  }
+  window.myChart = new Chart(resetCanvas('myChart'), {
+    // chart config with theme-aware colors
+    options: {
+      scales: {
+        x: { ticks: { color: colors.textSecondary }, grid: { color: colors.border } },
+        y: { ticks: { color: colors.textSecondary }, grid: { color: colors.border } }
+      }
+    }
+  });
+}
 ```
 
 ## Process
