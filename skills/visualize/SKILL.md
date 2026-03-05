@@ -30,8 +30,42 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
 3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
 4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
-5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). Use `chartsBuilt` guard flag, `role="img"` and `aria-label` on chart containers, min-height: 360px, `maintainAspectRatio: false`. **CRITICAL:** Always validate Chart.js loaded with `if (chartsBuilt || typeof Chart === 'undefined') return;` at the start of buildCharts(). Rebuild charts on theme change by setting `chartsBuilt = false` then calling buildCharts(). Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
-6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), font-size hierarchy (h1 > h2 > h3 > body text). **Test all layouts at 375px width — dashboards especially prone to chart container overflow.**
+5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
+```javascript
+var ChartManager = {
+  charts: new Map(),
+  safeInit: function(canvasId, config) {
+    if (this.charts.has(canvasId)) {
+      this.charts.get(canvasId).destroy();
+    }
+    var ctx = document.getElementById(canvasId);
+    if (!ctx) return null;
+    var chart = new Chart(ctx, config);
+    this.charts.set(canvasId, chart);
+    return chart;
+  },
+  updateTheme: function(newTheme) {
+    this.charts.forEach(chart => {
+      // Update chart colors and re-render
+      chart.update();
+    });
+  },
+  destroyAll: function() {
+    this.charts.forEach(chart => chart.destroy());
+    this.charts.clear();
+  }
+};
+```
+Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL:** Always validate Chart.js loaded with `if (typeof Chart === 'undefined') return;`. Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
+6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), font-size hierarchy (h1 > h2 > h3 > body text). **Test all layouts at 375px width — dashboards especially prone to chart container overflow.** **CSS CONTAINER QUERIES:** For advanced responsiveness, use container-based queries:
+```css
+.chart-container { container-type: inline-size; }
+@container (max-width: 400px) { 
+  .chart-legend { display: none; } 
+  .chart-title { font-size: 1rem; }
+}
+```
+This provides true component-level responsiveness beyond viewport media queries.
 7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
 8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
 
@@ -93,13 +127,13 @@ Key highlights (consult reference for full details):
 - **Inter font mandatory** — `https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap`
 - **MANDATORY font weight hierarchy:** h1 ≥ 700, h2 ≥ 600, h3 ≥ 500, body = 400 (critical evaluation requirement)
 - -0.03em tracking on headings
-- Noto Sans KR/JP/SC for CJK. See reference for full type scale.
+- **KOREAN TYPOGRAPHY EXCELLENCE:** For Korean content, use Noto Sans KR for body text with Inter for UI elements. Apply `line-height: 1.6` for Korean (vs 1.4 for Latin). Korean Medium weight maps to Western Regular (400). Include: `https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap`
 
 **Colors:**
 - Class-based theming only (NO @media prefers-color-scheme)
 - Dark: #0A0A0A bg, #EDEDED text. Light: #FAFAF9 bg, #0f172a text
 - See reference for full palette.
-- **Cards:** 8px radius, shadow-only hover (no translateY/scale), 1px solid var(--border).
+- **Cards:** 8px radius, shadow-only hover (no translateY/scale), 1px solid var(--border). **GLASS MORPHISM UPGRADE:** For premium layouts, use glass containers with `backdrop-filter: blur(8px)`, semi-transparent backgrounds with CSS var `--glass-opacity: 0.08`, and elevated shadows. Apply selectively to hero sections or primary cards for sophisticated layering.
 - **Animations:** CSS @keyframes for page-load (.animate + .delay-N), data-reveal + IntersectionObserver for scroll, data-count for counters. Content visible by default. **Above-fold content must NEVER use data-reveal** — use `.animate` classes instead. Use `data-reveal` sparingly (max 3-4 sections) for below-fold content only.
 - **Accessibility:** Skip-to-content, aria-labels, landmark roles, :focus-visible, sr-only for chart data. See reference for full checklist.
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
@@ -109,6 +143,7 @@ Key highlights (consult reference for full details):
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
 - **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
 - **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.
+- **AI-NATIVE INFORMATION ARCHITECTURE:** Modern designs prioritize insight-driven hierarchy. Place the most important metric/insight above the fold. Use progressive revelation patterns — show key data immediately, provide drill-down on hover/click. Contextual actions should appear near relevant content. Lead with conclusions, support with details.
 - **Entrance animations mandatory:** fadeInUp + stagger on all cards/sections.
 - **Single-screen posters:** overflow:hidden + justify-content:space-between on fixed-dimension body. See reference for 9:16, 1:1, 4:5 sizing.
 
