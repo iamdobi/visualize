@@ -30,11 +30,15 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
 3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values. **CRITICAL:** Must explicitly define `.theme-light` and `.theme-dark` classes in stylesheet (not just `:root` variables) for evaluation system compatibility.
 4. **Semantic HTML:** `<main id="main-content">` element, **MANDATORY: Multiple `<section>` elements for major content blocks** (header, metrics, charts, etc.), skip-to-content link. Each distinct content area must be wrapped in semantic `<section>` tags.
-5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
+5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). **MANDATORY CHART VALIDATION:** Every chart function MUST start with `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`. **CHART ACCESSIBILITY:** Every canvas element MUST have `role="img"` and descriptive `aria-label` attributes. **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
 ```javascript
 var ChartManager = {
   charts: new Map(),
   safeInit: function(canvasId, config) {
+    if (typeof Chart === 'undefined') {
+      console.error('Chart.js library not loaded');
+      return null;
+    }
     try {
       if (this.charts.has(canvasId)) {
         this.charts.get(canvasId).destroy();
@@ -45,6 +49,11 @@ var ChartManager = {
         console.error('Canvas element not found: ' + canvasId);
         return null;
       }
+      // Set accessibility attributes
+      ctx.setAttribute('role', 'img');
+      if (!ctx.getAttribute('aria-label')) {
+        ctx.setAttribute('aria-label', 'Chart visualization');
+      }
       var chart = new Chart(ctx, config);
       this.charts.set(canvasId, chart);
       return chart;
@@ -53,7 +62,8 @@ var ChartManager = {
       return null;
     }
   },
-  updateTheme: function(newTheme) {
+  updateTheme: function() {
+    if (typeof Chart === 'undefined') return;
     this.charts.forEach(function(chart, canvasId) {
       try {
         chart.update();
@@ -74,8 +84,8 @@ var ChartManager = {
   }
 };
 ```
-Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL:** Always validate Chart.js loaded with `if (typeof Chart === 'undefined') return;`. Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
-6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), font-size hierarchy (h1 > h2 > h3 > body text). **Test all layouts at 375px width — dashboards especially prone to chart container overflow.** **CSS CONTAINER QUERIES:** For advanced responsiveness, use container-based queries:
+Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false` and disable tooltips for print compatibility. Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
+6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** Title slide h1 ≥ 3rem, content slide titles ≥ 2.5rem, clear visual distinction between heading levels. **Test all layouts at 375px width — dashboards especially prone to chart container overflow.** **CSS CONTAINER QUERIES:** For advanced responsiveness, use container-based queries:
 ```css
 .chart-container { container-type: inline-size; }
 @container (max-width: 400px) { 
