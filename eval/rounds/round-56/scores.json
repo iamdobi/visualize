@@ -1,0 +1,103 @@
+{
+  "round": 56,
+  "timestamp": "2026-03-05T14:07:22.190Z",
+  "filesEvaluated": 3,
+  "average": 9.23,
+  "minScore": 8.8,
+  "gate": "SHIP",
+  "results": [
+    {
+      "file": "board-presentation.html",
+      "format": "slide-deck",
+      "layer2Score": 88,
+      "layer3Score": null,
+      "overall": 8.8,
+      "failedChecks": [
+        {
+          "name": "section-spacing",
+          "message": "Adequate spacing between major sections (>= 48px)"
+        },
+        {
+          "name": "chart-animation-disabled",
+          "message": "Chart.defaults.animation is false"
+        },
+        {
+          "name": "chart-tooltips-enabled",
+          "message": "Chart tooltips are not disabled"
+        },
+        {
+          "name": "chart-container-dimensions",
+          "message": "Chart container has explicit dimensions (height >= 300px)"
+        },
+        {
+          "name": "chart-maintain-aspect-ratio",
+          "message": "maintainAspectRatio is false on chart instances"
+        },
+        {
+          "name": "chart-theme-colors",
+          "message": "Charts use theme-aware colors"
+        }
+      ],
+      "consoleErrors": [
+        "Cannot use import statement outside a module",
+        "Chart is not defined",
+        "Cannot use import statement outside a module",
+        "Chart is not defined",
+        "Chart.js not loaded"
+      ]
+    },
+    {
+      "file": "lotte-digital-dashboard.html",
+      "format": "dashboard",
+      "layer2Score": 89,
+      "layer3Score": null,
+      "overall": 8.9,
+      "failedChecks": [
+        {
+          "name": "chart-animation-disabled",
+          "message": "Chart.defaults.animation is false"
+        },
+        {
+          "name": "chart-tooltips-enabled",
+          "message": "Chart tooltips are not disabled"
+        },
+        {
+          "name": "chart-maintain-aspect-ratio",
+          "message": "maintainAspectRatio is false on chart instances"
+        },
+        {
+          "name": "chart-theme-colors",
+          "message": "Charts use theme-aware colors"
+        },
+        {
+          "name": "zero-console-errors",
+          "message": "Zero console errors on page load"
+        }
+      ],
+      "consoleErrors": [
+        "Cannot use import statement outside a module",
+        "Chart is not defined",
+        "Chart.js not loaded",
+        "Chart.js not loaded",
+        "Cannot use import statement outside a module",
+        "Chart is not defined",
+        "Chart.js not loaded",
+        "Chart.js not loaded"
+      ]
+    },
+    {
+      "file": "o2o-platform-infographic.html",
+      "format": "timeline",
+      "layer2Score": 100,
+      "layer3Score": null,
+      "overall": 10,
+      "failedChecks": [],
+      "consoleErrors": [
+        "Cannot use import statement outside a module",
+        "Chart is not defined",
+        "Cannot use import statement outside a module",
+        "Chart is not defined"
+      ]
+    }
+  ]
+}
