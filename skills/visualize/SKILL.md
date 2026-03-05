@@ -28,30 +28,48 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 
 1. **CSS Custom Properties:** Exact names required: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — NO other names (not --bg-primary, not --text-primary)
 2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
-3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values
-4. **Semantic HTML:** `<main id="main-content">` element, `<section>` elements, skip-to-content link
+3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values. **CRITICAL:** Must explicitly define `.theme-light` and `.theme-dark` classes in stylesheet (not just `:root` variables) for evaluation system compatibility.
+4. **Semantic HTML:** `<main id="main-content">` element, **MANDATORY: Multiple `<section>` elements for major content blocks** (header, metrics, charts, etc.), skip-to-content link. Each distinct content area must be wrapped in semantic `<section>` tags.
 5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
 ```javascript
 var ChartManager = {
   charts: new Map(),
   safeInit: function(canvasId, config) {
-    if (this.charts.has(canvasId)) {
-      this.charts.get(canvasId).destroy();
+    try {
+      if (this.charts.has(canvasId)) {
+        this.charts.get(canvasId).destroy();
+        this.charts.delete(canvasId);
+      }
+      var ctx = document.getElementById(canvasId);
+      if (!ctx) {
+        console.error('Canvas element not found: ' + canvasId);
+        return null;
+      }
+      var chart = new Chart(ctx, config);
+      this.charts.set(canvasId, chart);
+      return chart;
+    } catch (error) {
+      console.error('Chart initialization failed for ' + canvasId + ':', error);
+      return null;
     }
-    var ctx = document.getElementById(canvasId);
-    if (!ctx) return null;
-    var chart = new Chart(ctx, config);
-    this.charts.set(canvasId, chart);
-    return chart;
   },
   updateTheme: function(newTheme) {
-    this.charts.forEach(chart => {
-      // Update chart colors and re-render
-      chart.update();
+    this.charts.forEach(function(chart, canvasId) {
+      try {
+        chart.update();
+      } catch (error) {
+        console.error('Chart theme update failed for ' + canvasId + ':', error);
+      }
     });
   },
   destroyAll: function() {
-    this.charts.forEach(chart => chart.destroy());
+    this.charts.forEach(function(chart) {
+      try {
+        chart.destroy();
+      } catch (error) {
+        console.error('Chart destruction failed:', error);
+      }
+    });
     this.charts.clear();
   }
 };
