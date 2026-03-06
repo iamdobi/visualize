@@ -153,7 +153,7 @@ Users invoke this **mid-conversation** with Claude Code. Use the full conversati
 
 **MANDATORY FIRST STEP: Copy the complete skeleton from [references/skeleton.md](references/skeleton.md) — this includes all required elements (menu, theme system, CSS properties, semantic HTML, accessibility features). Never write HTML from scratch.**
 
-- Write ONE `.html` file to the working directory (or user-specified path)  
+- Write ONE `.html` file to `~/Downloads/` (or user-specified path)
 - Filename: descriptive kebab-case, e.g., `q4-revenue-dashboard.html`, `team-roadmap-deck.html`
 - Start with skeleton.md template, add your content to the `<!-- YOUR CONTENT HERE -->` section
 - All custom styles in `<style>` after the skeleton's base styles
