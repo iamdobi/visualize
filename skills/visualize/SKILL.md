@@ -163,7 +163,7 @@ Users invoke this **mid-conversation** with Claude Code. Use the full conversati
   - **D3.js** — `https://cdn.jsdelivr.net/npm/d3@7` (complex/custom data viz, force graphs)
   - **Mermaid** — `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` (flowcharts, sequence diagrams)
   - **Three.js** — 3D when appropriate
-  - **Reveal.js** — full-featured slide engine when needed
+  - **Reveal.js** — full-featured slide engine when needed. **CRITICAL:** Must set `html, body { height: 100%; overflow: hidden; }` and give the `.reveal` container `height: 100%`. Config MUST use numeric dimensions: `Reveal.initialize({ width: 1280, height: 720, center: true })` — NEVER use string percentages like `'100%'` which cause zero-height viewport and blank slides.
   - **Leaflet** — maps and geospatial data (`https://unpkg.com/leaflet@1.9/dist/leaflet.js` + CSS). **Required for geographic data** — never hand-draw SVG continent shapes. Use OpenStreetMap tiles or a minimal tile provider.
 - SVG for icons and simple graphics — never use external image URLs unless user provides them
 - Prefer CSS animations over JS when possible
