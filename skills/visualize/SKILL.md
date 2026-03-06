@@ -163,7 +163,24 @@ Users invoke this **mid-conversation** with Claude Code. Use the full conversati
   - **D3.js** — `https://cdn.jsdelivr.net/npm/d3@7` (complex/custom data viz, force graphs)
   - **Mermaid** — `https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js` (flowcharts, sequence diagrams)
   - **Three.js** — 3D when appropriate
-  - **Reveal.js** — full-featured slide engine when needed. **CRITICAL:** Must set `html, body { height: 100%; overflow: hidden; }` and give the `.reveal` container `height: 100%`. Config MUST use numeric dimensions: `Reveal.initialize({ width: 1280, height: 720, center: true })` — NEVER use string percentages like `'100%'` which cause zero-height viewport and blank slides.
+  - **Reveal.js** — full-featured slide engine when needed. **CRITICAL:** Must set `html, body { height: 100%; overflow: hidden; }` and give the `.reveal` container `height: 100%`. Config MUST use numeric dimensions: `Reveal.initialize({ width: 1280, height: 720, center: true, controls: false })` — NEVER use string percentages like `'100%'` which cause zero-height viewport and blank slides. **MANDATORY: Disable Reveal.js default controls** (`controls: false`) — the default `<` `>` arrow overlays are ugly. Instead, add a custom minimal bottom nav bar:
+```html
+<nav class="slide-nav" aria-label="Slide navigation">
+  <button onclick="prevSlide()" aria-label="Previous slide">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <span class="slide-counter" id="slideCounter">1 / 8</span>
+  <button onclick="nextSlide()" aria-label="Next slide">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+</nav>
+```
+```css
+.slide-nav { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; z-index: 9998; }
+.slide-nav button { width: 28px; height: 28px; border-radius: 6px; background: transparent; border: none; color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.3; transition: opacity 0.2s; }
+.slide-nav button:hover { opacity: 0.7; }
+.slide-counter { font-size: 12px; color: var(--text-secondary); font-weight: 400; min-width: 40px; text-align: center; opacity: 0.35; }
+```
   - **Leaflet** — maps and geospatial data (`https://unpkg.com/leaflet@1.9/dist/leaflet.js` + CSS). **Required for geographic data** — never hand-draw SVG continent shapes. Use OpenStreetMap tiles or a minimal tile provider.
 - SVG for icons and simple graphics — never use external image URLs unless user provides them
 - Prefer CSS animations over JS when possible
