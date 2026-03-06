@@ -20,6 +20,19 @@ metadata:
 
 Turn any idea, data, or content into a stunning single-file HTML visualization.
 
+## After Creating a File
+
+**Always do BOTH of these after writing the HTML file:**
+
+1. **Auto-open in browser:** Run `open <filename>.html` (macOS) or `xdg-open <filename>.html` (Linux) so the user sees it immediately
+2. **Return the file path as a clickable URL:** Include `file://<absolute-path>` in your response so the user can click to open it
+
+Example response after creation:
+```
+Created your visualization! Opening in browser now...
+📄 file:///Users/you/project/my-dashboard.html
+```
+
 ## Critical Requirements (NON-NEGOTIABLE)
 
 ⚠️ **EVALUATION FAILURE GUARANTEED WITHOUT THESE 8 ELEMENTS** ⚠️
