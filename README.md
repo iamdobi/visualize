@@ -76,8 +76,16 @@ Every visualization includes:
 ### Claude Code Plugin (recommended)
 
 ```bash
-# Install directly from GitHub
-/plugin install careerhackeralex/visualize
+# Step 1: Add the marketplace (one-time)
+claude plugin marketplace add careerhackeralex/visualize
+
+# Step 2: Install the plugin
+claude plugin install visualize@careerhackeralex
+```
+
+To update later:
+```bash
+claude plugin update visualize@careerhackeralex
 ```
 
 ### Manual Installation
@@ -86,18 +94,9 @@ Every visualization includes:
 # Clone the repo
 git clone https://github.com/careerhackeralex/visualize.git
 
-# Option A: Add as a plugin
 # Claude Code auto-discovers plugins with .claude-plugin/plugin.json
-
-# Option B: Copy just the skill
-cp -r visualize/skills/visualize ~/.claude/skills/visualize
-```
-
-### OpenClaw
-
-```bash
-# Symlink the skill into OpenClaw skills directory
-ln -s /path/to/visualize/skills/visualize ~/.openclaw/skills/visualize
+# Just open Claude Code in the cloned directory, or add it as a plugin dir:
+claude plugin install --plugin-dir /path/to/visualize
 ```
 
 ## Usage
