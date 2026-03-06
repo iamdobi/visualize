@@ -49,7 +49,7 @@ Created your visualization! Opening in browser now...
 ```
 **NEVER rely on just `:root` or `@media (prefers-color-scheme)` — evaluation system checks for class-based themes.**
 4. **Semantic HTML:** `<main id="main-content">` element, **MANDATORY: Multiple `<section>` elements for major content blocks** (header, metrics, charts, etc.), skip-to-content link. Each distinct content area must be wrapped in semantic `<section>` tags.
-5. **Chart.js Requirements (EVALUATION CRITICAL):** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. **MANDATORY:** IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches and is automatically checked by evaluation system). **MANDATORY CHART VALIDATION:** Every chart function MUST start with `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`. **CHART ACCESSIBILITY:** Every canvas element MUST have `role="img"` and descriptive `aria-label` attributes. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: false } }` for print compatibility. **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
+5. **Chart.js Requirements (EVALUATION CRITICAL):** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. **MANDATORY:** IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches and is automatically checked by evaluation system). **MANDATORY CHART VALIDATION:** Every chart function MUST start with `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`. **CHART ACCESSIBILITY:** Every canvas element MUST have `role="img"` and descriptive `aria-label` attributes. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: true } }` for accessibility. **NEVER disable tooltips** - evaluation system checks for enabled tooltips. **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
 ```javascript
 var ChartManager = {
   charts: new Map(),
@@ -109,7 +109,16 @@ var ChartManager = {
   }
 };
 ```
-Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false` and disable tooltips for print compatibility. Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
+Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: true } }` for accessibility. **CHART CONTAINER DIMENSIONS:** Container must have explicit `height` >= 300px for charts to render properly. Use theme-aware colors with CSS custom properties, never static hex colors. **NEVER use import/export syntax with Chart.js CDN** — use standard var declarations only.
+
+**CHART.JS TROUBLESHOOTING (CRITICAL):** If charts appear as blank white spaces:
+- Verify Chart.js CDN is included before `</head>`
+- Verify `Chart.defaults.animation = false;` is immediately after CDN
+- Verify chart initialization is in DOMContentLoaded event listener
+- Verify no module import/export syntax anywhere in the file
+- Verify ChartManager.safeInit() pattern is used correctly
+- Verify canvas has `role="img"` and `aria-label` attributes
+
 6. **Responsive Design:** Section spacing ≥48px, **CRITICAL: NO horizontal overflow at 375px viewport** (MANDATORY: add `@media (max-width: 375px) { body { overflow-x: hidden; } }` to prevent horizontal scroll), **MANDATORY FONT-SIZE HIERARCHY:** h1 ≥ 2.5rem, h2 ≥ 2rem, h3 ≥ 1.5rem, body = 1rem. **SLIDE DECK REQUIREMENTS:** Title slide h1 ≥ 3rem, content slide titles ≥ 2.5rem, clear visual distinction between heading levels. **SLIDE SECTION SPACING:** Major sections within slides must have ≥48px spacing (title-to-content, content-to-charts, charts-to-navigation). **Test all layouts at 375px width — dashboards especially prone to chart container overflow.** **CSS CONTAINER QUERIES:** For advanced responsiveness, use container-based queries:
 ```css
 .chart-container { container-type: inline-size; }
@@ -193,7 +202,7 @@ Key highlights (consult reference for full details):
 - **Icons:** Inline SVG only, never emojis. Lucide-style 24x24, stroke-based.
 - **Chart.js (MANDATORY PATTERNS):** `Chart.defaults.animation = false;` at top of script, destroy+recreate on theme toggle, explicit rgba() colors, tooltips always enabled, `maintainAspectRatio: false` on all chart options. **Accessibility: Wrap canvas in div with `role="img"` and descriptive `aria-label`**. **Guard pattern:** Use `chartsBuilt` flag — `onThemeChange()` must check `if (chartsBuilt)` before rebuilding. **Chart containers need min-height: 360px for substantial presence.**
 - **Chart.js customization:** Apply professional styling beyond defaults — custom padding (`layout: { padding: 30 }`), remove excessive gridlines (opacity ≤ 0.04), use rounded corners (`borderRadius: 4`), thoughtful color palettes that match theme. Chart containers need 12px border radius, 40px internal padding, and 360px minimum height for substantial presence. Avoid library defaults that look auto-generated.
-- **Typography hierarchy:** MANDATORY descending font-size scale: h1 > h2 > h3 > body text. Example: h1: 3rem (48px), h2: 2rem (32px), h3: 1.5rem (24px), body: 1rem (16px). Each heading level must be visibly smaller than the previous level.
+- **Typography hierarchy:** MANDATORY descending font-size scale: h1 > h2 > h3 > body text. **REQUIRED MINIMUMS:** h1: ≥3rem (48px), h2: ≥2rem (32px), h3: ≥1.5rem (24px), body: 1rem (16px). **EVALUATION CRITICAL:** Each heading level must be visibly smaller than the previous level with at least 0.5rem difference between levels. Example valid hierarchy: h1: 3rem, h2: 2.5rem, h3: 1.5rem, body: 1rem.
 - **Visual restraint:** No floating orbs, gradient borders, gradient text on headings, scale transforms, glow effects, decorative animations.
 - **Stat value colors:** Colored numbers must have semantic meaning (green/positive = good metric, red/negative = bad metric, accent = primary/neutral highlight). If no clear semantic meaning, use `var(--text)`. Never randomly colorize stat values. **For KPI grids with 4+ cards:** use at most 2 accent colors for values — `var(--accent)` for the single most important metric and `var(--text)` for all others. Reserve `var(--positive)`/`var(--negative)` only for delta indicators (arrows, percentages), not the main card value.
 - **Background atmosphere:** One subtle technique per file (radial gradient, noise texture, or dot grid). **Adapt the atmosphere to the content** — a game dashboard should feel different from a financial report. Adjust accent colors and gradient hues to match the subject matter.
