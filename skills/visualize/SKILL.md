@@ -26,11 +26,17 @@ Turn any idea, data, or content into a stunning single-file HTML visualization.
 
 **EVERY file MUST start from the skeleton template in [references/skeleton.md](references/skeleton.md) — copy the ENTIRE template, then add your content.**
 
-1. **CSS Custom Properties:** Exact names required: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — NO other names (not --bg-primary, not --text-primary)
-2. **Utility Menu System:** Complete `.viz-menu` with `.viz-menu-toggle`, `.viz-menu-dropdown`, download PNG button, print button, html-to-image CDN script
-3. **Theme Classes:** Both `html.theme-light` and `html.theme-dark` defined in CSS with proper custom property values. **CRITICAL:** Must explicitly define `.theme-light` and `.theme-dark` classes in stylesheet (not just `:root` variables) for evaluation system compatibility.
+1. **CSS Custom Properties:** Exact names required: `--bg, --surface, --surface-hover, --border, --text, --text-secondary, --accent, --accent-secondary, --positive, --negative, --warning` — NO other names (not --bg-primary, not --text-primary). **CRITICAL:** These exact property names are required for evaluation system compatibility.
+2. **Utility Menu System (MANDATORY):** Complete `.viz-menu` element with `.viz-menu-toggle` button, `.viz-menu-dropdown` container, download PNG button (`onclick="downloadImage()"`), print button (`onclick="window.print()"`), and html-to-image CDN script (`<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>`). **EVALUATION CRITICAL:** Menu system is automatically checked and WILL CAUSE FAILURES if missing.
+3. **Theme Classes (EVALUATION CRITICAL):** Must explicitly define BOTH `.theme-light` and `.theme-dark` classes in stylesheet with complete custom property definitions. **EXAMPLE REQUIRED:**
+```css
+:root { /* base properties */ }
+.theme-light { --bg: #ffffff; --surface: #f8f9fa; --text: #1a1a1a; /* etc */ }
+.theme-dark { --bg: #0a0a0a; --surface: #1a1a1a; --text: #ffffff; /* etc */ }
+```
+**NEVER rely on just `:root` or `@media (prefers-color-scheme)` — evaluation system checks for class-based themes.**
 4. **Semantic HTML:** `<main id="main-content">` element, **MANDATORY: Multiple `<section>` elements for major content blocks** (header, metrics, charts, etc.), skip-to-content link. Each distinct content area must be wrapped in semantic `<section>` tags.
-5. **Chart.js Requirements:** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches). **MANDATORY CHART VALIDATION:** Every chart function MUST start with `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`. **CHART ACCESSIBILITY:** Every canvas element MUST have `role="img"` and descriptive `aria-label` attributes. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: false } }` for print compatibility. **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
+5. **Chart.js Requirements (EVALUATION CRITICAL):** MUST include `<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.min.js"></script>` before closing `</head>`. **MANDATORY:** IMMEDIATELY after Chart.js script, add `<script>Chart.defaults.animation = false;</script>` (prevents animation glitches and is automatically checked by evaluation system). **MANDATORY CHART VALIDATION:** Every chart function MUST start with `if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }`. **CHART ACCESSIBILITY:** Every canvas element MUST have `role="img"` and descriptive `aria-label` attributes. **CRITICAL CHART CONFIG:** Set `maintainAspectRatio: false`, `responsive: true`, and `plugins: { tooltip: { enabled: false } }` for print compatibility. **CHART RELIABILITY SYSTEM:** Use dedicated ChartManager pattern for bulletproof integration:
 ```javascript
 var ChartManager = {
   charts: new Map(),
@@ -101,7 +107,8 @@ Use `ChartManager.safeInit()` instead of raw `new Chart()`. **CRITICAL CHART CON
 ```
 This provides true component-level responsiveness beyond viewport media queries.
 7. **Print & Accessibility:** `@media print` styles, `@media (prefers-reduced-motion: reduce)` with disabled animations
-8. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
+8. **Entrance Animations (MANDATORY):** Must include entrance animations via `.animate` classes, `data-reveal` attributes, or CSS `@keyframes`. **EVALUATION CRITICAL:** Animation presence is automatically detected and required.
+9. **JavaScript Functions:** `cycleTheme()`, `toggleMenu()`, top-level variables use `var` not `let`/`const`
 
 **🔥 CRITICAL: Copy skeleton.md exactly → Replace "YOUR CONTENT HERE" with visualization content → Save file**
 
