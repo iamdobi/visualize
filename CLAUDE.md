@@ -27,6 +27,7 @@ visualize/
 │   ├── SKILL.md              # Evaluator skill
 │   ├── loop-state.json       # Current round + score history
 │   ├── stress-tests.md       # 40 test cases
+│   ├── OPENCLAW-SETUP.md     # Prompt to set up automated cron job on OpenClaw
 │   ├── pipeline/             # Automated eval pipeline (Node.js)
 │   │   ├── run.js            # Orchestrator: node run.js --dir examples/
 │   │   ├── format-detect.js  # Layer 1: auto-detect visualization format
@@ -82,6 +83,8 @@ When running eval:
   - Runs Layer 1 (format detection) + Layer 2 (45 DOM checks) + captures screenshots
   - Layer 3 (visual/IA quality) is done by the AI agent reviewing the screenshots
 - **Self-improvement loop:** pass `eval/pipeline/LOOP-PROMPT.md` to any Claude Code / OpenClaw agent
+- **Automated scheduling:** see `eval/OPENCLAW-SETUP.md` for setting up a cron job on OpenClaw (every 3 hours)
+- No API keys needed — the agent harness (Claude Code, OpenClaw) handles authentication
 - See `eval/EVAL.md` for the 3-layer scoring specification
 
 ## Common Pitfalls
