@@ -5,10 +5,10 @@
   "author": {
     "name": "Career Hacker Alex",
     "email": "careerhackeralex@gmail.com",
-    "url": "https://github.com/careerhackeralex"
+    "url": "https://github.com/iamdobi"
   },
-  "homepage": "https://github.com/careerhackeralex/visualize",
-  "repository": "https://github.com/careerhackeralex/visualize",
+  "homepage": "https://github.com/iamdobi/visualize",
+  "repository": "https://github.com/iamdobi/visualize",
   "license": "MIT",
   "keywords": [
     "visualization",
@@ -29,7 +29,7 @@
       "Write",
       "Interactive"
     ],
-    "websiteURL": "https://github.com/careerhackeralex/visualize",
+    "websiteURL": "https://github.com/iamdobi/visualize",
     "defaultPrompt": [
       "Create a pitch deck for my AI startup.",
       "Turn this CSV into a dashboard in ~/Downloads.",

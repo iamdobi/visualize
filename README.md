@@ -116,29 +116,29 @@ To automate that setup from this repo:
 scripts/install-into-codex-project.sh /path/to/your-codex-project
 
 # Or install from a pushed Git repo
-scripts/install-into-codex-project.sh /path/to/your-codex-project https://github.com/careerhackeralex/visualize.git
+scripts/install-into-codex-project.sh /path/to/your-codex-project https://github.com/iamdobi/visualize.git
 ```
 
 ### Claude Code Plugin (recommended)
 
 ```bash
 # Step 1: Add the marketplace (one-time)
-claude plugin marketplace add careerhackeralex/visualize
+claude plugin marketplace add iamdobi/visualize
 
 # Step 2: Install the plugin
-claude plugin install visualize@careerhackeralex
+claude plugin install visualize@iamdobi
 ```
 
 To update later:
 ```bash
-claude plugin update visualize@careerhackeralex
+claude plugin update visualize@iamdobi
 ```
 
 ### Manual Installation
 
 ```bash
 # Clone the repo
-git clone https://github.com/careerhackeralex/visualize.git
+git clone https://github.com/iamdobi/visualize.git
 
 # Claude Code auto-discovers plugins with .claude-plugin/plugin.json
 # Just open Claude Code in the cloned directory, or add it as a plugin dir:
