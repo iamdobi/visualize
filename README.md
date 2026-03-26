@@ -2,7 +2,7 @@
 
 **Turn any idea into a beautiful HTML visualization — with one prompt.**
 
-A [Claude Code](https://code.claude.com) plugin that creates stunning, self-contained HTML visualizations from natural language. Slide decks, dashboards, infographics, flowcharts, timelines, and more — all as single HTML files you can open anywhere.
+A [Claude Code](https://code.claude.com) plugin and [Codex](https://openai.com/codex/) plugin that creates stunning, self-contained HTML visualizations from natural language. Slide decks, dashboards, infographics, flowcharts, timelines, and more — all as single HTML files you can open anywhere.
 
 > HTML is not a "website." It's a visualization tool. Code is cheap. Everyone should feel empowered to visualize anything.
 
@@ -73,6 +73,52 @@ Every visualization includes:
 
 ## Installation
 
+### Codex Plugin
+
+This repository now includes a root-level Codex manifest at `.codex-plugin/plugin.json`, so Codex can treat this repo itself as a plugin.
+
+If you want to reuse it from another Codex project, the recommended setup is:
+
+```bash
+# Inside the target project
+git submodule add https://github.com/careerhackeralex/visualize.git plugins/visualize
+```
+
+Then add or update `.agents/plugins/marketplace.json` in the target project:
+
+```json
+{
+  "name": "local-plugins",
+  "interface": {
+    "displayName": "Local Plugins"
+  },
+  "plugins": [
+    {
+      "name": "visualize",
+      "source": {
+        "source": "local",
+        "path": "./plugins/visualize"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
+```
+
+To automate that setup from this repo:
+
+```bash
+# Use current local checkout
+scripts/install-into-codex-project.sh /path/to/your-codex-project
+
+# Or install from a pushed Git repo
+scripts/install-into-codex-project.sh /path/to/your-codex-project https://github.com/careerhackeralex/visualize.git
+```
+
 ### Claude Code Plugin (recommended)
 
 ```bash
@@ -121,8 +167,12 @@ See the [`examples/`](examples/) directory for sample outputs.
 
 ```
 visualize/
+├── .codex-plugin/
+│   └── plugin.json             # Codex plugin manifest
 ├── .claude-plugin/
 │   └── plugin.json             # Plugin manifest
+├── scripts/
+│   └── install-into-codex-project.sh
 ├── skills/
 │   └── visualize/
 │       ├── SKILL.md            # Core skill instructions

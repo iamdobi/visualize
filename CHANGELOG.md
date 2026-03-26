@@ -3,6 +3,16 @@
 All notable changes to the Visualize plugin are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## Unreleased
+
+### Added
+- Codex plugin manifest at `.codex-plugin/plugin.json`
+- `scripts/install-into-codex-project.sh` for copying the plugin into another Codex project or wiring it in from a Git URL
+
+### Changed
+- README now documents Codex installation and marketplace wiring
+- Skill wording updated to reflect usage from Claude Code or Codex
+
 ## v0.3.0 — Eval Maturity
 
 ### Added
